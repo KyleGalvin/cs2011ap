@@ -268,25 +268,38 @@ class hgrid: public grid{
 			return grids.size();
 		}
 
-};
-
-/*typedef Object Obj;
-typedef boost::shared_ptr<Obj> PtrObj;
-class hgrid_iterator : public iterator<forward_iterator_tag,PtrObj*>{
+	class MyGriditerator : public iterator<forward_iterator_tag,vector<boost::shared_ptr<singlegrid> > >{
 	
-	//Private constructor means only hgrid can create this iterator
-	friend class hgrid;
+		//Private constructor means only hgrid can create this iterator
+		friend class hgrid;
 
-	private:
-		boost::shared_ptr<singlegrid> Outer;
-		singlegrid::iterator Inner;
-		hgrid_iterator(boost::shared_ptr<singlegrid> NewOuter): Outer(NewOuter){
-			Inner = Outer->begin();
+		private:
+
+			vector<boost::shared_ptr<singlegrid> >::iterator Iter;
+
+			MyGriditerator(vector<boost::shared_ptr<singlegrid> >::iterator newIter){
+				Iter=newIter;
+			}
+		public:
+			boost::shared_ptr<singlegrid> & operator*(){
+				return *Iter;
+			}
+			MyGriditerator & operator++(){
+				++Iter;
+				return *this;
+			}
+			bool operator !=(hgrid::MyGriditerator external){
+				return Iter != external.Iter;
+			}
+			bool operator ==(hgrid::MyGriditerator external){
+				return Iter == external.Iter;
+			}
+	};
+
+		hgrid::MyGriditerator GridBegin(){
+			return grids.begin();
 		}
-	public:
-		PtrObj operator*(){
-			return *Inner;
+		hgrid::MyGriditerator GridEnd(){
+			return grids.begin();
 		}
-		const hgrid_iterator & operator++(){};
-		bool operator !=(const hgrid_iterator& external) const;
-};*/
+};

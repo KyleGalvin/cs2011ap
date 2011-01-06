@@ -129,7 +129,7 @@ class singlegrid: public grid{
 		//since this involves looping through all N dimensions and N is unknown,
 		//recursion is used rather than iteration.
 		vector<Coordinate> RFoil(PtrObj O, Coordinate L, \
-				Size S, Size CS, boost::shared_ptr<Coordinate> Instance){
+			Size S, Size CS, boost::shared_ptr<Coordinate> Instance){
 
 			vector<Coordinate> Result;
 			vector<Coordinate> Returned;
@@ -437,7 +437,7 @@ class singlegrid: public grid{
 
 		}
 
-		class const_iterator : public iterator<forward_iterator_tag,PtrObj>{
+		class Myiterator : public iterator<forward_iterator_tag,PtrObj>{
 		
 			//Private constructor means only hgrid can create this iterator
 			friend class singlegrid;
@@ -446,7 +446,7 @@ class singlegrid: public grid{
 				map<string, PtrObj>::iterator Iter;
 
 				//const_iterator(PtrObj NewCurrent): Current(NewCurrent){}
-				const_iterator(map<string, PtrObj>::iterator newIter){
+				Myiterator(map<string, PtrObj>::iterator newIter){
 					Iter = newIter;
 				}
 
@@ -454,18 +454,27 @@ class singlegrid: public grid{
 				PtrObj operator*(){
 					return (*Iter).second;
 				}
-				const const_iterator & operator++(){
+				Myiterator & operator++(){
 					++Iter;
 					return *this;
 				}
-				bool operator !=(const const_iterator& external) const{
+				bool operator !=(Myiterator& external){
 					return this->Iter != external.Iter;
+				}
+				bool operator ==(Myiterator& external){
+					return this->Iter == external.Iter;
+				}
+				bool operator !=(map<string, PtrObj>::iterator external){
+					return this->Iter != external;
+				}
+				bool operator ==(map<string, PtrObj>::iterator external){
+					return this->Iter == external;
 				}
 		};
 
 
-		singlegrid::const_iterator begin(){return Cells.begin();}
-		singlegrid::const_iterator end(){return Cells.end();}
+		singlegrid::Myiterator begin(){return Cells.begin();}
+		singlegrid::Myiterator end(){return Cells.end();}
 };
 
 #endif

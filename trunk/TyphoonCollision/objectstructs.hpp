@@ -6,6 +6,7 @@
 #include "geotypes.hpp"
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#include "SDL/SDL.h"
 using namespace std;
 
 //Here we define algorithm complexity levels for different types of bounding

@@ -1,0 +1,11 @@
+CC=g++
+CFLAGS= -lSDL -lSDL_image -lGLU -lglut
+SOURCES=Typhoon3DDemo.cpp
+OBJECTS=$(SOURCES)
+EXECUTABLE=cs2011ap_bin
+
+all: $(SOURCES) $(EXECUTABLE)
+	
+$(EXECUTABLE): $(OBJECTS) 
+	$(CC) $(CFLAGS) $(OBJECTS) -o $@
+ 
