@@ -16,35 +16,22 @@ namespace NetTest
 		{		
 			MainClass MyMain = new MainClass();
 			
-			Console.WriteLine ("[s]erver, [c]lient, [t]est cases, [q]uit");
+			Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
+			//Console.WriteLine ("[s]erver, [c]lient, [t]est cases, [q]uit");
 			string input = Console.ReadLine();
-			if (input[0]=='s'){
-				MyMain.Server();
+			if (input[0]=='c'){
+				MyMain.CreateLobby();
 			}else if(input[0]=='c'){
-				MyMain.Client();
-			}else if(input[0]=='t'){
-				MyMain.Test();
+				MyMain.FindLobby();
 			}else if(input[0]=='q'){
 			}else{
 			}
 		}
 		
-		public void threadincoming(){
-			this.tcplistener.Start();
-
-		  	while (true)
-			{
-				//blocks until a client has connected to the server
-			    TcpClient client = this.tcplistener.AcceptTcpClient();
-		
-		    	//create a thread to handle communication
-			    //with connected client
-		  	  	Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
-		 	   	clientThread.Start(client);
-			}
+		public void JoinLobby(){
 		}
 		
-		public void Server()
+		public void CreateLobby()
 		{
 			int place = 0;
 			int place2 = 0;
@@ -53,6 +40,7 @@ namespace NetTest
 			Console.WriteLine("Opening socket...");
 			IPEndPoint lep = new IPEndPoint(IPAddress.Any,3000);//port 3000 is arbitrary, but needs to be consistent with client
 			
+			Console.WriteLine("Listening for incoming connections...");
 			this.tcplistener = new TcpListener(lep);
 			this.listenthread = new Thread(new ThreadStart(ListenForClients));
 			this.listenthread.Start();
@@ -117,11 +105,13 @@ namespace NetTest
 			  tcpClient.Close();
 		}
 		
-		public void Client()
+		public void JoinLobby()
 		{
+			Console.WriteLine("Please enter Lobby IP:");
+			String IP = Console.ReadLine();
 			TcpClient client = new TcpClient();
 
-			IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3000);
+			IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), 3000);
 			
 			client.Connect(serverEndPoint);
 			
