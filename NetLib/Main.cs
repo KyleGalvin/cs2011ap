@@ -21,14 +21,11 @@ namespace NetTest
 			string input = Console.ReadLine();
 			if (input[0]=='c'){
 				MyMain.CreateLobby();
-			}else if(input[0]=='c'){
-				MyMain.FindLobby();
+			}else if(input[0]=='j'){
+				MyMain.JoinLobby();
 			}else if(input[0]=='q'){
 			}else{
 			}
-		}
-		
-		public void JoinLobby(){
 		}
 		
 		public void CreateLobby()
@@ -69,6 +66,8 @@ namespace NetTest
 		
 			  TcpClient tcpClient = (TcpClient)client;
 			  NetworkStream clientStream = tcpClient.GetStream();
+			  Console.WriteLine("client: "+tcpClient.Client.RemoteEndPoint);
+			
 				
 			  byte[] message = new byte[4];
 			  int bytesRead;
