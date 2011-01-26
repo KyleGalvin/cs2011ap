@@ -43,7 +43,7 @@ namespace NetTest
 		
 			  TcpClient tcpClient = (TcpClient)client;
 			  NetworkStream clientStream = tcpClient.GetStream();
-			  Console.WriteLine("client: "+tcpClient.Client.RemoteEndPoint);
+			  Console.WriteLine("client {0} has connected.", tcpClient.Client.RemoteEndPoint);
 			
 				
 			  byte[] message = new byte[4];
@@ -67,6 +67,7 @@ namespace NetTest
 			    if (bytesRead == 0)
 			    {
 			      //the client has disconnected from the server
+				Console.WriteLine("Client {0} has disconnected.",tcpClient.Client.RemoteEndPoint);
 			      break;
 			    }
 				//Header Packet - 32 bits
@@ -109,12 +110,14 @@ namespace NetTest
 		public static void Main (string[] args)
 		{		
 			int DefaultPort = 3000;
-			Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
-			string input = Console.ReadLine();
 			
 			while(true){
+				Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
+				string input = Console.ReadLine();
+
 				if (input[0]=='c'){
 					Lobby myLobby = new Lobby(DefaultPort);
+					break;
 				}else if(input[0]=='j'){
 					Client myClient = new Client(DefaultPort);
 				}else if(input[0]=='q'){
