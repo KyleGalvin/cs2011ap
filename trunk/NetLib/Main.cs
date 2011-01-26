@@ -12,12 +12,9 @@ namespace NetTest
 		private Thread listenthread;
 		private TcpListener tcplistener;
 		public Lobby(int port){
-			int place = 0;
-			int place2 = 0;
-			int Count = 0;
 			
 			Console.WriteLine("Opening socket...");
-			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);//port 3000 is arbitrary, but needs to be consistent with client
+			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
 			
 			Console.WriteLine("Listening for incoming connections...");
 			this.tcplistener = new TcpListener(lep);
@@ -77,7 +74,7 @@ namespace NetTest
 				//message[1] contains 'count' flags
 				//messages[2-3] are picked up by our reader but we dont currently have a use for these bits in the header.
 				
-				//all other packets are 32 bit datatypes such as(but not entirely limited to) floats
+				//all other packets are 32 bit datatypes such as (but not entirely limited to) floats
 				Console.WriteLine("Read Value: {0},{1},{2},{3}",message[0],message[1],message[2],message[3]);
 			  }
 			
@@ -96,8 +93,9 @@ namespace NetTest
 			TcpClient client = new TcpClient();
 
 			IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
-			
+			Console.WriteLine("Connecting to server...");
 			client.Connect(serverEndPoint);
+			Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
 			
 			NetworkStream clientStream = client.GetStream();
 			
@@ -108,24 +106,21 @@ namespace NetTest
 	
 	class MainClass
 	{	
-		public byte[] NetRead = new byte[4]{0,0,0,0};
-		public byte[] NetWrite = new byte[4]{3,12,9,6};
-		private Thread listenthread;
-		private TcpListener tcplistener;
 		public static void Main (string[] args)
 		{		
-			MainClass MyMain = new MainClass();
 			int DefaultPort = 3000;
-			
 			Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
-			//Console.WriteLine ("[s]erver, [c]lient, [t]est cases, [q]uit");
 			string input = Console.ReadLine();
-			if (input[0]=='c'){
-				Lobby myLobby = new Lobby(DefaultPort);
-			}else if(input[0]=='j'){
-				Client myClient = new Client(DefaultPort);
-			}else if(input[0]=='q'){
-			}else{
+			
+			while(true){
+				if (input[0]=='c'){
+					Lobby myLobby = new Lobby(DefaultPort);
+				}else if(input[0]=='j'){
+					Client myClient = new Client(DefaultPort);
+				}else if(input[0]=='q'){
+						break;
+				}else{
+				}
 			}
 		}
 	}		
