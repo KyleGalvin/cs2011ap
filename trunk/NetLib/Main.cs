@@ -6,43 +6,23 @@ using System.Text;
 
 namespace NetTest
 {
-	class MainClass
-	{	
-		public byte[] NetRead = new byte[4]{0,0,0,0};
-		public byte[] NetWrite = new byte[4]{3,12,9,6};
+	
+	class Lobby
+	{
 		private Thread listenthread;
 		private TcpListener tcplistener;
-		public static void Main (string[] args)
-		{		
-			MainClass MyMain = new MainClass();
-			
-			Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
-			//Console.WriteLine ("[s]erver, [c]lient, [t]est cases, [q]uit");
-			string input = Console.ReadLine();
-			if (input[0]=='c'){
-				MyMain.CreateLobby();
-			}else if(input[0]=='j'){
-				MyMain.JoinLobby();
-			}else if(input[0]=='q'){
-			}else{
-			}
-		}
-		
-		public void CreateLobby()
-		{
+		public Lobby(int port){
 			int place = 0;
 			int place2 = 0;
 			int Count = 0;
 			
 			Console.WriteLine("Opening socket...");
-			IPEndPoint lep = new IPEndPoint(IPAddress.Any,3000);//port 3000 is arbitrary, but needs to be consistent with client
+			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);//port 3000 is arbitrary, but needs to be consistent with client
 			
 			Console.WriteLine("Listening for incoming connections...");
 			this.tcplistener = new TcpListener(lep);
 			this.listenthread = new Thread(new ThreadStart(ListenForClients));
 			this.listenthread.Start();
-
-
 		}
 		
 		private void ListenForClients()
@@ -103,14 +83,19 @@ namespace NetTest
 			
 			  tcpClient.Close();
 		}
-		
-		public void JoinLobby()
+	}
+	
+	class Client
+	{
+		public byte[] NetWrite = new byte[4]{3,12,9,6};//should we make a class for this 32 bit reader? A class for an array of 32 bit reads?
+		public Client(int port)
 		{
+			//The client's first order of business is to connect to a lobby
 			Console.WriteLine("Please enter Lobby IP:");
 			String IP = Console.ReadLine();
 			TcpClient client = new TcpClient();
 
-			IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), 3000);
+			IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
 			
 			client.Connect(serverEndPoint);
 			
@@ -119,9 +104,29 @@ namespace NetTest
 			clientStream.Write(NetWrite, 0 , NetWrite.Length);
 			clientStream.Flush();
 		}
-		
-		public void Test()
-		{
+	}
+	
+	class MainClass
+	{	
+		public byte[] NetRead = new byte[4]{0,0,0,0};
+		public byte[] NetWrite = new byte[4]{3,12,9,6};
+		private Thread listenthread;
+		private TcpListener tcplistener;
+		public static void Main (string[] args)
+		{		
+			MainClass MyMain = new MainClass();
+			int DefaultPort = 3000;
+			
+			Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
+			//Console.WriteLine ("[s]erver, [c]lient, [t]est cases, [q]uit");
+			string input = Console.ReadLine();
+			if (input[0]=='c'){
+				Lobby myLobby = new Lobby(DefaultPort);
+			}else if(input[0]=='j'){
+				Client myClient = new Client(DefaultPort);
+			}else if(input[0]=='q'){
+			}else{
+			}
 		}
 	}		
 }		
