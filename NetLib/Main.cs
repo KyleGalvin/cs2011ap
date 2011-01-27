@@ -37,10 +37,11 @@ namespace NetTest
 			{
 				if(sendmessage)
 				{
-					foreach(TcpClient Client in myClients)
-					{
+					//This loop needs to lock myClients so nothing modifies its data while we loop
+					//foreach(TcpClient Client in myClients)
+					//{
 						
-					}
+					//}
 				}
 				
 			}
