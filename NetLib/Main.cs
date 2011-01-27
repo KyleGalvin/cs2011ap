@@ -3,14 +3,18 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System.Collections.Generic;
 
 namespace NetTest
 {
 	
 	class Lobby
 	{
+		private List<TcpClient> MyClients;
 		private Thread listenthread;
+		private Thread respondthread;
 		private TcpListener tcplistener;
+		
 		public Lobby(int port){
 			
 			Console.WriteLine("Opening socket...");
@@ -24,18 +28,19 @@ namespace NetTest
 		
 		private void ListenForClients()
 		{
-		  this.tcplistener.Start();
+		  tcplistener.Start();
 		
 		  while (true)
 		  {
-		    //blocks until a client has connected to the server
-		    TcpClient client = this.tcplistener.AcceptTcpClient();
+		    //wait for new connection and ad it to the end of our clients list
+			TcpClient newClient = tcplistener.AcceptTcpClient();
+			TcpClient anothernewclient = newClient;
 		
 		    //create a thread to handle communication
-		    //with connected client
 		    Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
-		    clientThread.Start(client);
+		    clientThread.Start(newClient);//start the thread using the last added client
 		  }
+			
 		}
 		
 		private void HandleClientComm(object client)
@@ -44,7 +49,6 @@ namespace NetTest
 			  TcpClient tcpClient = (TcpClient)client;
 			  NetworkStream clientStream = tcpClient.GetStream();
 			  Console.WriteLine("client {0} has connected.", tcpClient.Client.RemoteEndPoint);
-			
 				
 			  byte[] message = new byte[4];
 			  int bytesRead;
@@ -70,13 +74,10 @@ namespace NetTest
 				Console.WriteLine("Client {0} has disconnected.",tcpClient.Client.RemoteEndPoint);
 			      break;
 			    }
-				//Header Packet - 32 bits
-			    //message[0] contains 'action' and 'generic type' flags
-				//message[1] contains 'count' flags
-				//messages[2-3] are picked up by our reader but we dont currently have a use for these bits in the header.
-				
-				//all other packets are 32 bit datatypes such as (but not entirely limited to) floats
-				Console.WriteLine("Read Value: {0},{1},{2},{3}",message[0],message[1],message[2],message[3]);
+
+				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
+				System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
+				Console.WriteLine("Read Value: {0}",encoding.GetString(message));
 			  }
 			
 			  tcpClient.Close();
@@ -85,7 +86,6 @@ namespace NetTest
 	
 	class Client
 	{
-		public byte[] NetWrite = new byte[4]{3,12,9,6};//should we make a class for this 32 bit reader? A class for an array of 32 bit reads?
 		public Client(int port)
 		{
 			//The client's first order of business is to connect to a lobby
@@ -99,9 +99,16 @@ namespace NetTest
 			Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
 			
 			NetworkStream clientStream = client.GetStream();
-			
-			clientStream.Write(NetWrite, 0 , NetWrite.Length);
-			clientStream.Flush();
+			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
+
+			while(true){
+				string Message = Console.ReadLine();
+				while(Message.Length % 4 !=0){
+					Message += "\0";//insert nulls to fill the rest of the 32 bit packet
+				}
+				clientStream.Write(encoding.GetBytes(Message), 0 , Message.Length);
+				clientStream.Flush();
+			}
 		}
 	}
 	
