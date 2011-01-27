@@ -10,13 +10,13 @@ namespace NetTest
 	
 	class Lobby
 	{
-		private List<TcpClient> MyClients;
+		private List<TcpClient> myClients;
 		private Thread listenthread;
 		private Thread respondthread;
 		private TcpListener tcplistener;
 		
 		public Lobby(int port){
-			
+			myClients = new List<TcpClient>();
 			Console.WriteLine("Opening socket...");
 			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
 			
@@ -24,6 +24,26 @@ namespace NetTest
 			this.tcplistener = new TcpListener(lep);
 			this.listenthread = new Thread(new ThreadStart(ListenForClients));
 			this.listenthread.Start();
+			
+			this.respondthread = new Thread(new ThreadStart(RespondToClients));
+			this.respondthread.Start();
+		}
+		
+		private void RespondToClients()
+		{
+			bool sendmessage = true;
+			string message = "Server: I see you connected";
+			while(true)
+			{
+				if(sendmessage)
+				{
+					foreach(TcpClient Client in myClients)
+					{
+						
+					}
+				}
+				
+			}
 		}
 		
 		private void ListenForClients()
@@ -33,12 +53,12 @@ namespace NetTest
 		  while (true)
 		  {
 		    //wait for new connection and ad it to the end of our clients list
-			TcpClient newClient = tcplistener.AcceptTcpClient();
-			TcpClient anothernewclient = newClient;
+			myClients.Add(tcplistener.AcceptTcpClient());
+			
 		
 		    //create a thread to handle communication
 		    Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
-		    clientThread.Start(newClient);//start the thread using the last added client
+		    clientThread.Start(myClients[myClients.Count -1]);//start the thread using the last added client
 		  }
 			
 		}
@@ -77,7 +97,7 @@ namespace NetTest
 
 				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
 				System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-				Console.WriteLine("Read Value: {0}",encoding.GetString(message));
+				Console.WriteLine("Client: {0}",encoding.GetString(message));
 			  }
 			
 			  tcpClient.Close();
@@ -101,6 +121,11 @@ namespace NetTest
 			NetworkStream clientStream = client.GetStream();
 			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
 
+			//create listener to pick up on server responses
+			Thread clientThread = new Thread(new ParameterizedThreadStart(HandleServerComm));
+			clientThread.Start();
+			
+			//Send to server at our leisure
 			while(true){
 				string Message = Console.ReadLine();
 				while(Message.Length % 4 !=0){
@@ -109,6 +134,10 @@ namespace NetTest
 				clientStream.Write(encoding.GetBytes(Message), 0 , Message.Length);
 				clientStream.Flush();
 			}
+		}
+		
+		private void HandleServerComm(object server)
+		{
 		}
 	}
 	
