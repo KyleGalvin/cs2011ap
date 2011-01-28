@@ -39,7 +39,7 @@ namespace NetTest
 						
 				//create a thread to handle communication
 				Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
-				clientThread.Start(myConnections[myConnections.Count -1]);//start the thread using the last added client
+				clientThread.Start(myConnections[(myConnections.Count -1)]);
 			}
 		}
 		
@@ -123,7 +123,7 @@ namespace NetTest
 				
 				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
 				System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-				Console.WriteLine("Client IP: {0} Client Data: {1}",tcpClient.Client.RemoteEndPoint,encoding.GetString(message));
+				Console.WriteLine("Client IP: {0}, Client Data: {1}",tcpClient.Client.RemoteEndPoint,encoding.GetString(message));
 			}
 			
 			tcpClient.Close();
@@ -169,10 +169,6 @@ namespace NetTest
 			
 			NetworkStream clientStream = client.GetStream();
 			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-			
-			//create listener to pick up on server responses
-			Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
-			clientThread.Start();
 			
 			//Send to server at our leisure
 			while(true){
@@ -220,6 +216,7 @@ namespace NetTest
 			Console.WriteLine("Waiting for incoming messages from {0}.", tcpClient.Client.RemoteEndPoint);
 				
 			byte[] message = new byte[4];
+			byte[] temp;
 			
 			List<byte[]> data = new List<byte[]>();
 			int bytesRead;
@@ -231,8 +228,8 @@ namespace NetTest
 			    try
 			    {
 					//blocks until a client sends a message
-					bytesRead = clientStream.Read(message, 0, 4);
-					data.Add(message);
+					bytesRead += clientStream.Read(message, 0, 4);
+					
 			    }
 			    catch
 			    {
@@ -246,13 +243,13 @@ namespace NetTest
 					Console.WriteLine("Disconnected from {0}.",tcpClient.Client.RemoteEndPoint);
 					break;
 				}
+				data.Add(message);
 				
 				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
 				System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-				Console.WriteLine("Read data: {0}",tcpClient.Client.RemoteEndPoint,encoding.GetString(message));
+				Console.WriteLine("Message from {0}: {1}",tcpClient.Client.RemoteEndPoint,encoding.GetString(message));
 			}
 			
-			tcpClient.Close();
 		}
 		
 		protected override void SendOutgoingComm(Object remoteEnd, byte[] data)
