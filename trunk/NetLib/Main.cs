@@ -14,26 +14,39 @@ namespace NetTest
 		protected TcpListener tcpListener;
 		protected int port;
 		
-		protected List<TcpClient> myConnectionsIn;
-		protected List<TcpClient> myConnectionsOut;
+		protected List<TcpClient> myConnections;
 		protected List<byte[]> myData;
 		protected String myRole;
 		
 		public NetManager(int newPort)
 		{
-			myConnectionsIn = new List<TcpClient>();
-			myConnectionsOut = new List<TcpClient>();
+			myConnections = new List<TcpClient>();
 			port = newPort;
+		}
+		
+		//Listen for any requests directed at our IP and Port
+		//respond by accepting connection and requesting one of our own for outgoing data
+		protected void Listen()
+		{
+			tcpListener.Start();
+			TcpClient client = new TcpClient();
+			
+			while (true)
+			{
+				//wait for new connection and ad it to the end of our clients list
+				client = tcpListener.AcceptTcpClient();
+				myConnections.Add(client);
+						
+				//create a thread to handle communication
+				Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
+				clientThread.Start(myConnections[myConnections.Count -1]);//start the thread using the last added client
+			}
 		}
 		
 		//communication is handled differently in the lobby/client children classes
 		protected abstract void HandleIncomingComm(Object remoteEnd);
 		
 		protected abstract void SendOutgoingComm(Object remoteEnd, byte[] data);
-		
-		//The server will respond to every incoming connection request with an outgoing connection request
-		//if both sides did this, we'd connect-loop infinitely. Therefore, two implimentations
-		protected abstract void Listen();
 		
 	}
 	
@@ -47,29 +60,6 @@ namespace NetTest
 			tcpListener = new TcpListener(lep);
 			listenThread = new Thread(new ThreadStart(Listen));
 			listenThread.Start();
-		}
-		
-		//Listen for any requests directed at our IP and Port
-		//respond by accepting connection and requesting one of our own for outgoing data
-		protected override void Listen()
-		{
-			tcpListener.Start();
-			TcpClient client = new TcpClient();
-			
-			while (true)
-			{
-				//wait for new connection and ad it to the end of our clients list
-				client = tcpListener.AcceptTcpClient();
-				myConnectionsIn.Add(client);
-
-				IPEndPoint clientEndPoint = (IPEndPoint)client.Client.RemoteEndPoint;
-				client.Connect(clientEndPoint);
-				myConnectionsOut.Add(client);
-						
-				//create a thread to handle communication
-				Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
-				clientThread.Start(myConnectionsIn[myConnectionsIn.Count -1]);//start the thread using the last added client
-			}
 		}
 		
 		private List<byte[]> GetResponse(List<byte[]> data, TcpClient tcpClient)
@@ -87,8 +77,11 @@ namespace NetTest
 		//for responding to all clients
 		private void RespondToClients(List<byte[]> response)
 		{
-			foreach(TcpClient client in myConnectionsOut)
-			{
+			foreach(TcpClient client in myConnections)
+			{	
+				//32 bits per iteration
+				foreach(byte[] data32 in response)
+				client.Client.Send(data32);
 			}
 		}
 		
@@ -147,6 +140,7 @@ namespace NetTest
 		
 		public Client(int port):base(port)
 		{
+			//we try some auto-connection trickery first
 			String IP = "";
 			TcpClient client = new TcpClient();
 			IPEndPoint broadcastEP = new IPEndPoint(IPAddress.Broadcast,port);
@@ -163,7 +157,7 @@ namespace NetTest
 			IPEndPoint serverEndPoint = FindServer(port,broadcastEP);
 			
 			if (serverEndPoint == broadcastEP){
-				//server failed to respond. Ask for manual intervention
+				//server failed to respond. Our trickery failed. Ask for manual intervention
 				Console.WriteLine("Please enter Lobby IP:");
 				IP = Console.ReadLine();
 				serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
@@ -173,13 +167,9 @@ namespace NetTest
 			client.Connect(serverEndPoint);
 			Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
 			
-			while(myConnectionsIn.Count == 0){
-				//wait for a server to establish a connection (need a timeout)
-			}
-			
 			NetworkStream clientStream = client.GetStream();
 			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-
+			
 			//create listener to pick up on server responses
 			Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
 			clientThread.Start();
@@ -195,24 +185,7 @@ namespace NetTest
 			}
 		}
 		
-		//Listen for any requests directed at our IP and Port
-		//respond by accepting connection and requesting one of our own for outgoing data
-		protected override void Listen()
-		{
-			tcpListener.Start();
-			TcpClient client = new TcpClient();
-			
-			while (true)
-			{
-				//wait for new connection and ad it to the end of our clients list
-				client = tcpListener.AcceptTcpClient();
-				myConnectionsIn.Add(client);
-						
-				//create a thread to handle communication
-				Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
-				clientThread.Start(myConnectionsIn[myConnectionsIn.Count -1]);//start the thread using the last added client
-			}
-		}
+
 		
 		//automatically find server on subnet
 		private IPEndPoint FindServer(int port,IPEndPoint broadcastEP){
