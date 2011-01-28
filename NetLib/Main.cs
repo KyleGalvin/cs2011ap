@@ -7,26 +7,62 @@ using System.Collections.Generic;
 
 namespace NetTest
 {
-	
-	class Lobby
+	abstract class NetManager
 	{
-		private List<TcpClient> myClients;
-		private Thread listenthread;
-		private Thread respondthread;
-		private TcpListener tcplistener;
+		protected Thread listenThread;
+		protected Thread respondThread;
+		protected TcpListener tcpListener;
+		protected int port;
 		
-		public Lobby(int port){
-			myClients = new List<TcpClient>();
+		protected List<TcpClient> myConnections;
+		protected List<byte[]> myData;
+		
+		public NetManager(int newPort)
+		{
+			myConnections = new List<TcpClient>();
+			port = newPort;
+		}
+		
+		//Listen for any requests directed at our IP and Port;
+		protected void Listen()
+		{
+			tcpListener.Start();
+		
+			while (true)
+			{
+				//wait for new connection and ad it to the end of our clients list
+				myConnections.Add(tcpListener.AcceptTcpClient());
+			
+		
+				//create a thread to handle communication
+				Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
+				clientThread.Start(myConnections[myConnections.Count -1]);//start the thread using the last added client
+			}
+		}
+		
+		//communication is handled differently in the lobby/client children classes
+		protected abstract void HandleIncomingComm(Object RemoteEnd);
+		
+		private void ReadFromConnection(TcpClient connection){}
+		private void AcceptConnection(){}
+		
+	}
+	
+	class Lobby : NetManager
+	{
+		
+		public Lobby(int port):base(port){
+			myConnections = new List<TcpClient>();
 			Console.WriteLine("Opening socket...");
 			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
 			
 			Console.WriteLine("Listening for incoming connections...");
-			this.tcplistener = new TcpListener(lep);
-			this.listenthread = new Thread(new ThreadStart(ListenForClients));
-			this.listenthread.Start();
+			tcpListener = new TcpListener(lep);
+			listenThread = new Thread(new ThreadStart(Listen));
+			listenThread.Start();
 			
-			this.respondthread = new Thread(new ThreadStart(RespondToClients));
-			this.respondthread.Start();
+			respondThread = new Thread(new ThreadStart(RespondToClients));
+			respondThread.Start();
 		}
 		
 		private void RespondToClients()
@@ -37,9 +73,14 @@ namespace NetTest
 			{
 				if(sendmessage)
 				{
+<<<<<<< .mine
+					foreach(TcpClient Client in myConnections)
+					{
+=======
 					//This loop needs to lock myClients so nothing modifies its data while we loop
 					//foreach(TcpClient Client in myClients)
 					//{
+>>>>>>> .r24
 						
 					//}
 				}
@@ -47,24 +88,7 @@ namespace NetTest
 			}
 		}
 		
-		private void ListenForClients()
-		{
-		  tcplistener.Start();
-		
-		  while (true)
-		  {
-		    //wait for new connection and ad it to the end of our clients list
-			myClients.Add(tcplistener.AcceptTcpClient());
-			
-		
-		    //create a thread to handle communication
-		    Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
-		    clientThread.Start(myClients[myClients.Count -1]);//start the thread using the last added client
-		  }
-			
-		}
-		
-		private void HandleClientComm(object client)
+		protected override void HandleIncomingComm(object client)
 		{
 		
 			  TcpClient tcpClient = (TcpClient)client;
@@ -105,16 +129,51 @@ namespace NetTest
 		}
 	}
 	
-	class Client
+	class Client : NetManager
 	{
-		public Client(int port)
-		{
-			//The client's first order of business is to connect to a lobby
-			Console.WriteLine("Please enter Lobby IP:");
-			String IP = Console.ReadLine();
-			TcpClient client = new TcpClient();
+		
+		//automatically find server on subnet
+		private IPEndPoint FindServer(int port,IPEndPoint broadcastEP){
+			//broadcast
+			Socket BC = new Socket(AddressFamily.InterNetwork,SocketType.Dgram,ProtocolType.Udp);
 
-			IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
+			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
+			
+			try
+			{
+				BC.SendTo(encoding.GetBytes("Client Broadcast"),broadcastEP);
+			}
+			catch
+			{
+				Console.WriteLine("Could not broadcast request for server");
+				Console.WriteLine("Broadcast May be disabled...");
+			}
+			
+			//listen
+
+			//get tcpclient for all
+			
+			//set server end point
+				
+			return broadcastEP;
+		}
+		
+		public Client(int port):base(port)
+		{
+			String IP = "";
+			TcpClient client = new TcpClient();
+			IPEndPoint broadcastEP = new IPEndPoint(IPAddress.Broadcast,port);
+			
+			//Broadcast our address and protocol in hopes that a server will respond
+			IPEndPoint serverEndPoint = FindServer(port,broadcastEP);
+			
+			if (serverEndPoint == broadcastEP){
+				//server failed to respond. Ask for manual intervention
+				Console.WriteLine("Please enter Lobby IP:");
+				IP = Console.ReadLine();
+				serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
+			}
+			
 			Console.WriteLine("Connecting to server...");
 			client.Connect(serverEndPoint);
 			Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
@@ -123,7 +182,7 @@ namespace NetTest
 			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
 
 			//create listener to pick up on server responses
-			Thread clientThread = new Thread(new ParameterizedThreadStart(HandleServerComm));
+			Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
 			clientThread.Start();
 			
 			//Send to server at our leisure
@@ -137,7 +196,7 @@ namespace NetTest
 			}
 		}
 		
-		private void HandleServerComm(object server)
+		protected override void HandleIncomingComm(object server)
 		{
 		}
 	}
@@ -146,7 +205,7 @@ namespace NetTest
 	{	
 		public static void Main (string[] args)
 		{		
-			int DefaultPort = 3000;
+			int DefaultPort = 9999;
 			
 			while(true){
 				Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
