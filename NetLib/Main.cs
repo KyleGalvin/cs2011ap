@@ -46,8 +46,6 @@ namespace NetTest
 		//communication is handled differently in the lobby/client children classes
 		protected abstract void HandleIncomingComm(Object remoteEnd);
 		
-		protected abstract void SendOutgoingComm(Object remoteEnd, byte[] data);
-		
 	}
 	
 	class Lobby : NetManager
@@ -62,27 +60,12 @@ namespace NetTest
 			listenThread.Start();
 		}
 		
-		private List<byte[]> GetResponse(List<byte[]> data, TcpClient tcpClient)
+		private void Respond(byte[] data,TcpClient client)
 		{
+			
 			//we will eventually need to do something other than echo back.
-			return data;
-		}
-		
-		//for responding to a single client
-		private void RespondToClient(List<byte[]> response, TcpClient tcpClient)
-		{
-		
-		}
-		
-		//for responding to all clients
-		private void RespondToClients(List<byte[]> response)
-		{
-			foreach(TcpClient client in myConnections)
-			{	
-				//32 bits per iteration
-				foreach(byte[] data32 in response)
-				client.Client.Send(data32);
-			}
+			Console.WriteLine("sending response: {0} to client: {1}",data,client.Client.RemoteEndPoint);
+			client.Client.Send(data);
 		}
 		
 		protected override void HandleIncomingComm(object client)
@@ -106,7 +89,7 @@ namespace NetTest
 					//blocks until a client sends a message
 					bytesRead = clientStream.Read(message, 0, 4);
 					data.Add(message);
-					RespondToClients(GetResponse(data,tcpClient));
+					Respond(message,tcpClient);
 			    }
 			    catch
 			    {
@@ -127,10 +110,6 @@ namespace NetTest
 			}
 			
 			tcpClient.Close();
-		}
-		
-		protected override void SendOutgoingComm(Object remoteEnd, byte[] data)
-		{
 		}
 		
 	}
@@ -180,8 +159,6 @@ namespace NetTest
 				clientStream.Flush();
 			}
 		}
-		
-
 		
 		//automatically find server on subnet
 		private IPEndPoint FindServer(int port,IPEndPoint broadcastEP){
@@ -250,10 +227,6 @@ namespace NetTest
 				Console.WriteLine("Message from {0}: {1}",tcpClient.Client.RemoteEndPoint,encoding.GetString(message));
 			}
 			
-		}
-		
-		protected override void SendOutgoingComm(Object remoteEnd, byte[] data)
-		{
 		}
 		
 	}
