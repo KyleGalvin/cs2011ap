@@ -73,14 +73,9 @@ namespace NetTest
 			{
 				if(sendmessage)
 				{
-<<<<<<< .mine
-					foreach(TcpClient Client in myConnections)
-					{
-=======
-					//This loop needs to lock myClients so nothing modifies its data while we loop
-					//foreach(TcpClient Client in myClients)
+					//foreach(TcpClient Client in myConnections)
 					//{
->>>>>>> .r24
+					//This loop needs to lock myClients so nothing modifies its data while we loop
 						
 					//}
 				}
