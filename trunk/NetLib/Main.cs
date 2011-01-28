@@ -41,10 +41,9 @@ namespace NetTest
 		}
 		
 		//communication is handled differently in the lobby/client children classes
-		protected abstract void HandleIncomingComm(Object RemoteEnd);
+		protected abstract void HandleIncomingComm(Object remoteEnd);
 		
-		private void ReadFromConnection(TcpClient connection){}
-		private void AcceptConnection(){}
+		protected abstract void SendOutgoingComm(Object remoteEnd, byte[] data);
 		
 	}
 	
@@ -60,68 +59,73 @@ namespace NetTest
 			tcpListener = new TcpListener(lep);
 			listenThread = new Thread(new ThreadStart(Listen));
 			listenThread.Start();
-			
-			respondThread = new Thread(new ThreadStart(RespondToClients));
-			respondThread.Start();
 		}
 		
-		private void RespondToClients()
+		private List<byte[]> GetResponse(List<byte[]> data, TcpClient tcpClient)
 		{
-			bool sendmessage = true;
-			string message = "Server: I see you connected";
-			while(true)
-			{
-				if(sendmessage)
-				{
-					//foreach(TcpClient Client in myConnections)
-					//{
-					//This loop needs to lock myClients so nothing modifies its data while we loop
-						
-					//}
-				}
-				
-			}
+			//we will eventually need to do something other than echo back.
+			return data;
+		}
+		
+		//for responding to a single client
+		private void RespondToClient(List<byte[]> response, TcpClient tcpClient)
+		{
+		
+		}
+		
+		//for responding to all clients
+		private void RespondToClients(List<byte[]> response)
+		{
 		}
 		
 		protected override void HandleIncomingComm(object client)
 		{
 		
-			  TcpClient tcpClient = (TcpClient)client;
-			  NetworkStream clientStream = tcpClient.GetStream();
-			  Console.WriteLine("client {0} has connected.", tcpClient.Client.RemoteEndPoint);
+			TcpClient tcpClient = (TcpClient)client;
+			NetworkStream clientStream = tcpClient.GetStream();
+			Console.WriteLine("client {0} has connected.", tcpClient.Client.RemoteEndPoint);
 				
-			  byte[] message = new byte[4];
-			  int bytesRead;
+			byte[] message = new byte[4];
 			
-			  while (true)
-			  {
-			    bytesRead = 0;
+			List<byte[]> data = new List<byte[]>();
+			int bytesRead;
+			
+			while (true)
+			{
+				bytesRead = 0;
 			
 			    try
 			    {
-			      //blocks until a client sends a message
-			      bytesRead = clientStream.Read(message, 0, 4);
+					//blocks until a client sends a message
+					bytesRead = clientStream.Read(message, 0, 4);
+					data.Add(message);
+					RespondToClients(GetResponse(data,tcpClient));
 			    }
 			    catch
 			    {
-			      //a socket error has occured
-			      break;
+					//a socket error has occured
+					break;
 			    }
 			
 			    if (bytesRead == 0)
-			    {
-			      //the client has disconnected from the server
-				Console.WriteLine("Client {0} has disconnected.",tcpClient.Client.RemoteEndPoint);
-			      break;
-			    }
-
+				{
+					//the client has disconnected from the server
+					Console.WriteLine("Client {0} has disconnected.",tcpClient.Client.RemoteEndPoint);
+					break;
+				}
+				
 				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
 				System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-				Console.WriteLine("Client: {0}",encoding.GetString(message));
-			  }
+				Console.WriteLine("Client IP: {0} Client Data: {1}",tcpClient.Client.RemoteEndPoint,encoding.GetString(message));
+			}
 			
-			  tcpClient.Close();
+			tcpClient.Close();
 		}
+		
+		protected override void SendOutgoingComm(Object remoteEnd, byte[] data)
+		{
+		}
+		
 	}
 	
 	class Client : NetManager
@@ -193,7 +197,50 @@ namespace NetTest
 		
 		protected override void HandleIncomingComm(object server)
 		{
+			TcpClient tcpClient = (TcpClient)server;
+			NetworkStream clientStream = tcpClient.GetStream();
+			Console.WriteLine("Waiting for incoming messages from {0}.", tcpClient.Client.RemoteEndPoint);
+				
+			byte[] message = new byte[4];
+			
+			List<byte[]> data = new List<byte[]>();
+			int bytesRead;
+			
+			while (true)
+			{
+				bytesRead = 0;
+			
+			    try
+			    {
+					//blocks until a client sends a message
+					bytesRead = clientStream.Read(message, 0, 4);
+					data.Add(message);
+			    }
+			    catch
+			    {
+					//a socket error has occured
+					break;
+			    }
+			
+			    if (bytesRead == 0)
+				{
+					//the client has disconnected from the server
+					Console.WriteLine("Disconnected from {0}.",tcpClient.Client.RemoteEndPoint);
+					break;
+				}
+				
+				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
+				System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
+				Console.WriteLine("Read data: {0}",tcpClient.Client.RemoteEndPoint,encoding.GetString(message));
+			}
+			
+			tcpClient.Close();
 		}
+		
+		protected override void SendOutgoingComm(Object remoteEnd, byte[] data)
+		{
+		}
+		
 	}
 	
 	class MainClass
