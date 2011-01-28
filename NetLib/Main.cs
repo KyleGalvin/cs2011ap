@@ -36,7 +36,7 @@ namespace NetTest
 				//wait for new connection and ad it to the end of our clients list
 				client = tcpListener.AcceptTcpClient();
 				myConnections.Add(client);
-						
+				Console.WriteLine("Starting the {0}th connection",myConnections.Count);
 				//create a thread to handle communication
 				Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
 				clientThread.Start(myConnections[(myConnections.Count -1)]);
@@ -60,12 +60,19 @@ namespace NetTest
 			listenThread.Start();
 		}
 		
-		private void Respond(byte[] data,TcpClient client)
+		private void Respond(byte[] data,Object client)
 		{
+			TcpClient tcpClient = (TcpClient)client;
+			
 			
 			//we will eventually need to do something other than echo back.
-			Console.WriteLine("sending response: {0} to client: {1}",data,client.Client.RemoteEndPoint);
-			client.Client.Send(data);
+			Console.WriteLine("sending response: {0} to client: {1}",data,tcpClient.Client.RemoteEndPoint);
+			int val = tcpClient.Client.Send(data);
+			Console.WriteLine("quepasa{0}",val);
+		}
+		
+		protected void HandleOutgoingComm(object client)
+		{
 		}
 		
 		protected override void HandleIncomingComm(object client)
@@ -89,7 +96,7 @@ namespace NetTest
 					//blocks until a client sends a message
 					bytesRead = clientStream.Read(message, 0, 4);
 					data.Add(message);
-					Respond(message,tcpClient);
+					Respond(message,client);
 			    }
 			    catch
 			    {
@@ -127,10 +134,7 @@ namespace NetTest
 			Console.WriteLine("Opening socket...");
 			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
 			
-			Console.WriteLine("Listening for incoming connections...");
-			tcpListener = new TcpListener(lep);
-			listenThread = new Thread(new ThreadStart(Listen));
-			listenThread.Start();
+
 			
 			//Broadcast our address and protocol in hopes that a server will respond
 			IPEndPoint serverEndPoint = FindServer(port,broadcastEP);
@@ -148,6 +152,11 @@ namespace NetTest
 			
 			NetworkStream clientStream = client.GetStream();
 			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
+			
+			Console.WriteLine("Listening for incoming data...");
+			tcpListener = new TcpListener(lep);
+			listenThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
+			listenThread.Start(clientStream);
 			
 			//Send to server at our leisure
 			while(true){
@@ -186,11 +195,11 @@ namespace NetTest
 			return broadcastEP;
 		}
 		
-		protected override void HandleIncomingComm(object server)
+		protected override void HandleIncomingComm(object stream)
 		{
-			TcpClient tcpClient = (TcpClient)server;
-			NetworkStream clientStream = tcpClient.GetStream();
-			Console.WriteLine("Waiting for incoming messages from {0}.", tcpClient.Client.RemoteEndPoint);
+			NetworkStream clientStream = (NetworkStream)stream;
+
+			Console.WriteLine("Waiting for incoming messages");
 				
 			byte[] message = new byte[4];
 			byte[] temp;
@@ -217,14 +226,14 @@ namespace NetTest
 			    if (bytesRead == 0)
 				{
 					//the client has disconnected from the server
-					Console.WriteLine("Disconnected from {0}.",tcpClient.Client.RemoteEndPoint);
+					Console.WriteLine("Disconnected.");
 					break;
 				}
 				data.Add(message);
 				
 				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
 				System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-				Console.WriteLine("Message from {0}: {1}",tcpClient.Client.RemoteEndPoint,encoding.GetString(message));
+				Console.WriteLine("Message: {0}",encoding.GetString(message));
 			}
 			
 		}
