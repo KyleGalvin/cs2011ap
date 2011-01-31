@@ -41,13 +41,15 @@ namespace NetLib
 			listenThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
 			listenThread.Start(clientStream);
 			
-			List<GameObj> Model = new List<GameObj>();
+			Dictionary<String,List<GameObj>> Model = new Dictionary<String,List<GameObj>>();
+			List<GameObj> Enemies = new List<GameObj>();
+			Model.Add("Enemies",Enemies);
 			
 			//create an enemy object to test communications with
-			Enemy baddie = new Enemy(100,100,5,5,20);
-			Model.Add(baddie);
+			Enemy baddie1 = new Enemy(100,100,5,5,20);
+			Enemies.Add(baddie1);
 			
-			Send(Model,Action.Create);
+			Send(Model,(UInt32)Action.Create);
 			
 			//Send to server at our leisure
 			//while(true){
