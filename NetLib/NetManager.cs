@@ -58,17 +58,19 @@ namespace NetLib
 		
 		public void Send(Dictionary<String,List<GameObj>> outgoing, UInt32 action)
 		{
+			
 			List<byte[]> buffer = new List<byte[]>();
 			//fill the buffer with our outgoing data
 			foreach(KeyValuePair<String,List<GameObj>> p in outgoing)
 			{
+				
 				List<GameObj> ObjSet = p.Value;
 				//craft packet header
 				UInt32 size = ObjSet[0].netsize;
 				UInt32 count = (UInt32)ObjSet.Count;
 				count = count<<16;
 				UInt32 header = count^size^action;
-				
+				Console.WriteLine("Sending Header: {0}",header);
 				buffer.Add(BitConverter.GetBytes(header));
 				
 				foreach(GameObj O in ObjSet)
@@ -84,6 +86,7 @@ namespace NetLib
 				NetworkStream clientStream = client.GetStream();
 				foreach(byte[] b in buffer)
 				{
+					Console.WriteLine("Writing: {0}",b);
 					clientStream.Write(b,0,4);
 				}
 				clientStream.Flush();

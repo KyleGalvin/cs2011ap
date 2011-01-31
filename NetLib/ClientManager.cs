@@ -47,7 +47,9 @@ namespace NetLib
 			
 			//create an enemy object to test communications with
 			Enemy baddie1 = new Enemy(100,100,5,5,20);
+			Enemy baddie2 = new Enemy(300,100,5,5,20);
 			Enemies.Add(baddie1);
+			Enemies.Add(baddie2);
 			
 			Send(Model,(UInt32)Action.Create);
 			
