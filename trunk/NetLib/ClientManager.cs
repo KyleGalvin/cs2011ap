@@ -33,6 +33,10 @@ namespace NetLib
 			client.Connect(serverEndPoint);
 			Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
 			
+			lock(this){
+				myConnections.Add(client);
+			}
+			
 			NetworkStream clientStream = client.GetStream();
 			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
 			

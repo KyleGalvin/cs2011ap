@@ -40,12 +40,7 @@ namespace NetLib
 		
 		protected override void HandleIncomingComm(object client)
 		{
-			TcpClient tcpClient = (TcpClient)client;
-			lock(this)
-			{
-				myConnections.Add(tcpClient);
-			}
-			
+			TcpClient tcpClient = (TcpClient)client;			
 			NetworkStream clientStream = tcpClient.GetStream();
 			Console.WriteLine("client {0} has connected.", tcpClient.Client.RemoteEndPoint);
 				
@@ -62,6 +57,8 @@ namespace NetLib
 			
 			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
 			
+			NetPackage pack = new NetPackage();
+			
 			bytesRead = 0;
 			
 			while (true)
@@ -69,15 +66,15 @@ namespace NetLib
 			
 			    try
 			    {
+					//try to recieve a packet
+					
 					//blocks until a client sends a message
 					bytesRead += clientStream.Read(rawMessage, 0, 4);
-					message = BitConverter.ToUInt32(rawMessage,0);
-					data.Add(message);
-					
-					//the number of 32 bit reads to follow plus the 32 bit header
-					packageSize = GetExpectedPackageSize(message);
-					Console.WriteLine("Expected {0} numerics", packageSize);
-					
+					pack.Recieve(rawMessage);//recieve header
+					while(pack.IsComplete()==false){//recieve body
+						bytesRead += clientStream.Read(rawMessage, 0, 4);
+						pack.Recieve(rawMessage);
+					}				
 
 			    }
 			    catch
@@ -89,12 +86,12 @@ namespace NetLib
 			    if (bytesRead == 0)//nothing was read from socket
 				{
 					Console.WriteLine("Client IP: {0}, Client Data: {1}",tcpClient.Client.RemoteEndPoint,encoding.GetString(rawMessage));
-					Respond(message);
+					//Respond(message);
 					//the client has disconnected from the server
 					Console.WriteLine("Client {0} has disconnected.",tcpClient.Client.RemoteEndPoint);
 					break;
 				}
-				if(bytesRead == packageSize)//we've accumulated the amount of data our header predicts
+				if(pack.IsComplete())//we've accumulated the amount of data our header predicts
 				{
 					Console.WriteLine("Now we are able to test if we are picking up the right data here");
 					bytesRead = 0;
@@ -118,38 +115,9 @@ namespace NetLib
 			UInt32 typesize=0;		
 			
 			Console.WriteLine("Header: {0} Type: {1} Action: {2} Count: {3}", header, type, action, count);
-			switch (type)
-			{
-			case 0://player
-				Console.WriteLine("00 = client player; 8 floats");
-				typesize=8;
-				break;
-			case 1://AI
-				Console.WriteLine("01 = enemy AI; 8 floats");
-				typesize=8;
-				break;
-			case 2://building
-				Console.WriteLine("02 = building; 8 floats");
-				typesize=8;
-				break;
-			case 3://bullet
-				Console.WriteLine("03 = bullet; 7 floats");
-				typesize=7;
-				break;
-			case 4://explosion
-				Console.WriteLine("04 = explosion; 8 floats");
-				typesize=8;
-				break;
-			case 5://power-up
-				Console.WriteLine("05 = power-up; 8 floats");
-				typesize=8;
-				break;
-			default:
-				Console.WriteLine("Invalid Command!");
-				break;
-			}
+
 			
-			return typesize*count;
+			return GetSize(type)*count;
 		}
 		
 	}

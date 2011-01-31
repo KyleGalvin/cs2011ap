@@ -10,13 +10,14 @@ namespace NetLib
 		public float yPos;
 		public float xVel;
 		public float yVel;
-		public UInt32 netsize;
+		public UInt32 type;
 		
 		public GameObj ()
 		{
 		}
 		
 		public abstract byte[] Export();
+		
 	}
 	
 	public class Circle : GameObj
@@ -27,7 +28,7 @@ namespace NetLib
 		{
 			//this is the minimum number of values needed to re-create this class.
 			//do we need to hard-code this?
-			netsize = 0x00060000;
+			type = (UInt32)Type.Circle;
 			
 			xPos=xP;
 			yPos=yP;
@@ -40,6 +41,7 @@ namespace NetLib
 		{
 			
 			List<byte> result = new List<byte>();
+			result.AddRange(BitConverter.GetBytes(UID));
 			result.AddRange(BitConverter.GetBytes(xPos));
 			result.AddRange(BitConverter.GetBytes(yPos));
 			result.AddRange(BitConverter.GetBytes(xVel));
