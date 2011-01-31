@@ -7,6 +7,7 @@ namespace NetLib
 	{
 		public UInt32 header;
 		public UInt32 size;
+		public UInt32 type;
 		public UInt32 count;
 		public List<byte[]> body;
 		public bool complete;
@@ -29,6 +30,7 @@ namespace NetLib
 				UInt32 type = (header & 0x0F000000)>>24;
 				size = GetSize(type);
 				count = (header & 0x00FF0000)>>16;
+				Console.WriteLine("RECIEVED HEADER-- size: {0} type {1} count: {2}",size,type,count);
 			}
 			else
 			{
@@ -57,7 +59,7 @@ namespace NetLib
 				return 8;
 			case 2://building
 				return 8;;
-			case (UInt32)Type.Circle://circle
+			case 3://circle
 				return 6;
 			case 4://explosion
 				return 8;

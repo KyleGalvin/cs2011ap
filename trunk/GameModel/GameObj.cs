@@ -16,7 +16,7 @@ namespace NetLib
 		{
 		}
 		
-		public abstract byte[] Export();
+		public abstract List<byte[]> Export();
 		
 	}
 	
@@ -37,18 +37,18 @@ namespace NetLib
 			rad=r;
 		}
 		
-		public override byte[] Export()
+		public override List<byte[]> Export()
 		{
 			
-			List<byte> result = new List<byte>();
-			result.AddRange(BitConverter.GetBytes(UID));
-			result.AddRange(BitConverter.GetBytes(xPos));
-			result.AddRange(BitConverter.GetBytes(yPos));
-			result.AddRange(BitConverter.GetBytes(xVel));
-			result.AddRange(BitConverter.GetBytes(yVel));
-			result.AddRange(BitConverter.GetBytes(rad));
+			List<byte[]> result = new List<byte[]>();
+			result.Add(BitConverter.GetBytes(UID));
+			result.Add(BitConverter.GetBytes(xPos));
+			result.Add(BitConverter.GetBytes(yPos));
+			result.Add(BitConverter.GetBytes(xVel));
+			result.Add(BitConverter.GetBytes(yVel));
+			result.Add(BitConverter.GetBytes(rad));
 		
-			return result.ToArray();
+			return result;
 		}
 
 	}
