@@ -75,14 +75,18 @@ namespace NetLib
 				
 				foreach(GameObj O in ObjSet)
 				{
+					Console.WriteLine("Data!");
 					buffer.Add(O.Export());
 				}
 				
 			}
 			
+			Console.WriteLine("Buffer Size: {0}",buffer.Count);
+			
 			//write buffer to all clients
 			foreach(TcpClient client in myConnections)
 			{
+				Console.WriteLine("Connection Found!");
 				NetworkStream clientStream = client.GetStream();
 				foreach(byte[] b in buffer)
 				{
