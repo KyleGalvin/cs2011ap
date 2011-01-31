@@ -64,8 +64,9 @@ namespace NetLib
 		
 		public void Send(Dictionary<String,List<GameObj>> outgoing, UInt32 action)
 		{
-			
+			//Create buffer to fill and send over network
 			List<byte[]> buffer = new List<byte[]>();
+			
 			//fill the buffer with our outgoing data
 			foreach(KeyValuePair<String,List<GameObj>> p in outgoing)
 			{
@@ -75,12 +76,13 @@ namespace NetLib
 				UInt32 count = (UInt32)ObjSet.Count;
 				count = count<<16;
 				UInt32 header = count^action^ObjSet[0].type;
-				Console.WriteLine("Sending Header: {0} Count: {1} Action: {2} Type: {3}",header,count,action,ObjSet[0].type);
+				Console.WriteLine("Sending Header: {0} Count: {1} Action: {2} Type: {3}",header,count>>16,action>>28,ObjSet[0].type>>24);
 				buffer.Add(BitConverter.GetBytes(header));
 				
 				foreach(GameObj O in ObjSet)
 				{
-					foreach(byte[] b32 in O.Export())
+					List<byte[]> oNetData = O.Export();
+					foreach(byte[] b32 in oNetData)
 					{
 						Console.WriteLine("Data!");
 						buffer.Add(b32);
@@ -99,7 +101,7 @@ namespace NetLib
 				NetworkStream clientStream = client.GetStream();
 				foreach(byte[] b in buffer)
 				{
-					Console.WriteLine("Writing: {0}",BitConverter.ToInt32(b,0));
+					Console.WriteLine("Writing {0} to {1}",BitConverter.ToInt32(b,0),client.Client.RemoteEndPoint);
 					clientStream.Write(b,0,4);
 				}
 				clientStream.Flush();

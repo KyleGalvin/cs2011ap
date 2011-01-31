@@ -11,15 +11,13 @@ namespace NetLib
 		
 		public ClientManager(int port):base(port)
 		{
-			//we try some auto-connection trickery first
+			//set up variables
 			String IP = "";
 			TcpClient client = new TcpClient();
 			IPEndPoint broadcastEP = new IPEndPoint(IPAddress.Broadcast,port);
-	
-			Console.WriteLine("Opening socket...");
 			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
 			
-			//Broadcast our address and protocol in hopes that a server will respond
+			//Try to connect to server via broadcast
 			IPEndPoint serverEndPoint = FindServer(port,broadcastEP);
 			
 			if (serverEndPoint == broadcastEP){
@@ -29,22 +27,22 @@ namespace NetLib
 				serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
 			}
 			
-			Console.WriteLine("Connecting to server...");
+			Console.WriteLine("Waiting for connections...");
 			client.Connect(serverEndPoint);
-			Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
 			
 			lock(this){
 				myConnections.Add(client);
+				Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
 			}
 			
 			NetworkStream clientStream = client.GetStream();
-			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
 			
-			Console.WriteLine("Listening for incoming data...");
+			Console.WriteLine("Creating listener thread for reading server communications...");
 			tcpListener = new TcpListener(lep);
 			listenThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
 			listenThread.Start(clientStream);
 			
+			Console.WriteLine("Creating new game model containing 2 enemies...");
 			Dictionary<String,List<GameObj>> Model = new Dictionary<String,List<GameObj>>();
 			List<GameObj> Enemies = new List<GameObj>();
 			Model.Add("Enemies",Enemies);
@@ -55,18 +53,8 @@ namespace NetLib
 			Enemies.Add(baddie1);
 			Enemies.Add(baddie2);
 			
+			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
 			Send(Model,(UInt32)Action.Create);
-			
-			//Send to server at our leisure
-			//while(true){
-				//I'm using this only to create a 'hit enter to send packet' situation
-				//string Message = Console.ReadLine();
-				
-				//test hack
-				//byte[] testpackage = {0,0,count,(byte)Enemy.netObjType};
-				//clientStream.Write(testpackage,0,4);
-				//clientStream.Flush();
-			//}
 		}
 		
 		//automatically find server on subnet

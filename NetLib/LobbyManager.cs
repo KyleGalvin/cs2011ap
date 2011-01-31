@@ -74,8 +74,8 @@ namespace NetLib
 					//segment number
 					int i = 0;
 					while(pack.IsComplete()==false){//recieve body
-						Console.WriteLine("Reading Segment {0} of {1}...",i,pack.size * pack.GetSize(pack.type));
 						bytesRead += clientStream.Read(rawMessage, 0, 4);
+						Console.WriteLine("Reading Segment {0} of {1}... Value: {2}",i,pack.size * pack.GetSize(pack.type), BitConverter.ToInt32(rawMessage,0));
 						pack.Recieve(rawMessage);
 						i++;
 					}	
