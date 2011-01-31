@@ -6,6 +6,12 @@ using System.Collections.Generic;
 
 namespace NetLib
 {
+	
+	public enum Action{
+		Create = 0;
+		Update = 1;
+	}
+	
 	abstract class NetManager
 	{
 		protected Thread listenThread;
@@ -49,9 +55,44 @@ namespace NetLib
 			}
 		}
 		
+		public void Send(Dictionary<String,List<GameObj>> outgoing, int action)
+		{
+			List<byte[]> buffer = new List<byte[]>();
+			byte act = (byte)action<<4;
+			//fill the buffer with our outgoing data
+			foreach(KeyValuePair<String,List<GameObj>> p in outgoing)
+			{
+				List<GameObj> ObjSet = p.Value;
+				//craft packet header
+				int size = ObjSet[0].netsize;
+				int count = ObjSet.Count;
+				byte[] header = {0,0,(byte)count,(((byte)size)&act)};//action and size share a byte
+				buffer.Add(header);
+				
+				foreach(GameObj O in ObjSet)
+				{
+					buffer.Add(O.Export());
+				}
+				
+			}
+			
+			//write buffer to all clients
+			foreach(TcpClient client in myConnections)
+			{
+				NetworkStream clientStream = client.GetStream();
+				foreach(byte[] b in buffer)
+				{
+					clientStream.Write(b,0,4);
+				}
+				clientStream.Flush();
+			}
+
+		}
+		
 		//communication is handled differently in the lobby/client children classes
 		protected abstract void HandleIncomingComm(Object remoteEnd);
 		
 	}
+	
 }
 

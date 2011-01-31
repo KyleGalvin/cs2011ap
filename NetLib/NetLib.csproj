@@ -41,6 +41,7 @@
     <Compile Include="NetManager.cs" />
     <Compile Include="LobbyManager.cs" />
     <Compile Include="ClientManager.cs" />
+    <Compile Include="NetPackage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
