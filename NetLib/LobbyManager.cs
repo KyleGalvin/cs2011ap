@@ -71,10 +71,15 @@ namespace NetLib
 					//blocks until a client sends a message
 					bytesRead += clientStream.Read(rawMessage, 0, 4);
 					pack.Recieve(rawMessage);//recieve header
+					//segment number
+					int i = 0;
 					while(pack.IsComplete()==false){//recieve body
+						Console.WriteLine("Reading Segment {0} of {1}...",i,pack.size * pack.GetSize(pack.type));
 						bytesRead += clientStream.Read(rawMessage, 0, 4);
 						pack.Recieve(rawMessage);
-					}				
+						i++;
+					}	
+					Console.WriteLine("Packet complete!");
 
 			    }
 			    catch

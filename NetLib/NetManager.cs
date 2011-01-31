@@ -80,8 +80,12 @@ namespace NetLib
 				
 				foreach(GameObj O in ObjSet)
 				{
-					Console.WriteLine("Data!");
-					buffer.Add(O.Export());
+					foreach(byte[] b32 in O.Export())
+					{
+						Console.WriteLine("Data!");
+						buffer.Add(b32);
+					}
+					
 				}
 				
 			}
@@ -117,7 +121,7 @@ namespace NetLib
 				return 8;
 			case 2://building
 				return 8;;
-			case (UInt32)Type.Circle://circle
+			case 3://circle
 				return 6;
 			case 4://explosion
 				return 8;
