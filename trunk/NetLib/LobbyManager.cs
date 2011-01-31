@@ -36,10 +36,7 @@ namespace NetLib
 			}
 			Console.WriteLine("Freeing resource lock - now accepting incomming connections");
 		}
-		
-		protected void HandleOutgoingComm(object client)
-		{
-		}
+
 		
 		protected override void HandleIncomingComm(object client)
 		{
@@ -65,7 +62,6 @@ namespace NetLib
 			
 			while (true)
 			{
-				
 			
 			    try
 			    {

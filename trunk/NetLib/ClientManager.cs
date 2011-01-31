@@ -41,24 +41,24 @@ namespace NetLib
 			listenThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
 			listenThread.Start(clientStream);
 			
+			List<GameObj> Model = new List<GameObj>();
+			
 			//create an enemy object to test communications with
 			Enemy baddie = new Enemy(100,100,5,5,20);
-			byte count = 1;
+			Model.Add(baddie);
+			
+			Send(Model,Action.Create);
 			
 			//Send to server at our leisure
-			while(true){
-				string Message = Console.ReadLine();
+			//while(true){
+				//I'm using this only to create a 'hit enter to send packet' situation
+				//string Message = Console.ReadLine();
 				
 				//test hack
-				byte[] testpackage = {0,0,count,(byte)Enemy.netObjType};
-				clientStream.Write(testpackage,0,4);
-				
-				//while(Message.Length % 4 !=0){
-				//	Message += "\0";//insert nulls to fill the rest of the 32 bit packet
-				//}
-				//clientStream.Write(encoding.GetBytes(Message), 0 , Message.Length);
-				clientStream.Flush();
-			}
+				//byte[] testpackage = {0,0,count,(byte)Enemy.netObjType};
+				//clientStream.Write(testpackage,0,4);
+				//clientStream.Flush();
+			//}
 		}
 		
 		//automatically find server on subnet
