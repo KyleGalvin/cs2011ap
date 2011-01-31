@@ -40,8 +40,12 @@ namespace NetLib
 		
 		protected override void HandleIncomingComm(object client)
 		{
-		
 			TcpClient tcpClient = (TcpClient)client;
+			lock(this)
+			{
+				myConnections.Add(tcpClient);
+			}
+			
 			NetworkStream clientStream = tcpClient.GetStream();
 			Console.WriteLine("client {0} has connected.", tcpClient.Client.RemoteEndPoint);
 				
@@ -96,6 +100,11 @@ namespace NetLib
 					bytesRead = 0;
 				}
 				
+			}
+			
+			lock(this)
+			{
+				myConnections.Remove(tcpClient);
 			}
 			
 			tcpClient.Close();
