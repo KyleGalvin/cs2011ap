@@ -7,10 +7,16 @@ using System.Collections.Generic;
 namespace NetLib
 {
 	
-	enum Action{
-		Create = 0x00000000,
+	public enum Action {
+		Create = 0x60000000,
 		Update = 0x10000000,
 		Delete = 0x20000000
+	}
+	
+	public enum Type {
+		Player = 0x00000000,
+		Enemy = 0x01000000,
+		Circle = 0x03000000
 	}
 	
 	abstract class NetManager
@@ -66,11 +72,10 @@ namespace NetLib
 				
 				List<GameObj> ObjSet = p.Value;
 				//craft packet header
-				UInt32 size = ObjSet[0].netsize;
 				UInt32 count = (UInt32)ObjSet.Count;
 				count = count<<16;
-				UInt32 header = count^size^action;
-				Console.WriteLine("Sending Header: {0}",header);
+				UInt32 header = count^action^ObjSet[0].type;
+				Console.WriteLine("Sending Header: {0} Count: {1} Action: {2} Type: {3}",header,count,action,ObjSet[0].type);
 				buffer.Add(BitConverter.GetBytes(header));
 				
 				foreach(GameObj O in ObjSet)
@@ -90,7 +95,7 @@ namespace NetLib
 				NetworkStream clientStream = client.GetStream();
 				foreach(byte[] b in buffer)
 				{
-					Console.WriteLine("Writing: {0}",b);
+					Console.WriteLine("Writing: {0}",BitConverter.ToInt32(b,0));
 					clientStream.Write(b,0,4);
 				}
 				clientStream.Flush();
@@ -101,6 +106,27 @@ namespace NetLib
 		//communication is handled differently in the lobby/client children classes
 		protected abstract void HandleIncomingComm(Object remoteEnd);
 		
+		
+		public UInt32 GetSize(UInt32 type)
+		{
+			switch (type)
+			{
+			case ((UInt32)Type.Player)://player
+				return 8;
+			case (UInt32)Type.Enemy://AI
+				return 8;
+			case 2://building
+				return 8;;
+			case (UInt32)Type.Circle://circle
+				return 6;
+			case 4://explosion
+				return 8;
+			case 5://power-up
+				return 8;
+			default:
+				return 0;
+			}
+		}
 	}
 	
 }
