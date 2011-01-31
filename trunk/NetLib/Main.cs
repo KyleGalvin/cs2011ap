@@ -125,6 +125,7 @@ namespace NetTest
 					
 					//the number of 32 bit reads to follow plus the 32 bit header
 					packageSize = GetExpectedPackageSize(message);
+					Console.WriteLine("Expected {0} numerics", packageSize);
 					
 
 			    }
@@ -155,34 +156,35 @@ namespace NetTest
 		
 		private UInt32 GetExpectedPackageSize(UInt32 header)
 		{
-			//byte action = ((byte)header[0] >> 4);
-			UInt32 type = header & 0x000F;
-			UInt32 typesize=0;
-			UInt32 count = (header & 0x0F00) >> 8;//take only our count byte
+			UInt32 action = (header & 0xF0000000)>>28;
+			UInt32 type = (header & 0x0F000000)>>24;
+			UInt32 count = (header & 0x00FF0000)>>16;
+			UInt32 typesize=0;		
 			
+			Console.WriteLine("Header: {0} Type: {1} Action: {2} Count: {3}", header, type, action, count);
 			switch (type)
 			{
-			case 0x0://player
+			case 0://player
 				Console.WriteLine("00 = client player; 8 floats");
 				typesize=8;
 				break;
-			case 0x1://AI
+			case 1://AI
 				Console.WriteLine("01 = enemy AI; 8 floats");
 				typesize=8;
 				break;
-			case 0x2://building
+			case 2://building
 				Console.WriteLine("02 = building; 8 floats");
 				typesize=8;
 				break;
-			case 0x4://bullet
+			case 3://bullet
 				Console.WriteLine("03 = bullet; 7 floats");
 				typesize=7;
 				break;
-			case 0x5://explosion
+			case 4://explosion
 				Console.WriteLine("04 = explosion; 8 floats");
 				typesize=8;
 				break;
-			case 0x6://power-up
+			case 5://power-up
 				Console.WriteLine("05 = power-up; 8 floats");
 				typesize=8;
 				break;
