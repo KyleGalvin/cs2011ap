@@ -35,7 +35,7 @@ namespace NetLib
 			else
 			{
 				body.Add(incoming);
-				if(body.Count == size*count)
+				if(body.Count == (size*count)+1)//+1 for header
 				{
 					complete = true;
 				}
