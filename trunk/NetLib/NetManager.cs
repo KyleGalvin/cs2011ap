@@ -7,9 +7,9 @@ using System.Collections.Generic;
 namespace NetLib
 {
 	
-	public enum Action{
-		Create = 0;
-		Update = 1;
+	enum Action{
+		Create = 0,
+		Update = 1
 	}
 	
 	abstract class NetManager
