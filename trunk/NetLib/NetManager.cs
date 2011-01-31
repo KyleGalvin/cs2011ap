@@ -8,8 +8,9 @@ namespace NetLib
 {
 	
 	enum Action{
-		Create = 0,
-		Update = 1
+		Create = 0x00000000,
+		Update = 0x10000000,
+		Delete = 0x20000000
 	}
 	
 	abstract class NetManager
@@ -55,19 +56,20 @@ namespace NetLib
 			}
 		}
 		
-		public void Send(Dictionary<String,List<GameObj>> outgoing, int action)
+		public void Send(Dictionary<String,List<GameObj>> outgoing, UInt32 action)
 		{
 			List<byte[]> buffer = new List<byte[]>();
-			byte act = (byte)action<<4;
 			//fill the buffer with our outgoing data
 			foreach(KeyValuePair<String,List<GameObj>> p in outgoing)
 			{
 				List<GameObj> ObjSet = p.Value;
 				//craft packet header
-				int size = ObjSet[0].netsize;
-				int count = ObjSet.Count;
-				byte[] header = {0,0,(byte)count,(((byte)size)&act)};//action and size share a byte
-				buffer.Add(header);
+				UInt32 size = ObjSet[0].netsize;
+				UInt32 count = (UInt32)ObjSet.Count;
+				count = count<<16;
+				UInt32 header = count^size^action;
+				
+				buffer.Add(BitConverter.GetBytes(header));
 				
 				foreach(GameObj O in ObjSet)
 				{
