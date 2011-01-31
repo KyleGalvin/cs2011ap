@@ -37,6 +37,10 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="..\GameModel\GameObj.cs" />
+    <Compile Include="NetManager.cs" />
+    <Compile Include="LobbyManager.cs" />
+    <Compile Include="ClientManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
