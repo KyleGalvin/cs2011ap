@@ -1,0 +1,11 @@
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\AP.exe
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\AP.pdb
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\OpenTK.Compatibility.dll
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\OpenTK.dll
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\OpenTK.GLControl.dll
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\OpenTK.xml
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\OpenTK.Compatibility.xml
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\OpenTK.GLControl.xml
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\obj\x86\Debug\AP.exe
+c:\users\crix\documents\visual studio 2010\Projects\AP\AP\obj\x86\Debug\AP.pdb
