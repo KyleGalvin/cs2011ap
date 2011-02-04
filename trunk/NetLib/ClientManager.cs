@@ -31,16 +31,14 @@ namespace NetLib
 			client.Connect(serverEndPoint);
 			
 			lock(this){
-				myConnections.Add(client);
+				myConnections.Add(new Connection(client));
 				Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
 			}
 			
 			NetworkStream clientStream = client.GetStream();
 			
 			Console.WriteLine("Creating listener thread for reading server communications...");
-			tcpListener = new TcpListener(lep);
-			listenThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
-			listenThread.Start(clientStream);
+			new Thread(new ThreadStart(this.Listen)).Start();
 			
 			Console.WriteLine("Creating new game model containing 2 enemies...");
 			Dictionary<String,List<GameObj>> Model = new Dictionary<String,List<GameObj>>();

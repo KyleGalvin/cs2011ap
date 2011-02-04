@@ -6,8 +6,9 @@ namespace NetLib
 	public class NetPackage
 	{
 		public UInt32 header;
-		public UInt32 size;
-		public UInt32 type;
+		public UInt32 sizeofobj;
+		public UInt32 typeofobj;
+		public UInt32 action;
 		public UInt32 count;
 		public List<byte[]> body;
 		public bool complete;
@@ -22,23 +23,26 @@ namespace NetLib
 		public void Recieve(byte[] incoming)
 		{
 			//we only intend to recieve 4 bytes at a time
+			body.Add(incoming);
 			
 			if(header == 0)
 			{
 				//no header has been created. We naievely assume the data read is a header
+				
 				header = BitConverter.ToUInt32(incoming,0);
-				UInt32 type = (header & 0x0F000000)>>24;
-				size = GetSize(type);
+				UInt32 typeofobj = (header & 0x0F000000)>>24;
+				UInt32 action = (header & 0xF0000000)>>28;
+				//sizeofobj = GetSize(typeofobj);
 				count = (header & 0x00FF0000)>>16;
-				Console.WriteLine("RECIEVED HEADER-- size: {0} type {1} count: {2}",size,type,count);
+				//Console.WriteLine("GetSize(type): {0}",GetSize(typeofobj));
+				Console.WriteLine("RECIEVED HEADER-- size: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,count,action);
 			}
 			else
 			{
-				body.Add(incoming);
-				if(body.Count == (size*count)+1)//+1 for header
-				{
-					complete = true;
-				}
+				//if(body.Count == GetSize(typeofobj))//+1 for header
+				//{
+					//complete = true;
+				//}
 			}
 			
 			
@@ -49,26 +53,7 @@ namespace NetLib
 			return complete;
 		}
 		
-		public UInt32 GetSize(UInt32 type)
-		{
-			switch (type)
-			{
-			case ((UInt32)Type.Player)://player
-				return 8;
-			case (UInt32)Type.Enemy://AI
-				return 8;
-			case 2://building
-				return 8;;
-			case 3://circle
-				return 6;
-			case 4://explosion
-				return 8;
-			case 5://power-up
-				return 8;
-			default:
-				return 0;
-			}
-		}
+
 	}
 }
 

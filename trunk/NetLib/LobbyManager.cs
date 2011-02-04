@@ -8,14 +8,9 @@ namespace NetLib
 {
 	class LobbyManager : NetManager
 	{
-		public LobbyManager(int port):base(port){;
-			Console.WriteLine("Opening socket...");
-			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
-			
+		public LobbyManager(int port):base(port){		
 			Console.WriteLine("Listening for incoming connections...");
-			tcpListener = new TcpListener(lep);
-			listenThread = new Thread(new ThreadStart(Listen));
-			listenThread.Start();
+			new Thread(new ThreadStart(this.Listen)).Start();
 		}
 		
 		private void Respond(UInt32 data)
@@ -27,37 +22,27 @@ namespace NetLib
 			
 			lock(this)
 			{
-				foreach(TcpClient client in myConnections)
+				foreach(Connection c in myConnections)
 				{
 					//we will eventually need to do something other than echo back.
-					Console.WriteLine("echoing response: {1}",data,client.Client.RemoteEndPoint);
-					int val = client.Client.Send(rawData);
+					Console.WriteLine("echoing response: {0}",data);
+					c.Write(rawData);
 				}
 			}
 			Console.WriteLine("Freeing resource lock - now accepting incomming connections");
 		}
 
-		
-		protected override void HandleIncomingComm(object client)
+		protected override void HandleIncomingComm(object connection)
 		{
-			TcpClient tcpClient = (TcpClient)client;			
-			NetworkStream clientStream = tcpClient.GetStream();
-			Console.WriteLine("client {0} has connected.", tcpClient.Client.RemoteEndPoint);
-				
-			byte[] rawMessage = new byte[4];
-			UInt32 message;
 			
-			List<UInt32> data = new List<UInt32>();
+			Connection myConnection = (Connection)connection;
+			NetPackage pack = new NetPackage();
+
+			TcpClient client = myConnection.GetClient();
+			Console.WriteLine("client {0} has connected.", client.Client.RemoteEndPoint);
 			
 			//The current 32 bit data unit coming in
 			int bytesRead;
-			
-			//the header data unit indicates how many data units are expected to follow. This value includes the header data
-			UInt32 packageSize;
-			
-			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-			
-			NetPackage pack = new NetPackage();
 			
 			bytesRead = 0;
 			
@@ -66,21 +51,8 @@ namespace NetLib
 			
 			    try
 			    {
-					//try to recieve a packet
-					
-					//blocks until a client sends a message
-					bytesRead += clientStream.Read(rawMessage, 0, 4);
-					pack.Recieve(rawMessage);//recieve header
-					//segment number
-					int i = 0;
-					while(pack.IsComplete()==false){//recieve body
-						bytesRead += clientStream.Read(rawMessage, 0, 4);
-						Console.WriteLine("Reading Segment {0} of {1}... Value: {2}",i,pack.size * pack.GetSize(pack.type), BitConverter.ToInt32(rawMessage,0));
-						pack.Recieve(rawMessage);
-						i++;
-					}	
-					Console.WriteLine("Packet complete!");
-
+					//read package data
+					pack = myConnection.Read();
 			    }
 			    catch
 			    {
@@ -90,15 +62,16 @@ namespace NetLib
 			
 			    if (bytesRead == 0)//nothing was read from socket
 				{
-					Console.WriteLine("Client IP: {0}, Client Data: {1}",tcpClient.Client.RemoteEndPoint,encoding.GetString(rawMessage));
-					//Respond(message);
-					//the client has disconnected from the server
-					Console.WriteLine("Client {0} has disconnected.",tcpClient.Client.RemoteEndPoint);
+					Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
 					break;
 				}
 				if(pack.IsComplete())//we've accumulated the amount of data our header predicts
 				{
-					Console.WriteLine("Now we are able to test if we are picking up the right data here");
+					if(pack.action == (UInt32)Action.Create)
+					{
+						Console.WriteLine("Create command triggered by incoming packet header");
+					}
+			
 					bytesRead = 0;
 				}
 				
@@ -106,23 +79,22 @@ namespace NetLib
 			
 			lock(this)
 			{
-				myConnections.Remove(tcpClient);
+				myConnections.Remove(myConnection);
 			}
-			
-			tcpClient.Close();
 		}
 		
+		
+		//MOVE THIS
 		private UInt32 GetExpectedPackageSize(UInt32 header)
 		{
 			UInt32 action = (header & 0xF0000000)>>28;
 			UInt32 type = (header & 0x0F000000)>>24;
 			UInt32 count = (header & 0x00FF0000)>>16;
-			UInt32 typesize=0;		
 			
 			Console.WriteLine("Header: {0} Type: {1} Action: {2} Count: {3}", header, type, action, count);
 
 			
-			return GetSize(type)*count;
+			return 0;
 		}
 		
 	}

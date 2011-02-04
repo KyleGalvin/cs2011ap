@@ -7,7 +7,18 @@ using System.Collections.Generic;
 
 namespace NetLib
 {
+	public enum Action {
+		Create = 0x60000000,
+		Update = 0x10000000,
+		Delete = 0x20000000
+	}
 	
+	public enum Type {
+		Player = 0x00000000,
+		Enemy = 0x01000000,
+		Circle = 0x03000000
+	}		
+
 	class MainClass
 	{	
 		public static void Main (string[] args)
