@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{53AD52AF-F8AF-4DF6-880A-BEEDDD323E48}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -37,10 +37,6 @@
     <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="OpenTK.Compatibility, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
     <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL" />
-    <Reference Include="SdlDotNet, Version=6.1.0.0, Culture=neutral, PublicKeyToken=26ad4f7e10c61408, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SdlDotNet\bin\SdlDotNet.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -55,12 +51,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Network\ClientManager.cs" />
+    <Compile Include="Network\Connection.cs" />
+    <Compile Include="Network\LobbyManager.cs" />
+    <Compile Include="Network\NetManager.cs" />
+    <Compile Include="Network\NetPackage.cs" />
+    <Compile Include="Network\PackageInterpreter.cs" />
+    <Compile Include="Network\PackageReader.cs" />
+    <Compile Include="Network\PackageWriter.cs" />
     <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Weapons\Rocket.cs" />
     <Compile Include="Weapons\Rifle.cs" />
     <Compile Include="Enemies\StationaryBoss.cs" />
     <Compile Include="Network\Client.cs" />
-    <Compile Include="Controls\Controls.cs" />
     <Compile Include="Weapons\Bullet.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Weapons\Weapon.cs" />
@@ -73,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AI\" />
+    <Folder Include="Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

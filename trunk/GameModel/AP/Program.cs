@@ -18,7 +18,7 @@ namespace AP
         // second row index = EnemyID
         List<Enemy>[,] enemyList;
         public Player player;
-        public Controls controls;
+        //public Controls controls;
         private int enemyIdentifier = 0;
 
         /// <summary>Creates a window with the specified title.</summary>
@@ -117,12 +117,37 @@ namespace AP
 
         static void Main(string[] args)
         {
+            int DefaultPort = 9999;
+
+            while (true)
+            {
+                Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
+                string input = Console.ReadLine();
+
+                if (input[0] == 'c')
+                {
+                    NetLib.LobbyManager myLobby = new NetLib.LobbyManager(DefaultPort);
+                    break;
+                }
+                else if (input[0] == 'j')
+                {
+                    NetLib.ClientManager myClient = new NetLib.ClientManager(DefaultPort);
+                }
+                else if (input[0] == 'q')
+                {
+                    break;
+                }
+                else
+                {
+                }
+            }
+
             //start the form for log in screen
             // if client
             // - create player object and send to server
             // if server
             // - get client info
-            using( Program game = new Program() )
+            using (Program game = new Program())
             {
                 game.Run(28.0);
             }
