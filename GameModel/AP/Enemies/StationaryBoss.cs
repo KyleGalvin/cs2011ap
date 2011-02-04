@@ -7,10 +7,8 @@ namespace AP
 {
     public class StationaryBoss: Enemy
     {
-        public StationaryBoss(float x, float y, int ID)
+        public StationaryBoss(int ID)
         {
-            xPos = x;
-            yPos = y;
             life = (int)Life.Boss;
             enemyID = ID;
         }

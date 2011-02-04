@@ -21,6 +21,12 @@ namespace AP
             alive = false;
         }
 
+        public void setPosition(float x, float y)
+        {
+            xPos = x;
+            yPos = y;
+        }
+
         // this class utilizes decorator pattern
         // when an Enemy object is created such as a zombie (i.e Enemy z1 = new Zombie( xPos, yPos )) 
         // the specific abstract functions in this class are overriden in the type of enemy's class

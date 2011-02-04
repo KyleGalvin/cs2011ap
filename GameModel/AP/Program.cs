@@ -10,16 +10,28 @@ namespace AP
 {
     class Program : GameWindow
     {
-        const int screenX = 600;
-        const int screenY = 600;
-
+        //camera related things
+        OpenTK.Vector3d up = new OpenTK.Vector3d(0.0, 1.0, 0.0);
+        OpenTK.Vector3d viewDirection = new OpenTK.Vector3d(0.0, 0.0, 1.0);
+        double viewDist = 17.0;
+        const int screenX = 800;
+        const int screenY = 800;
+        private int zombieIterator = 0;
         //assign amount of enemies per level
         // first row index = EnemyObject
         // second row index = EnemyID
-        List<Enemy>[,] enemyList;
+        List<Enemy> enemyList = new List<Enemy>();
+        List<EnemySpawn> spawns = new List<EnemySpawn>();
         public Player player;
         //public Controls controls;
         private int enemyIdentifier = 0;
+        EnemySpawn spawn1;
+        EnemySpawn spawn2;
+        EnemySpawn spawn3;
+        EnemySpawn spawn4;
+        OpenLevel currentLevel;
+        Random randNum = new Random();
+        LoadedObjects loadedObjects = new LoadedObjects();
 
         /// <summary>Creates a window with the specified title.</summary>
         public Program()
@@ -33,10 +45,27 @@ namespace AP
         protected override void OnLoad(EventArgs e)
         {
             //base.OnLoad(e);
-            
             player = new Player(0, 0, 0);
-            GL.ClearColor(0.0f, 0.2f, 0.0f, 0.0f);
+            spawn1 = new EnemySpawn(0, (float)1.6);
+            spawn2 = new EnemySpawn((float)1.6, 0);
+            spawn3 = new EnemySpawn(0, (float)-1.6);
+            spawn4 = new EnemySpawn((float)-1.6, 0);
+            currentLevel = new OpenLevel(1);
+            currentLevel.parseFile();
+            spawns.Add(spawn1);
+            spawns.Add(spawn2);
+            spawns.Add(spawn3);
+            spawns.Add(spawn4);
+            GL.ClearColor(0.0f, 0.2f, 0.2f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.Texture2D);
+            GL.EnableClientState(ArrayCap.VertexArray);
+            GL.EnableClientState(ArrayCap.NormalArray);
+            GL.EnableClientState(ArrayCap.TextureCoordArray);
+            GL.EnableClientState(ArrayCap.IndexArray);
+            
+            //loading a cube... so easy
+            loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png");
         }
 
         /// <summary>
@@ -68,15 +97,26 @@ namespace AP
             if (Keyboard[Key.S])
                 player.move(0,-1);
             if (Keyboard[Key.A])
-                player.move(1,0);
-            if (Keyboard[Key.D])
                 player.move(-1,0);
+            if (Keyboard[Key.D])
+                player.move(1,0);
             if (Keyboard[Key.Escape])
                 Exit();
 
+            if (Keyboard[OpenTK.Input.Key.Up])
+            {
+                viewDist *= 1.1f;
+                Console.WriteLine("View distance: {0}", viewDist);
+            }
+            else if (Keyboard[OpenTK.Input.Key.Down])
+            {
+                viewDist *= 0.9f;
+                Console.WriteLine("View distance: {0}", viewDist);
+            }
+
             //base.OnUpdateFrame(e);
 
-            Console.WriteLine("Running");
+            //Console.WriteLine("Running");
 
         }
 
@@ -101,56 +141,52 @@ namespace AP
         /// <param name="e">Contains timing information.</param>
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            //base.OnRenderFrame(e);
-            
-            
+            base.OnRenderFrame(e);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
-            Matrix4 modelview = Matrix4.LookAt(Vector3.Zero, Vector3.UnitZ, Vector3.UnitY);
             GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref modelview);
+            GL.LoadIdentity();
+            Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist),
+                                              OpenTK.Vector3d.Zero, up);
+            GL.LoadMatrix(ref camera);
 
             player.draw();
+            zombieIterator++;
+            if (zombieIterator == 60)
+            {
+                foreach (var spawn in spawns)
+                {
+                    enemyList.Add(spawn.spawnEnemy());
+                }
+                //Console.WriteLine("spawn");
+                zombieIterator = 0;
+            }
 
+
+            foreach (var member in enemyList)
+            {
+                member.move(1, 0);
+                member.draw();
+            }
+
+            //GL.Rotate(180, 1, 1, 1);
+            loadedObjects.DrawObject(0);
+            
             SwapBuffers();
         }
 
         static void Main(string[] args)
         {
-            int DefaultPort = 9999;
-
-            while (true)
-            {
-                Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
-                string input = Console.ReadLine();
-
-                if (input[0] == 'c')
-                {
-                    NetLib.LobbyManager myLobby = new NetLib.LobbyManager(DefaultPort);
-                    break;
-                }
-                else if (input[0] == 'j')
-                {
-                    NetLib.ClientManager myClient = new NetLib.ClientManager(DefaultPort);
-                }
-                else if (input[0] == 'q')
-                {
-                    break;
-                }
-                else
-                {
-                }
-            }
-
             //start the form for log in screen
             // if client
             // - create player object and send to server
             // if server
             // - get client info
-            //using (Program game = new Program())
-            //{
-                //game.Run(28.0);
-           // }
+            //Form1 form = new Form1();
+
+            using( Program game = new Program() )
+            {
+                game.Run(28.0);
+            }
         }
     }
 }
