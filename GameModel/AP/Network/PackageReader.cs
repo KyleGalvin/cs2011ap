@@ -1,13 +1,14 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+
 namespace NetLib
 {
-	public class PackageReader
+	public class PackageReader: StreamHandler
 	{
 		NetworkStream myStream;
 		
-		public PackageReader(NetworkStream stream)
+		public PackageReader(NetworkStream stream):base(stream)
 		{
 			myStream = stream;
 		}
