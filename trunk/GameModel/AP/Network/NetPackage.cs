@@ -9,7 +9,7 @@ namespace NetLib
 		public UInt32 sizeofobj;
 		public UInt32 typeofobj;
 		public UInt32 action;
-		public UInt32 count;
+		public UInt32 totalSize;
 		public List<byte[]> body;
 		public bool complete;
 		
@@ -33,9 +33,9 @@ namespace NetLib
 				UInt32 typeofobj = (header & 0x0F000000)>>24;
 				UInt32 action = (header & 0xF0000000)>>28;
 				//sizeofobj = GetSize(typeofobj);
-				count = (header & 0x00FF0000)>>16;
+				totalSize = (header & 0x00FF0000)>>16;
 				//Console.WriteLine("GetSize(type): {0}",GetSize(typeofobj));
-				Console.WriteLine("RECIEVED HEADER-- size: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,count,action);
+				Console.WriteLine("RECIEVED HEADER-- size: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,totalSize,action);
 			}
 			else
 			{

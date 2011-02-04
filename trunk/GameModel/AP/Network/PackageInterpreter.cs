@@ -27,16 +27,21 @@ namespace NetLib
 			switch (type)//these values need to be sorted out when the protocol is more sound
 			{
 			case Type.Player:
-				return 1;
-			//case Type.Enemy:
-			//	return 2;
-			//case Type.Circle:
-			//	return 3;
+				return 8;
+			case Type.AI:
+				return 8;
+			case Type.Building:
+				return 8;
 			default:
 				return 0;
 			}				
 		}
-		
+
+        public int GetCount(UInt32 header)
+        {
+            return (int)(header & 0x00110000)>>16;
+        }
+
 		public PackageInterpreter ()
 		{
 		}

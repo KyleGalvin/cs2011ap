@@ -8,7 +8,7 @@ namespace NetLib
     {
         protected NetworkStream myStream;
         protected NetPackage myPackage;
-        PackageInterpreter myInterpreter;
+        protected PackageInterpreter myInterpreter;
         //StateWorker myWorker;
 
         public StreamHandler(NetworkStream stream)
@@ -16,11 +16,6 @@ namespace NetLib
             myStream = stream;
             myPackage = new NetPackage();
             myInterpreter = new PackageInterpreter();
-        }
-
-        public void ReadPackage()
-        {
-            //Type t = 
         }
     }
 }

@@ -18,9 +18,9 @@ namespace NetLib
 			myNetWriter = new PackageWriter(myClient.GetStream());
 		}
 		
-		public NetPackage Read()
+		public NetPackage ReadPackage()
 		{
-			return myNetReader.Read();
+			return myNetReader.ReadPackage();
 		}
 		
 		public void Write(List<byte[]> data)
