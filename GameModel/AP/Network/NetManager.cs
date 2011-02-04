@@ -55,46 +55,6 @@ namespace NetLib
 			}
 		}
 		
-		public void Send(Dictionary<String,List<AP.Position>> outgoing, UInt32 action)
-		{
-			//Create buffer to fill and send over network
-			List<byte[]> buffer = new List<byte[]>();
-			
-			//fill the buffer with our outgoing data
-			foreach(KeyValuePair<String,List<AP.Position>> p in outgoing)
-			{
-				
-				List<AP.Position> ObjSet = p.Value;
-				//craft packet header
-				UInt32 count = (UInt32)ObjSet.Count;
-				count = count<<16;
-				UInt32 header = count^action^ObjSet[0].type;
-				Console.WriteLine("Sending Header: {0} Count: {1} Action: {2} Type: {3}",header,count>>16,action>>28,ObjSet[0].type>>24);
-				buffer.Add(BitConverter.GetBytes(header));
-				
-				foreach(GameObj O in ObjSet)
-				{
-					List<byte[]> oNetData = O.Export();
-					foreach(byte[] b32 in oNetData)
-					{
-						Console.WriteLine("Data!");
-						buffer.Add(b32);
-					}
-					
-				}
-				
-			}
-			
-			Console.WriteLine("Buffer Size: {0}",buffer.Count);
-			
-			//write buffer to all clients
-			foreach(Connection c in myConnections)
-			{
-				c.Write(buffer);
-			}
-
-		}
-		
 		//communication is handled differently in the lobby/client children classes
 		protected abstract void HandleIncomingComm(Object remoteEnd);
 	}
