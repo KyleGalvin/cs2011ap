@@ -1,26 +1,34 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
+using System.Text;
+using System.Timers;
+using Timer = System.Threading.Timer;
 
 namespace NetLib
 {
 	class ClientManager : NetManager
 	{
-		
+        private Thread broadcastThread;
+	    private bool TimesUp;
+	    private List<IPAddress> ServerIps= new List<IPAddress>();
 		public ClientManager(int port):base(port)
 		{
 			//set up variables
+
 			String IP = "";
 			TcpClient client = new TcpClient();
-			IPEndPoint broadcastEP = new IPEndPoint(IPAddress.Broadcast,port);
+            IPAddress broadcast = IPAddress.Parse("192.168.105.255");
+			IPEndPoint broadcastEP = new IPEndPoint(broadcast,port);
 			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
 			
 			//Try to connect to server via broadcast
 			IPEndPoint serverEndPoint = FindServer(port,broadcastEP);
 			
-			if (serverEndPoint == broadcastEP){
+			if (serverEndPoint == null){
 				//server failed to respond. Our trickery failed. Ask for manual intervention
 				Console.WriteLine("Please enter Lobby IP:");
 				IP = Console.ReadLine();
@@ -56,31 +64,88 @@ namespace NetLib
 		}
 		
 		//automatically find server on subnet
-		private IPEndPoint FindServer(int port,IPEndPoint broadcastEP){
-			//broadcast
-			Socket BC = new Socket(AddressFamily.InterNetwork,SocketType.Dgram,ProtocolType.Udp);
+        private IPEndPoint FindServer(int port, IPEndPoint broadcastEP)
+        {
+            //broadcast
+            SendBroadcast(broadcastEP);
+            //listen
+            bool done = false;
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
+            // Create a timer with a ten second interval.
+            System.Timers.Timer aTimer = new System.Timers.Timer(10000);
+            // Hook up the Elapsed event for the timer.
+            aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            aTimer.Enabled = true;
+            aTimer.AutoReset = false;
+            aTimer.Start();
+            try
+            {
+                    broadcastThread = new Thread(new ThreadStart(ListenforBroadCast));
+                    broadcastThread.Start();
+                    
+                    Console.WriteLine("Starting broadcast thread");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            while (!TimesUp)
+            {
+                //Place holder need to wait until the timer is done
+            }
+            return ServerIps.Count==0?null:new IPEndPoint(ServerIps.First(),port);
+        }
 
-			System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
-			
-			try
-			{
-				BC.SendTo(encoding.GetBytes("Client Broadcast"),broadcastEP);
-			}
-			catch
-			{
-				Console.WriteLine("Could not broadcast request for server");
-				Console.WriteLine("Broadcast May be disabled...");
-			}
-			
-			//listen
+	    private void SendBroadcast(IPEndPoint broadcastEP)
+	    {
+	        Socket BC = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-			//get tcpclient for all
-			
-			//set server end point
-				
-			return broadcastEP;
-		}
-		
+	        System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+
+	        try
+	        {
+	            BC.SendTo(encoding.GetBytes("Client Broadcast"), broadcastEP);
+	            Console.WriteLine("Broadcast sent");
+	        }
+	        catch
+	        {
+	            Console.WriteLine("Could not broadcast request for server");
+	            Console.WriteLine("Broadcast May be disabled...");
+	        }
+	    }
+
+	    private void ListenforBroadCast()
+	    {
+	        bool once=false;
+            IPAddress broadcast = IPAddress.Parse("192.168.105.255");
+            IPEndPoint broadcastEP = new IPEndPoint(broadcast, port);
+            string msg = String.Empty;
+            UdpClient listener = new UdpClient(port);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
+            while (!TimesUp)
+            {
+                if (!once)
+                {
+                    SendBroadcast(broadcastEP);
+                    once = true;
+                } 
+                Console.WriteLine("Waiting for broadcast again {0}",groupEP.ToString());
+                byte[] bytes = listener.Receive(ref groupEP);
+                msg = Encoding.ASCII.GetString(bytes, 0, bytes.Length);
+                if (msg == "Server Broadcast")
+                {
+                    Console.WriteLine("Adding " + groupEP.Address.ToString() + " to the list of clients");
+                    ServerIps.Add(groupEP.Address);
+                    TimesUp = true;
+                }
+            }
+        }
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            broadcastThread.Suspend();
+            Console.WriteLine("Listening Stopped (Timeout Reached)");
+            TimesUp = true;
+        }
 		protected override void HandleIncomingComm(object stream)
 		{
 			NetworkStream clientStream = (NetworkStream)stream;
@@ -118,7 +183,7 @@ namespace NetLib
 				data.Add(message);
 				
 				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
-				System.Text.UTF8Encoding  encoding=new System.Text.UTF8Encoding();
+				var  encoding=new UTF8Encoding();
 				Console.WriteLine("Message: {0}",encoding.GetString(message));
 			}
 			
