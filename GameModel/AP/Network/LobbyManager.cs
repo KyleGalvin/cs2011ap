@@ -66,8 +66,8 @@ namespace NetLib
 
 		public LobbyManager(int port):base(port){		
 			Console.WriteLine("Listening for incoming connections...");
-            new Thread(new ThreadStart(this.BroadcastListener)).Start();
-			new Thread(new ThreadStart(this.Listen)).Start();
+            new Thread(new ThreadStart(this.BroadcastListener)).Start();//Alert clients of our presence
+			new Thread(new ThreadStart(this.Listen)).Start();//Collect clients in our connection pool
 		}
 		
 		private void Respond(UInt32 data)
