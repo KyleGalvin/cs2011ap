@@ -59,9 +59,7 @@
     <Compile Include="Weapons\Rocket.cs" />
     <Compile Include="Weapons\Rifle.cs" />
     <Compile Include="Enemies\StationaryBoss.cs" />
-    <Compile Include="Network\Client.cs" />
     <Compile Include="Weapons\Bullet.cs" />
-    <Compile Include="Network\Server.cs" />
     <Compile Include="Weapons\Weapon.cs" />
     <Compile Include="Enemies\Enemy.cs" />
     <Compile Include="Player\Player.cs" />
