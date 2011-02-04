@@ -111,7 +111,7 @@ namespace NetLib
 			    try
 			    {
 					//read package data
-					pack = myConnection.Read();
+					pack = myConnection.ReadPackage();
 			    }
 			    catch
 			    {
