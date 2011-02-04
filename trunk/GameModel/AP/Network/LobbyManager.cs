@@ -19,7 +19,8 @@ namespace NetLib
 
             try
             {
-                BC.SendTo(encoding.GetBytes("Server Broadcast"), broadcastEP);
+                BC.SendTo(encoding.GetBytes("Server Broadcast"),broadcastEP);
+                Console.WriteLine("Sent Response to " +broadcastEP.ToString());
             }
             catch
             {
@@ -36,7 +37,8 @@ namespace NetLib
             string msg = String.Empty;
             UdpClient listener = new UdpClient(port);
             IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
-
+            //Send initial broadcast
+            RespondToClients(port, broadcastEP);
             System.Text.UTF8Encoding Encoding = new System.Text.UTF8Encoding();
 
             try
