@@ -147,10 +147,10 @@ namespace AP
             // - create player object and send to server
             // if server
             // - get client info
-            using (Program game = new Program())
-            {
-                game.Run(28.0);
-            }
+            //using (Program game = new Program())
+            //{
+                //game.Run(28.0);
+           // }
         }
     }
 }
