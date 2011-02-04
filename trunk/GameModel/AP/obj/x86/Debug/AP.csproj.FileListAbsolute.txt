@@ -9,8 +9,8 @@ c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\OpenTK.Compa
 c:\users\crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\OpenTK.GLControl.xml
 c:\users\crix\documents\visual studio 2010\Projects\AP\AP\obj\x86\Debug\AP.exe
 c:\users\crix\documents\visual studio 2010\Projects\AP\AP\obj\x86\Debug\AP.pdb
-C:\Documents and Settings\student\My Documents\AP\obj\x86\Debug\AP.exe
-C:\Documents and Settings\student\My Documents\AP\obj\x86\Debug\AP.pdb
-C:\Documents and Settings\student\My Documents\AP\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Documents and Settings\student\My Documents\AP\bin\Debug\AP.exe
-C:\Documents and Settings\student\My Documents\AP\bin\Debug\AP.pdb
+C:\Users\Crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\AP.exe.manifest
+C:\Users\Crix\documents\visual studio 2010\Projects\AP\AP\bin\Debug\AP.application
+C:\Users\Crix\documents\visual studio 2010\Projects\AP\AP\obj\x86\Debug\AP.exe.manifest
+C:\Users\Crix\documents\visual studio 2010\Projects\AP\AP\obj\x86\Debug\AP.application
+C:\Users\Crix\documents\visual studio 2010\Projects\AP\AP\obj\x86\Debug\AP.csproj.ResolveComReference.cache

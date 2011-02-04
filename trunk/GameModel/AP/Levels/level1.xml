@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<level1>
+  Level 1 - ROFLPewPew
+  <objects>
+    <wall
+      id="1"
+      x="0"
+      y="0"
+      scale="1"
+      width="1"
+      length="1"/>
+    <wall
+      id="2"
+      x="0"
+      y="1"
+      scale="1"
+      width="1"
+      length="1"/>
+    <spawn
+      x="5"
+      y="5"
+      >Spawn1</spawn>
+    <spawn
+      x="10"
+      y="10"
+      >Spawn1</spawn>
+    <boss
+      type="StationaryBoss"
+      x="20"
+      y="20"/>   
+  </objects>
+</level1>

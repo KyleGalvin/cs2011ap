@@ -29,10 +29,10 @@ namespace AP
 
         public void move( int x, int y)
         {
-            //xPos += (float)0.01;
-            //yPos += (float)0.01;
             xPos += x * this.speed;
             yPos += y * this.speed;
+            Console.WriteLine( "xPos =: " + ((float)xPos).ToString());
+            Console.WriteLine( "yPos =: " + ((float)yPos).ToString());
         }
 
         public void updateBulletCooldown()

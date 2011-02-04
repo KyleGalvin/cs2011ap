@@ -6,7 +6,6 @@ using SdlDotNet.Core;
 using SdlDotNet.Input;
 using SdlDotNet.Graphics;
 
-
 namespace AP
 {
     public class Controls
