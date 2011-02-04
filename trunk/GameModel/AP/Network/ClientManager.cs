@@ -52,7 +52,7 @@ namespace NetLib
 			Enemies.Add(baddie2);
 			
 			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
-			Send(Model,(UInt32)Action.Create);
+			//Send(Model,(UInt32)Action.Create);
 		}
 		
 		//automatically find server on subnet
