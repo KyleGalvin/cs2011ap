@@ -8,8 +8,65 @@ namespace NetLib
 {
 	class LobbyManager : NetManager
 	{
+
+        public void RespondToClients(int port, IPEndPoint broadcastEP)
+        {
+            //Needs to broadcast itself on the network
+            //broadcast
+            Socket BC = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+            System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+
+            try
+            {
+                BC.SendTo(encoding.GetBytes("Server Broadcast"), broadcastEP);
+            }
+            catch
+            {
+                Console.WriteLine("Could not broadcast request for server");
+                Console.WriteLine("Broadcast May be disabled...");
+            }
+        }
+        private void BroadcastListener()
+        {
+            //This is used to see the servers
+            IPAddress broadcast = IPAddress.Parse("192.168.105.255");
+            IPEndPoint broadcastEP = new IPEndPoint(broadcast, port);
+            bool done = false;
+            string msg = String.Empty;
+            UdpClient listener = new UdpClient(port);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
+
+            System.Text.UTF8Encoding Encoding = new System.Text.UTF8Encoding();
+
+            try
+            {
+                while (!done)
+                {
+                    Console.WriteLine("Waiting for broadcast");
+                    byte[] bytes = listener.Receive(ref groupEP);
+                    msg = Encoding.GetString(bytes, 0, bytes.Length);
+                    if (msg == "Client Broadcast")
+                    {
+                        Console.WriteLine("Responding to: " + msg + " at " + groupEP.ToString());
+                        RespondToClients(port, broadcastEP);
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                listener.Close();
+            }
+        }
+
 		public LobbyManager(int port):base(port){		
 			Console.WriteLine("Listening for incoming connections...");
+            new Thread(new ThreadStart(this.BroadcastListener)).Start();
 			new Thread(new ThreadStart(this.Listen)).Start();
 		}
 		
