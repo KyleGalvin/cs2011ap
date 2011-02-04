@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace NetLib
 {
-	public class PackageWriter
+	public class PackageWriter: StreamHandler
 	{
-		NetworkStream myStream;
 		
-		public PackageWriter (NetworkStream stream)
+		
+		public PackageWriter (NetworkStream stream):base(stream)
 		{
 			myStream = stream;
 		}

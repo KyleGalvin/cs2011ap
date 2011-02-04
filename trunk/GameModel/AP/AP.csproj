@@ -55,6 +55,7 @@
     <Compile Include="Network\PackageInterpreter.cs" />
     <Compile Include="Network\PackageReader.cs" />
     <Compile Include="Network\PackageWriter.cs" />
+    <Compile Include="Network\StreamHandler.cs" />
     <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Weapons\Rocket.cs" />
     <Compile Include="Weapons\Rifle.cs" />

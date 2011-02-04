@@ -69,7 +69,7 @@ namespace NetLib
             //broadcast
             SendBroadcast(broadcastEP);
             //listen
-            bool done = false;
+
             IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
             // Create a timer with a ten second interval.
             System.Timers.Timer aTimer = new System.Timers.Timer(10000);
@@ -153,7 +153,6 @@ namespace NetLib
 			Console.WriteLine("Waiting for incoming messages");
 				
 			byte[] message = new byte[4];
-			byte[] temp;
 			
 			List<byte[]> data = new List<byte[]>();
 			int bytesRead;
