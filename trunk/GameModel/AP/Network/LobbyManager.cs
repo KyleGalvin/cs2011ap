@@ -112,6 +112,7 @@ namespace NetLib
 			    {
 					//read package data
 					pack = myConnection.ReadPackage();
+                    Console.WriteLine("Package recieved!");
 			    }
 			    catch
 			    {

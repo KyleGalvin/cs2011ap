@@ -21,7 +21,9 @@ namespace NetLib
 			//segment number
 			int i = 0;
 			int bytesRead = 0;
+            Console.WriteLine("Waiting for incoming data from...");
             bytesRead += myStream.Read(rawMessage, 0, 4);//read header
+            Console.WriteLine("Read header!");
             myPackage.Recieve(rawMessage);
 
             int typeSize = myInterpreter.GetTypeSize((Type)(myPackage.header & 0x01000000));
