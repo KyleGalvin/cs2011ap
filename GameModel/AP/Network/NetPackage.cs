@@ -5,6 +5,7 @@ namespace NetLib
 {
 	public class NetPackage
 	{
+        public PackageInterpreter myInterpreter;
 		public UInt32 header;
 		public UInt32 sizeofobj;
 		public UInt32 typeofobj;
@@ -15,6 +16,7 @@ namespace NetLib
 		
 		public NetPackage ()
 		{
+            myInterpreter = new PackageInterpreter();
 			complete = false;
 			header = 0;
 			body = new List<byte[]>();
@@ -39,10 +41,10 @@ namespace NetLib
 			}
 			else
 			{
-				//if(body.Count == GetSize(typeofobj))//+1 for header
-				//{
-					//complete = true;
-				//}
+				if(body.Count == myInterpreter.GetCount(header))
+				{
+					complete = true;
+				}
 			}
 			
 			

@@ -16,10 +16,13 @@ namespace NetLib
 		
 		protected List<byte[]> myData;
 		protected String myRole;
+
+        protected PackageInterpreter myProtocol;
 		
 		public NetManager(int newPort)
 		{
 			myConnections = new List<Connection>();
+            myProtocol = new PackageInterpreter();
 			port = newPort;
 		}
 		
