@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+
 namespace NetLib
 {
     public enum Action
@@ -36,6 +38,44 @@ namespace NetLib
 				return 0;
 			}				
 		}
+
+        public List<byte[]> encode(Action a, Type t, List<AP.Position> objs)
+        {
+            List<byte[]> result = new List<byte[]>();
+
+            int count = objs.Count;
+            foreach (AP.Position obj in objs)
+            {
+                result.AddRange(serialize(t, obj));
+            }
+            return result;
+        }
+
+        private List<byte[]> serialize(Type t, AP.Position obj)
+        {
+            Console.WriteLine(obj.GetType());
+            List<byte[]> result = new List<byte[]>();
+            switch (t)
+            {
+                case Type.AI:
+                    //result.Add();
+                    break;
+                case Type.Building:
+                    break;
+                case Type.Bullet:
+                    break;
+                case Type.Explosion:
+                    break;
+                case Type.Player:
+                    break;
+                case Type.Powerup:
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
+        }
 
         public int GetCount(UInt32 header)
         {

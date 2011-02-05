@@ -12,7 +12,7 @@ namespace NetLib
 		private TcpClient myClient;
 		
 		public Connection(object client)
-		{			
+		{
 			myClient = (TcpClient)client;
 			myNetReader = new PackageReader(myClient.GetStream());
 			myNetWriter = new PackageWriter(myClient.GetStream());
