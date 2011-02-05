@@ -20,7 +20,7 @@ namespace NetLib
             {
                 myStream.Write(chunk32, 0, 4);
             }
-
+            myStream.Flush();
             Console.WriteLine("Write multi data to socket here");
         }
 
@@ -30,7 +30,7 @@ namespace NetLib
             {
                 myStream.Write(chunk32,0,4);
             }
-            
+            myStream.Flush();
 			Console.WriteLine("Write multi data to socket here");
 		}
 		
@@ -38,6 +38,7 @@ namespace NetLib
 		{
             //we assume 32 bits of data only
             myStream.Write(data, 0, 4);
+            myStream.Flush();
 			Console.WriteLine("Write single data to socket here");
 		}
 	}
