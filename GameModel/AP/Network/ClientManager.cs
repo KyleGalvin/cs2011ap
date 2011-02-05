@@ -54,8 +54,8 @@ namespace NetLib
 			Model.Add("Enemies",Enemies);
 			
 			//create an enemy object to test communications with
-			AP.Zombie baddie1 = new AP.Zombie(100,100,1);
-			AP.Zombie baddie2 = new AP.Zombie(300,100,2);
+			AP.Zombie baddie1 = new AP.Zombie(1);
+			AP.Zombie baddie2 = new AP.Zombie(2);
 			Enemies.Add(baddie1);
 			Enemies.Add(baddie2);
 			

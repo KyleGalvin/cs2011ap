@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{53AD52AF-F8AF-4DF6-880A-BEEDDD323E48}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -89,6 +89,15 @@
     <Compile Include="Models\LoadedObjects.cs" />
     <Compile Include="Models\Loader.cs" />
     <Compile Include="Models\MeshData.cs" />
+    <Compile Include="Network\ClientManager.cs" />
+    <Compile Include="Network\Connection.cs" />
+    <Compile Include="Network\LobbyManager.cs" />
+    <Compile Include="Network\NetManager.cs" />
+    <Compile Include="Network\NetPackage.cs" />
+    <Compile Include="Network\PackageInterpreter.cs" />
+    <Compile Include="Network\PackageReader.cs" />
+    <Compile Include="Network\PackageWriter.cs" />
+    <Compile Include="Network\StreamHandler.cs" />
     <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Weapons\Rocket.cs" />
     <Compile Include="Weapons\Rifle.cs" />
@@ -104,9 +113,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Enemies\Zombie.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AI\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AP_TemporaryKey.pfx" />
@@ -167,6 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Levels\level1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AI\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
