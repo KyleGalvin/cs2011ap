@@ -176,16 +176,67 @@ namespace AP
 
         static void Main(string[] args)
         {
-            //start the form for log in screen
-            // if client
-            // - create player object and send to server
-            // if server
-            // - get client info
-            //Form1 form = new Form1();
 
-            using( Program game = new Program() )
+            Console.WriteLine("[0] Run Game");
+            Console.WriteLine("[1] Adam's Tests");
+            Console.WriteLine("[2] Gage's Tests");
+            Console.WriteLine("[3] Kyle's Tests");
+            Console.WriteLine("[4] Mike's Tests");
+            Console.WriteLine("[5] Scott's Tests");
+            Console.WriteLine("[6] Todd's Tests");
+            String read = Console.ReadLine();
+            switch (read)
             {
-                game.Run(28.0);
+                case "0":
+                    //start the form for log in screen
+                    // if client
+                    // - create player object and send to server
+                    // if server
+                    // - get client info
+                    //Form1 form = new Form1();
+                    using (Program game = new Program())
+                    {
+                        game.Run(28.0);
+                    }
+                    break;
+                case "1":
+                    break;
+                case "2":
+                    break;
+                case "3":
+                    int DefaultPort = 9999;
+                    
+                    while (true)
+                    {
+                        Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
+                        string input = Console.ReadLine();
+
+                        if (input[0] == 'c')
+                        {
+                            NetLib.LobbyManager myLobby = new NetLib.LobbyManager(DefaultPort);
+                            break;
+                        }
+                        else if (input[0] == 'j')
+                        {
+                            NetLib.ClientManager myClient = new NetLib.ClientManager(DefaultPort);
+                        }
+                        else if (input[0] == 'q')
+                        {
+                            break;
+                        }
+                        else
+                        {
+                        }
+                    }
+                    break;
+                case "4":
+                    break;
+                case "5":
+                    break;
+                case "6":
+                    break;
+                default:
+                    break;
             }
         }
     }
