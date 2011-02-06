@@ -42,11 +42,12 @@ namespace NetLib
         public List<byte[]> encode(Action a, Type t, List<AP.Position> objs)
         {
             List<byte[]> result = new List<byte[]>();
-            UInt32 count = (UInt32)objs.Count>>16;
-            UInt32 header = (UInt32)a & (UInt32)t & count;
+            UInt32 count = (UInt32)objs.Count;
+            count = count << 16;
+            UInt32 header = (UInt32)a ^ (UInt32)t ^ count;
             result.Add(BitConverter.GetBytes(header));
 
-            Console.WriteLine("objs count: {0}",count);
+            Console.WriteLine("count!: {0}",count);
             foreach (AP.Position obj in objs)
             {
                 Console.WriteLine("Adding object to buffer. size: {0}",result.Count);
