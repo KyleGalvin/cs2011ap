@@ -7,30 +7,30 @@ namespace NetLib
 {
 	public class Connection
 	{
-		private PackageReader myNetReader;
-		private PackageWriter myNetWriter;
+		//private PackageReader myNetReader;
+		//private PackageWriter myNetWriter;
+        private StreamHandler myStream;
 		private TcpClient myClient;
 		
 		public Connection(object client)
 		{
 			myClient = (TcpClient)client;
-			myNetReader = new PackageReader(myClient.GetStream());
-			myNetWriter = new PackageWriter(myClient.GetStream());
+			myStream = new StreamHandler(myClient.GetStream());
 		}
 		
 		public NetPackage ReadPackage()
 		{
-			return myNetReader.ReadPackage();
+			return myStream.ReadPackage();
 		}
 		
 		public void Write(List<byte[]> data)
 		{
-			myNetWriter.Write(data);
+			myStream.Write(data);
 		}
 		
 		public void Write(byte[] data)
 		{
-			myNetWriter.Write(data);
+			myStream.Write(data);
 		}
 		
 		public TcpClient GetClient()
