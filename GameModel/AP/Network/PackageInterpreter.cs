@@ -42,10 +42,14 @@ namespace NetLib
         public List<byte[]> encode(Action a, Type t, List<AP.Position> objs)
         {
             List<byte[]> result = new List<byte[]>();
+            UInt32 count = (UInt32)objs.Count>>16;
+            UInt32 header = (UInt32)a & (UInt32)t & count;
+            result.Add(BitConverter.GetBytes(header));
 
-            int count = objs.Count;
+            Console.WriteLine("objs count: {0}",count);
             foreach (AP.Position obj in objs)
             {
+                Console.WriteLine("Adding object to buffer. size: {0}",result.Count);
                 result.AddRange(serialize(t, obj));
             }
             return result;
@@ -58,7 +62,12 @@ namespace NetLib
             switch (t)
             {
                 case Type.AI:
-                    //result.Add();
+                    Console.WriteLine("xPos:{0}",obj.xPos);
+                    result.Add(BitConverter.GetBytes((int)obj.xPos));
+                    result.Add(BitConverter.GetBytes((int)obj.yPos));
+                    result.Add(BitConverter.GetBytes((int)obj.xVel));
+                    result.Add(BitConverter.GetBytes((int)obj.yVel));
+                        //result.Add();
                     break;
                 case Type.Building:
                     break;
