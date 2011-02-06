@@ -34,7 +34,7 @@ namespace NetLib
 				header = BitConverter.ToUInt32(incoming,0);
 				UInt32 typeofobj = (header & 0x0F000000)>>24;
 				UInt32 action = (header & 0xF0000000)>>28;
-				sizeofobj = myInterpreter.GetTypeSize(typeofobj);
+				sizeofobj = myInterpreter.GetTypeSize((Type)typeofobj);
 				totalSize = (header & 0x00FF0000)>>16;
 				//Console.WriteLine("GetSize(type): {0}",GetSize(typeofobj));
 				Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,totalSize,action);
