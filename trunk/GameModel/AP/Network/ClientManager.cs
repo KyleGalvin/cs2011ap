@@ -54,8 +54,8 @@ namespace NetLib
 			Model.Add("Enemies",myEnemies);
 			
 			//create an enemy object to test communications with
-			AP.Zombie baddie1 = new AP.Zombie(1);
-			AP.Zombie baddie2 = new AP.Zombie(2);
+			AP.Zombie baddie1 = new AP.Zombie(1,100,100,5,5);
+			AP.Zombie baddie2 = new AP.Zombie(2,300,100,5,5);
 			myEnemies.Add(baddie1);
 			myEnemies.Add(baddie2);
 			
@@ -64,6 +64,7 @@ namespace NetLib
             List<byte[]> data = myProtocol.encode(Action.Create, Type.AI, myEnemies);
             foreach (Connection c in myConnections)
             {
+                Console.WriteLine("Writing model to stream");
                 c.Write(data);
             }
 		}

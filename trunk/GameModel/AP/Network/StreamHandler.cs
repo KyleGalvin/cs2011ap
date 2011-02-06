@@ -25,6 +25,7 @@ namespace NetLib
 
             foreach (byte[] chunk32 in pack.body)
             {
+                Console.WriteLine("Writing to stream: {0}", BitConverter.ToString(chunk32));
                 myStream.Write(chunk32, 0, 4);
             }
             myStream.Flush();
@@ -35,6 +36,7 @@ namespace NetLib
         {
             foreach (byte[] chunk32 in data)
             {
+                Console.WriteLine("Writing to stream: {0}", BitConverter.ToString(chunk32));
                 myStream.Write(chunk32, 0, 4);
             }
             myStream.Flush();
@@ -71,7 +73,7 @@ namespace NetLib
             while (myPackage.IsComplete() == false)
             {//recieve body
                 bytesRead += myStream.Read(rawMessage, 0, 4);
-                Console.WriteLine("Reading Segment {0} of {1}... Value: {2}", i, "(broken)", BitConverter.ToInt32(rawMessage, 0));
+                Console.WriteLine("Reading Segment {0} of {1}... Value: {2}", i, (typeSize*count)+1, BitConverter.ToInt32(rawMessage, 0));
                 myPackage.Recieve(rawMessage);
                 i++;
             }
