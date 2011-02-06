@@ -132,7 +132,7 @@ namespace AP
         /// <output>None.</output>
         private void assignEnemyID( Enemy enemy )
         {
-            enemy.enemyID = enemyIdentifier++;
+            enemy.UID = enemyIdentifier++;
         }
 
         /// <summary>

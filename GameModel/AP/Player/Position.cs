@@ -7,6 +7,7 @@ namespace AP
 {
     public class Position
     {
+        public float UID { get; set; }
         public float xPos { get; set; }
         public float yPos { get; set; }
         public float life { get; set; }
