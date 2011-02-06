@@ -30,11 +30,11 @@ namespace NetLib
 			switch (type)//these values need to be sorted out when the protocol is more sound
 			{
 			case Type.Player:
-				return 0x4;
+				return 0x5;
 			case Type.AI:
-				return 0x4;
+				return 0x5;
 			case Type.Building:
-				return 0x4;
+				return 0x5;
 			default:
 				return 0x0;
 			}				
@@ -66,6 +66,7 @@ namespace NetLib
             switch (t)
             {
                 case Type.AI:
+                    result.Add(BitConverter.GetBytes((int)obj.UID));
                     result.Add(BitConverter.GetBytes((int)obj.xPos));
                     result.Add(BitConverter.GetBytes((int)obj.yPos));
                     result.Add(BitConverter.GetBytes((int)obj.xVel));
@@ -78,6 +79,11 @@ namespace NetLib
                 case Type.Explosion:
                     break;
                 case Type.Player:
+                    result.Add(BitConverter.GetBytes((int)obj.UID));
+                    result.Add(BitConverter.GetBytes((int)obj.xPos));
+                    result.Add(BitConverter.GetBytes((int)obj.yPos));
+                    result.Add(BitConverter.GetBytes((int)obj.xVel));
+                    result.Add(BitConverter.GetBytes((int)obj.yVel));
                     break;
                 case Type.Powerup:
                     break;
