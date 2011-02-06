@@ -66,7 +66,7 @@ namespace NetLib
             Console.WriteLine("Read header!");
             myPackage.Recieve(rawMessage);
 
-            int typeSize = myInterpreter.GetTypeSize((Type)(myPackage.header & 0x01000000));
+            UInt32 typeSize = myInterpreter.GetTypeSize((Type)(myPackage.header & 0x01000000));
             int count = myInterpreter.GetCount(myPackage.header);
             myPackage.totalSize = (UInt32)(typeSize * count);
 
