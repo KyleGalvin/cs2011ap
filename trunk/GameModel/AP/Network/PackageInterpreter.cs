@@ -26,19 +26,21 @@ namespace NetLib
 	{
 		//Interpreter seems best suited to place TypeSize information
 		public UInt32 GetTypeSize(Type type){
+            
 			switch (type)//these values need to be sorted out when the protocol is more sound
 			{
 			case Type.Player:
-				return 8;
+				return 0x4;
 			case Type.AI:
-				return 8;
+				return 0x4;
 			case Type.Building:
-				return 8;
+				return 0x4;
 			default:
-				return 0;
+				return 0x0;
 			}				
 		}
 
+        //turns a list of objects into a serialized network stream
         public List<byte[]> encode(Action a, Type t, List<AP.Position> objs)
         {
             List<byte[]> result = new List<byte[]>();
@@ -47,10 +49,8 @@ namespace NetLib
             UInt32 header = (UInt32)a ^ (UInt32)t ^ count;
             result.Add(BitConverter.GetBytes(header));
 
-            Console.WriteLine("count!: {0}",count);
             foreach (AP.Position obj in objs)
             {
-                Console.WriteLine("Adding object to buffer. size: {0}",result.Count);
                 result.AddRange(serialize(t, obj));
             }
             return result;
@@ -60,15 +60,16 @@ namespace NetLib
         {
             Console.WriteLine(obj.GetType());
             List<byte[]> result = new List<byte[]>();
+
+            //each type of object has a different composure.
+            //here we define the structure of all possible types
             switch (t)
             {
                 case Type.AI:
-                    Console.WriteLine("xPos:{0}",obj.xPos);
                     result.Add(BitConverter.GetBytes((int)obj.xPos));
                     result.Add(BitConverter.GetBytes((int)obj.yPos));
                     result.Add(BitConverter.GetBytes((int)obj.xVel));
                     result.Add(BitConverter.GetBytes((int)obj.yVel));
-                        //result.Add();
                     break;
                 case Type.Building:
                     break;
@@ -87,9 +88,9 @@ namespace NetLib
             return result;
         }
 
-        public int GetCount(UInt32 header)
+        public UInt32 GetCount(UInt32 header)
         {
-            return (int)(header & 0x00110000)>>16;
+            return (header & 0x00FF0000) >> 16;
         }
 
 		public PackageInterpreter ()
