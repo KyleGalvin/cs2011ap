@@ -63,21 +63,14 @@ namespace NetLib
             int bytesRead = 0;
             Console.WriteLine("Waiting for incoming data from...");
             bytesRead += myStream.Read(rawMessage, 0, 4);//read header
-            Console.WriteLine("Read header!");
             myPackage.Recieve(rawMessage);
-
-            UInt32 typeSize = myInterpreter.GetTypeSize((Type)(myPackage.header & 0x01000000));
-            int count = myInterpreter.GetCount(myPackage.header);
-            myPackage.totalSize = (UInt32)(typeSize * count);
 
             while (myPackage.IsComplete() == false)
             {//recieve body
                 bytesRead += myStream.Read(rawMessage, 0, 4);
-                Console.WriteLine("Reading Segment {0} of {1}... Value: {2}", i, (typeSize*count)+1, BitConverter.ToInt32(rawMessage, 0));
                 myPackage.Recieve(rawMessage);
-                i++;
             }
-            Console.WriteLine("Packet complete!");
+
             return myPackage;
         }
     }

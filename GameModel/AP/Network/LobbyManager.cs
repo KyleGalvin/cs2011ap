@@ -100,11 +100,6 @@ namespace NetLib
 			TcpClient client = myConnection.GetClient();
 			Console.WriteLine("client {0} has connected.", client.Client.RemoteEndPoint);
 			
-			//The current 32 bit data unit coming in
-			int bytesRead;
-			
-			bytesRead = 0;
-			
 			while (true)
 			{
 			
@@ -120,11 +115,11 @@ namespace NetLib
 					break;
 			    }
 			
-			    if (bytesRead == 0)//nothing was read from socket
-				{
-					Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
-					break;
-				}
+			    //if (bytesRead == 0)//nothing was read from socket
+				//{
+				//	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
+				//	break;
+				//}
 				if(pack.IsComplete())//we've accumulated the amount of data our header predicts
 				{
 					if(pack.action == (UInt32)Action.Create)
@@ -132,7 +127,6 @@ namespace NetLib
 						Console.WriteLine("Create command triggered by incoming packet header");
 					}
 			
-					bytesRead = 0;
 				}
 				
 			}
