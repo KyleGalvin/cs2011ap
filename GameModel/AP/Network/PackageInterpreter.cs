@@ -48,14 +48,18 @@ namespace NetLib
         public List<byte[]> encodeText(String s)
         {
             List<byte[]> result = new List<byte[]>();
-            result.Add(BitConverter.GetBytes((UInt32)((s.Length/4)<<16) ^ (UInt32)Action.Text));
 
             while (s.Length % 4 != 0)
             {
                 s += " ";
             }
 
+            //add packet header
+            result.Add(BitConverter.GetBytes((UInt32)((s.Length / 4) << 16) ^ ((UInt32)Action.Text) ^ ((UInt32)Type.Text)));
+
             char[] carray = s.ToCharArray();
+
+            //add packet body
             for(int i = 0; i < carray.Length;i=i+4)
             {
                 UInt32 segment = (UInt32)(carray[i]) ^ (UInt32)(carray[i + 1] << 8) ^ (UInt32)(carray[i + 2] << 16) ^ (UInt32)(carray[i + 3] << 24);
