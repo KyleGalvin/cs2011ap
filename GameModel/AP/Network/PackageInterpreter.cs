@@ -9,7 +9,8 @@ namespace NetLib
         Delete = 0x10000000,
         Update = 0x20000000,
         Request = 0x30000000,
-        Describe = 0x40000000
+        Describe = 0x40000000,
+        Text = 0x50000000
     }
 
     public enum Type
@@ -39,6 +40,28 @@ namespace NetLib
 				return 0x0;
 			}				
 		}
+
+        //sends a string over the network
+        public List<byte[]> encodeText(String s)
+        {
+            List<byte[]> result = new List<byte[]>();
+            result.Add(BitConverter.GetBytes(s.Length));
+
+            while (s.Length % 4 != 0)
+            {
+                s += " ";
+            }
+
+            char[] carray = s.ToCharArray();
+            for(int i = 0; i < carray.Length;i=i+4)
+            {
+                UInt32 segment = (UInt32)(carray[i]) ^ (UInt32)(carray[i + 1] << 8) ^ (UInt32)(carray[i + 2] << 16) ^ (UInt32)(carray[i + 3] << 24);
+                result.Add( BitConverter.GetBytes(segment));
+
+            }
+
+            return new List<byte[]>();
+        }
 
         //turns a list of objects into a serialized network stream
         public List<byte[]> encode(Action a, Type t, List<AP.Position> objs)
