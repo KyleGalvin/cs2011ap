@@ -56,6 +56,7 @@ namespace NetLib
 
             //add packet header
             result.Add(BitConverter.GetBytes((UInt32)((s.Length / 4) << 16) ^ ((UInt32)Action.Text) ^ ((UInt32)Type.Text)));
+            Console.WriteLine(BitConverter.ToString(result[0]));
 
             char[] carray = s.ToCharArray();
 

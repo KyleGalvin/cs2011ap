@@ -40,6 +40,7 @@ namespace NetLib
                 count = myInterpreter.GetCount(header);
 				//Console.WriteLine("GetSize(type): {0}",GetSize(typeofobj));
 				Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,count,action);
+                Console.WriteLine(header);
 			}
 			else
 			{
