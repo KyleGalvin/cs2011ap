@@ -45,7 +45,7 @@ namespace NetLib
         public List<byte[]> encodeText(String s)
         {
             List<byte[]> result = new List<byte[]>();
-            result.Add(BitConverter.GetBytes(s.Length));
+            result.Add(BitConverter.GetBytes((UInt32)(s.Length<<16) ^ (UInt32)Action.Text));
 
             while (s.Length % 4 != 0)
             {
