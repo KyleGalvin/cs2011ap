@@ -3,26 +3,16 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
+using AP;
 
 namespace NetLib
 {
 
 	public abstract class NetManager
 	{
-        public class GameState
-        {
-            public GameState()
-            {
-                Players = new List<AP.Player>();
-                Enemies = new List<AP.Enemy>();
-                Bullets = new List<AP.Bullet>();
-            }
-            public List<AP.Player> Players;
-            public List<AP.Enemy> Enemies;
-            public List<AP.Bullet> Bullets;
-        }
+       
 
-        static protected GameState State = new GameState();
+        static public GameState State = new GameState();
 		protected Thread respondThread;
 		protected int port;
 		
@@ -34,8 +24,10 @@ namespace NetLib
         protected PackageInterpreter myProtocol;
 
         protected PackWorker worker;
+
+        public bool Connected = false;
 		
-		public NetManager(int newPort, NetManager.GameState StateRef)
+		public NetManager(int newPort,  ref GameState StateRef)
 		{
             worker = new PackWorker(ref StateRef);
             State = StateRef;
@@ -43,10 +35,6 @@ namespace NetLib
             myProtocol = new PackageInterpreter();
 			port = newPort;
 		}
-        public NetManager(int newPort):this(newPort,new NetManager.GameState())
-        {
-            //GameState=new
-        }
 		//Listen for any requests directed at our IP and Port
 		//respond by accepting connection and requesting one of our own for outgoing data
 		public void Listen()
@@ -64,6 +52,7 @@ namespace NetLib
 				
 				//wait for new incoming connection
 				client = myListener.AcceptTcpClient();
+                Connected = true;
 				
 				//We cannot be sending out on our connections while we add a new one
 				//since the list length cannot change while we iterate through the list

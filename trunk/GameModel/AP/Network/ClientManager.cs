@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Timers;
 using Timer = System.Threading.Timer;
-
+using AP;
 namespace NetLib
 {
 	public class ClientManager : NetManager
@@ -15,7 +15,8 @@ namespace NetLib
         private Thread broadcastThread;
 	    private bool TimesUp;
 	    private List<IPAddress> ServerIps= new List<IPAddress>();
-        public ClientManager(int port):base(port)
+        public ClientManager(int port, ref GameState State)
+            : base(port, ref State)
 		{
 			//set up variables
 

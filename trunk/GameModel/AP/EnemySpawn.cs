@@ -15,9 +15,9 @@ namespace AP
             yPos = y;
         }
 
-        public Enemy spawnEnemy()
+        public Enemy spawnEnemy(int ID)
         {
-            Enemy enemy = new Zombie(0);
+            Enemy enemy = new Zombie(ID);
             
             //Console.WriteLine("Spawning");
             enemy.setPosition(xPos, yPos);

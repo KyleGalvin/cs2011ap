@@ -3,13 +3,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
-
+using AP;
 namespace NetLib
 {
 	public class LobbyManager : NetManager
 	{
 
-        public LobbyManager(int port): base(port)
+        public LobbyManager(int port, ref GameState State): base(port, ref State)
         {
             Console.WriteLine("Listening for incoming connections...");
             new Thread(new ThreadStart(this.BroadcastListener)).Start();//Alert clients of our presence

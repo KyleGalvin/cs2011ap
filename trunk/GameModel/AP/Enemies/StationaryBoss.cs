@@ -10,7 +10,7 @@ namespace AP
         public StationaryBoss(int ID)
         {
             life = (int)Life.Boss;
-            enemyID = ID;
+            UID = ID;
         }
 
         public override void move(int x, int y)

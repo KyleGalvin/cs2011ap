@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AP;
 namespace NetLib
 {
     /// <summary>
@@ -9,9 +10,9 @@ namespace NetLib
     {
         //private List<AP.Position> GameState;
         PackageInterpreter myInterpreter = new PackageInterpreter();
-        NetManager.GameState State;
+        GameState State;
 
-        public PackWorker(ref NetManager.GameState s)
+        public PackWorker(ref GameState s)
         {
             State = s;
             //
@@ -42,14 +43,14 @@ namespace NetLib
                     List<AP.Enemy> result = new List<AP.Enemy>();
                     result.Add(CreateAI(pack.body.GetRange((int)(i*myTypeSize),5)));
                     State.Enemies.AddRange(result);
-                    Console.WriteLine("Created {0} objects from remote network command!", result.Count);
+                    Console.WriteLine("Created {0} AI objects from remote network command!", result.Count);
                 }
                 else if ((Type)t == Type.Player)
                 {
                     List<AP.Player> result = new List<AP.Player>();
                     result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize), 5)));
                     State.Players.AddRange(result);
-                    Console.WriteLine("Created {0} objects from remote network command!", result.Count);
+                    Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
                 }
             }
             
