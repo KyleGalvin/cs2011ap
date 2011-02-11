@@ -20,7 +20,8 @@ namespace NetLib
         Building = 0x03000000,
         Bullet = 0x04000000,
         Explosion = 0x05000000,
-        Powerup = 0x06000000
+        Powerup = 0x06000000,
+        Text = 0x70000000
     }
 
 	public class PackageInterpreter
@@ -36,6 +37,8 @@ namespace NetLib
 				return 0x5;
 			case Type.Building:
 				return 0x5;
+            case Type.Text:
+                return 0x1;
 			default:
 				return 0x0;
 			}				
@@ -45,7 +48,7 @@ namespace NetLib
         public List<byte[]> encodeText(String s)
         {
             List<byte[]> result = new List<byte[]>();
-            result.Add(BitConverter.GetBytes((UInt32)(s.Length<<16) ^ (UInt32)Action.Text));
+            result.Add(BitConverter.GetBytes((UInt32)((s.Length/4)<<16) ^ (UInt32)Action.Text));
 
             while (s.Length % 4 != 0)
             {
