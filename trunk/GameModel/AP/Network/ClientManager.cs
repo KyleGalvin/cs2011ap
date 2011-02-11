@@ -58,10 +58,12 @@ namespace NetLib
 			AP.Zombie baddie2 = new AP.Zombie(2,300,100,5,5);
 			myEnemies.Add(baddie1);
 			myEnemies.Add(baddie2);
+
+
 			
 			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
 			//Send(Model,(UInt32)Action.Create);
-            List<byte[]> data = myProtocol.encode(Action.Create, Type.AI, myEnemies);
+            List<byte[]> data = myProtocol.encodeText("Test string");
             foreach (Connection c in myConnections)
             {
                 Console.WriteLine("Writing model to stream");

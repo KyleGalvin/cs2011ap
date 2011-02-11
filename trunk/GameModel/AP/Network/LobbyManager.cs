@@ -8,9 +8,11 @@ namespace NetLib
 {
 	class LobbyManager : NetManager
 	{
+        private PackWorker worker = new PackWorker();
 
         public void RespondToClients(int port, IPEndPoint broadcastEP)
         {
+            
             //Needs to broadcast itself on the network
             //broadcast
             Socket BC = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -122,10 +124,19 @@ namespace NetLib
 				//}
 				if(pack.IsComplete())//we've accumulated the amount of data our header predicts
 				{
+                    if(pack.action == (UInt32)Action.Text)
+                    {
+                        string Message = worker.HandleText(pack);
+                        Console.WriteLine(Message);
+                    }
 					if(pack.action == (UInt32)Action.Create)
 					{
 						Console.WriteLine("Create command triggered by incoming packet header");
 					}
+                    if (pack.action == (UInt32)Action.Update)
+                    {
+
+                    }
 			
 				}
 				
