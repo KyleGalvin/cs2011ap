@@ -16,6 +16,7 @@ namespace AP
         protected float speed { get; set; }
         public float xVel { get; set; }
         public float yVel { get; set; }
+        public int UID { get; set; }
         // enum starts at 0
         // set any of these values to anything you want
         // i.e. none=0, slow=3, normal=5, fast=7

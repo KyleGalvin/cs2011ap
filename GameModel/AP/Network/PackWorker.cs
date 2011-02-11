@@ -7,9 +7,12 @@ namespace NetLib
     /// </summary>
     public class PackWorker
     {
+        private List<AP.Position> GameState;
         PackageInterpreter myInterpreter = new PackageInterpreter();
-        public PackWorker()
+
+        public PackWorker(ref List<AP.Position> StatePtr)
         {
+            GameState = StatePtr;
             //
             // TODO: Add constructor logic here
             //
@@ -32,25 +35,27 @@ namespace NetLib
             //i=1 initially since the header is not data
             for (int i = 1; i < pack.count; i += (int)myTypeSize)
             {
-                for (int j = 0; j < myTypeSize; j++)
+                Type t = (Type)pack.typeofobj;
+                if (t == Type.AI)
                 {
-                    Type t = pack.typeofobj;
-                    if (t == Type.AI)
-                    {
+                    result.Add(CreateAI(pack.body.GetRange(i,5)));
+                }
+                else if (t == Type.Player)
+                {
 
-                    }
-                    else if (t == Type.Player)
-                    {
-
-                    }
                 }
             }
-          return new List<AP.Position>();
+          return result;
         }
 
         public List<AP.Position> HandleUpdate(NetPackage pack)
         {
             return new List<AP.Position>();
+        }
+
+        public AP.Enemy CreateAI(List<byte[]> data)
+        {
+            return new AP.Zombie(BitConverter.ToInt32(data[0],0));
         }
     }
 }

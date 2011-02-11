@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AP
 {
-    class Weapon : Position
+    class Weapon: Position
     {
 
     }

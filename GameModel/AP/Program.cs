@@ -10,6 +10,8 @@ namespace AP
 {
     class Program : GameWindow
     {
+        NetLib.NetManager network;
+
         //camera related things
         Vector3d up = new Vector3d(0.0, 1.0, 0.0);
         Vector3d viewDirection = new Vector3d(0.0, 0.0, 1.0);
@@ -42,7 +44,7 @@ namespace AP
         CreateLevel currentLevel;
         Random randNum = new Random();
         Bullet bullet1;
-        static LoadedObjects loadedObjects = new LoadedObjects();
+       // static LoadedObjects loadedObjects = new LoadedObjects();
 
         /// <summary>Creates a window with the specified title.</summary>
         public Program()
@@ -92,7 +94,7 @@ namespace AP
             GL.EnableClientState(ArrayCap.IndexArray);
             
             //loading a cube... so easy
-            loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png");
+            //loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png");
         }
 
         /// <summary>
@@ -232,7 +234,7 @@ namespace AP
                     {
                         GL.LoadMatrix(ref camera);
                         GL.Translate(x + idx, yPosSquares[i], 4);
-                        loadedObjects.DrawObject(0);
+                       // loadedObjects.DrawObject(0);
                     }
                 }
 
@@ -242,7 +244,7 @@ namespace AP
                     {
                         GL.LoadMatrix(ref camera);
                         GL.Translate(x, yPosSquares[i] + idx, 4);
-                        loadedObjects.DrawObject(0);
+                        //loadedObjects.DrawObject(0);
                     }
                 }
 
@@ -260,9 +262,18 @@ namespace AP
             // if server
             // - get client info
             //Form1 form = new Form1();
-
+            
             using( Program game = new Program() )
             {
+                String r = Console.ReadLine();
+                if (r == "c")
+                {
+                    game.network = new NetLib.ClientManager(9999);
+                }
+                else if (r == "s")
+                {
+                    game.network = new NetLib.LobbyManager(9999);
+                }
                 game.Run(28.0);
             }
         }

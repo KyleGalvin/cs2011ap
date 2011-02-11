@@ -7,8 +7,11 @@ using System.Collections.Generic;
 namespace NetLib
 {
 	
-	abstract class NetManager
+	public abstract class NetManager
 	{
+
+        public List<AP.Position> GameState;
+
 		protected Thread respondThread;
 		protected int port;
 		
@@ -18,14 +21,21 @@ namespace NetLib
 		protected String myRole;
 
         protected PackageInterpreter myProtocol;
+
+        protected PackWorker worker;
 		
-		public NetManager(int newPort)
+		public NetManager(int newPort, List<AP.Position> StateRef)
 		{
+            worker = new PackWorker(ref StateRef);
+            GameState = StateRef;
 			myConnections = new List<Connection>();
             myProtocol = new PackageInterpreter();
 			port = newPort;
 		}
-		
+        public NetManager(int newPort):this(newPort,new List<AP.Position>())
+        {
+            //GameState=new
+        }
 		//Listen for any requests directed at our IP and Port
 		//respond by accepting connection and requesting one of our own for outgoing data
 		public void Listen()

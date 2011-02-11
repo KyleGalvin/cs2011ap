@@ -85,8 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EnemySpawn.cs" />
-    <Compile Include="Levels\OpenLevel.cs" />
-    <Compile Include="Models\LoadedObjects.cs" />
+    <Compile Include="Levels\CreateLevel.cs" />
     <Compile Include="Models\Loader.cs" />
     <Compile Include="Models\MeshData.cs" />
     <Compile Include="Network\ClientManager.cs" />

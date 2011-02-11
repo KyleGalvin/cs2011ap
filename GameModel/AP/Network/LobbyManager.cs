@@ -6,9 +6,15 @@ using System.Collections.Generic;
 
 namespace NetLib
 {
-	class LobbyManager : NetManager
+	public class LobbyManager : NetManager
 	{
-        private PackWorker worker = new PackWorker();
+
+        public LobbyManager(int port): base(port)
+        {
+            Console.WriteLine("Listening for incoming connections...");
+            new Thread(new ThreadStart(this.BroadcastListener)).Start();//Alert clients of our presence
+            new Thread(new ThreadStart(this.Listen)).Start();//Collect clients in our connection pool
+        }
 
         public void RespondToClients(int port, IPEndPoint broadcastEP)
         {
@@ -68,12 +74,6 @@ namespace NetLib
             }
         }
 
-		public LobbyManager(int port):base(port){		
-			Console.WriteLine("Listening for incoming connections...");
-            new Thread(new ThreadStart(this.BroadcastListener)).Start();//Alert clients of our presence
-			new Thread(new ThreadStart(this.Listen)).Start();//Collect clients in our connection pool
-		}
-		
 		private void Respond(UInt32 data)
 		{
 			Console.WriteLine("Responding to incoming communication...");
@@ -131,6 +131,7 @@ namespace NetLib
                     }
 					if(pack.action == (UInt32)Action.Create)
 					{
+                        worker.HandleCreate(pack);
 						Console.WriteLine("Create command triggered by incoming packet header");
 					}
                     if (pack.action == (UInt32)Action.Update)

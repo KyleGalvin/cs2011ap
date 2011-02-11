@@ -10,12 +10,12 @@ using Timer = System.Threading.Timer;
 
 namespace NetLib
 {
-	class ClientManager : NetManager
+	public class ClientManager : NetManager
 	{
         private Thread broadcastThread;
 	    private bool TimesUp;
 	    private List<IPAddress> ServerIps= new List<IPAddress>();
-		public ClientManager(int port):base(port)
+        public ClientManager(int port):base(port)
 		{
 			//set up variables
 
@@ -54,9 +54,9 @@ namespace NetLib
 			Model.Add("Enemies",myEnemies);
 			
 			//create an enemy object to test communications with
-			AP.Zombie baddie1 = new AP.Zombie(1,100,100,5,5);
-			AP.Zombie baddie2 = new AP.Zombie(2,300,100,5,5);
-			myEnemies.Add(baddie1);
+			AP.Zombie baddie1 = new AP.Zombie(1);
+			AP.Zombie baddie2 = new AP.Zombie(2);
+            myEnemies.Add(baddie1);
 			myEnemies.Add(baddie2);
 
 
