@@ -11,12 +11,15 @@ namespace AP
     class Program : GameWindow
     {
         //camera related things
-        OpenTK.Vector3d up = new OpenTK.Vector3d(0.0, 1.0, 0.0);
-        OpenTK.Vector3d viewDirection = new OpenTK.Vector3d(0.0, 0.0, 1.0);
-        double viewDist = 17.0;
+        Vector3d up = new Vector3d(0.0, 1.0, 0.0);
+        Vector3d viewDirection = new Vector3d(0.0, 0.0, 1.0);
+        Vector3 defaultPosition = new Vector3(0, 0, 0);
+        Vector3 defaultVelocity = new Vector3(0, 0, 0);
+        private double viewDist = 23.0;
         const int screenX = 800;
         const int screenY = 800;
         private int zombieIterator = 0;
+        private bool enemySpawned = false;
         //assign amount of enemies per level
         // first row index = EnemyObject
         // second row index = EnemyID
@@ -25,17 +28,25 @@ namespace AP
         public Player player;
         //public Controls controls;
         private int enemyIdentifier = 0;
+        //EnemySpawn spawn;
+        List<int> xPosSquares = new List<int>();
+        List<int> yPosSquares = new List<int>();
+        List<int> widthSquares = new List<int>();
+        List<int> heightSquares = new List<int>();
+        List<int> xPosSpawn = new List<int>();
+        List<int> yPosSpawn = new List<int>();
         EnemySpawn spawn1;
         EnemySpawn spawn2;
         EnemySpawn spawn3;
         EnemySpawn spawn4;
-        OpenLevel currentLevel;
+        CreateLevel currentLevel;
         Random randNum = new Random();
-        LoadedObjects loadedObjects = new LoadedObjects();
+        Bullet bullet1;
+        static LoadedObjects loadedObjects = new LoadedObjects();
 
         /// <summary>Creates a window with the specified title.</summary>
         public Program()
-            : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "Shoot - em fuckers up!")
+            : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
             VSync = VSyncMode.On;
         }
@@ -45,17 +56,33 @@ namespace AP
         protected override void OnLoad(EventArgs e)
         {
             //base.OnLoad(e);
-            player = new Player(0, 0, 0);
-            spawn1 = new EnemySpawn(0, (float)1.6);
-            spawn2 = new EnemySpawn((float)1.6, 0);
-            spawn3 = new EnemySpawn(0, (float)-1.6);
-            spawn4 = new EnemySpawn((float)-1.6, 0);
-            currentLevel = new OpenLevel(1);
-            currentLevel.parseFile();
-            spawns.Add(spawn1);
-            spawns.Add(spawn2);
-            spawns.Add(spawn3);
-            spawns.Add(spawn4);
+            player = new Player();//(defaultPosition, 0);
+            currentLevel = new CreateLevel(1);
+            currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
+
+            if ( xPosSpawn.Count > 0 )
+            {
+                spawn1 = new EnemySpawn(xPosSpawn[0], yPosSpawn[0]);
+                spawns.Add(spawn1);
+            }
+            if ( xPosSpawn.Count > 1 )
+            {
+                Console.WriteLine(" 2 spawns ");
+                spawn2 = new EnemySpawn(xPosSpawn[1], yPosSpawn[1]);
+                spawns.Add(spawn2);
+            }
+            if ( xPosSpawn.Count > 2 )
+            {
+                Console.WriteLine(" 2 spawns ");
+                spawn3 = new EnemySpawn(xPosSpawn[2], yPosSpawn[2]);
+                spawns.Add(spawn3);
+            }
+            if ( xPosSpawn.Count > 3 )
+            {
+                spawn4 = new EnemySpawn(xPosSpawn[3], yPosSpawn[3]);
+                spawns.Add(spawn4);
+            }
+
             GL.ClearColor(0.0f, 0.2f, 0.2f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
@@ -90,8 +117,7 @@ namespace AP
         /// <param name="e">Contains timing information for framerate independent logic.</param>
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            //base.OnUpdateFrame(e);
-
+            base.OnUpdateFrame(e);
             if (Keyboard[Key.W])
                 player.move(0,1);
             if (Keyboard[Key.S])
@@ -102,6 +128,44 @@ namespace AP
                 player.move(1,0);
             if (Keyboard[Key.Escape])
                 Exit();
+            if (Keyboard[Key.V])
+            {
+                zombieIterator++;
+                foreach (var spawn in spawns)
+                {
+                    spawn.draw();
+                    if (zombieIterator == 60)
+                    {
+                        enemyList.Add(spawn.spawnEnemy());
+                        //Console.WriteLine("spawn");
+                        enemySpawned = true;
+                    }
+                }
+                if (enemySpawned)
+                {
+                    zombieIterator = 0;
+                    enemySpawned = false;
+                }
+            }
+
+            if (Mouse[OpenTK.Input.MouseButton.Left] == true)
+            {
+                
+                if (player.canShoot())
+                {
+                    Console.WriteLine("shoot");
+                    bullet1 = new Bullet(player.position, defaultVelocity, ref bullet1);
+                    bullet1.setDirectionByMouse(Mouse.X, Mouse.Y, screenX, screenY, ref player);
+                }
+            }
+            player.updateBulletCooldown();
+
+            if (bullet1 != null)
+            {
+                bullet1.move();
+                if (bullet1.killProjectile())
+                    bullet1 = null;
+            }
 
             if (Keyboard[OpenTK.Input.Key.Up])
             {
@@ -113,11 +177,6 @@ namespace AP
                 viewDist *= 0.9f;
                 Console.WriteLine("View distance: {0}", viewDist);
             }
-
-            //base.OnUpdateFrame(e);
-
-            //Console.WriteLine("Running");
-
         }
 
         private void assignPlayerID()
@@ -132,7 +191,7 @@ namespace AP
         /// <output>None.</output>
         private void assignEnemyID( Enemy enemy )
         {
-            enemy.UID = enemyIdentifier++;
+            enemy.enemyID = enemyIdentifier++;
         }
 
         /// <summary>
@@ -142,101 +201,88 @@ namespace AP
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
+            int i = 0;
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadIdentity();
+
             Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist),
                                               OpenTK.Vector3d.Zero, up);
             GL.LoadMatrix(ref camera);
 
             player.draw();
-            zombieIterator++;
-            if (zombieIterator == 60)
+            if (bullet1 != null)
             {
-                foreach (var spawn in spawns)
-                {
-                    enemyList.Add(spawn.spawnEnemy());
-                }
-                //Console.WriteLine("spawn");
-                zombieIterator = 0;
+                bullet1.draw();
             }
 
 
+            /*zombieIterator++;
+            foreach (var spawn in spawns)
+            {
+                spawn.draw();
+                if (zombieIterator == 60)
+                {
+                    enemyList.Add(spawn.spawnEnemy());
+                    //Console.WriteLine("spawn");
+                    enemySpawned = true;
+                }
+            }
+            if (enemySpawned)
+            {
+                zombieIterator = 0;
+                enemySpawned = false;
+            }*/
+            
+            
             foreach (var member in enemyList)
             {
                 member.move(1, 0);
                 member.draw();
             }
 
-            //GL.Rotate(180, 1, 1, 1);
-            loadedObjects.DrawObject(0);
+
+            i = 0;
+            foreach (var x in xPosSquares)
+            {
+                if (widthSquares[i] > 1)
+                {
+                    for (int idx = 0; idx < widthSquares[i] * 2; idx += 2)
+                    {
+                        GL.LoadMatrix(ref camera);
+                        GL.Translate(x + idx, yPosSquares[i], 4);
+                        loadedObjects.DrawObject(0);
+                    }
+                }
+
+                if (heightSquares[i] > 1)
+                {
+                    for (int idx = 0; idx < heightSquares[i] * 2; idx += 2)
+                    {
+                        GL.LoadMatrix(ref camera);
+                        GL.Translate(x, yPosSquares[i] + idx, 4);
+                        loadedObjects.DrawObject(0);
+                    }
+                }
+
+                i++;
+            }
             
             SwapBuffers();
         }
 
         static void Main(string[] args)
         {
+            //start the form for log in screen
+            // if client
+            // - create player object and send to server
+            // if server
+            // - get client info
+            //Form1 form = new Form1();
 
-            Console.WriteLine("[0] Run Game");
-            Console.WriteLine("[1] Adam's Tests");
-            Console.WriteLine("[2] Gage's Tests");
-            Console.WriteLine("[3] Kyle's Tests");
-            Console.WriteLine("[4] Mike's Tests");
-            Console.WriteLine("[5] Scott's Tests");
-            Console.WriteLine("[6] Todd's Tests");
-            String read = Console.ReadLine();
-            switch (read)
+            using( Program game = new Program() )
             {
-                case "0":
-                    //start the form for log in screen
-                    // if client
-                    // - create player object and send to server
-                    // if server
-                    // - get client info
-                    //Form1 form = new Form1();
-                    using (Program game = new Program())
-                    {
-                        game.Run(28.0);
-                    }
-                    break;
-                case "1":
-                    break;
-                case "2":
-                    break;
-                case "3":
-                    int DefaultPort = 9999;
-                    
-                    while (true)
-                    {
-                        Console.WriteLine("[c]reate Lobby, [j]oin Lobby, [q]uit");
-                        string input = Console.ReadLine();
-
-                        if (input[0] == 'c')
-                        {
-                            NetLib.LobbyManager myLobby = new NetLib.LobbyManager(DefaultPort);
-                            break;
-                        }
-                        else if (input[0] == 'j')
-                        {
-                            NetLib.ClientManager myClient = new NetLib.ClientManager(DefaultPort);
-                        }
-                        else if (input[0] == 'q')
-                        {
-                            break;
-                        }
-                        else
-                        {
-                        }
-                    }
-                    break;
-                case "4":
-                    break;
-                case "5":
-                    break;
-                case "6":
-                    break;
-                default:
-                    break;
+                game.Run(28.0);
             }
         }
     }
