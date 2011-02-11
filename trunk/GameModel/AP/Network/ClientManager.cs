@@ -63,7 +63,7 @@ namespace NetLib
 			
 			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
 			//Send(Model,(UInt32)Action.Create);
-            List<byte[]> data = myProtocol.encodeText("Test string");
+            List<byte[]> data = myProtocol.encode(Action.Create,Type.AI,myEnemies);
             foreach (Connection c in myConnections)
             {
                 Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
