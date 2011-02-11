@@ -12,6 +12,11 @@ namespace AP
             Enemies = new List<AP.Enemy>();
             Bullets = new List<AP.Bullet>();
         }
+
+        public int Count()
+        {
+            return Players.Count + Enemies.Count + Bullets.Count;
+        }
         public List<AP.Player> Players;
         public List<AP.Enemy> Enemies;
         public List<AP.Bullet> Bullets;

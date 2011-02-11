@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace AP
 {
-    public class Position
+    public abstract class Position
     {
         public float xPos { get; set; }
         public float yPos { get; set; }

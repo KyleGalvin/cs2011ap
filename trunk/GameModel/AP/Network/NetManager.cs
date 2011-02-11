@@ -10,8 +10,6 @@ namespace NetLib
 
 	public abstract class NetManager
 	{
-       
-
         static public GameState State = new GameState();
 		protected Thread respondThread;
 		protected int port;
@@ -67,7 +65,17 @@ namespace NetLib
 				clientThread.Start(myConnections[(myConnections.Count -1)]);
 			}
 		}
-		
+
+        public void Send<T>(List<T> Objs)
+        {
+            List<byte[]> data = myProtocol.encode(Action.Create, Type.AI, Objs);
+            foreach (Connection c in myConnections)
+            {
+                //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                c.Write(data);
+            }
+        }
+	
 		//communication is handled differently in the lobby/client children classes
 		protected abstract void HandleIncomingComm(Object remoteEnd);
 	}
