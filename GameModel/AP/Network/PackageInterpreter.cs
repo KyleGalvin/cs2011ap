@@ -72,36 +72,38 @@ namespace NetLib
         }
 
         //turns a list of objects into a serialized network stream
-        public List<byte[]> encode(Action a, Type t, List<AP.Position> objs)
+        public List<byte[]> encode<T>(Action a, Type t, List<T> objs)
         {
+
             List<byte[]> result = new List<byte[]>();
             UInt32 count = (UInt32)objs.Count;
             count = count << 16;
             UInt32 header = (UInt32)a ^ (UInt32)t ^ count;
             result.Add(BitConverter.GetBytes(header));
 
-            foreach (AP.Position obj in objs)
+            foreach (T obj in objs)
             {
-                result.AddRange(serialize(t, obj));
+                result.AddRange(serialize<T>(t, obj)); 
             }
             return result;
         }
 
-        private List<byte[]> serialize(Type t, AP.Position obj)
+        private List<byte[]> serialize<T>(Type t, T obj)
         {
+
             Console.WriteLine(obj.GetType());
             List<byte[]> result = new List<byte[]>();
-
             //each type of object has a different composure.
             //here we define the structure of all possible types
             switch (t)
             {
                 case Type.AI:
-                    result.Add(BitConverter.GetBytes((int)obj.UID));
-                    result.Add(BitConverter.GetBytes((int)obj.xPos));
-                    result.Add(BitConverter.GetBytes((int)obj.yPos));
-                    result.Add(BitConverter.GetBytes((int)obj.xVel));
-                    result.Add(BitConverter.GetBytes((int)obj.yVel));
+                    AP.Enemy e = (AP.Enemy)(object)obj;
+                    result.Add(BitConverter.GetBytes((int)e.UID));
+                    result.Add(BitConverter.GetBytes((int)e.xPos));
+                    result.Add(BitConverter.GetBytes((int)e.yPos));
+                    result.Add(BitConverter.GetBytes((int)e.xVel));
+                    result.Add(BitConverter.GetBytes((int)e.yVel));
                     break;
                 case Type.Building:
                     break;
@@ -110,11 +112,12 @@ namespace NetLib
                 case Type.Explosion:
                     break;
                 case Type.Player:
-                    result.Add(BitConverter.GetBytes((int)obj.UID));
-                    result.Add(BitConverter.GetBytes((int)obj.xPos));
-                    result.Add(BitConverter.GetBytes((int)obj.yPos));
-                    result.Add(BitConverter.GetBytes((int)obj.xVel));
-                    result.Add(BitConverter.GetBytes((int)obj.yVel));
+                    AP.Player p = (AP.Player)(object)obj;
+                    result.Add(BitConverter.GetBytes((int)p.UID));
+                    result.Add(BitConverter.GetBytes((int)p.xPos));
+                    result.Add(BitConverter.GetBytes((int)p.yPos));
+                    result.Add(BitConverter.GetBytes((int)p.xVel));
+                    result.Add(BitConverter.GetBytes((int)p.yVel));
                     break;
                 case Type.Powerup:
                     break;

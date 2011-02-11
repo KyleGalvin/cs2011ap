@@ -205,7 +205,9 @@ namespace AP
                 spawn.draw();
                 if (zombieIterator == 60)
                 {
-                    enemyList.Add(spawn.spawnEnemy(State.getEnemyUID()));
+                    //enemyList.Add(spawn.spawnEnemy(State.getEnemyUID()));
+                    State.Enemies.Add(spawn.spawnEnemy(State.getEnemyUID()));
+                    network.Send<AP.Enemy>(State.Enemies);
                     //Console.WriteLine("spawn");
                     enemySpawned = true;
                 }
@@ -278,6 +280,8 @@ namespace AP
                 while (!game.network.Connected){}
                 game.State = State;
                 game.Run(28.0);
+
+                Console.WriteLine("Program game state: {0}",game.State.Count());
                 
             }
         }

@@ -51,27 +51,28 @@ namespace NetLib
 			
 			Console.WriteLine("Creating new game model containing 2 enemies...");
 			Dictionary<String,List<AP.Position>> Model = new Dictionary<String,List<AP.Position>>();
-			List<AP.Position> myEnemies = new List<AP.Position>();
-			Model.Add("Enemies",myEnemies);
+            //List<AP.Position> myEnemies = new List<AP.Position>();
+            //Model.Add("Enemies",myEnemies);
 			
-			//create an enemy object to test communications with
-			AP.Zombie baddie1 = new AP.Zombie(1);
-			AP.Zombie baddie2 = new AP.Zombie(2);
-            myEnemies.Add(baddie1);
-			myEnemies.Add(baddie2);
+            ////create an enemy object to test communications with
+            //AP.Zombie baddie1 = new AP.Zombie(1);
+            //AP.Zombie baddie2 = new AP.Zombie(2);
+            //myEnemies.Add(baddie1);
+            //myEnemies.Add(baddie2);
 
 
 			
 			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
 			//Send(Model,(UInt32)Action.Create);
-            List<byte[]> data = myProtocol.encode(Action.Create,Type.AI,myEnemies);
-            foreach (Connection c in myConnections)
-            {
-                Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                c.Write(data);
-            }
+            //
+            //foreach (Connection c in myConnections)
+            //{
+            //    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+            //    c.Write(data);
+            //}
 		}
-		
+
+
 		//automatically find server on subnet
         private IPEndPoint FindServer(int port, IPEndPoint broadcastEP)
         {
