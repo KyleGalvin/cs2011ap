@@ -60,7 +60,7 @@ namespace NetLib
 
             }
 
-            return new List<byte[]>();
+            return result;
         }
 
         //turns a list of objects into a serialized network stream

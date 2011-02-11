@@ -66,7 +66,7 @@ namespace NetLib
             List<byte[]> data = myProtocol.encodeText("Test string");
             foreach (Connection c in myConnections)
             {
-                Console.WriteLine("Writing model to stream");
+                Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
                 c.Write(data);
             }
 		}
