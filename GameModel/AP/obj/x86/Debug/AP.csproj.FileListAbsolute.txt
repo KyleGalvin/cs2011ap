@@ -24,3 +24,13 @@ C:\Documents and Settings\Kgee\My Documents\Visual Studio 2008\Projects\AP\GameM
 C:\Documents and Settings\Kgee\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\ResolveAssemblyReference.cache
 C:\Documents and Settings\Kgee\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\AP.exe.manifest
 C:\Documents and Settings\Kgee\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\AP.application
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\AP.csproj.ResolveComReference.cache
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\AP.exe
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\AP.pdb
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\bin\Debug\AP.exe.manifest
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\bin\Debug\AP.application
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\bin\Debug\AP.exe
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\bin\Debug\AP.pdb
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\AP.exe.manifest
+C:\Documents and Settings\student\My Documents\Visual Studio 2008\Projects\AP\GameModel\AP\obj\x86\Debug\AP.application
