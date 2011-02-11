@@ -27,14 +27,22 @@ namespace NetLib
         {
             List<AP.Position> result = new List<AP.Position>();
 
-           UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)pack.typeofobj);
+            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)pack.typeofobj);
 
             //i=1 initially since the header is not data
-            for (int i = 1; i < pack.count; i+=(int)myTypeSize)
+            for (int i = 1; i < pack.count; i += (int)myTypeSize)
             {
                 for (int j = 0; j < myTypeSize; j++)
                 {
+                    Type t = pack.typeofobj;
+                    if (t == Type.AI)
+                    {
 
+                    }
+                    else if (t == Type.Player)
+                    {
+
+                    }
                 }
             }
           return new List<AP.Position>();
