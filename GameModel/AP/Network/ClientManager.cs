@@ -150,7 +150,10 @@ namespace NetLib
         }
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            broadcastThread.Suspend();
+            if (broadcastThread.IsAlive)
+            {
+                broadcastThread.Suspend();
+            }
             Console.WriteLine("Listening Stopped (Timeout Reached)");
             TimesUp = true;
         }

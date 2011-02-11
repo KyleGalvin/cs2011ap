@@ -7,6 +7,7 @@ namespace NetLib
     /// </summary>
     public class PackWorker
     {
+        PackageInterpreter myInterpreter = new PackageInterpreter();
         public PackWorker()
         {
             //
@@ -24,8 +25,24 @@ namespace NetLib
         }
         public List<AP.Position> HandleCreate(NetPackage pack)
         {
-           // for(int i=0;  i< pack.)pack.sizeofobj
+            List<AP.Position> result = new List<AP.Position>();
+
+           UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)pack.typeofobj);
+
+            //i=1 initially since the header is not data
+            for (int i = 1; i < pack.count; i+=(int)myTypeSize)
+            {
+                for (int j = 0; j < myTypeSize; j++)
+                {
+
+                }
+            }
           return new List<AP.Position>();
+        }
+
+        public List<AP.Position> HandleUpdate(NetPackage pack)
+        {
+            return new List<AP.Position>();
         }
     }
 }
