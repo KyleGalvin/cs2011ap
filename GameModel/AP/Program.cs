@@ -11,7 +11,7 @@ namespace AP
     class Program : GameWindow
     {
         NetLib.NetManager network;
-
+        GameState State;
         //camera related things
         Vector3d up = new Vector3d(0.0, 1.0, 0.0);
         Vector3d viewDirection = new Vector3d(0.0, 0.0, 1.0);
@@ -174,7 +174,7 @@ namespace AP
         /// <output>None.</output>
         private void assignEnemyID( Enemy enemy )
         {
-            enemy.enemyID = enemyIdentifier++;
+            enemy.UID = enemyIdentifier++;
         }
 
         /// <summary>
@@ -199,14 +199,13 @@ namespace AP
                 bullet1.draw();
             }
 
-
             zombieIterator++;
             foreach (var spawn in spawns)
             {
                 spawn.draw();
                 if (zombieIterator == 60)
                 {
-                    enemyList.Add(spawn.spawnEnemy());
+                    enemyList.Add(spawn.spawnEnemy(State.getEnemyUID()));
                     //Console.WriteLine("spawn");
                     enemySpawned = true;
                 }
@@ -265,16 +264,21 @@ namespace AP
             
             using( Program game = new Program() )
             {
+                GameState State = new GameState();
                 String r = Console.ReadLine();
                 if (r == "c")
                 {
-                    game.network = new NetLib.ClientManager(9999);
+                    game.network = new NetLib.ClientManager(9999,ref State);
                 }
                 else if (r == "s")
                 {
-                    game.network = new NetLib.LobbyManager(9999);
+                    game.network = new NetLib.LobbyManager(9999, ref State);
                 }
-                //game.Run(28.0);
+
+                while (!game.network.Connected){}
+                game.State = State;
+                game.Run(28.0);
+                
             }
         }
     }

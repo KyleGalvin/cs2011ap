@@ -7,7 +7,6 @@ namespace AP
 {
     public abstract class Enemy : Position
     {
-        public int enemyID;
         protected bool alive = true;
         protected enum Damage { None = 0, Low = 1, Medium = 3, High = 5 }
         protected enum Life { Zombie = 1, Harder = 2, Hardest = 3, Boss = 100 }

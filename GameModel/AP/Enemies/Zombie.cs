@@ -18,7 +18,7 @@ namespace AP
         public Zombie( int ID )
         {
             life = (int)Life.Zombie;
-            enemyID = ID;
+            UID = ID;
             speed = (float)0.01;
         }
 
