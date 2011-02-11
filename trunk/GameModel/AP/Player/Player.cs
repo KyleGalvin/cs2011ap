@@ -12,27 +12,30 @@ namespace AP
         private int playerId;
         private int bulletCooldown;
 
-        public Player( float x, float y, int ID )
+        public Player( Vector3 position, int ID )
         {
-            xPos = x;
-            yPos = y;
+            this.position = position;
             life = 100;
             //client assigns passed ID from server.
             playerId = ID;
-            speed = (float)0.05;
+            speed = 0.1f;
+            bulletCooldown = 0;
+        }
+
+        public Player()
+        {
+            this.position = position;
+            life = 100;
+            //client assigns passed ID from server.
+            xPos = 0;
+            yPos = 0;
+            speed = 0.1f;
+            bulletCooldown = 0;
         }
 
         public void assignPlayerID( int ID )
         {
             playerId = ID;
-        }
-
-        public void move( int x, int y)
-        {
-            xPos += x * this.speed;
-            yPos += y * this.speed;
-            Console.WriteLine( "xPos =: " + ((float)xPos).ToString());
-            Console.WriteLine( "yPos =: " + ((float)yPos).ToString());
         }
 
         public void updateBulletCooldown()
@@ -50,6 +53,18 @@ namespace AP
             return false;
         }
 
+        public void move( int x, int y)
+        {
+            Vector3 newPosition;
+            xPos += x * this.speed;
+            yPos += y * this.speed;
+            //Console.WriteLine("player x: " + xPos);
+            //Console.WriteLine("player y: " + yPos);
+            position = new Vector3(xPos, yPos,0);
+            //Console.WriteLine( "xPos =: " + ((float)xPos).ToString());
+            //Console.WriteLine( "yPos =: " + ((float)yPos).ToString());
+        }
+
         public void loseHealth( float damage )
         {
             life -= damage;
@@ -59,9 +74,9 @@ namespace AP
 
         public void draw()
         {
-            float colorR = 0.0f;
-            float colorG = 0.0f;
-            float colorB = 1.0f;
+            float colorR = 1.0f;
+            float colorG = 1.0f;
+            float colorB = 0.0f;
             float radius = 0.1f;
 
             GL.Begin( BeginMode.Polygon);
