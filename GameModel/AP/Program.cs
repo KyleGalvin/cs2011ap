@@ -128,25 +128,6 @@ namespace AP
                 player.move(1,0);
             if (Keyboard[Key.Escape])
                 Exit();
-            if (Keyboard[Key.V])
-            {
-                zombieIterator++;
-                foreach (var spawn in spawns)
-                {
-                    spawn.draw();
-                    if (zombieIterator == 60)
-                    {
-                        enemyList.Add(spawn.spawnEnemy());
-                        //Console.WriteLine("spawn");
-                        enemySpawned = true;
-                    }
-                }
-                if (enemySpawned)
-                {
-                    zombieIterator = 0;
-                    enemySpawned = false;
-                }
-            }
 
             if (Mouse[OpenTK.Input.MouseButton.Left] == true)
             {
@@ -217,7 +198,7 @@ namespace AP
             }
 
 
-            /*zombieIterator++;
+            zombieIterator++;
             foreach (var spawn in spawns)
             {
                 spawn.draw();
@@ -232,7 +213,7 @@ namespace AP
             {
                 zombieIterator = 0;
                 enemySpawned = false;
-            }*/
+            }
             
             
             foreach (var member in enemyList)
