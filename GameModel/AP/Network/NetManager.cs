@@ -6,12 +6,17 @@ using System.Collections.Generic;
 
 namespace NetLib
 {
-	
+
 	public abstract class NetManager
 	{
+        public class GameState
+        {
+            public List<AP.Player> Players;
+            public List<AP.Enemy> Enemies;
+            public List<AP.Bullet> Bullets;
+        }
 
-        public List<AP.Position> GameState;
-
+        static protected GameState State = new GameState();
 		protected Thread respondThread;
 		protected int port;
 		
@@ -24,15 +29,15 @@ namespace NetLib
 
         protected PackWorker worker;
 		
-		public NetManager(int newPort, List<AP.Position> StateRef)
+		public NetManager(int newPort, NetManager.GameState StateRef)
 		{
             worker = new PackWorker(ref StateRef);
-            GameState = StateRef;
+            State = StateRef;
 			myConnections = new List<Connection>();
             myProtocol = new PackageInterpreter();
 			port = newPort;
 		}
-        public NetManager(int newPort):this(newPort,new List<AP.Position>())
+        public NetManager(int newPort):this(newPort,new NetManager.GameState())
         {
             //GameState=new
         }
