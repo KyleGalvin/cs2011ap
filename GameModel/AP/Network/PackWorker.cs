@@ -45,6 +45,7 @@ namespace NetLib
 
                 }
             }
+            Console.WriteLine("Created {0} objects from remote network command!");
           return result;
         }
 
