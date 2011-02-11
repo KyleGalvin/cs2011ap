@@ -18,19 +18,10 @@ namespace AP
         public Zombie( int ID )
         {
             life = (int)Life.Zombie;
+            enemyID = ID;
             speed = (float)0.01;
         }
 
-        public Zombie(int ID, int xPosInit, int yPosInit, int xVelInit, int yVelInit)
-        {
-            life = (int)Life.Zombie;
-            UID = ID;
-            speed = (float)0.01;
-            xPos = xPosInit;
-            yPos = yPosInit;
-            xVel = xVelInit;
-            yVel = yVelInit;
-        }
         
         /// <summary>
         /// Moves the zombie enemy using the passed x and y positions as
