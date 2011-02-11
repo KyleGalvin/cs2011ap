@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <level1>
   Level 1 - ROFLPewPew
   <!-- Vieiwing Distance -->
@@ -22,9 +22,18 @@
 	
 	<!-- Walls -->
 	<wallObject>
-		<wall id="1" x="-8" y="7" scale="1" width="9" height="1"/>
+		<wall id="1" x="-3" y="2" scale="1" width="4" height="1"/>
 	</wallObject>
 	<wallObject>
+		<wall id="1" x="-3" y="-8" scale="1" width="1" height="5"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="3" y="-6" scale="1" width="1" height="5"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="-3" y="-10" scale="1" width="7" height="1"/>
+	</wallObject>
+	<!--allObject>
 		<wall id="1" x="-8" y="-3" scale="1" width="1" height="5"/>
 	</wallObject>
 	<wallObject>
@@ -32,7 +41,7 @@
 	</wallObject>
 	<wallObject>
 		<wall id="1" x="-8" y="-7" scale="1" width="9" height="1"/>
-	</wallObject>
+	</wallObject>-->
   </objects>
   
 </level1>
