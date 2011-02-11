@@ -274,7 +274,7 @@ namespace AP
                 {
                     game.network = new NetLib.LobbyManager(9999);
                 }
-                game.Run(28.0);
+                //game.Run(28.0);
             }
         }
     }
