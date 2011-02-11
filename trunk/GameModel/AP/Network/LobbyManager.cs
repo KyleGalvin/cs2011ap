@@ -104,7 +104,7 @@ namespace NetLib
 			
 			while (true)
 			{
-			
+                Console.WriteLine("Size of game state: {0}", State.Enemies.Count+State.Players.Count);
 			    try
 			    {
 					//read package data
@@ -130,8 +130,7 @@ namespace NetLib
                         Console.WriteLine(Message);
                     }
 					if(pack.action == (UInt32)Action.Create)
-					{
-                        worker.HandleCreate(pack);
+					{   worker.HandleCreate(pack);
 						Console.WriteLine("Create command triggered by incoming packet header");
 					}
                     if (pack.action == (UInt32)Action.Update)

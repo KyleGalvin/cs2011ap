@@ -71,7 +71,27 @@ namespace AP
             //-update damage bar
             //-send update health bar packet
         }
+        /*public void drawOtherPlayer()
+        {
+            float colorR = 1.0f;
+            float colorG = 1.0f;
+            float colorB = 0.0f;
+            float radius = 0.1f;
 
+            GL.Begin(BeginMode.Polygon);
+
+            GL.Color3(colorR, colorG, colorB);
+            GL.Vertex3(xPos - radius, yPos, 4.0f);
+            GL.Vertex3(xPos - radius * 0.7, yPos + radius * 0.7, 4.0f);
+            GL.Vertex3(xPos, yPos + radius, 4.0f);
+            GL.Vertex3(xPos + radius * 0.7, yPos + radius * 0.7, 4.0f);
+            GL.Vertex3(xPos + radius, yPos, 4.0f);
+            GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 4.0f);
+            GL.Vertex3(xPos, yPos - radius, 4.0f);
+            GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 4.0f);
+
+            GL.End();
+        }*/
         public void draw()
         {
             float colorR = 1.0f;

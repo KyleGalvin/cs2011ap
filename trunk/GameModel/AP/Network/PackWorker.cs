@@ -7,12 +7,13 @@ namespace NetLib
     /// </summary>
     public class PackWorker
     {
-        private List<AP.Position> GameState;
+        //private List<AP.Position> GameState;
         PackageInterpreter myInterpreter = new PackageInterpreter();
+        NetManager.GameState State;
 
-        public PackWorker(ref List<AP.Position> StatePtr)
+        public PackWorker(ref NetManager.GameState s)
         {
-            GameState = StatePtr;
+            State = s;
             //
             // TODO: Add constructor logic here
             //
@@ -26,37 +27,65 @@ namespace NetLib
             }
                 return result;
         }
-        public List<AP.Position> HandleCreate(NetPackage pack)
+        public void HandleCreate(NetPackage pack)
         {
-            List<AP.Position> result = new List<AP.Position>();
+            
 
-            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)pack.typeofobj);
+            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj<<24));
 
             //i=1 initially since the header is not data
-            for (int i = 1; i < pack.count; i += (int)myTypeSize)
+            for (int i = 0; i < pack.count; i++)
             {
-                Type t = (Type)pack.typeofobj;
-                if (t == Type.AI)
+                UInt32 t = pack.typeofobj <<24;
+                if ((Type)t == Type.AI)
                 {
-                    result.Add(CreateAI(pack.body.GetRange(i,5)));
+                    List<AP.Enemy> result = new List<AP.Enemy>();
+                    result.Add(CreateAI(pack.body.GetRange((int)(i*myTypeSize),5)));
+                    State.Enemies.AddRange(result);
+                    Console.WriteLine("Created {0} objects from remote network command!", result.Count);
                 }
-                else if (t == Type.Player)
+                else if ((Type)t == Type.Player)
                 {
-
+                    List<AP.Player> result = new List<AP.Player>();
+                    result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                    State.Players.AddRange(result);
+                    Console.WriteLine("Created {0} objects from remote network command!", result.Count);
                 }
             }
-            Console.WriteLine("Created {0} objects from remote network command!");
-          return result;
+            
         }
 
         public List<AP.Position> HandleUpdate(NetPackage pack)
         {
-            return new List<AP.Position>();
+            List<AP.Position> result = new List<AP.Position>();
+
+            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj << 24));
+
+            //i=1 initially since the header is not data
+            for (int i = 0; i < pack.count; i++)
+            {
+                UInt32 t = pack.typeofobj << 24;
+                if ((Type)t == Type.AI)
+                {
+                    result.Add(CreateAI(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                }
+                else if ((Type)t == Type.Player)
+                {
+                    result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                }
+            }
+            Console.WriteLine("Created {0} objects from remote network command!", result.Count);
+            return result;
         }
 
         public AP.Enemy CreateAI(List<byte[]> data)
         {
             return new AP.Zombie(BitConverter.ToInt32(data[0],0));
+        }
+
+        public AP.Player CreatePlayer(List<byte[]> data)
+        {
+            return new AP.Player(new OpenTK.Vector3(0,0,0),BitConverter.ToInt32(data[0],0));
         }
     }
 }
