@@ -2,20 +2,21 @@
 <level1>
   Level 1 - ROFLPewPew
   <objects>
-    <wall
-      id="1"
-      x="0"
-      y="0"
-      scale="1"
-      width="1"
-      length="1"/>
+    
     <wall
       id="2"
       x="0"
       y="1"
       scale="1"
       width="1"
-      length="1"/>
+      length="1"></wall>
+    <wall
+      id="1"
+      x="0"
+      y="0"
+      scale="1"
+      width="1"
+      length="1"></wall>
     <spawn
       x="5"
       y="5"
