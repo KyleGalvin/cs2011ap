@@ -11,6 +11,12 @@ namespace NetLib
 	{
         public class GameState
         {
+            public GameState()
+            {
+                Players = new List<AP.Player>();
+                Enemies = new List<AP.Enemy>();
+                Bullets = new List<AP.Bullet>();
+            }
             public List<AP.Player> Players;
             public List<AP.Enemy> Enemies;
             public List<AP.Bullet> Bullets;
