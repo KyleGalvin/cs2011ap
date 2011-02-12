@@ -58,7 +58,7 @@ namespace AP
         protected override void OnLoad(EventArgs e)
         {
             //base.OnLoad(e);
-            player = new Player();//(defaultPosition, 0);
+            //(defaultPosition, 0);
             currentLevel = new CreateLevel(1);
             currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
 
@@ -271,13 +271,18 @@ namespace AP
                 if (r == "c")
                 {
                     game.network = new NetLib.ClientManager(9999,ref State);
+                    while (!game.network.Connected) { }
 
                 }
                 else if (r == "s")
                 {
                     game.network = new NetLib.LobbyManager(9999, ref State);
+                    game.player = new Player(0);
                 }
-                while (!game.network.Connected) { }
+               
+
+                game.player = 
+                
 
                 game.State = State;
                 game.Run(28.0);
