@@ -56,6 +56,11 @@ namespace NetLib
             
         }
 
+        public int HandleRequest(NetPackage pack)
+        {
+            return 0;
+        }
+
         public List<AP.Position> HandleUpdate(NetPackage pack)
         {
             List<AP.Position> result = new List<AP.Position>();

@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Timers;
 using System.Collections.Generic;
 using AP;
 namespace NetLib
@@ -15,6 +16,8 @@ namespace NetLib
             Console.WriteLine("Listening for incoming connections...");
             new Thread(new ThreadStart(this.BroadcastListener)).Start();//Alert clients of our presence
             new Thread(new ThreadStart(this.Listen)).Start();//Collect clients in our connection pool
+            System.Timers.Timer timer = new System.Timers.Timer(5000);
+            timer.Enabled = true;
         }
 
         public void RespondToClients(int port, IPEndPoint broadcastEP)
@@ -106,41 +109,24 @@ namespace NetLib
 			while (true)
 			{
                 Console.WriteLine("Size of game state: {0}", State.Enemies.Count+State.Players.Count);
-			    try
-			    {
-					//read package data
-					pack = myConnection.ReadPackage();
+                try
+                {
+                    //read package data
+                    pack = myConnection.ReadPackage();
                     Console.WriteLine("Package recieved!");
-			    }
-			    catch
-			    {
-					//a socket error has occured
-					break;
-			    }
+                }
+                catch
+                {
+                    //a socket error has occured
+                    break;
+                }
 			
 			    //if (bytesRead == 0)//nothing was read from socket
 				//{
 				//	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
 				//	break;
 				//}
-				if(pack.IsComplete())//we've accumulated the amount of data our header predicts
-				{
-                    if(pack.action == (UInt32)Action.Text)
-                    {
-                        string Message = worker.HandleText(pack);
-                        Console.WriteLine(Message);
-                    }
-					if(pack.action == (UInt32)Action.Create)
-					{   worker.HandleCreate(pack);
-						Console.WriteLine("Create command triggered by incoming packet header");
-					}
-                    if (pack.action == (UInt32)Action.Update)
-                    {
-
-                    }
-			
-				}
-				
+                packetSwitcher(pack);
 			}
 			
 			lock(this)

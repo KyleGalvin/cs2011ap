@@ -66,6 +66,36 @@ namespace NetLib
 			}
 		}
 
+        public void packetSwitcher(NetPackage pack)
+        {
+            if (pack.IsComplete())//we've accumulated the amount of data our header predicts
+            {
+                if (pack.action == (UInt32)Action.Text)
+                {
+                    string Message = worker.HandleText(pack);
+                    Console.WriteLine(Message);
+                }
+                if (pack.action == (UInt32)Action.Create)
+                {
+                    worker.HandleCreate(pack);
+                    Console.WriteLine("Create command triggered by incoming packet header");
+                }
+                if (pack.action == (UInt32)Action.Update)
+                {
+
+                }
+                if (pack.action == (UInt32)Action.Request)
+                {
+                    worker.HandleRequest(pack);
+                }
+                if (pack.action == (UInt32)Action.Describe)
+                {
+
+                }
+
+            }
+        }
+
         public void Send<T>(List<T> Objs)
         {
             List<byte[]> data = myProtocol.encode(Action.Create, Type.AI, Objs);

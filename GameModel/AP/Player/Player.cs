@@ -12,10 +12,11 @@ namespace AP
         private int playerId;
         private int bulletCooldown;
 
-        public Player( Vector3 position, int ID )
+        public Player( int ID )
         {
-            this.position = position;
             life = 100;
+            xPos = 0;
+            yPos = 0;
             //client assigns passed ID from server.
             playerId = ID;
             speed = 0.1f;
@@ -24,7 +25,6 @@ namespace AP
 
         public Player()
         {
-            this.position = position;
             life = 100;
             //client assigns passed ID from server.
             xPos = 0;
