@@ -11,6 +11,7 @@ namespace NetLib
 		//private PackageWriter myNetWriter;
         private StreamHandler myStream;
 		private TcpClient myClient;
+        public int playerUID;
 		
 		public Connection(object client)
 		{

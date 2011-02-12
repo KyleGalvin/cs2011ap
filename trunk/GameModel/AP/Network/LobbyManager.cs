@@ -11,6 +11,7 @@ namespace NetLib
 
         public LobbyManager(int port, ref GameState State): base(port, ref State)
         {
+            Connected = true;//Server has nothing to connect to
             Console.WriteLine("Listening for incoming connections...");
             new Thread(new ThreadStart(this.BroadcastListener)).Start();//Alert clients of our presence
             new Thread(new ThreadStart(this.Listen)).Start();//Collect clients in our connection pool

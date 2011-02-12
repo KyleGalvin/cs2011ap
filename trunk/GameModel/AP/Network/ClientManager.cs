@@ -15,26 +15,24 @@ namespace NetLib
         private Thread broadcastThread;
 	    private bool TimesUp;
 	    private List<IPAddress> ServerIps= new List<IPAddress>();
-        public ClientManager(int port, ref GameState State)
-            : base(port, ref State)
+        public ClientManager(int port, ref GameState State): base(port, ref State)
 		{
 			//set up variables
 
-			String IP = "";
-			TcpClient client = new TcpClient();
-            IPAddress broadcast = IPAddress.Parse("192.168.105.255");
-			IPEndPoint broadcastEP = new IPEndPoint(broadcast,port);
-			IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
+            String IP = "192.168.105.123";
+            TcpClient client = new TcpClient();
+            //IPAddress broadcast = IPAddress.Parse("192.168.105.255");
+            //IPEndPoint broadcastEP = new IPEndPoint(broadcast,port);
+            //IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
 			
-			//Try to connect to server via broadcast
-			IPEndPoint serverEndPoint = FindServer(port,broadcastEP);
+            ////Try to connect to server via broadcast
+             //serverEndPoint = FindServer(port,broadcastEP);
 			
-			if (serverEndPoint == null){
-				//server failed to respond. Our trickery failed. Ask for manual intervention
-				Console.WriteLine("Please enter Lobby IP:");
-				IP = Console.ReadLine();
-				serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
-			}
+            //if (serverEndPoint == null){
+               //server failed to respond. Our trickery failed. Ask for manual intervention
+                //Console.WriteLine("Please enter Lobby IP:");
+             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
+            //}
 			
 			Console.WriteLine("Waiting for connections...");
 			client.Connect(serverEndPoint);

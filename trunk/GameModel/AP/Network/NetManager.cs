@@ -14,7 +14,7 @@ namespace NetLib
 		protected Thread respondThread;
 		protected int port;
 		
-		protected List<Connection> myConnections;
+		public List<Connection> myConnections;
 		
 		protected List<byte[]> myData;
 		protected String myRole;
