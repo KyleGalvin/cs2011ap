@@ -271,13 +271,14 @@ namespace AP
                 if (r == "c")
                 {
                     game.network = new NetLib.ClientManager(9999,ref State);
+
                 }
                 else if (r == "s")
                 {
                     game.network = new NetLib.LobbyManager(9999, ref State);
                 }
+                while (!game.network.Connected) { }
 
-                while (!game.network.Connected){}
                 game.State = State;
                 game.Run(28.0);
 
