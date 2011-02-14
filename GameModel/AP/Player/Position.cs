@@ -12,6 +12,7 @@ namespace AP
         public float yPos { get; set; }
         public Vector3 position {get; set;}
         public Vector3 velocity { get; set; }
+        public int UID { get; set; }
         public float life { get; set; }
         protected float speed { get; set; }
         public float xVel { get; set; }
