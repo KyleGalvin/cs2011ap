@@ -12,15 +12,6 @@ namespace AP
         private int playerId;
         public Weapon weapons = new Weapon();
 
-        public Player( Vector3 position, int ID )
-        {
-            this.position = position;
-            life = 100;
-            //client assigns passed ID from server.
-            playerId = ID;
-            speed = 0.1f;
-        }
-
         public Player()
         {
             this.position = position;
@@ -36,8 +27,6 @@ namespace AP
         {
             playerId = ID;
         }
-
-        
 
         public void move( int x, int y)
         {
