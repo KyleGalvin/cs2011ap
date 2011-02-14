@@ -10,32 +10,25 @@ namespace AP
     public class Bullet: Position
     {
         private int lifeTime = 30;
-        private Bullet prevBullet = null;
+        //private Bullet prevBullet = null;
         float radius = 0.1f;
         private float direction = 1.0f;
         float xVel = 0;
         float yVel = 0;
 
-        public Bullet(Vector3 position, Vector3 velocity, ref Bullet prevBullet)
+        public Bullet(Vector3 position, Vector3 velocity)
         {
             this.position = position;
             xPos = position.X;
             yPos = position.Y;
             this.velocity = velocity;
-            speed = 4.5f;
-            this.prevBullet = prevBullet;
+            speed = 2.0f;
         }
         public void move()
         {
             xPos += xVel * speed;
             yPos += yVel * speed;
 
-
-            if (prevBullet != null)
-                prevBullet.move();
-
-            if (lifeTime <= 0)
-                prevBullet = null;
             lifeTime--;
         }
 
@@ -43,19 +36,19 @@ namespace AP
         {
             GL.Begin(BeginMode.Polygon);
             
-            GL.Color3(1.0f, 1.0f, 0.0f);
-            GL.Vertex3(xPos - radius, yPos, 4.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos + radius * 0.7, 4.0f);
-            GL.Vertex3(xPos, yPos + radius, 4.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos + radius * 0.7, 4.0f);
-            GL.Vertex3(xPos + radius, yPos, 4.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 4.0f);
-            GL.Vertex3(xPos, yPos - radius, 4.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 4.0f); 
+            GL.Color3(0.0f, 0.0f, 0.0f);
+            GL.Vertex3(xPos - radius, yPos, 0.0f);
+            GL.Vertex3(xPos - radius * 0.7, yPos + radius * 0.7, 0.0f);
+            GL.Vertex3(xPos, yPos + radius, 0.0f);
+            GL.Vertex3(xPos + radius * 0.7, yPos + radius * 0.7, 0.0f);
+            GL.Vertex3(xPos + radius, yPos, 0.0f);
+            GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 0.0f);
+            GL.Vertex3(xPos, yPos - radius, 0.0f);
+            GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 0.0f); 
             GL.End();
 
-            if (prevBullet != null)
-                prevBullet.draw();
+            //if (prevBullet != null)
+                //prevBullet.draw();
         }
 
         public bool killProjectile()
@@ -67,11 +60,6 @@ namespace AP
 
         public void setDirectionByMouse(float x, float y, int screenX, int screenY, ref Player player)
         {
-            /*if (x <= screenX / 2)
-                x *= -1;
-            if (y >= screenY / 2)
-                y *= -1;*/
-
             float mx = (float)(x - screenX / 2) / (screenX * 0.3f);
             float my = (float)(y - screenY / 2) / (screenY * 0.3f);
 

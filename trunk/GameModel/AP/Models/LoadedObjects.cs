@@ -22,9 +22,9 @@ namespace AP
         {
         }
 
-        public int LoadObject(String objPath, String texPath)
+        public int LoadObject(String objPath, String texPath, float scale)
         {
-            m.Add(LoadFile(objPath));
+            m.Add(LoadFile(objPath, scale));
             tex.Add(LoadTex(texPath));
 
             return m.Count - 1;

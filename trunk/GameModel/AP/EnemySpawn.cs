@@ -8,11 +8,11 @@ namespace AP
 {
     class EnemySpawn : Position
     {
-        private int enemyCounter = 60;
-        public EnemySpawn(float x, float y)
+        public EnemySpawn(float x, float y,int ID)
         {
             xPos = x;
             yPos = y;
+            enemyID = ID;
         }
 
         public Enemy spawnEnemy(int ID)

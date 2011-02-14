@@ -10,7 +10,7 @@ namespace AP
 {
     class Loader
     {       
-        public MeshData LoadStream(Stream stream)
+        public MeshData LoadStream(Stream stream, float scale)
         {
             StreamReader reader = new StreamReader(stream);
             List<Vector33> points = new List<Vector33>();
@@ -32,9 +32,9 @@ namespace AP
                         break;
 
                     case "v": // Vertex
-                        float x = float.Parse(parameters[1]);
-                        float y = float.Parse(parameters[2]);
-                        float z = float.Parse(parameters[3]);
+                        float x = float.Parse(parameters[1]) * scale;
+                        float y = float.Parse(parameters[2]) * scale;
+                        float z = float.Parse(parameters[3]) * scale;
                         points.Add(new Vector33(x, y, z));
                         break;
 
@@ -65,12 +65,12 @@ namespace AP
             return new MeshData(p, n, tc, f);
         }
 
-        public MeshData LoadFile(string file)
+        public MeshData LoadFile(string file, float scale)
         {
             // Silly me, using() closes the file automatically.
             using (FileStream s = File.Open(file, FileMode.Open))
             {
-                return LoadStream(s);
+                return LoadStream(s, scale);
             }
         }
 
