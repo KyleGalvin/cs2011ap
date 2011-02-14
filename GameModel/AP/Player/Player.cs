@@ -10,27 +10,26 @@ namespace AP
     public class Player : Position
     {
         private int playerId;
-        private int bulletCooldown;
+        public Weapon weapons = new Weapon();
 
-        public Player( int ID )
+        public Player( Vector3 position, int ID )
         {
+            this.position = position;
             life = 100;
-            xPos = 0;
-            yPos = 0;
             //client assigns passed ID from server.
             playerId = ID;
             speed = 0.1f;
-            bulletCooldown = 0;
         }
 
         public Player()
         {
+            this.position = position;
             life = 100;
             //client assigns passed ID from server.
             xPos = 0;
             yPos = 0;
             speed = 0.1f;
-            bulletCooldown = 0;
+            radius = 0.1f;
         }
 
         public void assignPlayerID( int ID )
@@ -38,31 +37,13 @@ namespace AP
             playerId = ID;
         }
 
-        public void updateBulletCooldown()
-        {
-            bulletCooldown--;
-        }
-
-        public bool canShoot()
-        {
-            if (bulletCooldown <= 0)
-            {
-                bulletCooldown = 10;
-                return true;
-            }
-            return false;
-        }
+        
 
         public void move( int x, int y)
         {
-            Vector3 newPosition;
             xPos += x * this.speed;
             yPos += y * this.speed;
-            //Console.WriteLine("player x: " + xPos);
-            //Console.WriteLine("player y: " + yPos);
             position = new Vector3(xPos, yPos,0);
-            //Console.WriteLine( "xPos =: " + ((float)xPos).ToString());
-            //Console.WriteLine( "yPos =: " + ((float)yPos).ToString());
         }
 
         public void loseHealth( float damage )
@@ -71,45 +52,25 @@ namespace AP
             //-update damage bar
             //-send update health bar packet
         }
-        /*public void drawOtherPlayer()
-        {
-            float colorR = 1.0f;
-            float colorG = 1.0f;
-            float colorB = 0.0f;
-            float radius = 0.1f;
 
-            GL.Begin(BeginMode.Polygon);
-
-            GL.Color3(colorR, colorG, colorB);
-            GL.Vertex3(xPos - radius, yPos, 4.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos + radius * 0.7, 4.0f);
-            GL.Vertex3(xPos, yPos + radius, 4.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos + radius * 0.7, 4.0f);
-            GL.Vertex3(xPos + radius, yPos, 4.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 4.0f);
-            GL.Vertex3(xPos, yPos - radius, 4.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 4.0f);
-
-            GL.End();
-        }*/
         public void draw()
         {
-            float colorR = 1.0f;
-            float colorG = 1.0f;
-            float colorB = 0.0f;
+            float colorR = 0.0f;
+            float colorG = 0.0f;
+            float colorB = 1.0f;
             float radius = 0.1f;
 
             GL.Begin( BeginMode.Polygon);
 
             GL.Color3(colorR, colorG, colorB);
-            GL.Vertex3(xPos - radius, yPos, 4.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos + radius * 0.7, 4.0f);
-            GL.Vertex3(xPos, yPos + radius, 4.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos + radius * 0.7, 4.0f);
-            GL.Vertex3(xPos + radius, yPos, 4.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 4.0f);
-            GL.Vertex3(xPos, yPos - radius, 4.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 4.0f);
+            GL.Vertex3(-radius, 0, 0.01f);
+            GL.Vertex3(-radius * 0.7, radius * 0.7, 0.01f);
+            GL.Vertex3(0, radius, 0.01f);
+            GL.Vertex3(radius * 0.7, radius * 0.7, 0.01f);
+            GL.Vertex3(radius, 0, 0.01f);
+            GL.Vertex3(radius * 0.7, -radius * 0.7, 0.01f);
+            GL.Vertex3(0, -radius, 0.01f);
+            GL.Vertex3(-radius * 0.7, -radius * 0.7, 0.01f);
 
             GL.End();
         }

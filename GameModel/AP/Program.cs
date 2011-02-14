@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
+using System.Drawing.Imaging;
 using OpenTK;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
+using System.Windows.Forms;
 
 namespace AP
 {
     class Program : GameWindow
     {
-        NetLib.NetManager network;
-        GameState State;
         //camera related things
         Vector3d up = new Vector3d(0.0, 1.0, 0.0);
         Vector3d viewDirection = new Vector3d(0.0, 0.0, 1.0);
@@ -25,7 +26,9 @@ namespace AP
         //assign amount of enemies per level
         // first row index = EnemyObject
         // second row index = EnemyID
+        List<Bullet> bulletList = new List<Bullet>();
         List<Enemy> enemyList = new List<Enemy>();
+        List<Player> playerList = new List<Player>();
         List<EnemySpawn> spawns = new List<EnemySpawn>();
         public Player player;
         //public Controls controls;
@@ -43,8 +46,10 @@ namespace AP
         EnemySpawn spawn4;
         CreateLevel currentLevel;
         Random randNum = new Random();
-        Bullet bullet1;
-       // static LoadedObjects loadedObjects = new LoadedObjects();
+        //Bullet bullet1;
+        int enemyIDs = 0;
+        public static LoadedObjects loadedObjects = new LoadedObjects();
+        public static CollisionAI collisionAI = new CollisionAI();
 
         /// <summary>Creates a window with the specified title.</summary>
         public Program()
@@ -52,40 +57,44 @@ namespace AP
         {
             VSync = VSyncMode.On;
         }
-
+        
         /// <summary>Load resources here.</summary>
         /// <param name="e">Not used.</param>
         protected override void OnLoad(EventArgs e)
         {
             //base.OnLoad(e);
-            //(defaultPosition, 0);
+            player = new Player();//(defaultPosition, 0);
             currentLevel = new CreateLevel(1);
             currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
-
+            playerList.Add(player);
             if ( xPosSpawn.Count > 0 )
             {
-                spawn1 = new EnemySpawn(xPosSpawn[0], yPosSpawn[0]);
+                spawn1 = new EnemySpawn(xPosSpawn[0], yPosSpawn[0],enemyIDs);
                 spawns.Add(spawn1);
+                enemyIDs++;
             }
             if ( xPosSpawn.Count > 1 )
             {
                 Console.WriteLine(" 2 spawns ");
-                spawn2 = new EnemySpawn(xPosSpawn[1], yPosSpawn[1]);
+                spawn2 = new EnemySpawn(xPosSpawn[1], yPosSpawn[1],enemyIDs);
                 spawns.Add(spawn2);
+                enemyIDs++;
             }
             if ( xPosSpawn.Count > 2 )
             {
                 Console.WriteLine(" 2 spawns ");
-                spawn3 = new EnemySpawn(xPosSpawn[2], yPosSpawn[2]);
+                spawn3 = new EnemySpawn(xPosSpawn[2], yPosSpawn[2],enemyIDs);
                 spawns.Add(spawn3);
+                enemyIDs++;
             }
             if ( xPosSpawn.Count > 3 )
             {
-                spawn4 = new EnemySpawn(xPosSpawn[3], yPosSpawn[3]);
+                spawn4 = new EnemySpawn(xPosSpawn[3], yPosSpawn[3], enemyIDs);
                 spawns.Add(spawn4);
+                enemyIDs++;
             }
 
-            GL.ClearColor(0.0f, 0.2f, 0.2f, 0.0f);
+            GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
             GL.EnableClientState(ArrayCap.VertexArray);
@@ -94,7 +103,9 @@ namespace AP
             GL.EnableClientState(ArrayCap.IndexArray);
             
             //loading a cube... so easy
-            //loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png");
+            loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//Bricks.png", 1);
+            loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
+            Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.15f);
         }
 
         /// <summary>
@@ -131,23 +142,60 @@ namespace AP
             if (Keyboard[Key.Escape])
                 Exit();
 
+            if (Keyboard[Key.Number1])
+            {
+                player.weapons.equipPistol();
+            }
+            if (Keyboard[Key.Number2])
+            {
+                player.weapons.equipRifle();
+            }
+            if (Keyboard[Key.Number3])
+            {
+                player.weapons.equipShotgun();
+            }
+            if (Keyboard[Key.Number4])
+            {
+                player.weapons.equipRocket();
+            }
+
+            float wheelD = Mouse.WheelDelta;
+            viewDirection.Y += wheelD / 10;
+            viewDirection.Z += wheelD / 10;
+
+            collisionAI.updateState(ref enemyList);
+            foreach (var member in enemyList)
+            {
+                member.moveTowards(player);
+            }
+
             if (Mouse[OpenTK.Input.MouseButton.Left] == true)
             {
-                
-                if (player.canShoot())
+                if (player.weapons.canShoot())
                 {
-                    Console.WriteLine("shoot");
-                    bullet1 = new Bullet(player.position, defaultVelocity, ref bullet1);
-                    bullet1.setDirectionByMouse(Mouse.X, Mouse.Y, screenX, screenY, ref player);
+                    player.weapons.shoot(ref bulletList, ref player, screenX, screenY, Mouse.X, Mouse.Y);
                 }
             }
-            player.updateBulletCooldown();
+            player.weapons.updateBulletCooldown();
 
-            if (bullet1 != null)
+            List<Bullet> tmpBullet = new List<Bullet>();
+            foreach (Bullet bullet in bulletList)
             {
-                bullet1.move();
-                if (bullet1.killProjectile())
-                    bullet1 = null;
+                bullet.move();
+                if (bullet.killProjectile())
+                    tmpBullet.Add(bullet);
+                Enemy hit;
+                collisionAI.checkForCollision<Enemy>(bullet, out hit);
+                if (hit != null)
+                {
+                    enemyList.Remove(hit);
+                    tmpBullet.Add(bullet);
+                }
+            }
+
+            foreach (Bullet bullet in tmpBullet)
+            {
+                bulletList.Remove(bullet);
             }
 
             if (Keyboard[OpenTK.Input.Key.Up])
@@ -174,7 +222,7 @@ namespace AP
         /// <output>None.</output>
         private void assignEnemyID( Enemy enemy )
         {
-            enemy.UID = enemyIdentifier++;
+            enemy.enemyID = enemyIdentifier++;
         }
 
         /// <summary>
@@ -194,22 +242,36 @@ namespace AP
             GL.LoadMatrix(ref camera);
 
             player.draw();
-            if (bullet1 != null)
+            GL.Translate(-player.xPos, -player.yPos, 0);
+            /*if (bullet1 != null)
             {
                 bullet1.draw();
+            }*/
+
+            foreach (Bullet bullet in bulletList)
+            {
+                bullet.draw();
+            }
+
+
+            GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
+            foreach (var member in enemyList)
+            {
+                //member.Update(ref playerList,ref enemyList, ref xPosSquares,ref yPosSquares);
+                member.draw();
             }
 
             zombieIterator++;
+
             foreach (var spawn in spawns)
             {
                 spawn.draw();
                 if (zombieIterator == 60)
                 {
-                    //enemyList.Add(spawn.spawnEnemy(State.getEnemyUID()));
-                    State.Enemies.Add(spawn.spawnEnemy(State.getEnemyUID()));
-                    network.Send<AP.Enemy>(State.Enemies);
+                    enemyList.Add(spawn.spawnEnemy(enemyIDs));
                     //Console.WriteLine("spawn");
                     enemySpawned = true;
+                    enemyIDs++;
                 }
             }
             if (enemySpawned)
@@ -217,16 +279,22 @@ namespace AP
                 zombieIterator = 0;
                 enemySpawned = false;
             }
-            
-            
-            foreach (var member in enemyList)
-            {
-                member.move(1, 0);
-                member.draw();
-            }
 
 
             i = 0;
+
+            GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
+            //change this to be the same way as you do the walls
+            for(int x = 0; x < 5; x++)
+                for (int y = 0; y < 5; y++)
+                {
+                    GL.PushMatrix();
+                    GL.Translate(-10 + x * 5, -10 + y * 5, 0);
+                    loadedObjects.DrawObject(1); //grassssssssssssss
+                    GL.PopMatrix();
+                }
+
+
             foreach (var x in xPosSquares)
             {
                 if (widthSquares[i] > 1)
@@ -234,8 +302,9 @@ namespace AP
                     for (int idx = 0; idx < widthSquares[i] * 2; idx += 2)
                     {
                         GL.LoadMatrix(ref camera);
-                        GL.Translate(x + idx, yPosSquares[i], 4);
-                       // loadedObjects.DrawObject(0);
+                        GL.Translate(-player.xPos, -player.yPos, 0);
+                        GL.Translate(x + idx, yPosSquares[i], 1);
+                        loadedObjects.DrawObject(0);
                     }
                 }
 
@@ -244,8 +313,9 @@ namespace AP
                     for (int idx = 0; idx < heightSquares[i] * 2; idx += 2)
                     {
                         GL.LoadMatrix(ref camera);
-                        GL.Translate(x, yPosSquares[i] + idx, 4);
-                        //loadedObjects.DrawObject(0);
+                        GL.Translate(-player.xPos, -player.yPos, 0);
+                        GL.Translate(x, yPosSquares[i] + idx, 1);
+                        loadedObjects.DrawObject(0);
                     }
                 }
 
@@ -263,32 +333,10 @@ namespace AP
             // if server
             // - get client info
             //Form1 form = new Form1();
-            
+
             using( Program game = new Program() )
             {
-                GameState State = new GameState();
-                String r = Console.ReadLine();
-                if (r == "c")
-                {
-                    game.network = new NetLib.ClientManager(9999,ref State);
-                    while (!game.network.Connected) { }
-
-                }
-                else if (r == "s")
-                {
-                    game.network = new NetLib.LobbyManager(9999, ref State);
-                    game.player = new Player(0);
-                }
-               
-
-                game.player = 
-                
-
-                game.State = State;
                 game.Run(28.0);
-
-                Console.WriteLine("Program game state: {0}",game.State.Count());
-                
             }
         }
     }

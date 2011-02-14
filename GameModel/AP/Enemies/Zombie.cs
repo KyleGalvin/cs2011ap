@@ -8,6 +8,7 @@ namespace AP
 {
     public class Zombie : Enemy
     {
+        public static int drawNumber; //not sure how this should properly be inheirited so just putting it here for now
         /// <summary>
         /// Initialize the creation of a zombie enemy.
         /// -Zombie's life: 1 hit.
@@ -18,8 +19,9 @@ namespace AP
         public Zombie( int ID )
         {
             life = (int)Life.Zombie;
-            UID = ID;
-            speed = (float)0.01;
+            enemyID = ID;
+            speed = (float)0.05;
+            radius = 0.15f;
         }
 
         
@@ -30,11 +32,30 @@ namespace AP
         /// <param name="x">Passed x position determined from AI calulation.</param>
         /// <param name="y">Passed y position determined from AI calulation.</param>
         /// <output>None.</output>
-        public override void move( int x, int y )
+        public override void move( float x, float y )
         {
             //kind of unknown what we are gonna do here right now.
             xPos += x * speed;
             yPos += y * speed;
+        }
+
+        public override void moveTowards(Player target)
+        {
+            float x = target.xPos - xPos;
+            float y = target.yPos - yPos;
+
+            float len = (float)Math.Sqrt(x * x + y * y);
+            Position moveAwayFrom;
+            if (!Program.collisionAI.checkForCollision(this, out moveAwayFrom))
+                move(x / len, y / len);
+            else
+            {
+                x = moveAwayFrom.xPos - xPos;
+                y = moveAwayFrom.yPos - yPos;
+
+                len = (float)Math.Sqrt(x * x + y * y);
+                move(-x / len, -y / len);
+            }
         }
 
         /// <summary>
@@ -49,25 +70,12 @@ namespace AP
 
         public override void draw()
         {
-            // OpenGL Calls
-            float colorR = 1.0f;
-            float colorG = 0.0f;
-            float colorB = 0.0f;
-            float radius = 0.1f;
-
-            GL.Begin(BeginMode.Polygon);
-
-            GL.Color3(colorR, colorG, colorB);
-            GL.Vertex3(xPos - radius, yPos, 4.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos + radius * 0.7, 4.0f);
-            GL.Vertex3(xPos, yPos + radius, 4.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos + radius * 0.7, 4.0f);
-            GL.Vertex3(xPos + radius, yPos, 4.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 4.0f);
-            GL.Vertex3(xPos, yPos - radius, 4.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 4.0f);
-
-            GL.End();
+            GL.PushMatrix();
+            GL.Translate(xPos, yPos, 0);
+            GL.Rotate(90, 1.0, 0, 0);
+            Program.loadedObjects.DrawObject(drawNumber);
+            GL.PopMatrix();
+      
         }
     }
 }

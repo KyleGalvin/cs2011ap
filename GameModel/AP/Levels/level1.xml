@@ -1,33 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <level1>
   Level 1 - ROFLPewPew
+  <!-- Vieiwing Distance -->
+  <viewDist dist="23"/>
+
   <objects>
-    
-    <wall
-      id="2"
-      x="0"
-      y="1"
-      scale="1"
-      width="1"
-      length="1"></wall>
-    <wall
-      id="1"
-      x="0"
-      y="0"
-      scale="1"
-      width="1"
-      length="1"></wall>
-    <spawn
-      x="5"
-      y="5"
-      >Spawn1</spawn>
-    <spawn
-      x="10"
-      y="10"
-      >Spawn1</spawn>
-    <boss
-      type="StationaryBoss"
-      x="20"
-      y="20"/>   
+    <!-- Enemy Spawns -->
+    <spawnObject>
+      <spawn x="-8" y="-5">Spawn1</spawn>
+      <enemyType num="100" type="zombie"/>
+      <enemyType num="20" type="fastZombie"/>
+    </spawnObject>
+    <spawnObject>
+      <spawn x="8" y="5">Spawn2</spawn>
+      <enemyType num="100" type="zombie"/>
+      <enemyType num="20" type="fastZombie"/>
+    </spawnObject>
+
+    <!-- Boss -->
+    <boss type="StationaryBoss" x="20" y="20" life="1000"/>
+
+    <!-- Walls -->
+    <wallObject>
+      <wall id="1" x="-8" y="7" scale="1" width="9" height="1"/>
+    </wallObject>
+    <wallObject>
+      <wall id="1" x="-8" y="-3" scale="1" width="1" height="5"/>
+    </wallObject>
+    <wallObject>
+      <wall id="1" x="8" y="-7" scale="1" width="1" height="6"/>
+    </wallObject>
+    <wallObject>
+      <wall id="1" x="-8" y="-7" scale="1" width="9" height="1"/>
+    </wallObject>
   </objects>
+
 </level1>

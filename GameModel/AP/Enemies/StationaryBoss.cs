@@ -10,10 +10,15 @@ namespace AP
         public StationaryBoss(int ID)
         {
             life = (int)Life.Boss;
-            UID = ID;
+            enemyID = ID;
         }
 
-        public override void move(int x, int y)
+        public override void move(float x, float y)
+        {
+            //no need to move a stationary boss :)
+        }
+
+        public override void moveTowards(Player target)
         {
             //no need to move a stationary boss :)
         }
