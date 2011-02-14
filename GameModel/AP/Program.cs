@@ -40,14 +40,8 @@ namespace AP
         List<int> heightSquares = new List<int>();
         List<int> xPosSpawn = new List<int>();
         List<int> yPosSpawn = new List<int>();
-        EnemySpawn spawn1;
-        EnemySpawn spawn2;
-        EnemySpawn spawn3;
-        EnemySpawn spawn4;
         CreateLevel currentLevel;
         Random randNum = new Random();
-        //Bullet bullet1;
-        int enemyIDs = 0;
         public static LoadedObjects loadedObjects = new LoadedObjects();
         public static CollisionAI collisionAI = new CollisionAI();
 
@@ -68,29 +62,19 @@ namespace AP
             playerList.Add(player);
             if ( xPosSpawn.Count > 0 )
             {
-                spawn1 = new EnemySpawn(xPosSpawn[0], yPosSpawn[0],enemyIDs);
-                spawns.Add(spawn1);
-                enemyIDs++;
+                spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
             }
             if ( xPosSpawn.Count > 1 )
             {
-                Console.WriteLine(" 2 spawns ");
-                spawn2 = new EnemySpawn(xPosSpawn[1], yPosSpawn[1],enemyIDs);
-                spawns.Add(spawn2);
-                enemyIDs++;
+                spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1]));
             }
             if ( xPosSpawn.Count > 2 )
             {
-                Console.WriteLine(" 2 spawns ");
-                spawn3 = new EnemySpawn(xPosSpawn[2], yPosSpawn[2],enemyIDs);
-                spawns.Add(spawn3);
-                enemyIDs++;
+                spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2]));
             }
             if ( xPosSpawn.Count > 3 )
             {
-                spawn4 = new EnemySpawn(xPosSpawn[3], yPosSpawn[3], enemyIDs);
-                spawns.Add(spawn4);
-                enemyIDs++;
+                spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
             }
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -257,10 +241,9 @@ namespace AP
                 spawn.draw();
                 if (zombieIterator == 60)
                 {
-                    enemyList.Add(spawn.spawnEnemy(enemyIDs));
-                    //Console.WriteLine("spawn");
+                    //need to ping server for a UID
+                    enemyList.Add(spawn.spawnEnemy(0));
                     enemySpawned = true;
-                    enemyIDs++;
                 }
             }
             if (enemySpawned)
@@ -270,7 +253,7 @@ namespace AP
             }
 
 
-            i = 0;
+            
 
             GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
             //change this to be the same way as you do the walls
@@ -283,7 +266,7 @@ namespace AP
                     GL.PopMatrix();
                 }
 
-
+            i = 0;
             foreach (var x in xPosSquares)
             {
                 if (widthSquares[i] > 1)
