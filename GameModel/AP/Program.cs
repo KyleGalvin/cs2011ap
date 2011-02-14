@@ -62,8 +62,7 @@ namespace AP
         /// <param name="e">Not used.</param>
         protected override void OnLoad(EventArgs e)
         {
-            //base.OnLoad(e);
-            player = new Player();//(defaultPosition, 0);
+            player = new Player();
             currentLevel = new CreateLevel(1);
             currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
             playerList.Add(player);
@@ -130,7 +129,6 @@ namespace AP
         /// <param name="e">Contains timing information for framerate independent logic.</param>
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            base.OnUpdateFrame(e);
             if (Keyboard[Key.W])
                 player.move(0,1);
             if (Keyboard[Key.S])
@@ -210,11 +208,6 @@ namespace AP
             }
         }
 
-        private void assignPlayerID()
-        {
-            //player = server request for ID
-        }
-
         /// <summary>
         /// Assign passed enemy object a unique enemyIdentifier
         /// </summary>
@@ -243,10 +236,6 @@ namespace AP
 
             player.draw();
             GL.Translate(-player.xPos, -player.yPos, 0);
-            /*if (bullet1 != null)
-            {
-                bullet1.draw();
-            }*/
 
             foreach (Bullet bullet in bulletList)
             {
