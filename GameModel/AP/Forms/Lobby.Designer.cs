@@ -32,6 +32,8 @@
             this.lbl_Name = new System.Windows.Forms.Label();
             this.grp_Players = new System.Windows.Forms.GroupBox();
             this.btn_Close = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.grp_Players.SuspendLayout();
             this.SuspendLayout();
             // 
             // btn_Start
@@ -57,6 +59,7 @@
             // 
             // grp_Players
             // 
+            this.grp_Players.Controls.Add(this.listBox1);
             this.grp_Players.Location = new System.Drawing.Point(17, 36);
             this.grp_Players.Name = "grp_Players";
             this.grp_Players.Size = new System.Drawing.Size(214, 299);
@@ -75,6 +78,14 @@
             this.btn_Close.UseVisualStyleBackColor = true;
             this.btn_Close.Click += new System.EventHandler(this.btn_Close_Click);
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(6, 19);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(202, 277);
+            this.listBox1.TabIndex = 0;
+            // 
             // Lobby
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -89,7 +100,7 @@
             this.Name = "Lobby";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Lobby";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Lobby_FormClosing);
+            this.grp_Players.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -101,5 +112,6 @@
         private System.Windows.Forms.Label lbl_Name;
         private System.Windows.Forms.GroupBox grp_Players;
         private System.Windows.Forms.Button btn_Close;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }

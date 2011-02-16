@@ -26,13 +26,12 @@ namespace AP.Forms
         private IPEndPoint broadcastEP;
         private UdpClient listener;
         private IPEndPoint groupEP;
+        private bool listen;
         public Main()
         {
             InitializeComponent();
             //These need to be initialized out here otherwise it thinks the socket is already open
-            broadcastEP = new IPEndPoint(broadcast, port);
-            listener = new UdpClient(port);
-            groupEP = new IPEndPoint(IPAddress.Any, port);
+            lst_Servers.DataSource = ServerIps;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -44,6 +43,15 @@ namespace AP.Forms
         private void btn_Refresh_Click(object sender, EventArgs e)
         {
             if (checkServers) return;
+
+            if (!listen)
+            {
+                //These need to be set for the server check to run correctly
+                broadcastEP = new IPEndPoint(broadcast, port);
+                listener = new UdpClient(port);
+                groupEP = new IPEndPoint(IPAddress.Any, port);
+                listen = true;
+            }
             //This makes sure the thread only runs one at a time.
             checkServers = true;
             broadcastThread2 = new Thread(FetchServers);
@@ -58,6 +66,7 @@ namespace AP.Forms
                 FindServer(port, broadcastEP);
                 //Once the thread stops we check this flag to allow it to check again
                 checkServers = false;
+                
             }
         }
         /// <summary>
@@ -67,6 +76,7 @@ namespace AP.Forms
         /// <param name="e"></param>
         private void btn_Host_Click(object sender, EventArgs e)
         {
+            if(listener!=null) listener.Close();
             DialogResult dr;
             Lobby_Dialog lobbyDialog = new Lobby_Dialog();
             dr = lobbyDialog.ShowDialog();
