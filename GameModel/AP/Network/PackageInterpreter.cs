@@ -11,7 +11,6 @@ namespace NetLib
         Request = 0x30000000,
         Describe = 0x40000000,
         Text = 0x50000000,
-        Initialize = 0x60000000
     }
 
     public enum Type
@@ -22,8 +21,8 @@ namespace NetLib
         Bullet = 0x04000000,
         Explosion = 0x05000000,
         Powerup = 0x06000000,
-        Text = 0x70000000,
-        Connection = 0x80000000
+        Text = 0x07000000,
+        Connection = 0x08000000
     }
 
 	public class PackageInterpreter
@@ -46,21 +45,16 @@ namespace NetLib
 			}				
 		}
 
-        //sends a string over the network
-        public List<byte[]> encodeText(String s)
+        ///Lobby Communication Protocols
+        public List<byte[]> encodeComm(Action a, String Comm)
         {
             List<byte[]> result = new List<byte[]>();
 
-            while (s.Length % 4 != 0)
-            {
-                s += " ";
-            }
-
             //add packet header
-            result.Add(BitConverter.GetBytes((UInt32)((s.Length / 4) << 16) ^ ((UInt32)Action.Text) ^ ((UInt32)Type.Text)));
+            result.Add(BitConverter.GetBytes((UInt32)((Comm.Length) << 16) ^ ((UInt32)Action.Text)));
             Console.WriteLine(BitConverter.ToString(result[0]));
 
-            char[] carray = s.ToCharArray();
+            char[] carray = Comm.ToCharArray();
 
             //add packet body
             for(int i = 0; i < carray.Length;i=i+4)
@@ -73,8 +67,8 @@ namespace NetLib
             return result;
         }
 
-        //turns a list of objects into a serialized network stream
-        public List<byte[]> encode<T>(Action a, Type t, List<T> objs)
+        ///Game State Communication Protocols
+        public List<byte[]> encodeObjs<T>(Action a, Type t, List<T> objs)
         {
 
             List<byte[]> result = new List<byte[]>();
@@ -90,6 +84,7 @@ namespace NetLib
             return result;
         }
 
+        ///turns a list of objects into a serialized network stream
         private List<byte[]> serialize<T>(Type t, T obj)
         {
 
