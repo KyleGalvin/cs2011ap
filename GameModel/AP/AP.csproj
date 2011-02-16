@@ -93,11 +93,13 @@
     <Compile Include="Models\MeshData.cs" />
     <Compile Include="Network\ClientManager.cs" />
     <Compile Include="Network\Connection.cs" />
+    <Compile Include="Network\HostManager.cs" />
     <Compile Include="Network\LobbyManager.cs" />
     <Compile Include="Network\NetManager.cs" />
     <Compile Include="Network\NetPackage.cs" />
     <Compile Include="Network\PackageInterpreter.cs" />
     <Compile Include="Network\PackWorker.cs" />
+    <Compile Include="Network\PlayerManager.cs" />
     <Compile Include="Network\StreamHandler.cs" />
     <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Weapons\Rocket.cs" />
