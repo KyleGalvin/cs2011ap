@@ -15,6 +15,7 @@ namespace NetLib
 		protected int port;
 		
 		public List<Connection> myConnections;
+        public Queue<NetPackage> myOutgoing;
 		
 		protected List<byte[]> myData;
 		protected String myRole;
@@ -90,7 +91,7 @@ namespace NetLib
                 }
                 if (pack.action == (UInt32)Action.Describe)
                 {
-
+                    worker.HandleDescribe(pack);
                 }
 
             }
@@ -103,6 +104,20 @@ namespace NetLib
             {
                 //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
                 c.Write(data);
+            }
+        }
+
+        public void Send<T>()
+        {
+            List<byte[]> data = myProtocol.encode(Action.Create, Type.AI, Objs);
+            foreach (Connection c in myConnections)
+            {
+                foreach (NetPackage p in myConnections)
+                {
+                    worker.
+                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+                }
             }
         }
 	
