@@ -10,7 +10,8 @@ namespace NetLib
         Update = 0x20000000,
         Request = 0x30000000,
         Describe = 0x40000000,
-        Text = 0x50000000
+        Text = 0x50000000,
+        Initialize = 0x60000000
     }
 
     public enum Type
@@ -21,7 +22,8 @@ namespace NetLib
         Bullet = 0x04000000,
         Explosion = 0x05000000,
         Powerup = 0x06000000,
-        Text = 0x70000000
+        Text = 0x70000000,
+        Connection = 0x80000000
     }
 
 	public class PackageInterpreter

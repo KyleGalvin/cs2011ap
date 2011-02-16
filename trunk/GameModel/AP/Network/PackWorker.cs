@@ -28,6 +28,12 @@ namespace NetLib
             }
                 return result;
         }
+
+        public void HandleDescribe(NetPackage pack)
+        {
+            BitConverter.ToInt32(pack.body[0], 0);
+        }
+
         public void HandleCreate(NetPackage pack)
         {
             
