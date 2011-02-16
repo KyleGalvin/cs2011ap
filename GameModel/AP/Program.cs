@@ -62,19 +62,19 @@ namespace AP
             playerList.Add(player);
             if ( xPosSpawn.Count > 0 )
             {
-                spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
+                spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0],0));
             }
             if ( xPosSpawn.Count > 1 )
             {
-                spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1]));
+                spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1],0));
             }
             if ( xPosSpawn.Count > 2 )
             {
-                spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2]));
+                spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2],0));
             }
             if ( xPosSpawn.Count > 3 )
             {
-                spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
+                spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3],0));
             }
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
