@@ -86,6 +86,24 @@
   <ItemGroup>
     <Compile Include="AI\CollisionAI.cs" />
     <Compile Include="EnemySpawn.cs" />
+    <Compile Include="Forms\Lobby.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Lobby.Designer.cs">
+      <DependentUpon>Lobby.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Lobby_Dialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Lobby_Dialog.Designer.cs">
+      <DependentUpon>Lobby_Dialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
     <Compile Include="GameState.cs" />
     <Compile Include="Levels\CreateLevel.cs" />
     <Compile Include="Models\LoadedObjects.cs" />
@@ -100,6 +118,7 @@
     <Compile Include="Network\PackageInterpreter.cs" />
     <Compile Include="Network\PackWorker.cs" />
     <Compile Include="Network\PlayerManager.cs" />
+    <Compile Include="Network\Server.cs" />
     <Compile Include="Network\StreamHandler.cs" />
     <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Weapons\Rocket.cs" />
@@ -177,6 +196,17 @@
     <Content Include="bin\Debug\AP.exe" />
     <Content Include="bin\Debug\AP.pdb" />
     <Content Include="Levels\level1.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\Lobby.resx">
+      <DependentUpon>Lobby.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Lobby_Dialog.resx">
+      <DependentUpon>Lobby_Dialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Main.resx">
+      <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Graphics\" />

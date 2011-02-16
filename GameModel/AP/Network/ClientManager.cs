@@ -57,8 +57,6 @@ namespace NetLib
             //myEnemies.Add(baddie1);
             //myEnemies.Add(baddie2);
 
-
-			
 			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
 			//Send(Model,(UInt32)Action.Create);
             //

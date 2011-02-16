@@ -29,7 +29,7 @@ namespace AP.Forms
             var port = 9999;
             InitializeComponent();
             lbl_Name.Text = _Name;
-            lobbyManager=new LobbyManager(port);
+            //lobbyManager=new LobbyManager(port);
             
         }
 
@@ -40,7 +40,7 @@ namespace AP.Forms
 
         private void btn_Close_Click(object sender, EventArgs e)
         {
-            lobbyManager.listener.Close();
+            //lobbyManager.listener.Close();
             this.Close();
         }
     }

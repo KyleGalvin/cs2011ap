@@ -297,6 +297,7 @@ namespace AP
             SwapBuffers();
         }
 
+        [STAThread]
         static void Main(string[] args)
         {
             //start the form for log in screen
@@ -305,11 +306,9 @@ namespace AP
             // if server
             // - get client info
             //Form1 form = new Form1();
-
-            using( Program game = new Program() )
-            {
-                game.Run(28.0);
-            }
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new AP.Forms.Main());
         }
     }
 }

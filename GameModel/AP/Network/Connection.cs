@@ -12,6 +12,7 @@ namespace NetLib
         private StreamHandler myStream;
 		private TcpClient myClient;
         public int playerUID;
+        public string playerName;
 		
 		public Connection(object client)
 		{
