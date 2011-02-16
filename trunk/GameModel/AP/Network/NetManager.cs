@@ -97,9 +97,9 @@ namespace NetLib
             }
         }
 
-        public void Send<T>(List<T> Objs)
+        public void SendObjs<T>(List<T> Objs)
         {
-            List<byte[]> data = myProtocol.encode(Action.Create, Type.AI, Objs);
+            List<byte[]> data = myProtocol.encodeObjs(Action.Create, Type.AI, Objs);
             foreach (Connection c in myConnections)
             {
                 //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
@@ -107,14 +107,15 @@ namespace NetLib
             }
         }
 
-        public void Send<T>()
+        public void SendComm<T>(String Comm)
         {
-            List<byte[]> data = myProtocol.encode(Action.Create, Type.AI, Objs);
+            List<byte[]> data = myProtocol.encodeComm(Action.Create, Comm);
             foreach (Connection c in myConnections)
             {
-                foreach (NetPackage p in myConnections)
+                foreach (NetPackage p in myOutgoing)
                 {
-                    worker.
+                    //worker.
+
                     //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
                     c.Write(data);
                 }
