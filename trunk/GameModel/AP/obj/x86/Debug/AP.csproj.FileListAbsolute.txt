@@ -24,3 +24,7 @@ C:\Documents and Settings\student\Desktop\cs2011ap\GameModel\AP\bin\Debug\AP.exe
 C:\Documents and Settings\student\Desktop\cs2011ap\GameModel\AP\bin\Debug\AP.pdb
 C:\Documents and Settings\student\Desktop\cs2011ap\GameModel\AP\obj\x86\Debug\AP.exe.manifest
 C:\Documents and Settings\student\Desktop\cs2011ap\GameModel\AP\obj\x86\Debug\AP.application
+C:\Documents and Settings\student\Desktop\cs2011ap\GameModel\AP\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\Documents and Settings\student\Desktop\cs2011ap\GameModel\AP\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\Documents and Settings\student\Desktop\cs2011ap\GameModel\AP\obj\x86\Debug\AP.Forms.Main.resources
+C:\Documents and Settings\student\Desktop\cs2011ap\GameModel\AP\obj\x86\Debug\AP.csproj.GenerateResource.Cache

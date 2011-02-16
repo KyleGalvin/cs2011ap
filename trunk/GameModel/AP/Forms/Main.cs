@@ -103,7 +103,7 @@ namespace AP.Forms
         }
         private void btn_Join_Click(object sender, EventArgs e)
         {
-            if (lst_Servers.SelectedIndex > 0)
+            if (lst_Servers.SelectedIndex < 0)
             {
                 MessageBox.Show("Select a game");
                 return;
