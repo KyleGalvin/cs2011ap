@@ -11,6 +11,8 @@ namespace AP.Forms
 {
     public partial class Lobby : Form
     {
+        private LobbyManager lobbyManager;
+        private ClientManager clientManager;
         /// <summary>
         /// This lobby constructor is used when joining the lobby
         /// </summary>
@@ -27,8 +29,8 @@ namespace AP.Forms
             var port = 9999;
             InitializeComponent();
             lbl_Name.Text = _Name;
-                
-
+            lobbyManager=new LobbyManager(port);
+            
         }
 
 
@@ -38,6 +40,7 @@ namespace AP.Forms
 
         private void btn_Close_Click(object sender, EventArgs e)
         {
+            lobbyManager.listener.Close();
             this.Close();
         }
     }
