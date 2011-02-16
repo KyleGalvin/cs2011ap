@@ -5,6 +5,7 @@ using System.Threading;
 using System.Timers;
 using System.Collections.Generic;
 using AP;
+
 namespace NetLib
 {
 	public class LobbyManager : NetManager
@@ -133,20 +134,6 @@ namespace NetLib
 			{
 				myConnections.Remove(myConnection);
 			}
-		}
-		
-		
-		//MOVE THIS
-		private UInt32 GetExpectedPackageSize(UInt32 header)
-		{
-			UInt32 action = (header & 0xF0000000)>>28;
-			UInt32 type = (header & 0x0F000000)>>24;
-			UInt32 count = (header & 0x00FF0000)>>16;
-			
-			Console.WriteLine("Header: {0} Type: {1} Action: {2} Count: {3}", header, type, action, count);
-
-			
-			return 0;
 		}
 		
 	}
