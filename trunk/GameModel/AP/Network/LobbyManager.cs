@@ -115,6 +115,7 @@ namespace NetLib
                 try
                 {
                     //read package data
+                    Console.WriteLine("attempt to read pack:");
                     pack = myConnection.ReadPackage();
                     Console.WriteLine("Package recieved!");
                 }

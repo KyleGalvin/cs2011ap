@@ -79,7 +79,7 @@
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>38lh6MAQxw0nS047bqpJnylUGTw=</dsig:DigestValue>
+        <dsig:DigestValue>ehqy4v85OEePaRqDXjgfh/uUSsU=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -89,7 +89,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>j6azsVlXpfi12MqX3AT0x5MyjAY=</dsig:DigestValue>
+      <dsig:DigestValue>xsWg0hWaXpFPIjM0cqSSGBNu2X4=</dsig:DigestValue>
     </hash>
   </file>
   <file name="bin\Debug\AP.pdb" size="171520">
@@ -98,7 +98,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>+wu71wRN/k6/l2KA1lcPwtG6xio=</dsig:DigestValue>
+      <dsig:DigestValue>k5yz0icIdq6Mn2XAo8OzPj8uYZg=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Levels\level1.xml" size="1062" writeableType="applicationData">

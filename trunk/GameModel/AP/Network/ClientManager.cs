@@ -131,7 +131,7 @@ namespace NetLib
             {
                 foreach (NetPackage p in myOutgoing)
                 {
-                    //worker.
+                   
 
                     //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
                     c.Write(data);
