@@ -140,7 +140,8 @@ namespace AP.Forms
         private void joinLobby()
         {
             //Open the lobby with the clients view. Use a different initializer.
-
+            Lobby lobby=new Lobby((Server)(lst_Servers.SelectedItem));
+            lobby.ShowDialog();
         }
 
         private void lst_Servers_DoubleClick(object sender, EventArgs e)

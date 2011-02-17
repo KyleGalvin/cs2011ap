@@ -7,7 +7,6 @@ using AP;
 
 namespace NetLib
 {
-
 	public abstract class NetManager
 	{
         static public GameState State = new GameState();
@@ -26,10 +25,8 @@ namespace NetLib
 
         public bool Connected = false;
 		
-		public NetManager(int newPort,  ref GameState StateRef)
+		public NetManager(int newPort)
 		{
-            worker = new PackWorker(ref StateRef);
-            State = StateRef;
 			myConnections = new List<Connection>();
             myProtocol = new PackageInterpreter();
 			port = newPort;
@@ -104,21 +101,6 @@ namespace NetLib
             {
                 //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
                 c.Write(data);
-            }
-        }
-
-        public void SendComm<T>(String Comm)
-        {
-            List<byte[]> data = myProtocol.encodeComm(Action.Create, Comm);
-            foreach (Connection c in myConnections)
-            {
-                foreach (NetPackage p in myOutgoing)
-                {
-                    //worker.
-
-                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
-                }
             }
         }
 	

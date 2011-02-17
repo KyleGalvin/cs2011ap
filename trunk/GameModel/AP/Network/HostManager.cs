@@ -4,7 +4,7 @@ using AP;
 
 namespace NetLib
 {
-    public class HostManager : NetManager
+    public class HostManager : PlayerManager
     {
         public HostManager(int port, ref GameState State): base(port, ref State)
         {
