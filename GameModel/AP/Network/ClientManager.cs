@@ -6,6 +6,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Text;
 using AP;
+using AP.Network;
 
 namespace NetLib
 {
@@ -14,7 +15,7 @@ namespace NetLib
 
 
 
-        public ClientManager(int port, ref GameState State,IPAddress ip): base(port, ref State)
+        public ClientManager(int port, ref GameState State,Server serv): base(port, ref State)
 		{
 			//set up variables
 
@@ -29,7 +30,7 @@ namespace NetLib
             //if (serverEndPoint == null){
                //server failed to respond. Our trickery failed. Ask for manual intervention
                 //Console.WriteLine("Please enter Lobby IP:");
-             IPEndPoint serverEndPoint = new IPEndPoint(ip, port);
+             IPEndPoint serverEndPoint = new IPEndPoint(serv.ServerIP, port);
             //}
 			
 			Console.WriteLine("Waiting for connections...");
@@ -49,7 +50,7 @@ namespace NetLib
 			Dictionary<String,List<AP.Position>> Model = new Dictionary<String,List<AP.Position>>();
 
 			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
-
+            JoinGame(serv.Name);
 		}
 
 		protected override void HandleIncomingComm(object stream)
@@ -125,7 +126,7 @@ namespace NetLib
 
         public void JoinGame(String GameName)
         {
-            List<byte[]> data = myProtocol.encodeComm(Action.Create, Type.Building,"");
+            List<byte[]> data = myProtocol.encodeComm(Action.Request, Type.Building,GameName);
             foreach (Connection c in myConnections)
             {
                 foreach (NetPackage p in myOutgoing)

@@ -27,6 +27,7 @@ namespace NetLib
 		
 		public NetManager(int newPort)
 		{
+            myOutgoing = new Queue<NetPackage>();
 			myConnections = new List<Connection>();
             myProtocol = new PackageInterpreter();
 			port = newPort;
