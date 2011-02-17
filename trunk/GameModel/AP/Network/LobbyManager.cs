@@ -14,6 +14,7 @@ namespace NetLib
         public string LobbyName;
         public LobbyManager(int port, ref ListBox list): base(port)
         {
+            IsLobby = true;
             worker = (PackWorker)new LobbyPackWorker(ref list);
             Connected = true;//Server has nothing to connect to
             Console.WriteLine("Listening for incoming connections...");
@@ -21,6 +22,7 @@ namespace NetLib
             new Thread(new ThreadStart(this.Listen)).Start();//Collect clients in our connection pool
             System.Timers.Timer timer = new System.Timers.Timer(5000);
             timer.Enabled = true;
+            
         }
 
         public void RespondToClients(int port, IPEndPoint broadcastEP)

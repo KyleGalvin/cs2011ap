@@ -14,6 +14,7 @@ namespace NetLib
         public UInt32 count;
 		public List<byte[]> body;
 		public bool complete;
+        public bool isLobby;
 		
 		public NetPackage ()
 		{
@@ -36,7 +37,14 @@ namespace NetLib
 				typeofobj = (header & 0x0F000000)>>24;
 				action = (header & 0xF0000000);
                 Console.WriteLine("action: {0}", action);
-                sizeofobj = myInterpreter.GetTypeSize((Type)(header & 0x01000000));
+                if (this.isLobby)
+                {
+                    sizeofobj = 1;
+                }
+                else
+                {
+                    sizeofobj = myInterpreter.GetTypeSize((Type)(header & 0x01000000));
+                }
                 count = myInterpreter.GetCount(header);
 				//Console.WriteLine("GetSize(type): {0}",GetSize(typeofobj));
 				Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,count,action);

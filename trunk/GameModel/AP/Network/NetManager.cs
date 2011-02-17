@@ -12,7 +12,7 @@ namespace NetLib
         static public GameState State = new GameState();
 		protected Thread respondThread;
 		protected int port;
-		
+        protected bool IsLobby;
 		public List<Connection> myConnections;
         public Queue<NetPackage> myOutgoing;
 		
@@ -71,6 +71,11 @@ namespace NetLib
 				{
 					myConnections.Add(new Connection(client));
 				}
+
+                Connection lastCon = myConnections[myConnections.Count - 1];
+                lastCon.myStream.myPackage.isLobby = IsLobby;
+
+
 				
 				Console.WriteLine("Starting the {0}th connection",myConnections.Count);
 				//create a thread to handle communication

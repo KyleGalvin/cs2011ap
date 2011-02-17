@@ -8,7 +8,7 @@ namespace NetLib
     public class StreamHandler
     {
         protected NetworkStream myStream;
-        protected NetPackage myPackage;
+        public NetPackage myPackage;
         protected PackageInterpreter myInterpreter;
         //StateWorker myWorker;
 
