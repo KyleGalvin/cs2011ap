@@ -69,19 +69,19 @@ namespace AP
             gameState.Players.Add(player);
             if ( xPosSpawn.Count > 0 )
             {
-                spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0],0));
+                spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
             }
             if ( xPosSpawn.Count > 1 )
             {
-                spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1],0));
+                spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1]));
             }
             if ( xPosSpawn.Count > 2 )
             {
-                spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2],0));
+                spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2]));
             }
             if ( xPosSpawn.Count > 3 )
             {
-                spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3],0));
+                spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
             }
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -319,7 +319,6 @@ namespace AP
             SwapBuffers();
         }
 
-        [STAThread]
         static void Main(string[] args)
         {
             //start the form for log in screen
@@ -328,9 +327,11 @@ namespace AP
             // if server
             // - get client info
             //Form1 form = new Form1();
-                Application.EnableVisualStyles();
-                Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new AP.Forms.Main());
+
+            using( Program game = new Program() )
+            {
+                game.Run(28.0);
+            }
         }
     }
 }
