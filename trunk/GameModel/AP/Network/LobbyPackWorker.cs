@@ -12,7 +12,7 @@ namespace NetLib
             this.list = list;
         }
 
-        public void HandleDescribe(NetPackage pack)
+        public override void HandleDescribe(NetPackage pack)
         {
             if (pack.typeofobj == (UInt32)Type.Building)
             {
@@ -25,14 +25,14 @@ namespace NetLib
             }
         }
 
-        public void HandleRequest(NetPackage pack)
+        public override void HandleRequest(NetPackage pack)
         {
             Console.WriteLine("HERE");
             //join game. pack.body contains game name
             list.Items.Add("PlayerName");
         }
 
-        public void HandleCreate(NetPackage pack)
+        public override void HandleCreate(NetPackage pack)
         {
             //start game. no body
         }

@@ -12,6 +12,8 @@ namespace NetLib
 	public class LobbyManager : NetManager
 	{
         public string LobbyName;
+        private UdpClient listener;
+        private TcpClient client;
         public LobbyManager(int port, ref ListBox list): base(port)
         {
             IsLobby = true;
@@ -51,7 +53,7 @@ namespace NetLib
             IPEndPoint broadcastEP = new IPEndPoint(broadcast, port);
             bool done = false;
             string msg = String.Empty;
-            UdpClient listener = new UdpClient(port);
+            listener = new UdpClient(port);
             IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
             //Send initial broadcast
             RespondToClients(port, broadcastEP);
@@ -107,7 +109,7 @@ namespace NetLib
 			Connection myConnection = (Connection)connection;
 			NetPackage pack = new NetPackage();
 
-			TcpClient client = myConnection.GetClient();
+			client = myConnection.GetClient();
 			Console.WriteLine("client {0} has connected.", client.Client.RemoteEndPoint);
 			
 			while (true)
@@ -140,6 +142,12 @@ namespace NetLib
 			}
 		}
 
-	}
+
+        internal void Close()
+        {
+            client.Close();
+            listener.Close();
+        }
+    }
 }
 
