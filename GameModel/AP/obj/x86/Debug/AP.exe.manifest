@@ -43,11 +43,6 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
-      <assemblyIdentity name="Microsoft.Office.Interop.Excel" version="12.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" />
-    </dependentAssembly>
-  </dependency>
-  <dependency>
-    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
       <assemblyIdentity name="Microsoft.Vbe.Interop" version="12.0.0.0" publicKeyToken="71E9BCE111E9429C" language="neutral" />
     </dependentAssembly>
   </dependency>
@@ -72,14 +67,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AP.exe" size="54272">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AP.exe" size="54784">
       <assemblyIdentity name="AP" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>ehqy4v85OEePaRqDXjgfh/uUSsU=</dsig:DigestValue>
+        <dsig:DigestValue>tXU0ZXm3yF+IHuZzwkCRutymDa8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -89,7 +84,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>xsWg0hWaXpFPIjM0cqSSGBNu2X4=</dsig:DigestValue>
+      <dsig:DigestValue>ehqy4v85OEePaRqDXjgfh/uUSsU=</dsig:DigestValue>
     </hash>
   </file>
   <file name="bin\Debug\AP.pdb" size="171520">
@@ -98,7 +93,7 @@
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>k5yz0icIdq6Mn2XAo8OzPj8uYZg=</dsig:DigestValue>
+      <dsig:DigestValue>w+reHnIYs8qwwLhOynd2KY62Vtw=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Levels\level1.xml" size="1062" writeableType="applicationData">
