@@ -31,7 +31,7 @@ namespace AP.Forms
         {
             InitializeComponent();
             //These need to be initialized out here otherwise it thinks the socket is already open
-            lst_Servers.DataSource = ServerIps;
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -57,6 +57,17 @@ namespace AP.Forms
             broadcastThread2 = new Thread(FetchServers);
             broadcastThread2.Start();
         }
+        public delegate void SetListDelegate();
+        // This method is passed in to the SetTextCallBack delegate
+        // to set the Text property of textBox1.
+        private void SetList()
+        {
+            foreach(var x in ServerIps)
+            {
+                lst_Servers.Items.Add(x);
+            }
+        }
+
 
         private void FetchServers()
         {
@@ -66,7 +77,20 @@ namespace AP.Forms
                 FindServer(port, broadcastEP);
                 //Once the thread stops we check this flag to allow it to check again
                 checkServers = false;
-                
+                //ServerIps.Add(new Server("Test", IPAddress.Any));
+                if (this.lst_Servers.InvokeRequired)
+                {
+                    // It's on a different thread, so use Invoke.
+                    SetListDelegate d = new SetListDelegate(SetList);
+                    this.Invoke
+                        (d);
+                }
+                else
+                {
+                    // It's on the same thread, no need for Invoke
+                    SetList();
+                }
+
             }
         }
         /// <summary>
