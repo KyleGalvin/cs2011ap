@@ -9,14 +9,39 @@ namespace AP
     {
         private int Tiles = 50;
         //private float TileSize = 1;
-        List<Enemy>[,] tileList;        
+        List<Enemy>[,] tileList;
+        bool[,] blockedByWall;
 
-        public CollisionAI()
+        public CollisionAI(ref List<int> xWalls, ref List<int> yWalls, ref List<int> xSize, ref List<int> ySize)
         {
             tileList = new List<Enemy>[Tiles, Tiles];
+            blockedByWall = new bool[Tiles, Tiles];
+            int wallCount = 0;
             for (int i = 0; i < Tiles; i++)
                 for (int j = 0; j < Tiles; j++)
+                {
                     tileList[i, j] = new List<Enemy>();
+                    bool blocked = false;
+                    for (int w = 0; w < xWalls.Count; w++)
+                    {
+                        int countX = xSize[w];
+                        int countY = ySize[w];
+                        for (int x = countX - 1; x >= 0; x--)
+                            for (int y = countY - 1; y >= 0; y--)
+                            {
+                                if (xWalls[w] + x == i - Tiles / 2 && yWalls[w] + y == j - Tiles / 2 && !blocked)
+                                {
+                                    blocked = true;
+                                    blockedByWall[i, j] = true;
+                                    wallCount++;
+                                    //Console.WriteLine("{0} {1}", i, j);
+                                }
+                            }
+                    }
+                    if (!blocked)
+                        blockedByWall[i, j] = false;
+                }
+            Console.WriteLine("wall count{0}", wallCount);
         }
 
         public void updateState(ref List<Enemy> enemyList)
@@ -48,200 +73,69 @@ namespace AP
                 else
                     Console.WriteLine("Failed to add an enemy to the tile list");
             }
-            /*
-            Circle tempCircle = circleList;
-            while (tempCircle != null)
-            {
-                int x = -1, y = -1;
-                for (int i = 0; i < Tiles; i++)
-                {
-                    numberOfTileChecks++;
-                    if (tempCircle.posX + (Circle.distance / 10 * 8) / 2 <= ((i + 1) * (Circle.distance / 10 * 8) / Tiles) && x == -1)
-                    {
-                        x = i;
-                    }
-                    if (tempCircle.posY + (Circle.distance / 10 * 8) / 2 <= ((i + 1) * (Circle.distance / 10 * 8) / Tiles) && y == -1)
-                    {
-                        y = i;
-                    }
-                }
-
-                if (x != -1 && y != -1)
-                    tileList[x, y].Add(tempCircle);
-                else
-                    Console.WriteLine(tempCircle.posX);
-
-                tempCircle = tempCircle.prevCircle;
-            }*/
-
-
-            /*
-            tempCircle = circleList;
-            while (tempCircle != null)
-            {
-                tempCircle.moveTowards(circleList);
-                tempCircle = tempCircle.prevCircle;
-            }
-
-            if (Keyboard[Key.W])
-                circleList.dirY = -0.01f;
-            if (Keyboard[Key.S])
-                circleList.dirY = 0.01f;
-            if (!Keyboard[Key.W] && !Keyboard[Key.S])
-                circleList.dirY = 0;
-
-            if (Keyboard[Key.A])
-                circleList.dirX = -0.01f;
-            if (Keyboard[Key.D])
-                circleList.dirX = 0.01f;
-            if (!Keyboard[Key.A] && !Keyboard[Key.D])
-                circleList.dirX = 0;
-
-            //quick checks to keep the circles in the frame
-            for (int i = 0; i < Tiles; i++)
-                foreach (Circle a in tileList[0, i])
-                {
-                    if (a.posX < -(Circle.distance / 10 * 8) / 2)
-                        a.dirX *= -1;
-                }
-            for (int i = 0; i < Tiles; i++)
-                //these positive checks are strange.
-                //setting the limit to the second last tile seems to avoid the NaNs
-                foreach (Circle a in tileList[Tiles - 2, i])
-                {
-                    if (a.posX > 0)
-                        a.dirX *= -1;
-                }
-
-            for (int i = 0; i < Tiles; i++)
-                foreach (Circle a in tileList[i, 0])
-                {
-                    if (a.posY < -(Circle.distance / 10 * 8) / 2)
-                        a.dirY *= -1;
-                }
-            for (int i = 0; i < Tiles; i++)
-                foreach (Circle a in tileList[i, Tiles - 2])
-                {
-                    if (a.posY > 0)
-                        a.dirY *= -1;
-                }
-
-            //and now the narrow phase checks
-            for (int i = 0; i < Tiles; i++)
-                for (int j = 0; j < Tiles; j++)
-                    foreach (Circle a in tileList[i, j])
-                    {
-                        if (i < Tiles - 1 && j < Tiles - 1)
-                            foreach (Circle b in tileList[i + 1, j + 1])
-                            {
-                                numberOfChecks++;
-                                float diffX = a.posX - b.posX;
-                                float diffY = a.posY - b.posY;
-                                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius)
-                                {
-                                    numberOfCollisions++;
-                                    a.collision(b.posX, b.posY);
-                                }
-                            }
-                        if (i < Tiles - 1)
-                            foreach (Circle b in tileList[i + 1, j])
-                            {
-                                numberOfChecks++;
-                                float diffX = a.posX - b.posX;
-                                float diffY = a.posY - b.posY;
-                                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius)
-                                {
-                                    numberOfCollisions++;
-                                    a.collision(b.posX, b.posY);
-                                }
-                            }
-                        if (i < Tiles - 1 && j > 0)
-                            foreach (Circle b in tileList[i + 1, j - 1])
-                            {
-                                numberOfChecks++;
-                                float diffX = a.posX - b.posX;
-                                float diffY = a.posY - b.posY;
-                                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius)
-                                {
-                                    numberOfCollisions++;
-                                    a.collision(b.posX, b.posY);
-                                }
-                            }
-                        if (j < Tiles - 1)
-                            foreach (Circle b in tileList[i, j + 1])
-                            {
-                                numberOfChecks++;
-                                float diffX = a.posX - b.posX;
-                                float diffY = a.posY - b.posY;
-                                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius)
-                                {
-                                    numberOfCollisions++;
-                                    a.collision(b.posX, b.posY);
-                                }
-                            }
-                        foreach (Circle b in tileList[i, j])
-                        {
-                            numberOfChecks++;
-                            float diffX = a.posX - b.posX;
-                            float diffY = a.posY - b.posY;
-                            if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius && a != b)
-                            {
-                                numberOfCollisions++;
-                                a.collision(b.posX, b.posY);
-                            }
-                        }
-                        if (j > 0)
-                            foreach (Circle b in tileList[i, j - 1])
-                            {
-                                numberOfChecks++;
-                                float diffX = a.posX - b.posX;
-                                float diffY = a.posY - b.posY;
-                                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius)
-                                {
-                                    numberOfCollisions++;
-                                    a.collision(b.posX, b.posY);
-                                }
-                            }
-                        if (i > 0 && j < Tiles - 1)
-                            foreach (Circle b in tileList[i - 1, j + 1])
-                            {
-                                numberOfChecks++;
-                                float diffX = a.posX - b.posX;
-                                float diffY = a.posY - b.posY;
-                                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius)
-                                {
-                                    numberOfCollisions++;
-                                    a.collision(b.posX, b.posY);
-                                }
-                            }
-                        if (i > 0)
-                            foreach (Circle b in tileList[i - 1, j])
-                            {
-                                numberOfChecks++;
-                                float diffX = a.posX - b.posX;
-                                float diffY = a.posY - b.posY;
-                                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius)
-                                {
-                                    numberOfCollisions++;
-                                    a.collision(b.posX, b.posY);
-                                }
-                            }
-                        if (i > 0 && j > 0)
-                            foreach (Circle b in tileList[i - 1, j - 1])
-                            {
-                                numberOfChecks++;
-                                float diffX = a.posX - b.posX;
-                                float diffY = a.posY - b.posY;
-                                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= a.radius + b.radius)
-                                {
-                                    numberOfCollisions++;
-                                    a.collision(b.posX, b.posY);
-                                }
-                            }
-                    }*/
         }
 
-        public bool checkForCollision<T>(Position source, out T moveAwayFrom)
+        public bool checkForMovementCollision(Position source, out float moveAwayFromX, out float moveAwayFromY)
+        {
+            Enemy enemyHit;
+            //disabling the buggy wall check for now
+            //if (checkForWallCollision(source, out moveAwayFromX, out moveAwayFromY))
+                //return true;
+            return checkForCollision(source, out moveAwayFromX, out moveAwayFromY, out enemyHit);
+        }
+
+        public bool checkForWallCollision(Position source, out float moveAwayFromX, out float moveAwayFromY)
+        {
+            int i = -1;
+            int j = -1;
+            for (int l = 0; l < Tiles; l++)
+            {
+                if (source.xPos <= l - Tiles / 2 && i == -1)
+                {
+                    i = l;
+                }
+                if (source.yPos <= l - Tiles / 2 && j == -1)
+                {
+                    j = l;
+                }
+            }
+            if (i != -1 && j != -1)
+            {
+                if (blockedByWall[i, j])
+                {
+                    moveAwayFromX = i - Tiles / 2;
+                    moveAwayFromY = j - Tiles / 2;
+                        int integerDropY = (int)source.yPos;
+                        int integerDropX = (int)source.xPos;
+                            if (source.yPos - integerDropY > -0.5f && source.yPos - integerDropY < 0.5f)
+                            {
+                                moveAwayFromX = source.xPos;
+                                moveAwayFromY = source.yPos - 50;
+                            }
+                            if (source.xPos - integerDropX > -0.5f && source.xPos - integerDropX < 0.5f)
+                            {
+                                moveAwayFromX = source.xPos - 50;
+                                moveAwayFromY = source.yPos;
+                            }
+                       
+                        //Console.WriteLine("{0} {1} {2} {3}", source.xPos, source.yPos, source.xPos - integerDropX, source.yPos - integerDropY);
+                        return true;
+                }
+                //Console.WriteLine("{0}", i);
+                /*
+                if (blockedByWall[i, j])
+                {
+                    moveAwayFromX = i + 0.5f;
+                    moveAwayFromY = j + 0.5f;
+                    return true;
+                }*/
+            }
+            moveAwayFromX = 0;
+            moveAwayFromY = 0;
+            return false;
+        }
+
+        public bool checkForCollision(Position source, out float moveAwayFromX, out float moveAwayFromY, out Enemy enemyHit)
         {
             int i = -1;
             int j = -1;
@@ -265,7 +159,9 @@ namespace AP
                         float diffY = source.yPos - b.yPos;
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius)
                         {
-                            moveAwayFrom = (T)(object)b;
+                            enemyHit = b;
+                            moveAwayFromX = b.xPos;
+                            moveAwayFromY = b.yPos;
                             return true;
                         }
                     }
@@ -276,7 +172,9 @@ namespace AP
                         float diffY = source.yPos - b.yPos;
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius)
                         {
-                            moveAwayFrom = (T)(object)b;
+                            enemyHit = b;
+                            moveAwayFromX = b.xPos;
+                            moveAwayFromY = b.yPos;
                             return true;
                         }
                     }
@@ -287,7 +185,9 @@ namespace AP
                         float diffY = source.yPos - b.yPos;
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius)
                         {
-                            moveAwayFrom = (T)(object)b;
+                            enemyHit = b;
+                            moveAwayFromX = b.xPos;
+                            moveAwayFromY = b.yPos;
                             return true;
                         }
                     }
@@ -298,7 +198,9 @@ namespace AP
                         float diffY = source.yPos - b.yPos;
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius)
                         {
-                            moveAwayFrom = (T)(object)b;
+                            enemyHit = b;
+                            moveAwayFromX = b.xPos;
+                            moveAwayFromY = b.yPos;
                             return true;
                         }
                     }
@@ -308,7 +210,9 @@ namespace AP
                     float diffY = source.yPos - b.yPos;
                     if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius && source != b)
                     {
-                        moveAwayFrom = (T)(object)b;
+                        enemyHit = b;
+                        moveAwayFromX = b.xPos;
+                        moveAwayFromY = b.yPos;
                         return true;
                     }
                 }
@@ -319,7 +223,9 @@ namespace AP
                         float diffY = source.yPos - b.yPos;
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius)
                         {
-                            moveAwayFrom = (T)(object)b;
+                            enemyHit = b;
+                            moveAwayFromX = b.xPos;
+                            moveAwayFromY = b.yPos;
                             return true;
                         }
                     }
@@ -330,7 +236,9 @@ namespace AP
                         float diffY = source.yPos - b.yPos;
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius)
                         {
-                            moveAwayFrom = (T)(object)b;
+                            enemyHit = b;
+                            moveAwayFromX = b.xPos;
+                            moveAwayFromY = b.yPos;
                             return true;
                         }
                     }
@@ -341,7 +249,9 @@ namespace AP
                         float diffY = source.yPos - b.yPos;
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius)
                         {
-                            moveAwayFrom = (T)(object)b;
+                            enemyHit = b;
+                            moveAwayFromX = b.xPos;
+                            moveAwayFromY = b.yPos;
                             return true;
                         }
                     }
@@ -352,14 +262,18 @@ namespace AP
                         float diffY = source.yPos - b.yPos;
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + b.radius)
                         {
-                            moveAwayFrom = (T)(object)b;
+                            enemyHit = b;
+                            moveAwayFromX = b.xPos;
+                            moveAwayFromY = b.yPos;
                             return true;
                         }
                     }
             }
-                    moveAwayFrom = (T)(object)null;
-            return false;
-                    
+            //these need to be assigned but arnt ever used
+            enemyHit = null;
+            moveAwayFromX = 0;
+            moveAwayFromY = 0;
+            return false;                    
         }
     }
 }
