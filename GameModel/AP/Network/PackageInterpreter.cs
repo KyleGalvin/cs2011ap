@@ -77,19 +77,7 @@ namespace NetLib
                 
                 segment = segment ^ ((UInt32)carray[SegmentLen] << (4 * (SegmentLen - 1)));
                 SegmentLen++;
-                /*while(SegmentLen !=4)
-                {
-                    if (i + SegmentLen != carray.Length)
-                    {
-                        segment = segment ^ ((UInt32)carray[i + SegmentLen] << (4*(SegmentLen-1)));
-                    }
-                    else
-                    {
-                        Console.WriteLine("else");
-                    }
 
-                    SegmentLen++;
-                }*/
                 Console.WriteLine("Segment:"+segment.ToString());
                 result.Add(BitConverter.GetBytes(segment));
                 segment = 0;

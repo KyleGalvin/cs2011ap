@@ -81,6 +81,7 @@ namespace NetLib
 
         public void packetSwitcher(NetPackage pack)
         {
+            Console.WriteLine("PACKET SWITCHED");
             if (pack.IsComplete())//we've accumulated the amount of data our header predicts
             {
                 if (pack.action == (UInt32)Action.Text)
