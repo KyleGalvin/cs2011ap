@@ -11,7 +11,7 @@ namespace NetLib
 {
 	public class LobbyManager : NetManager
 	{
-
+        public string LobbyName;
         public LobbyManager(int port, ref ListBox list): base(port)
         {
             worker = (PackWorker)new LobbyPackWorker(ref list);
@@ -34,7 +34,7 @@ namespace NetLib
 
             try
             {
-                BC.SendTo(encoding.GetBytes("Server Broadcast"),broadcastEP);
+                BC.SendTo(encoding.GetBytes("S"+LobbyName),broadcastEP);
                 Console.WriteLine("Sent Response to " +broadcastEP.ToString());
             }
             catch
