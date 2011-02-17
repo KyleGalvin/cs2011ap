@@ -48,7 +48,7 @@ namespace NetLib
         ///Lobby Communication Protocols
         public List<byte[]> encodeComm(Action a, Type t, String Comm)
         {
-            Console.WriteLine("Encoding data:"+a.ToString()+" "+t.ToString()+" "+Comm);
+            Console.WriteLine("Encoding data:"+a.ToString()+" "+t.ToString()+Comm);
             List<byte[]> result = new List<byte[]>();
 
             //how many 32 bit network numbers do we need to contain the string?
@@ -65,28 +65,37 @@ namespace NetLib
             char[] carray = Comm.ToCharArray();
 
             UInt32 segment = 0;
-
+            int SegmentLen = 0;
             //add packet body
-            for (int i = 0; i < carray.Length; i++)
+            for (int i = 0; i < carray.Length/4; i++)
             {
-                int SegmentLen =0;
-                while(SegmentLen !=4)
+                if (SegmentLen == 4)
                 {
-                    if (i + SegmentLen > carray.Length)
+                    SegmentLen = 0;
+                    continue;
+                }
+                
+                segment = segment ^ ((UInt32)carray[SegmentLen] << (4 * (SegmentLen - 1)));
+                SegmentLen++;
+                /*while(SegmentLen !=4)
+                {
+                    if (i + SegmentLen != carray.Length)
                     {
-                        segment ^= (UInt32)carray[i + SegmentLen] << (8*SegmentLen);
+                        segment = segment ^ ((UInt32)carray[i + SegmentLen] << (4*(SegmentLen-1)));
                     }
                     else
                     {
+                        Console.WriteLine("else");
                     }
 
                     SegmentLen++;
-                }
+                }*/
                 Console.WriteLine("Segment:"+segment.ToString());
                 result.Add(BitConverter.GetBytes(segment));
                 segment = 0;
             }
 
+            Console.WriteLine("end");
             return result;
         }
 
