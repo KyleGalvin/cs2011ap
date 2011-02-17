@@ -27,6 +27,7 @@ namespace NetLib
 
         public void HandleRequest(NetPackage pack)
         {
+            Console.WriteLine("HERE");
             //join game. pack.body contains game name
             list.Items.Add("PlayerName");
         }
