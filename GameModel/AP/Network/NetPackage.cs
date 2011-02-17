@@ -34,9 +34,9 @@ namespace NetLib
 				//no header has been created. We naievely assume the data read is a header
 				
 				header = BitConverter.ToUInt32(incoming,0);
-				typeofobj = (header & 0x0F000000)>>24;
+                typeofobj = (header & 0x0F000000) >> 24;
 				action = (header & 0xF0000000);
-                Console.WriteLine("action: {0}", action);
+                Console.WriteLine("action: {0}", (Action)action);
                 if (this.isLobby)
                 {
                     sizeofobj = 1;
@@ -45,7 +45,9 @@ namespace NetLib
                 {
                     sizeofobj = myInterpreter.GetTypeSize((Type)(0x01000000));
                 }
+                Console.WriteLine("action: {0}", (Action)action);
                 count = myInterpreter.GetCount(header);
+                Console.WriteLine("action: {0}", (Type)typeofobj);
 				//Console.WriteLine("GetSize(type): {0}",GetSize(typeofobj));
 				Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,count,action);
                 Console.WriteLine(header);

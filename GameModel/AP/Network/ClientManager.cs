@@ -127,7 +127,7 @@ namespace NetLib
 
         public void JoinGame(String GameName)
         {
-            List<byte[]> data = myProtocol.encodeComm(Action.Request, Type.Building,GameName);
+            List<byte[]> data = myProtocol.encodeComm(Action.Request, Type.Building, GameName);
             foreach (Connection c in myConnections)
             {
                     //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
