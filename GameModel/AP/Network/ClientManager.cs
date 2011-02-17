@@ -14,11 +14,10 @@ namespace NetLib
 
 
 
-        public ClientManager(int port, ref GameState State): base(port, ref State)
+        public ClientManager(int port, ref GameState State,IPAddress ip): base(port, ref State)
 		{
 			//set up variables
 
-            String IP = "192.168.105.123";
             TcpClient client = new TcpClient();
             //IPAddress broadcast = IPAddress.Parse("192.168.105.255");
             //IPEndPoint broadcastEP = new IPEndPoint(broadcast,port);
@@ -30,7 +29,7 @@ namespace NetLib
             //if (serverEndPoint == null){
                //server failed to respond. Our trickery failed. Ask for manual intervention
                 //Console.WriteLine("Please enter Lobby IP:");
-             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
+             IPEndPoint serverEndPoint = new IPEndPoint(ip, port);
             //}
 			
 			Console.WriteLine("Waiting for connections...");
@@ -48,23 +47,9 @@ namespace NetLib
 			
 			Console.WriteLine("Creating new game model containing 2 enemies...");
 			Dictionary<String,List<AP.Position>> Model = new Dictionary<String,List<AP.Position>>();
-            //List<AP.Position> myEnemies = new List<AP.Position>();
-            //Model.Add("Enemies",myEnemies);
-			
-            ////create an enemy object to test communications with
-            //AP.Zombie baddie1 = new AP.Zombie(1);
-            //AP.Zombie baddie2 = new AP.Zombie(2);
-            //myEnemies.Add(baddie1);
-            //myEnemies.Add(baddie2);
 
 			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
-			//Send(Model,(UInt32)Action.Create);
-            //
-            //foreach (Connection c in myConnections)
-            //{
-            //    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-            //    c.Write(data);
-            //}
+
 		}
 
 		protected override void HandleIncomingComm(object stream)
@@ -108,7 +93,65 @@ namespace NetLib
 			}
 			
 		}
-		
+        public void ServerHandshake(String Username)
+        {
+            List<byte[]> data = myProtocol.encodeComm(Action.Describe, Type.Player, Username);
+            foreach (Connection c in myConnections)
+            {
+                foreach (NetPackage p in myOutgoing)
+                {
+                    //worker.
+
+                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+                }
+            }
+        }
+
+        public void BecomeHost(String GameName)
+        {
+            List<byte[]> data = myProtocol.encodeComm(Action.Describe, Type.Building, GameName);
+            foreach (Connection c in myConnections)
+            {
+                foreach (NetPackage p in myOutgoing)
+                {
+                    //worker.
+
+                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+                }
+            }
+        }
+
+        public void JoinGame(String GameName)
+        {
+            List<byte[]> data = myProtocol.encodeComm(Action.Create, Type.Building,"");
+            foreach (Connection c in myConnections)
+            {
+                foreach (NetPackage p in myOutgoing)
+                {
+                    //worker.
+
+                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+                }
+            }
+        }
+
+        public void StartGame()
+        {
+            List<byte[]> data = myProtocol.encodeComm(Action.Create, Type.Player, "");
+            foreach (Connection c in myConnections)
+            {
+                foreach (NetPackage p in myOutgoing)
+                {
+                    //worker.
+
+                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+                }
+            }
+        }
 	}
 }
 

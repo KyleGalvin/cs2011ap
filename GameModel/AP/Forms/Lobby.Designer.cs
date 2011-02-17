@@ -31,8 +31,8 @@
             this.btn_Start = new System.Windows.Forms.Button();
             this.lbl_Name = new System.Windows.Forms.Label();
             this.grp_Players = new System.Windows.Forms.GroupBox();
+            this.lst_Players = new System.Windows.Forms.ListBox();
             this.btn_Close = new System.Windows.Forms.Button();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.grp_Players.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,13 +59,22 @@
             // 
             // grp_Players
             // 
-            this.grp_Players.Controls.Add(this.listBox1);
+            this.grp_Players.Controls.Add(this.lst_Players);
             this.grp_Players.Location = new System.Drawing.Point(17, 36);
             this.grp_Players.Name = "grp_Players";
             this.grp_Players.Size = new System.Drawing.Size(214, 299);
             this.grp_Players.TabIndex = 2;
             this.grp_Players.TabStop = false;
             this.grp_Players.Text = "Players Connected";
+            // 
+            // listBox1
+            // 
+            this.lst_Players.FormattingEnabled = true;
+            this.lst_Players.Location = new System.Drawing.Point(6, 19);
+            this.lst_Players.Name = "listBox1";
+            this.lst_Players.Size = new System.Drawing.Size(202, 277);
+            this.lst_Players.TabIndex = 0;
+            this.lst_Players.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // btn_Close
             // 
@@ -77,14 +86,6 @@
             this.btn_Close.Text = "Close Lobby";
             this.btn_Close.UseVisualStyleBackColor = true;
             this.btn_Close.Click += new System.EventHandler(this.btn_Close_Click);
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(6, 19);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(202, 277);
-            this.listBox1.TabIndex = 0;
             // 
             // Lobby
             // 
@@ -112,6 +113,6 @@
         private System.Windows.Forms.Label lbl_Name;
         private System.Windows.Forms.GroupBox grp_Players;
         private System.Windows.Forms.Button btn_Close;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox lst_Players;
     }
 }

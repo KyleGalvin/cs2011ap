@@ -5,14 +5,16 @@ using System.Threading;
 using System.Timers;
 using System.Collections.Generic;
 using AP;
+using System.Windows.Forms;
 
 namespace NetLib
 {
 	public class LobbyManager : NetManager
 	{
 
-        public LobbyManager(int port, ref GameState State): base(port, ref State)
+        public LobbyManager(int port, ref ListBox list): base(port)
         {
+            worker = (PackWorker)new LobbyPackWorker(ref list);
             Connected = true;//Server has nothing to connect to
             Console.WriteLine("Listening for incoming connections...");
             new Thread(new ThreadStart(this.BroadcastListener)).Start();//Alert clients of our presence
@@ -135,7 +137,7 @@ namespace NetLib
 				myConnections.Remove(myConnection);
 			}
 		}
-		
+
 	}
 }
 

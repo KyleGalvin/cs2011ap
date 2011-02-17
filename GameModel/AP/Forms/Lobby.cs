@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using NetLib;
+using AP.Network;
 
 namespace AP.Forms
 {
@@ -16,9 +17,12 @@ namespace AP.Forms
         /// <summary>
         /// This lobby constructor is used when joining the lobby
         /// </summary>
-        public Lobby()
+        public Lobby(Server s)
         {
             InitializeComponent();
+            GameState state = new GameState();
+            clientManager = new ClientManager(9999, ref state, s.ServerIP);
+            btn_Start.Enabled = false;
         }
         /// <summary>
         /// This lobby constructor is used for creating a lobby
@@ -29,7 +33,7 @@ namespace AP.Forms
             var port = 9999;
             InitializeComponent();
             lbl_Name.Text = _Name;
-            //lobbyManager=new LobbyManager(port);
+            lobbyManager=new LobbyManager(port,ref lst_Players);
             
         }
 
@@ -42,6 +46,11 @@ namespace AP.Forms
         {
             //lobbyManager.listener.Close();
             this.Close();
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

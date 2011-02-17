@@ -17,8 +17,9 @@ public abstract class PlayerManager : NetManager
     private Thread broadcastThread;
     private bool TimesUp;
     private List<IPAddress> ServerIps = new List<IPAddress>();
+    public GameState State;
 
-	public PlayerManager(int newPort,  ref GameState StateRef): base(newPort, ref StateRef)
+	public PlayerManager(int newPort,  ref GameState StateRef): base(newPort)
 	{
     }
 
