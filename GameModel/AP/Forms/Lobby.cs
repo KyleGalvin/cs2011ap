@@ -21,7 +21,7 @@ namespace AP.Forms
         {
             InitializeComponent();
             GameState state = new GameState();
-            clientManager = new ClientManager(9999, ref state, s.ServerIP);
+            clientManager = new ClientManager(9999, ref state, s);
             btn_Start.Enabled = false;
         }
         /// <summary>
