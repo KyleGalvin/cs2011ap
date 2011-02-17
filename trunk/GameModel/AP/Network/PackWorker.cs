@@ -15,20 +15,21 @@ namespace NetLib
         {
         }
 
-        public String HandleText(NetPackage pack)
+        public virtual String HandleText(NetPackage pack)
         {
             return "";
         }
 
-        public void HandleCreate(NetPackage pack)
+        public virtual void HandleCreate(NetPackage pack)
         {
         }
 
-        public void HandleRequest(NetPackage pack)
+        public virtual void HandleRequest(NetPackage pack)
         {
+            
         }
 
-        public void HandleDescribe(NetPackage pack)
+        public virtual void HandleDescribe(NetPackage pack)
         {
         }
     }
