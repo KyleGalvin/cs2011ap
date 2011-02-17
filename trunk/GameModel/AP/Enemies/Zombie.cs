@@ -21,7 +21,7 @@ namespace AP
             life = (int)Life.Zombie;
             enemyID = ID;
             speed = (float)0.05;
-            radius = 0.15f;
+            radius = 0.08f;
         }
 
         
@@ -33,29 +33,32 @@ namespace AP
         /// <param name="y">Passed y position determined from AI calulation.</param>
         /// <output>None.</output>
         public override void move( float x, float y )
-        {
-            //kind of unknown what we are gonna do here right now.
-            xPos += x * speed;
-            yPos += y * speed;
+        {            
+            xPos += x * this.speed;
+            yPos += y * this.speed;            
         }
 
         public override void moveTowards(Player target)
         {
             float x = target.xPos - xPos;
             float y = target.yPos - yPos;
+            prevXPos = xPos;
+            prevYPos = yPos;
 
             float len = (float)Math.Sqrt(x * x + y * y);
-            Position moveAwayFrom;
-            if (!Program.collisionAI.checkForCollision(this, out moveAwayFrom))
-                move(x / len, y / len);
+            float moveX;
+            float moveY;
+            if (!Program.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                move(x / len, y / len); //free to move where you want
             else
-            {
-                x = moveAwayFrom.xPos - xPos;
-                y = moveAwayFrom.yPos - yPos;
+            { //standing in something, move away from it
+                x = moveX - xPos;
+                y = moveY - yPos;
 
                 len = (float)Math.Sqrt(x * x + y * y);
                 move(-x / len, -y / len);
             }
+            setAngle();
         }
 
         /// <summary>
@@ -71,11 +74,11 @@ namespace AP
         public override void draw()
         {
             GL.PushMatrix();
-            GL.Translate(xPos, yPos, 0);
+            GL.Translate(xPos, yPos, 0.2f);
+            GL.Rotate(angle - 115, 0, 0, 1);
             GL.Rotate(90, 1.0, 0, 0);
             Program.loadedObjects.DrawObject(drawNumber);
             GL.PopMatrix();
-      
         }
     }
 }
