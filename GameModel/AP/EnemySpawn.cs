@@ -8,18 +8,16 @@ namespace AP
 {
     class EnemySpawn : Position
     {
-        public EnemySpawn(float x, float y,int ID)
+        public EnemySpawn(float x, float y)
         {
             xPos = x;
             yPos = y;
-            enemyID = ID;
         }
 
         public Enemy spawnEnemy(int ID)
         {
             Enemy enemy = new Zombie(ID);
             
-            //Console.WriteLine("Spawning");
             enemy.setPosition(xPos, yPos);
             enemy.draw();
 
