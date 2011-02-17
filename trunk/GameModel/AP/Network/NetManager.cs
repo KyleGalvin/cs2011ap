@@ -31,7 +31,21 @@ namespace NetLib
             myProtocol = new PackageInterpreter();
 			port = newPort;
 		}
-		//Listen for any requests directed at our IP and Port
+
+	    protected NetManager()
+	    {
+	        //throw new NotImplementedException();
+	    }
+
+        //protected NetManager(int newPort)
+        //{
+        //    //throw new NotImplementedException();
+        //    myConnections = new List<Connection>();
+        //    myProtocol = new PackageInterpreter();
+        //    port = newPort;
+        //}
+
+	    //Listen for any requests directed at our IP and Port
 		//respond by accepting connection and requesting one of our own for outgoing data
 		public void Listen()
 		{
