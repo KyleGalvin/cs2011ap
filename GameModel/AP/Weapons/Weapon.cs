@@ -119,9 +119,9 @@ namespace AP
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
                 bulletList.Last().setDirectionByMouse(mouseX, mouseY, screenX, screenY, ref player);
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mouseX, mouseY*1.15f, screenX, screenY, ref player);
+                bulletList.Last().setDirectionByMouse(mouseX, mouseY * 1.15f, screenX, screenY, ref player);
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mouseX, mouseY*0.85f, screenX, screenY, ref player);
+                bulletList.Last().setDirectionByMouse(mouseX, mouseY * 0.85f, screenX, screenY, ref player);
             } else if (rocketEquipped ) {
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
                 bulletList.Last().setDirectionByMouse(mouseX, mouseY, screenX, screenY, ref player);

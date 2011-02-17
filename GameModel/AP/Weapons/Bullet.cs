@@ -11,13 +11,13 @@ namespace AP
     {
         private int lifeTime = 30;
         //private Bullet prevBullet = null;
-        float radius = 0.1f;
         private float direction = 1.0f;
         float xVel = 0;
         float yVel = 0;
 
         public Bullet(Vector3 position, Vector3 velocity)
         {
+            radius = 0.1f;
             this.position = position;
             xPos = position.X;
             yPos = position.Y;
@@ -37,14 +37,14 @@ namespace AP
             GL.Begin(BeginMode.Polygon);
             
             GL.Color3(0.0f, 0.0f, 0.0f);
-            GL.Vertex3(xPos - radius, yPos, 0.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos + radius * 0.7, 0.0f);
-            GL.Vertex3(xPos, yPos + radius, 0.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos + radius * 0.7, 0.0f);
-            GL.Vertex3(xPos + radius, yPos, 0.0f);
-            GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 0.0f);
-            GL.Vertex3(xPos, yPos - radius, 0.0f);
-            GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 0.0f); 
+            GL.Vertex3(xPos - radius, yPos, 0.1f);
+            GL.Vertex3(xPos - radius * 0.7, yPos + radius * 0.7, 0.1f);
+            GL.Vertex3(xPos, yPos + radius, 0.1f);
+            GL.Vertex3(xPos + radius * 0.7, yPos + radius * 0.7, 0.1f);
+            GL.Vertex3(xPos + radius, yPos, 0.1f);
+            GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 0.1f);
+            GL.Vertex3(xPos, yPos - radius, 0.1f);
+            GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 0.1f); 
             GL.End();
 
             //if (prevBullet != null)
