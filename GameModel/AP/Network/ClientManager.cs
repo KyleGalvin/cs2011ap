@@ -18,7 +18,7 @@ namespace NetLib
         public ClientManager(int port, ref GameState State,Server serv): base(port, ref State)
 		{
 			//set up variables
-
+            IsLobby = false;
             TcpClient client = new TcpClient();
             //IPAddress broadcast = IPAddress.Parse("192.168.105.255");
             //IPEndPoint broadcastEP = new IPEndPoint(broadcast,port);
@@ -44,7 +44,8 @@ namespace NetLib
 			NetworkStream clientStream = client.GetStream();
 			
 			Console.WriteLine("Creating listener thread for reading server communications...");
-			new Thread(new ThreadStart(this.Listen)).Start();
+			Thread T = new Thread(Listen);
+            T.Start(false);
 			
 			Console.WriteLine("Creating new game model containing 2 enemies...");
 			Dictionary<String,List<AP.Position>> Model = new Dictionary<String,List<AP.Position>>();
@@ -129,13 +130,9 @@ namespace NetLib
             List<byte[]> data = myProtocol.encodeComm(Action.Request, Type.Building,GameName);
             foreach (Connection c in myConnections)
             {
-                foreach (NetPackage p in myOutgoing)
-                {
-                   
-
                     //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
                     c.Write(data);
-                }
+
             }
         }
 

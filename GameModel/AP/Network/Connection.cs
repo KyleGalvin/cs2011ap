@@ -9,7 +9,7 @@ namespace NetLib
 	{
 		//private PackageReader myNetReader;
 		//private PackageWriter myNetWriter;
-        private StreamHandler myStream;
+        public StreamHandler myStream;
 		private TcpClient myClient;
         public int playerUID;
         public string playerName;
