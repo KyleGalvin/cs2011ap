@@ -48,6 +48,7 @@ namespace NetLib
         ///Lobby Communication Protocols
         public List<byte[]> encodeComm(Action a, Type t, String Comm)
         {
+            Console.WriteLine("Encoding data:"+a.ToString()+" "+t.ToString()+" "+Comm);
             List<byte[]> result = new List<byte[]>();
 
             //how many 32 bit network numbers do we need to contain the string?
@@ -81,6 +82,7 @@ namespace NetLib
 
                     SegmentLen++;
                 }
+                Console.WriteLine("Segment:"+segment.ToString());
                 result.Add(BitConverter.GetBytes(segment));
                 segment = 0;
             }
