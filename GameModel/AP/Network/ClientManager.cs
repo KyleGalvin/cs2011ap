@@ -45,7 +45,7 @@ namespace NetLib
 			
 			Console.WriteLine("Creating listener thread for reading server communications...");
 			Thread T = new Thread(Listen);
-            T.Start(false);
+            T.Start();
 			
 			Console.WriteLine("Creating new game model containing 2 enemies...");
 			Dictionary<String,List<AP.Position>> Model = new Dictionary<String,List<AP.Position>>();

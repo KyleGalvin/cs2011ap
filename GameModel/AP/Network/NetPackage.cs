@@ -43,7 +43,7 @@ namespace NetLib
                 }
                 else
                 {
-                    sizeofobj = myInterpreter.GetTypeSize((Type)(header & 0x01000000));
+                    sizeofobj = myInterpreter.GetTypeSize((Type)(0x01000000));
                 }
                 count = myInterpreter.GetCount(header);
 				//Console.WriteLine("GetSize(type): {0}",GetSize(typeofobj));
@@ -53,7 +53,7 @@ namespace NetLib
 			else
 			{
                 Console.WriteLine("Data {0} of {1}: {2}", body.Count, ((myInterpreter.GetCount(header)*sizeofobj) + 1),BitConverter.ToString(body[body.Count-1]));
-				if(body.Count == (myInterpreter.GetCount(header)*sizeofobj)+1)
+				if(body.Count == (myInterpreter.GetCount(header)*sizeofobj))
 				{
 					complete = true;
 				}
