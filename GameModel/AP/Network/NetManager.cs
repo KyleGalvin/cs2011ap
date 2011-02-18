@@ -128,7 +128,6 @@ namespace NetLib
 		//communication is handled differently in the lobby/client children classes
 		protected abstract void HandleIncomingComm(Object remoteEnd);
 
-        public abstract void SyncState();
 	}
 	
 }
