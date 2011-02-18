@@ -62,7 +62,7 @@ namespace AP
         protected override void OnLoad(EventArgs e)
         {
             // Create 
-            player = new Player();
+            
             gameState = new GameState();
             currentLevel = new CreateLevel(1);
             currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
@@ -112,10 +112,13 @@ namespace AP
 
             if (val == "s")
             {
+                player = new Player();
+                gameState.Players.Add(player);
                 return new NetLib.HostManager(9999,ref s);
             }
             else
             {
+                player = new Player(new Vector3(5,5,0), 0);
                 Console.WriteLine("enter server IP:");
                 val = Console.ReadLine();
                 Network.Server serv = new Network.Server("Serv",IPAddress.Parse(val));
@@ -123,7 +126,6 @@ namespace AP
                 while (nman.myConnections.Count == 0){}
                 nman.Connected = true;
                 return nman;
-                
             }
         }
 
@@ -256,6 +258,7 @@ namespace AP
         /// <param name="e">Contains timing information.</param>
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            //Console.WriteLine(gameState.Players.Count);
             base.OnRenderFrame(e);
             int i = 0;
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -266,7 +269,13 @@ namespace AP
                                               OpenTK.Vector3d.Zero, up);
             GL.LoadMatrix(ref camera);
 
-            player.draw();
+            int h = 0;
+            foreach (Player p in gameState.Players)
+            {
+                Console.WriteLine("Player " + h + ": xpos: " + p.xPos + " ypos: " + p.yPos);
+                p.draw();
+                h++;
+            }
              
             GL.Translate(-player.xPos, -player.yPos, 0);
 
