@@ -121,6 +121,7 @@ namespace AP
                 Network.Server serv = new Network.Server("Serv",IPAddress.Parse(val));
                 NetLib.NetManager nman = new NetLib.ClientManager(9999, ref s,serv);
                 while (nman.myConnections.Count == 0){}
+                nman.Connected = true;
                 return nman;
                 
             }
