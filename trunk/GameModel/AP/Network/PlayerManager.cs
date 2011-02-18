@@ -22,6 +22,7 @@ public abstract class PlayerManager : NetManager
 	public PlayerManager(int newPort,  ref GameState StateRef): base(newPort)
 	{
         worker = new GamePackWorker(ref StateRef);
+        State = StateRef;
     }
 
         //automatically find server on subnet
