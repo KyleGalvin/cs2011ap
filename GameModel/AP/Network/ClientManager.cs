@@ -45,7 +45,7 @@ namespace NetLib
             JoinGame(serv.Name);
 		}
 
-        protected void SyncState()
+        protected override void SyncState()
         {
             SendObjs<AP.Player>(State.Players);
         }
