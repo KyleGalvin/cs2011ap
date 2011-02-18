@@ -8,6 +8,7 @@ using OpenTK;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
 using System.Windows.Forms;
+using System.Net;
 
 namespace AP
 {
@@ -97,6 +98,31 @@ namespace AP
             loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
             Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
             player.modelNumber = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
+
+            NetLib.NetManager nman = DirtyNetHack(ref gameState);
+            while (!nman.Connected) { }
+        }
+
+        public NetLib.NetManager DirtyNetHack(ref GameState s)
+        {
+            //create client and/or server
+            Console.WriteLine("[s]erver or [c]lient");
+            string val = Console.ReadLine();
+
+            if (val == "s")
+            {
+                return new NetLib.HostManager(9999,ref s);
+            }
+            else
+            {
+                Console.WriteLine("enter server IP:");
+                val = Console.ReadLine();
+                Network.Server serv = new Network.Server("Serv",IPAddress.Parse(val));
+                NetLib.NetManager nman = new NetLib.ClientManager(9999, ref s,serv);
+                while (nman.myConnections.Count == 0){}
+                return nman;
+                
+            }
         }
 
         /// <summary>
