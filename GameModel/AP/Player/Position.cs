@@ -33,7 +33,13 @@ namespace AP
             prevYPos = yPos - prevYPos;
             angle = (int)(Math.Atan2(prevYPos, prevXPos) * RAD_TO_DEG);
         }
-
+        public void Update(byte[] _xPos, byte[] _yPos, byte[] _xVel, byte[] _yVel)
+        {
+            xPos = (float)BitConverter.ToDouble(_xPos, 0);
+            yPos = (float)BitConverter.ToDouble(_yPos, 0);
+            xVel = (float)BitConverter.ToDouble(_xVel, 0);
+            yVel = (float)BitConverter.ToDouble(_yVel, 0);
+        }
         /*public void Dispose()
         {
             Dispose(true);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AP;
 namespace NetLib
 {
@@ -16,7 +17,7 @@ namespace NetLib
             // TODO: Add constructor logic here
             //
         }
-        public String HandleText(NetPackage pack)
+        public override String HandleText(NetPackage pack)
         {
             string result = "";
             for (int i = 0; i < pack.sizeofobj; )
@@ -26,15 +27,13 @@ namespace NetLib
             return result;
         }
 
-        public void HandleDescribe(NetPackage pack)
+        public override void HandleDescribe(NetPackage pack)
         {
             BitConverter.ToInt32(pack.body[0], 0);
         }
 
-        public void HandleCreate(NetPackage pack)
+        public override void HandleCreate(NetPackage pack)
         {
-
-
             UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj << 24));
 
             //i=1 initially since the header is not data
@@ -55,13 +54,19 @@ namespace NetLib
                     State.Players.AddRange(result);
                     Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
                 }
+                else if ((Type)t == Type.Bullet)
+                {
+                    List<AP.Player> result = new List<AP.Player>();
+                    result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                    State.Players.AddRange(result);
+                    Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
+                }
             }
 
         }
 
-        public int HandleRequest(NetPackage pack)
+        public override void HandleRequest(NetPackage pack)
         {
-            return 0;
         }
 
         public List<AP.Position> HandleUpdate(NetPackage pack)
@@ -69,22 +74,32 @@ namespace NetLib
             List<AP.Position> result = new List<AP.Position>();
 
             UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj << 24));
-
             //i=1 initially since the header is not data
             for (int i = 0; i < pack.count; i++)
             {
+                var UID = BitConverter.ToUInt32(pack.body[0], 0);
                 UInt32 t = pack.typeofobj << 24;
                 if ((Type)t == Type.AI)
                 {
-                    result.Add(CreateAI(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                    State.Enemies.Where(y => y.UID == UID).First().Update(
+                        pack.body[1], pack.body[2], pack.body[3], pack.body[4]); 
                 }
                 else if ((Type)t == Type.Player)
                 {
-                    result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                    //todo TEST!! This will probably break
+                    State.Players.Where(y => y.UID == UID ).First().Update(
+                        pack.body[1], pack.body[2], pack.body[3], pack.body[4]);
+                }
+                else if ((Type)t == Type.Bullet)
+                {
+                    //todo TEST!! This will probably break
+                    State.Bullets.Where(y => y.UID == UID).First().Update(
+                        pack.body[1], pack.body[2], pack.body[3], pack.body[4]);
                 }
             }
             Console.WriteLine("Created {0} objects from remote network command!", result.Count);
             return result;
+        
         }
 
         public AP.Enemy CreateAI(List<byte[]> data)
@@ -93,6 +108,10 @@ namespace NetLib
         }
 
         public AP.Player CreatePlayer(List<byte[]> data)
+        {
+            return new AP.Player(new OpenTK.Vector3(0, 0, 0), BitConverter.ToInt32(data[0], 0));
+        }
+        public AP.Player CreateBullet(List<byte[]> data)
         {
             return new AP.Player(new OpenTK.Vector3(0, 0, 0), BitConverter.ToInt32(data[0], 0));
         }

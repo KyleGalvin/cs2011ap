@@ -38,6 +38,8 @@ namespace NetLib
 				return 0x5;
 			case Type.Building:
 				return 0x5;
+            case Type.Bullet:
+                return 0x5;
             case Type.Text:
                 return 0x1;
 			default:
@@ -116,25 +118,31 @@ namespace NetLib
             {
                 case Type.AI:
                     AP.Enemy e = (AP.Enemy)(object)obj;
-                    result.Add(BitConverter.GetBytes((int)e.UID));
-                    result.Add(BitConverter.GetBytes((int)e.xPos));
-                    result.Add(BitConverter.GetBytes((int)e.yPos));
-                    result.Add(BitConverter.GetBytes((int)e.xVel));
-                    result.Add(BitConverter.GetBytes((int)e.yVel));
+                    result.Add(BitConverter.GetBytes(e.UID));
+                    result.Add(BitConverter.GetBytes(e.xPos));
+                    result.Add(BitConverter.GetBytes(e.yPos));
+                    result.Add(BitConverter.GetBytes(e.xVel));
+                    result.Add(BitConverter.GetBytes(e.yVel));
                     break;
                 case Type.Building:
                     break;
                 case Type.Bullet:
+                    AP.Bullet b = (AP.Bullet)(object)obj;
+                    result.Add(BitConverter.GetBytes(b.UID));
+                    result.Add(BitConverter.GetBytes(b.xPos));
+                    result.Add(BitConverter.GetBytes(b.yPos));
+                    result.Add(BitConverter.GetBytes(b.xVel));
+                    result.Add(BitConverter.GetBytes(b.yVel));
                     break;
                 case Type.Explosion:
                     break;
                 case Type.Player:
                     AP.Player p = (AP.Player)(object)obj;
-                    result.Add(BitConverter.GetBytes((int)p.UID));
-                    result.Add(BitConverter.GetBytes((int)p.xPos));
-                    result.Add(BitConverter.GetBytes((int)p.yPos));
-                    result.Add(BitConverter.GetBytes((int)p.xVel));
-                    result.Add(BitConverter.GetBytes((int)p.yVel));
+                    result.Add(BitConverter.GetBytes(p.UID));
+                    result.Add(BitConverter.GetBytes(p.xPos));
+                    result.Add(BitConverter.GetBytes(p.yPos));
+                    result.Add(BitConverter.GetBytes(p.xVel));
+                    result.Add(BitConverter.GetBytes(p.yVel));
                     break;
                 case Type.Powerup:
                     break;

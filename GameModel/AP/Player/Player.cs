@@ -12,7 +12,7 @@ namespace AP
         
         private int playerId;
         public int modelNumber;
-        
+        public string playerName;
         public Weapon weapons = new Weapon();
 
         public Player( Vector3 position, int ID )
@@ -41,7 +41,7 @@ namespace AP
         {
             playerId = ID;
         }
-
+        
         
 
         public void makeMove( int x, int y)
