@@ -117,7 +117,7 @@ namespace NetLib
 
         public void SendObjs<T>(List<T> Objs)
         {
-            List<byte[]> data = myProtocol.encodeObjs(Action.Create, Type.AI, Objs);
+            List<byte[]> data = myProtocol.encodeObjs(Action.Create, Type.Player, Objs);
             foreach (Connection c in myConnections)
             {
                 //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
