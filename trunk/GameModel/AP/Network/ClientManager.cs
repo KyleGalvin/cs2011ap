@@ -20,19 +20,10 @@ namespace NetLib
 			//set up variables
             IsLobby = false;
             TcpClient client = new TcpClient();
-            //IPAddress broadcast = IPAddress.Parse("192.168.105.255");
-            //IPEndPoint broadcastEP = new IPEndPoint(broadcast,port);
-            //IPEndPoint lep = new IPEndPoint(IPAddress.Any,port);
-			
-            ////Try to connect to server via broadcast
-             //serverEndPoint = FindServer(port,broadcastEP);
-			
-            //if (serverEndPoint == null){
-               //server failed to respond. Our trickery failed. Ask for manual intervention
-                //Console.WriteLine("Please enter Lobby IP:");
-             IPEndPoint serverEndPoint = new IPEndPoint(serv.ServerIP, port);
-            //}
-			
+
+            IPEndPoint serverEndPoint = new IPEndPoint(serv.ServerIP, port);
+
+            Console.WriteLine("Port: {0} IP: {1}",port,serv.ServerIP);
 			Console.WriteLine("Waiting for connections...");
 			client.Connect(serverEndPoint);
 			
