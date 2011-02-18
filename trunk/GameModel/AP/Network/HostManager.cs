@@ -18,7 +18,7 @@ namespace NetLib
         {
         }
 
-        protected override void SyncState()
+        public override void SyncState()
         {
                 SendObjs<AP.Player>(State.Players);
         }
