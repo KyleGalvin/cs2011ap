@@ -111,5 +111,7 @@ public abstract class PlayerManager : NetManager
             Console.WriteLine("Listening Stopped (Timeout Reached)");
             TimesUp = true;
         }
+
+        public abstract void SyncState();
 	}
 }
