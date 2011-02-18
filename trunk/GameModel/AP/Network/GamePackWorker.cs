@@ -109,7 +109,7 @@ namespace NetLib
 
         public AP.Player CreatePlayer(List<byte[]> data)
         {
-            return new AP.Player(new OpenTK.Vector3(0, 0, 0), BitConverter.ToInt32(data[0], 0));
+            return new AP.Player(new OpenTK.Vector3(5,5, 0), BitConverter.ToInt32(data[0], 0));
         }
         public AP.Player CreateBullet(List<byte[]> data)
         {
