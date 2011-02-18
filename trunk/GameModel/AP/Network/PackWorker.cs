@@ -17,7 +17,7 @@ namespace NetLib
 
         public virtual String HandleText(NetPackage pack)
         {
-            return "";
+            return String.Empty;
         }
 
         public virtual void HandleCreate(NetPackage pack)

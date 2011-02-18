@@ -26,6 +26,8 @@ namespace NetLib
             timer.Enabled = true;
         }
 
+
+
         public void RespondToClients(int port, IPEndPoint broadcastEP)
         {
             
