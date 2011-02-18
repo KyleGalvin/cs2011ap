@@ -9,7 +9,7 @@ namespace NetLib
 {
 	public abstract class NetManager
 	{
-        static public GameState State = new GameState();
+        static public GameState State;
 		protected Thread respondThread;
 		protected int port;
         protected bool IsLobby;
