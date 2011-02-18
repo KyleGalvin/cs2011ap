@@ -8,6 +8,10 @@ namespace NetLib
 {
     public class HostManager : PlayerManager
     {
+
+        //HACK todo
+        int i = 0;
+
         public HostManager(int port, ref GameState State): base(port, ref State)
         {
             new Thread(new ThreadStart(this.Listen)).Start();//Collect clients in our connection pool
@@ -55,7 +59,15 @@ namespace NetLib
 
         public override void SyncState()
         {
-                SendObjs<AP.Player>(State.Players);
+            if (i == 0)
+            {
+                SendObjs<AP.Player>(Action.Create, State.Players);
+            }
+            else
+            {
+                SendObjs<AP.Player>(Action.Update, State.Players);
+            }
+               
         }
         //ConnectGame(IPEndPoint host)
         //{

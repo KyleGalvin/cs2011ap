@@ -13,7 +13,8 @@ namespace NetLib
 	public class ClientManager : PlayerManager
 	{
 
-
+        //HACK todo
+        int i = 0;
 
         public ClientManager(int port, ref GameState State,Server serv): base(port, ref State)
 		{
@@ -42,7 +43,14 @@ namespace NetLib
 
         public override void SyncState()
         {
-            SendObjs<AP.Player>(State.Players);
+            if (i == 0)
+            {
+                SendObjs<AP.Player>(Action.Create, State.Players);
+            }
+            else
+            {
+                SendObjs<AP.Player>(Action.Update, State.Players);
+            }
         }
 
 		protected override void HandleIncomingComm(object conn)
