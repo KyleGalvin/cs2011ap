@@ -3,15 +3,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{53AD52AF-F8AF-4DF6-880A-BEEDDD323E48}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AP</RootNamespace>
     <AssemblyName>AP</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
@@ -120,7 +121,6 @@
     <Compile Include="Network\PackageInterpreter.cs" />
     <Compile Include="Network\PackWorker.cs" />
     <Compile Include="Network\PlayerManager.cs" />
-    <Compile Include="Network\Server.cs" />
     <Compile Include="Network\StreamHandler.cs" />
     <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Weapons\Rocket.cs" />
@@ -128,6 +128,7 @@
     <Compile Include="Enemies\StationaryBoss.cs" />
     <Compile Include="Controls\Controls.cs" />
     <Compile Include="Weapons\Bullet.cs" />
+    <Compile Include="Network\Server.cs" />
     <Compile Include="Weapons\Shotgun.cs" />
     <Compile Include="Weapons\Weapon.cs" />
     <Compile Include="Enemies\Enemy.cs" />
@@ -138,6 +139,10 @@
     <Compile Include="Enemies\Zombie.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Graphics\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
     <None Include="AP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -209,9 +214,6 @@
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Graphics\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
