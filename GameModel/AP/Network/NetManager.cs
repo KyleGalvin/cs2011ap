@@ -9,6 +9,7 @@ namespace NetLib
 {
 	public abstract class NetManager
 	{
+        protected TcpClient client;
         static public GameState State;
 		protected Thread respondThread;
 		protected int port;
@@ -56,7 +57,7 @@ namespace NetLib
 			TcpListener myListener = new TcpListener(lep);
 			
 			myListener.Start();
-			TcpClient client = new TcpClient();
+			
 			
 			while (true)
 			{
@@ -71,7 +72,7 @@ namespace NetLib
 				{
 					myConnections.Add(new Connection(client));
 				}
-
+                
                 Connection lastCon = myConnections[myConnections.Count - 1];
                 lastCon.myStream.myPackage.isLobby = IsLobby;
 
@@ -115,9 +116,9 @@ namespace NetLib
             }
         }
 
-        public void SendObjs<T>(List<T> Objs)
+        public void SendObjs<T>(Action a,List<T> Objs)
         {
-            List<byte[]> data = myProtocol.encodeObjs(Action.Create, Type.Player, Objs);
+            List<byte[]> data = myProtocol.encodeObjs(a, Type.Player, Objs);
             foreach (Connection c in myConnections)
             {
                 //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );

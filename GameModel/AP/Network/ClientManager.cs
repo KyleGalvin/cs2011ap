@@ -19,7 +19,7 @@ namespace NetLib
 		{
 			//set up variables
             IsLobby = false;
-            TcpClient client = new TcpClient();
+            client = new TcpClient();
 
             IPEndPoint serverEndPoint = new IPEndPoint(serv.ServerIP, port);
 
@@ -35,13 +35,8 @@ namespace NetLib
 			NetworkStream clientStream = client.GetStream();
 			
 			Console.WriteLine("Creating listener thread for reading server communications...");
-			Thread T = new Thread(Listen);
-            T.Start();
-			
-			Console.WriteLine("Creating new game model containing 2 enemies...");
-			Dictionary<String,List<AP.Position>> Model = new Dictionary<String,List<AP.Position>>();
-
-			Console.WriteLine("Sending model to server. Action = Create for all 2 objects");
+            Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
+            clientThread.Start(myConnections[(myConnections.Count - 1)]);
             JoinGame(serv.Name);
 		}
 
@@ -50,47 +45,46 @@ namespace NetLib
             SendObjs<AP.Player>(State.Players);
         }
 
-		protected override void HandleIncomingComm(object stream)
+		protected override void HandleIncomingComm(object conn)
 		{
-			NetworkStream clientStream = (NetworkStream)stream;
 
-			Console.WriteLine("Waiting for incoming messages");
-				
-			byte[] message = new byte[4];
-			
-			List<byte[]> data = new List<byte[]>();
-			int bytesRead;
-			
-			while (true)
-			{
-				bytesRead = 0;
-			
-			    try
-			    {
-					//blocks until a client sends a message
-					bytesRead += clientStream.Read(message, 0, 4);
-					
-			    }
-			    catch
-			    {
-					//a socket error has occured
-					break;
-			    }
-			
-			    if (bytesRead == 0)
-				{
-					//the client has disconnected from the server
-					Console.WriteLine("Disconnected.");
-					break;
-				}
-				data.Add(message);
-				
-				//we read 32 bits at a time. This is a single float, a Uint32, or 4 chars
-				var  encoding=new UTF8Encoding();
-				Console.WriteLine("Message: {0}",encoding.GetString(message));
-			}
+            Connection myConnection = (Connection)conn;
+            NetPackage pack = new NetPackage();
+
+            client = myConnection.GetClient();
+            Console.WriteLine("client {0} has connected.", client.Client.RemoteEndPoint);
+
+            while (true)
+            {
+                Console.WriteLine("Size of game state: {0}", State.Enemies.Count + State.Players.Count);
+                try
+                {
+                    //read package data
+                    Console.WriteLine("attempt to read pack:");
+                    pack = myConnection.ReadPackage();
+                    Console.WriteLine("Package recieved!");
+                }
+                catch
+                {
+                    //a socket error has occured
+                    break;
+                }
+
+                //if (bytesRead == 0)//nothing was read from socket
+                //{
+                //	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
+                //	break;
+                //}
+                packetSwitcher(pack);
+            }
+
+            lock (this)
+            {
+                myConnections.Remove(myConnection);
+            }
 			
 		}
+
         public void ServerHandshake(String Username)
         {
             List<byte[]> data = myProtocol.encodeComm(Action.Describe, Type.Player, Username);
