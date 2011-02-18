@@ -101,6 +101,7 @@ namespace AP
 
             NetLib.NetManager nman = DirtyNetHack(ref gameState);
             while (!nman.Connected) { }
+            Console.WriteLine("Connected!");
         }
 
         public NetLib.NetManager DirtyNetHack(ref GameState s)
