@@ -18,6 +18,10 @@ namespace NetLib
         {
         }
 
+        protected void SyncState()
+        {
+                SendObjs<AP.Player>(State.Players);
+        }
         //ConnectGame(IPEndPoint host)
         //{
         //}
