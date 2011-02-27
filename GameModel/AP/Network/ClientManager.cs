@@ -12,10 +12,21 @@ namespace NetLib
 {
 	public class ClientManager : PlayerManager
 	{
+		#region Fields (1) 
 
         //HACK todo
         int i = 0;
 
+		#endregion Fields 
+
+		#region Constructors (1) 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClientManager"/> class.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        /// <param name="State">The state.</param>
+        /// <param name="serv">The server.</param>
         public ClientManager(int port, ref GameState State,Server serv): base(port, ref State)
 		{
 			//set up variables
@@ -41,6 +52,86 @@ namespace NetLib
             JoinGame(serv.Name);
 		}
 
+		#endregion Constructors 
+
+		#region Methods (6) 
+
+		// Public Methods (5) 
+
+        /// <summary>
+        /// Becomes the host.
+        /// </summary>
+        /// <param name="GameName">Name of the game.</param>
+        public void BecomeHost(String GameName)
+        {
+            List<byte[]> data = myProtocol.encodeComm(Action.Describe, Type.Building, GameName);
+            foreach (Connection c in myConnections)
+            {
+                foreach (NetPackage p in myOutgoing)
+                {
+                    //worker.
+
+                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Joins the game.
+        /// </summary>
+        /// <param name="GameName">Name of the game.</param>
+        public void JoinGame(String GameName)
+        {
+            List<byte[]> data = myProtocol.encodeComm(Action.Request, Type.Building, GameName);
+            foreach (Connection c in myConnections)
+            {
+                    Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+
+            }
+        }
+
+        /// <summary>
+        /// Servers the handshake.
+        /// </summary>
+        /// <param name="Username">The username.</param>
+        public void ServerHandshake(String Username)
+        {
+            List<byte[]> data = myProtocol.encodeComm(Action.Describe, Type.Player, Username);
+            foreach (Connection c in myConnections)
+            {
+                foreach (NetPackage p in myOutgoing)
+                {
+                    //worker.
+
+                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Starts the game.
+        /// </summary>
+        public void StartGame()
+        {
+            List<byte[]> data = myProtocol.encodeComm(Action.Create, Type.Player, "");
+            foreach (Connection c in myConnections)
+            {
+                foreach (NetPackage p in myOutgoing)
+                {
+                    //worker.
+
+                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
+                    c.Write(data);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Syncs the state.
+        /// </summary>
         public override void SyncState()
         {
             if (i == 0)
@@ -52,7 +143,12 @@ namespace NetLib
                 SendObjs<AP.Player>(Action.Update, State.Players);
             }
         }
+		// Protected Methods (1) 
 
+        /// <summary>
+        /// Handles the incoming comm.
+        /// </summary>
+        /// <param name="conn">The conn.</param>
 		protected override void HandleIncomingComm(object conn)
 		{
 
@@ -93,61 +189,7 @@ namespace NetLib
 			
 		}
 
-        public void ServerHandshake(String Username)
-        {
-            List<byte[]> data = myProtocol.encodeComm(Action.Describe, Type.Player, Username);
-            foreach (Connection c in myConnections)
-            {
-                foreach (NetPackage p in myOutgoing)
-                {
-                    //worker.
-
-                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
-                }
-            }
-        }
-
-        public void BecomeHost(String GameName)
-        {
-            List<byte[]> data = myProtocol.encodeComm(Action.Describe, Type.Building, GameName);
-            foreach (Connection c in myConnections)
-            {
-                foreach (NetPackage p in myOutgoing)
-                {
-                    //worker.
-
-                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
-                }
-            }
-        }
-
-        public void JoinGame(String GameName)
-        {
-            List<byte[]> data = myProtocol.encodeComm(Action.Request, Type.Building, GameName);
-            foreach (Connection c in myConnections)
-            {
-                    Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
-
-            }
-        }
-
-        public void StartGame()
-        {
-            List<byte[]> data = myProtocol.encodeComm(Action.Create, Type.Player, "");
-            foreach (Connection c in myConnections)
-            {
-                foreach (NetPackage p in myOutgoing)
-                {
-                    //worker.
-
-                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
-                }
-            }
-        }
+		#endregion Methods 
 	}
 }
 

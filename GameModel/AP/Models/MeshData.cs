@@ -16,10 +16,16 @@ namespace AP
     // XXX: Sources: http://www.opentk.com/files/ObjMeshLoader.cs, OOGL (MS3D), Icarus (Colladia)
     public class MeshData
     {
-        public Vector33[] Vertices;
-        public Vector22[] TexCoords;
+		#region Fields (4) 
+
         public Vector33[] Normals;
+        public Vector22[] TexCoords;
         public Tri[] Tris;
+        public Vector33[] Vertices;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
 
         public MeshData(Vector33[] vert, Vector33[] norm, Vector22[] tex, Tri[] tri)
         {
@@ -31,17 +37,31 @@ namespace AP
             Verify();
         }
 
-        public double[] VertexArray()
-        {
-            double[] verts = new double[Vertices.Length * 3];
-            for (int i = 0; i < Vertices.Length; i++)
-            {
-                verts[i * 3] = Vertices[i].X;
-                verts[i * 3 + 1] = Vertices[i].Y;
-                verts[i * 3 + 2] = Vertices[i].Z;
-            }
+		#endregion Constructors 
 
-            return verts;
+		#region Methods (8) 
+
+		// Public Methods (7) 
+
+        // XXX: Might technically be incorrect, since a (malformed) file could have vertices
+        // that aren't actually in any face.
+        // XXX: Don't take the names of the out parameters too literally...
+        public void Dimensions(out double width, out double length, out double height)
+        {
+            double maxx, minx, maxy, miny, maxz, minz;
+            maxx = maxy = maxz = minx = miny = minz = 0;
+            foreach (Vector33 vert in Vertices)
+            {
+                if (vert.X > maxx) maxx = vert.X;
+                if (vert.Y > maxy) maxy = vert.Y;
+                if (vert.Z > maxz) maxz = vert.Z;
+                if (vert.X < minx) minx = vert.X;
+                if (vert.Y < miny) miny = vert.Y;
+                if (vert.Z < minz) minz = vert.Z;
+            }
+            width = maxx - minx;
+            length = maxy - miny;
+            height = maxz - minz;
         }
 
         public double[] NormalArray()
@@ -56,49 +76,7 @@ namespace AP
 
             return norms;
         }
-        public double[] TexcoordArray()
-        {
-            double[] tcs = new double[TexCoords.Length * 2];
-            for (int i = 0; i < TexCoords.Length; i++)
-            {
-                tcs[i * 3] = TexCoords[i].X;
-                tcs[i * 3 + 1] = TexCoords[i].Y;
-            }
 
-            return tcs;
-        }
-
-        /*
-        public void IndexArrays(out int[] verts, out int[] norms, out int[] texcoords) {
-            List<int> v = new List<int>();
-            List<int> n = new List<int>();
-            List<int> t = new List<int>();
-            foreach(Face f in Faces) {
-                foreach(Point p in f.Points) {
-                    v.Add(p.Vertex);
-                    n.Add(p.Normal);
-                    t.Add(p.TexCoord);
-                }
-            }
-            verts = v.ToArray();
-            norms = n.ToArray();
-            texcoords = t.ToArray();
-        }
-        */
-
-
-
-        private Point[] Points()
-        {
-            List<Point> points = new List<Point>();
-            foreach (Tri t in Tris)
-            {
-                points.Add(t.P1);
-                points.Add(t.P2);
-                points.Add(t.P3);
-            }
-            return points.ToArray();
-        }
         // OpenGL's vertex buffers use the same index to refer to vertices, normals and floats,
         // and just duplicate data as necessary.  So, we do the same.
         // XXX: This... may or may not be correct, and is certainly not efficient.
@@ -129,6 +107,17 @@ namespace AP
             }
         }
 
+        public double[] TexcoordArray()
+        {
+            double[] tcs = new double[TexCoords.Length * 2];
+            for (int i = 0; i < TexCoords.Length; i++)
+            {
+                tcs[i * 3] = TexCoords[i].X;
+                tcs[i * 3 + 1] = TexCoords[i].Y;
+            }
+
+            return tcs;
+        }
 
         public override string ToString()
         {
@@ -157,27 +146,6 @@ namespace AP
             return s.ToString();
         }
 
-        // XXX: Might technically be incorrect, since a (malformed) file could have vertices
-        // that aren't actually in any face.
-        // XXX: Don't take the names of the out parameters too literally...
-        public void Dimensions(out double width, out double length, out double height)
-        {
-            double maxx, minx, maxy, miny, maxz, minz;
-            maxx = maxy = maxz = minx = miny = minz = 0;
-            foreach (Vector33 vert in Vertices)
-            {
-                if (vert.X > maxx) maxx = vert.X;
-                if (vert.Y > maxy) maxy = vert.Y;
-                if (vert.Z > maxz) maxz = vert.Z;
-                if (vert.X < minx) minx = vert.X;
-                if (vert.Y < miny) miny = vert.Y;
-                if (vert.Z < minz) minz = vert.Z;
-            }
-            width = maxx - minx;
-            length = maxy - miny;
-            height = maxz - minz;
-        }
-
         public void Verify()
         {
             foreach (Tri t in Tris)
@@ -202,39 +170,107 @@ namespace AP
                 }
             }
         }
-    }
 
+        public double[] VertexArray()
+        {
+            double[] verts = new double[Vertices.Length * 3];
+            for (int i = 0; i < Vertices.Length; i++)
+            {
+                verts[i * 3] = Vertices[i].X;
+                verts[i * 3 + 1] = Vertices[i].Y;
+                verts[i * 3 + 2] = Vertices[i].Z;
+            }
+
+            return verts;
+        }
+		// Private Methods (1) 
+
+        /*
+        public void IndexArrays(out int[] verts, out int[] norms, out int[] texcoords) {
+            List<int> v = new List<int>();
+            List<int> n = new List<int>();
+            List<int> t = new List<int>();
+            foreach(Face f in Faces) {
+                foreach(Point p in f.Points) {
+                    v.Add(p.Vertex);
+                    n.Add(p.Normal);
+                    t.Add(p.TexCoord);
+                }
+            }
+            verts = v.ToArray();
+            norms = n.ToArray();
+            texcoords = t.ToArray();
+        }
+        */
+        private Point[] Points()
+        {
+            List<Point> points = new List<Point>();
+            foreach (Tri t in Tris)
+            {
+                points.Add(t.P1);
+                points.Add(t.P2);
+                points.Add(t.P3);
+            }
+            return points.ToArray();
+        }
+
+		#endregion Methods 
+    }
     public struct Vector22
     {
+		#region Data Members (2) 
+
         public double X;
         public double Y;
+
+		#endregion Data Members 
+
+		#region Methods (2) 
+
+        public override string ToString() { return String.Format("<{0},{1}>", X, Y); }
+
         public Vector22(double x, double y)
         {
             X = x;
             Y = y;
         }
-        public override string ToString() { return String.Format("<{0},{1}>", X, Y); }
-    }
 
+		#endregion Methods 
+    }
     public struct Vector33
     {
+		#region Data Members (3) 
+
         public double X;
         public double Y;
         public double Z;
+
+		#endregion Data Members 
+
+		#region Methods (2) 
+
+        public override string ToString() { return String.Format("<{0},{1},{2}>", X, Y, Z); }
+
         public Vector33(double x, double y, double z)
         {
             X = x;
             Y = y;
             Z = z;
         }
-        public override string ToString() { return String.Format("<{0},{1},{2}>", X, Y, Z); }
-    }
 
+		#endregion Methods 
+    }
     public struct Point
     {
-        public int Vertex;
+		#region Data Members (3) 
+
         public int Normal;
         public int TexCoord;
+        public int Vertex;
+
+		#endregion Data Members 
+
+		#region Methods (2) 
 
         public Point(int v, int n, int t)
         {
@@ -244,6 +280,8 @@ namespace AP
         }
 
         public override string ToString() { return String.Format("Point: {0},{1},{2}", Vertex, Normal, TexCoord); }
+
+		#endregion Methods 
     }
 
     public class Tri

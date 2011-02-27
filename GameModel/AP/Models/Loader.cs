@@ -9,8 +9,27 @@ using OpenTK.Graphics.OpenGL;
 namespace AP
 {
     class Loader
-    {       
-        public MeshData LoadStream(Stream stream, float scale)
+    {
+		#region Methods (6) 
+
+		// Public Methods (3) 
+
+        /// <summary>
+        /// Loads the file.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <param name="scale">The scale.</param>
+        /// <returns></returns>
+        public MeshData LoadFile(string file, float scale)
+        {
+            // Silly me, using() closes the file automatically.
+            using (FileStream s = File.Open(file, FileMode.Open))
+            {
+                return LoadStream(s, scale);
+            }
+        }
+
+               public MeshData LoadStream(Stream stream, float scale)
         {
             StreamReader reader = new StreamReader(stream);
             List<Vector33> points = new List<Vector33>();
@@ -65,15 +84,11 @@ namespace AP
             return new MeshData(p, n, tc, f);
         }
 
-        public MeshData LoadFile(string file, float scale)
-        {
-            // Silly me, using() closes the file automatically.
-            using (FileStream s = File.Open(file, FileMode.Open))
-            {
-                return LoadStream(s, scale);
-            }
-        }
-
+               /// <summary>
+               /// Loads the textures.
+               /// </summary>
+               /// <param name="file">The file.</param>
+               /// <returns></returns>
         public uint LoadTex(string file)
         {
             Bitmap bitmap = new Bitmap(file);
@@ -96,7 +111,13 @@ namespace AP
 
             return texture;
         }
+		// Private Methods (3) 
 
+        /// <summary>
+        /// Parses the face.
+        /// </summary>
+        /// <param name="indices">The indices.</param>
+        /// <returns></returns>
         private static Tri[] parseFace(string[] indices)
         {
             Point[] p = new Point[indices.Length - 1];
@@ -108,8 +129,27 @@ namespace AP
             //return new Face(p);
         }
 
-        // Takes an array of points and returns an array of triangles.
-        // The points form an arbitrary polygon.
+        /// <summary>
+        /// Parses the point.
+        /// </summary>
+        /// <param name="s">The s.</param>
+        /// <returns></returns>
+        private static Point parsePoint(string s)
+        {
+            char[] splitChars = { '/' };
+            string[] parameters = s.Split(splitChars);
+            int vert = int.Parse(parameters[0]) - 1;
+            int tex = int.Parse(parameters[1]) - 1;
+            int norm = int.Parse(parameters[2]) - 1;
+            return new Point(vert, norm, tex);
+        }
+
+        /// <summary>
+        /// Takes an array of points and returns an array of triangles.
+        /// The points form an arbitrary polygon.
+        /// </summary>
+        /// <param name="ps">The ps.</param>
+        /// <returns></returns>
         private static Tri[] Triangulate(Point[] ps)
         {
             List<Tri> ts = new List<Tri>();
@@ -130,14 +170,6 @@ namespace AP
             return ts.ToArray();
         }
 
-        private static Point parsePoint(string s)
-        {
-            char[] splitChars = { '/' };
-            string[] parameters = s.Split(splitChars);
-            int vert = int.Parse(parameters[0]) - 1;
-            int tex = int.Parse(parameters[1]) - 1;
-            int norm = int.Parse(parameters[2]) - 1;
-            return new Point(vert, norm, tex);
-        }
+		#endregion Methods 
     }
 }

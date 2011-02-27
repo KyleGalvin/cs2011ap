@@ -5,17 +5,23 @@ namespace NetLib
 {
 	public class NetPackage
 	{
-        public PackageInterpreter myInterpreter;
-		public UInt32 header;
-		public UInt32 sizeofobj;
-		public UInt32 typeofobj;
+		#region Fields (10) 
+
 		public UInt32 action;
-		public UInt32 totalSize;
-        public UInt32 count;
 		public List<byte[]> body;
 		public bool complete;
+        public UInt32 count;
+		public UInt32 header;
         public bool isLobby;
-		
+        public PackageInterpreter myInterpreter;
+		public UInt32 sizeofobj;
+		public UInt32 totalSize;
+		public UInt32 typeofobj;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
 		public NetPackage ()
 		{
             myInterpreter = new PackageInterpreter();
@@ -23,7 +29,28 @@ namespace NetLib
 			header = 0;
 			body = new List<byte[]>();
 		}
-		
+
+		#endregion Constructors 
+
+		#region Methods (2) 
+
+		// Public Methods (2) 
+
+        /// <summary>
+        /// Determines whether this instance is complete.
+        /// </summary>
+        /// <returns>
+        ///   <c>true</c> if this instance is complete; otherwise, <c>false</c>.
+        /// </returns>
+		public bool IsComplete()
+		{
+			return complete;
+		}
+
+        /// <summary>
+        /// Recieves the specified incoming.
+        /// </summary>
+        /// <param name="incoming">The incoming.</param>
 		public void Recieve(byte[] incoming)
 		{
 			//we only intend to recieve 4 bytes at a time
@@ -63,13 +90,8 @@ namespace NetLib
 			
 			
 		}
-		
-		public bool IsComplete()
-		{
-			return complete;
-		}
-		
 
+		#endregion Methods 
 	}
 }
 

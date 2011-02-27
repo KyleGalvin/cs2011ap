@@ -8,22 +8,23 @@ namespace AP
 {
     class EnemySpawn : Position
     {
+		#region Constructors (1) 
+
         public EnemySpawn(float x, float y)
         {
             xPos = x;
             yPos = y;
         }
 
-        public Enemy spawnEnemy(int ID)
-        {
-            Enemy enemy = new Zombie(ID);
-            
-            enemy.setPosition(xPos, yPos);
-            enemy.draw();
+		#endregion Constructors 
 
-            return enemy;
-        }
+		#region Methods (2) 
 
+		// Public Methods (2) 
+
+        /// <summary>
+        /// Draws this instance.
+        /// </summary>
         public void draw()
         {
             // OpenGL Calls
@@ -45,5 +46,22 @@ namespace AP
 
             GL.End();
         }
+
+        /// <summary>
+        /// Spawns the enemy.
+        /// </summary>
+        /// <param name="ID">The ID.</param>
+        /// <returns></returns>
+        public Enemy spawnEnemy(int ID)
+        {
+            Enemy enemy = new Zombie(ID);
+            
+            enemy.setPosition(xPos, yPos);
+            enemy.draw();
+
+            return enemy;
+        }
+
+		#endregion Methods 
     }
 }

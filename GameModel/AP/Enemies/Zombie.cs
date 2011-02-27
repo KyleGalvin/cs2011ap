@@ -8,7 +8,15 @@ namespace AP
 {
     public class Zombie : Enemy
     {
-        public static int drawNumber; //not sure how this should properly be inheirited so just putting it here for now
+		#region Fields (1) 
+
+        public static int drawNumber;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
+ //not sure how this should properly be inheirited so just putting it here for now
         /// <summary>
         /// Initialize the creation of a zombie enemy.
         /// -Zombie's life: 1 hit.
@@ -24,7 +32,32 @@ namespace AP
             radius = 0.08f;
         }
 
-        
+		#endregion Constructors 
+
+		#region Methods (4) 
+
+		// Public Methods (4) 
+
+        /// <summary>
+        /// Reduces passed player's life.
+        /// </summary>
+        /// <param name="player">Passed played that was hit from a zombie attack.</param>
+        /// <output>None.</output>
+        public override void attack( Player player )
+        {
+            player.loseHealth( (float)Damage.Low );
+        }
+
+        public override void draw()
+        {
+            GL.PushMatrix();
+            GL.Translate(xPos, yPos, 0.2f);
+            GL.Rotate(angle - 115, 0, 0, 1);
+            GL.Rotate(90, 1.0, 0, 0);
+            Program.loadedObjects.DrawObject(drawNumber);
+            GL.PopMatrix();
+        }
+
         /// <summary>
         /// Moves the zombie enemy using the passed x and y positions as
         /// determined from the AI calculation. The zombie has a speed of slow.
@@ -38,6 +71,10 @@ namespace AP
             yPos += y * this.speed;            
         }
 
+        /// <summary>
+        /// Moves towards the player.
+        /// </summary>
+        /// <param name="target">The target.</param>
         public override void moveTowards(Player target)
         {
             float x = target.xPos - xPos;
@@ -61,24 +98,6 @@ namespace AP
             setAngle();
         }
 
-        /// <summary>
-        /// Reduces passed player's life.
-        /// </summary>
-        /// <param name="player">Passed played that was hit from a zombie attack.</param>
-        /// <output>None.</output>
-        public override void attack( Player player )
-        {
-            player.loseHealth( (float)Damage.Low );
-        }
-
-        public override void draw()
-        {
-            GL.PushMatrix();
-            GL.Translate(xPos, yPos, 0.2f);
-            GL.Rotate(angle - 115, 0, 0, 1);
-            GL.Rotate(90, 1.0, 0, 0);
-            Program.loadedObjects.DrawObject(drawNumber);
-            GL.PopMatrix();
-        }
+		#endregion Methods 
     }
 }

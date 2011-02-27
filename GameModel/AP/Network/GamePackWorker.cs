@@ -6,9 +6,15 @@ namespace NetLib
 {
     public class GamePackWorker : PackWorker
     {
+		#region Fields (2) 
+
         //private List<AP.Position> GameState;
         PackageInterpreter myInterpreter = new PackageInterpreter();
         GameState State;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
 
         public GamePackWorker(ref GameState s)
         {
@@ -17,21 +23,47 @@ namespace NetLib
             // TODO: Add constructor logic here
             //
         }
-        public override String HandleText(NetPackage pack)
+
+		#endregion Constructors 
+
+		#region Methods (8) 
+
+		// Public Methods (8) 
+
+        /// <summary>
+        /// Creates the AI.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
+        public AP.Enemy CreateAI(List<byte[]> data)
         {
-            string result = "";
-            for (int i = 0; i < pack.sizeofobj; )
-            {
-                result += BitConverter.ToString(pack.body[i]);
-            }
-            return result;
+            return new AP.Zombie(BitConverter.ToInt32(data[0], 0));
         }
 
-        public override void HandleDescribe(NetPackage pack)
+        /// <summary>
+        /// Creates the bullet.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
+        public AP.Player CreateBullet(List<byte[]> data)
         {
-            BitConverter.ToInt32(pack.body[0], 0);
+            return new AP.Player(new OpenTK.Vector3(0, 0, 0), BitConverter.ToInt32(data[0], 0));
         }
 
+        /// <summary>
+        /// Creates the player.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
+        public AP.Player CreatePlayer(List<byte[]> data)
+        {
+            return new AP.Player(new OpenTK.Vector3(5,5, 0), BitConverter.ToInt32(data[0], 0));
+        }
+
+        /// <summary>
+        /// Handles the create.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
         public override void HandleCreate(NetPackage pack)
         {
             UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj << 24));
@@ -65,10 +97,43 @@ namespace NetLib
 
         }
 
+        /// <summary>
+        /// Handles the describe.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
+        public override void HandleDescribe(NetPackage pack)
+        {
+            BitConverter.ToInt32(pack.body[0], 0);
+        }
+
+        /// <summary>
+        /// Handles the request.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
         public override void HandleRequest(NetPackage pack)
         {
         }
 
+        /// <summary>
+        /// Handles the text.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
+        /// <returns></returns>
+        public override String HandleText(NetPackage pack)
+        {
+            string result = "";
+            for (int i = 0; i < pack.sizeofobj; )
+            {
+                result += BitConverter.ToString(pack.body[i]);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Handles the update.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
+        /// <returns></returns>
         public List<AP.Position> HandleUpdate(NetPackage pack)
         {
             List<AP.Position> result = new List<AP.Position>();
@@ -102,18 +167,6 @@ namespace NetLib
         
         }
 
-        public AP.Enemy CreateAI(List<byte[]> data)
-        {
-            return new AP.Zombie(BitConverter.ToInt32(data[0], 0));
-        }
-
-        public AP.Player CreatePlayer(List<byte[]> data)
-        {
-            return new AP.Player(new OpenTK.Vector3(5,5, 0), BitConverter.ToInt32(data[0], 0));
-        }
-        public AP.Player CreateBullet(List<byte[]> data)
-        {
-            return new AP.Player(new OpenTK.Vector3(0, 0, 0), BitConverter.ToInt32(data[0], 0));
-        }
+		#endregion Methods 
     }
 }
