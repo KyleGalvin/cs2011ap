@@ -6,6 +6,17 @@ namespace AP
 {
     public class GameState
     {
+		#region Fields (4) 
+
+        public List<AP.Bullet> Bullets;
+        public List<AP.Enemy> Enemies;
+        private int enemyIDs = 4;
+        public List<AP.Player> Players;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         public GameState()
         {
             Players = new List<AP.Player>();
@@ -13,17 +24,30 @@ namespace AP
             Bullets = new List<AP.Bullet>();
         }
 
+		#endregion Constructors 
+
+		#region Methods (2) 
+
+		// Public Methods (2) 
+
+        /// <summary>
+        /// Counts this instance.
+        /// </summary>
+        /// <returns></returns>
         public int Count()
         {
             return Players.Count + Enemies.Count + Bullets.Count;
         }
-        public List<AP.Player> Players;
-        public List<AP.Enemy> Enemies;
-        public List<AP.Bullet> Bullets;
-        private int enemyIDs = 4;
+
+        /// <summary>
+        /// Gets the enemy UID.
+        /// </summary>
+        /// <returns></returns>
         public int getEnemyUID()
         {
             return (enemyIDs++);
         }
+
+		#endregion Methods 
     }
 }

@@ -8,9 +8,14 @@ namespace NetLib
 {
     public class HostManager : PlayerManager
     {
+		#region Fields (1) 
 
         //HACK todo
         int i = 0;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
 
         public HostManager(int port, ref GameState State): base(port, ref State)
         {
@@ -18,6 +23,33 @@ namespace NetLib
             bool startGame = false;
         }
 
+		#endregion Constructors 
+
+		#region Methods (2) 
+
+		// Public Methods (1) 
+
+        /// <summary>
+        /// Syncs the state.
+        /// </summary>
+        public override void SyncState()
+        {
+            if (i == 0)
+            {
+                SendObjs<AP.Player>(Action.Create, State.Players);
+            }
+            else
+            {
+                SendObjs<AP.Player>(Action.Update, State.Players);
+            }
+               
+        }
+		// Protected Methods (1) 
+
+        /// <summary>
+        /// Handles the incoming comm.
+        /// </summary>
+        /// <param name="connection">The connection.</param>
         protected override void HandleIncomingComm(object connection)
         {
             Connection myConnection = (Connection)connection;
@@ -57,18 +89,8 @@ namespace NetLib
 
         }
 
-        public override void SyncState()
-        {
-            if (i == 0)
-            {
-                SendObjs<AP.Player>(Action.Create, State.Players);
-            }
-            else
-            {
-                SendObjs<AP.Player>(Action.Update, State.Players);
-            }
-               
-        }
+		#endregion Methods 
+
         //ConnectGame(IPEndPoint host)
         //{
         //}

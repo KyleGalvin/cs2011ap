@@ -27,12 +27,22 @@ namespace AP
         const float PI = 3.1415926f;
         protected const float RAD_TO_DEG = 180.0f / PI;
 
+        /// <summary>
+        /// Sets the angle.
+        /// </summary>
         public void setAngle()
         {
             prevXPos = xPos - prevXPos;
             prevYPos = yPos - prevYPos;
             angle = (int)(Math.Atan2(prevYPos, prevXPos) * RAD_TO_DEG);
         }
+        /// <summary>
+        /// Updates the specified _x pos.
+        /// </summary>
+        /// <param name="_xPos">The _x pos.</param>
+        /// <param name="_yPos">The _y pos.</param>
+        /// <param name="_xVel">The _x vel.</param>
+        /// <param name="_yVel">The _y vel.</param>
         public void Update(byte[] _xPos, byte[] _yPos, byte[] _xVel, byte[] _yVel)
         {
             xPos = (float)BitConverter.ToDouble(_xPos, 0);

@@ -27,27 +27,26 @@ namespace NetLib
 
 	public class PackageInterpreter
 	{
-		//Interpreter seems best suited to place TypeSize information
-		public UInt32 GetTypeSize(Type type){
-            
-			switch (type)//these values need to be sorted out when the protocol is more sound
-			{
-			case Type.Player:
-				return 0x5;
-			case Type.AI:
-				return 0x5;
-			case Type.Building:
-				return 0x5;
-            case Type.Bullet:
-                return 0x5;
-            case Type.Text:
-                return 0x1;
-			default:
-				return 0x0;
-			}				
+		#region Constructors (1) 
+
+		public PackageInterpreter ()
+		{
 		}
 
-        ///Lobby Communication Protocols
+		#endregion Constructors 
+
+		#region Methods (5) 
+
+		// Public Methods (4) 
+
+        /// <summary>
+        /// Encodes the comm.
+        /// </summary>
+        /// <param name="a">A.</param>
+        /// <param name="t">The t.</param>
+        /// <param name="Comm">The comm.</param>
+        /// <returns></returns>
+        /// Lobby Communication Protocols
         public List<byte[]> encodeComm(Action a, Type t, String Comm)
         {
             Console.WriteLine("Encoding data:"+a.ToString()+" "+t.ToString()+Comm);
@@ -89,7 +88,15 @@ namespace NetLib
             return result;
         }
 
-        ///Game State Communication Protocols
+        /// <summary>
+        /// Encodes the objs.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a">A.</param>
+        /// <param name="t">The t.</param>
+        /// <param name="objs">The objs.</param>
+        /// <returns></returns>
+        /// Game State Communication Protocols
         public List<byte[]> encodeObjs<T>(Action a, Type t, List<T> objs)
         {
 
@@ -106,7 +113,50 @@ namespace NetLib
             return result;
         }
 
-        ///turns a list of objects into a serialized network stream
+        /// <summary>
+        /// Gets the count.
+        /// </summary>
+        /// <param name="header">The header.</param>
+        /// <returns></returns>
+        public UInt32 GetCount(UInt32 header)
+        {
+            return (header & 0x00FF0000) >> 16;
+        }
+
+		//Interpreter seems best suited to place TypeSize information
+        /// <summary>
+        /// Gets the size of the type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+		public UInt32 GetTypeSize(Type type){
+            
+			switch (type)//these values need to be sorted out when the protocol is more sound
+			{
+			case Type.Player:
+				return 0x5;
+			case Type.AI:
+				return 0x5;
+			case Type.Building:
+				return 0x5;
+            case Type.Bullet:
+                return 0x5;
+            case Type.Text:
+                return 0x1;
+			default:
+				return 0x0;
+			}				
+		}
+		// Private Methods (1) 
+
+        /// <summary>
+        /// Serializes the specified t.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t">The t.</param>
+        /// <param name="obj">The obj.</param>
+        /// <returns></returns>
+        /// turns a list of objects into a serialized network stream
         private List<byte[]> serialize<T>(Type t, T obj)
         {
 
@@ -153,14 +203,7 @@ namespace NetLib
             return result;
         }
 
-        public UInt32 GetCount(UInt32 header)
-        {
-            return (header & 0x00FF0000) >> 16;
-        }
-
-		public PackageInterpreter ()
-		{
-		}
+		#endregion Methods 
 	}
 }
 

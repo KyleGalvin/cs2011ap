@@ -9,23 +9,25 @@ namespace NetLib
 {
 	public abstract class NetManager
 	{
+		#region Fields (12) 
+
         protected TcpClient client;
-        static public GameState State;
-		protected Thread respondThread;
-		protected int port;
+        public bool Connected = false;
         protected bool IsLobby;
 		public List<Connection> myConnections;
-        public Queue<NetPackage> myOutgoing;
-		
 		protected List<byte[]> myData;
-		protected String myRole;
-
+        public Queue<NetPackage> myOutgoing;
         protected PackageInterpreter myProtocol;
-
+		protected String myRole;
+		protected int port;
+		protected Thread respondThread;
+        static public GameState State;
         protected PackWorker worker;
 
-        public bool Connected = false;
-		
+		#endregion Fields 
+
+		#region Constructors (2) 
+
 		public NetManager(int newPort)
 		{
             myOutgoing = new Queue<NetPackage>();
@@ -39,6 +41,12 @@ namespace NetLib
 	        //throw new NotImplementedException();
 	    }
 
+		#endregion Constructors 
+
+		#region Methods (4) 
+
+		// Public Methods (3) 
+
         //protected NetManager(int newPort)
         //{
         //    //throw new NotImplementedException();
@@ -46,9 +54,11 @@ namespace NetLib
         //    myProtocol = new PackageInterpreter();
         //    port = newPort;
         //}
-
 	    //Listen for any requests directed at our IP and Port
 		//respond by accepting connection and requesting one of our own for outgoing data
+        /// <summary>
+        /// Listens this instance.
+        /// </summary>
 		public void Listen()
 		{
 			
@@ -85,6 +95,10 @@ namespace NetLib
 			}
 		}
 
+        /// <summary>
+        /// Switches the packet.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
         public void packetSwitcher(NetPackage pack)
         {
             Console.WriteLine("PACKET SWITCHED");
@@ -116,6 +130,12 @@ namespace NetLib
             }
         }
 
+        /// <summary>
+        /// Sends the objs.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a">A.</param>
+        /// <param name="Objs">The objs.</param>
         public void SendObjs<T>(Action a,List<T> Objs)
         {
             List<byte[]> data = myProtocol.encodeObjs(a, Type.Player, Objs);
@@ -125,10 +145,12 @@ namespace NetLib
                 c.Write(data);
             }
         }
-	
+		// Protected Methods (1) 
+
 		//communication is handled differently in the lobby/client children classes
 		protected abstract void HandleIncomingComm(Object remoteEnd);
 
+		#endregion Methods 
 	}
 	
 }

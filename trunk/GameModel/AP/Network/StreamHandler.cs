@@ -7,11 +7,17 @@ namespace NetLib
 {
     public class StreamHandler
     {
-        protected NetworkStream myStream;
-        public NetPackage myPackage;
-        protected PackageInterpreter myInterpreter;
-        //StateWorker myWorker;
+		#region Fields (3) 
 
+        protected PackageInterpreter myInterpreter;
+        public NetPackage myPackage;
+        protected NetworkStream myStream;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
+        //StateWorker myWorker;
         public StreamHandler(NetworkStream stream)
         {
             myStream = stream;
@@ -19,38 +25,16 @@ namespace NetLib
             myInterpreter = new PackageInterpreter();
         }
 
-        public void WritePackage(NetPackage pack)
-        {
-            myStream.Write(BitConverter.GetBytes(pack.header), 0, 4);
+		#endregion Constructors 
 
-            foreach (byte[] chunk32 in pack.body)
-            {
-                Console.WriteLine("Writing to stream: {0}", BitConverter.ToString(chunk32));
-                myStream.Write(chunk32, 0, 4);
-            }
-            myStream.Flush();
-            Console.WriteLine("Write multi data to socket here");
-        }
+		#region Methods (4) 
 
-        public void Write(List<byte[]> data)
-        {
-            foreach (byte[] chunk32 in data)
-            {
-                Console.WriteLine("Writing to stream: {0}", BitConverter.ToString(chunk32));
-                myStream.Write(chunk32, 0, 4);
-            }
-            myStream.Flush();
-            Console.WriteLine("Write multi data to socket here");
-        }
+		// Public Methods (4) 
 
-        public void Write(byte[] data)
-        {
-            //we assume 32 bits of data only
-            myStream.Write(data, 0, 4);
-            myStream.Flush();
-            Console.WriteLine("Write single data to socket here");
-        }
-
+        /// <summary>
+        /// Reads the package.
+        /// </summary>
+        /// <returns></returns>
         public NetPackage ReadPackage()
         {
 
@@ -73,5 +57,51 @@ namespace NetLib
 
             return myPackage;
         }
+
+        /// <summary>
+        /// Writes the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        public void Write(List<byte[]> data)
+        {
+            foreach (byte[] chunk32 in data)
+            {
+                Console.WriteLine("Writing to stream: {0}", BitConverter.ToString(chunk32));
+                myStream.Write(chunk32, 0, 4);
+            }
+            myStream.Flush();
+            Console.WriteLine("Write multi data to socket here");
+        }
+
+        /// <summary>
+        /// Writes the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        public void Write(byte[] data)
+        {
+            //we assume 32 bits of data only
+            myStream.Write(data, 0, 4);
+            myStream.Flush();
+            Console.WriteLine("Write single data to socket here");
+        }
+
+        /// <summary>
+        /// Writes the package.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
+        public void WritePackage(NetPackage pack)
+        {
+            myStream.Write(BitConverter.GetBytes(pack.header), 0, 4);
+
+            foreach (byte[] chunk32 in pack.body)
+            {
+                Console.WriteLine("Writing to stream: {0}", BitConverter.ToString(chunk32));
+                myStream.Write(chunk32, 0, 4);
+            }
+            myStream.Flush();
+            Console.WriteLine("Write multi data to socket here");
+        }
+
+		#endregion Methods 
     }
 }

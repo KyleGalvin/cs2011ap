@@ -11,9 +11,16 @@ namespace NetLib
 {
 	public class LobbyManager : NetManager
 	{
-        public string LobbyName;
-        private UdpClient listener;
+		#region Fields (3) 
+
         private TcpClient client;
+        private UdpClient listener;
+        public string LobbyName;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         public LobbyManager(int port, ref ListBox list): base(port)
         {
             IsLobby = true;
@@ -26,8 +33,17 @@ namespace NetLib
             timer.Enabled = true;
         }
 
+		#endregion Constructors 
 
+		#region Methods (5) 
 
+		// Public Methods (1) 
+
+        /// <summary>
+        /// Responds to clients.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        /// <param name="broadcastEP">The broadcast EP.</param>
         public void RespondToClients(int port, IPEndPoint broadcastEP)
         {
             
@@ -48,63 +64,12 @@ namespace NetLib
                 Console.WriteLine("Broadcast May be disabled...");
             }
         }
-        private void BroadcastListener()
-        {
-            //This is used to see the servers
-            IPAddress broadcast = IPAddress.Parse("192.168.105.255");
-            IPEndPoint broadcastEP = new IPEndPoint(broadcast, port);
-            bool done = false;
-            string msg = String.Empty;
-            listener = new UdpClient(port);
-            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
-            //Send initial broadcast
-            RespondToClients(port, broadcastEP);
-            System.Text.UTF8Encoding Encoding = new System.Text.UTF8Encoding();
+		// Protected Methods (1) 
 
-            try
-            {
-                while (!done)
-                {
-                    Console.WriteLine("Waiting for broadcast");
-                    byte[] bytes = listener.Receive(ref groupEP);
-                    msg = Encoding.GetString(bytes, 0, bytes.Length);
-                    if (msg == "Client Broadcast")
-                    {
-                        Console.WriteLine("Responding to: " + msg + " at " + groupEP.ToString());
-                        RespondToClients(port, broadcastEP);
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            finally
-            {
-                listener.Close();
-            }
-        }
-
-		private void Respond(UInt32 data)
-		{
-			Console.WriteLine("Responding to incoming communication...");
-			Console.WriteLine("Locking Connections resource - incoming connections must wait");
-			
-			byte[] rawData = BitConverter.GetBytes(data);//break down into bytes to send over socket
-			
-			lock(this)
-			{
-				foreach(Connection c in myConnections)
-				{
-					//we will eventually need to do something other than echo back.
-					Console.WriteLine("echoing response: {0}",data);
-					c.Write(rawData);
-				}
-			}
-			Console.WriteLine("Freeing resource lock - now accepting incomming connections");
-		}
-
+        /// <summary>
+        /// Handles the incoming comm.
+        /// </summary>
+        /// <param name="connection">The connection.</param>
 		protected override void HandleIncomingComm(object connection)
 		{
 			
@@ -143,13 +108,83 @@ namespace NetLib
 				myConnections.Remove(myConnection);
 			}
 		}
+		// Private Methods (2) 
 
+        /// <summary>
+        /// Broadcasts the listener.
+        /// </summary>
+        private void BroadcastListener()
+        {
+            //This is used to see the servers
+            IPAddress broadcast = IPAddress.Parse("192.168.105.255");
+            IPEndPoint broadcastEP = new IPEndPoint(broadcast, port);
+            bool done = false;
+            string msg = String.Empty;
+            listener = new UdpClient(port);
+            IPEndPoint groupEP = new IPEndPoint(IPAddress.Any, port);
+            //Send initial broadcast
+            RespondToClients(port, broadcastEP);
+            System.Text.UTF8Encoding Encoding = new System.Text.UTF8Encoding();
 
+            try
+            {
+                while (!done)
+                {
+                    Console.WriteLine("Waiting for broadcast");
+                    byte[] bytes = listener.Receive(ref groupEP);
+                    msg = Encoding.GetString(bytes, 0, bytes.Length);
+                    if (msg == "Client Broadcast")
+                    {
+                        Console.WriteLine("Responding to: " + msg + " at " + groupEP.ToString());
+                        RespondToClients(port, broadcastEP);
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                listener.Close();
+            }
+        }
+
+        /// <summary>
+        /// Responds the specified data.
+        /// </summary>
+        /// <param name="data">The data.</param>
+		private void Respond(UInt32 data)
+		{
+			Console.WriteLine("Responding to incoming communication...");
+			Console.WriteLine("Locking Connections resource - incoming connections must wait");
+			
+			byte[] rawData = BitConverter.GetBytes(data);//break down into bytes to send over socket
+			
+			lock(this)
+			{
+				foreach(Connection c in myConnections)
+				{
+					//we will eventually need to do something other than echo back.
+					Console.WriteLine("echoing response: {0}",data);
+					c.Write(rawData);
+				}
+			}
+			Console.WriteLine("Freeing resource lock - now accepting incomming connections");
+		}
+		// Internal Methods (1) 
+
+        /// <summary>
+        /// Closes this instance.
+        /// </summary>
         internal void Close()
         {
             client.Close();
             listener.Close();
         }
+
+		#endregion Methods 
     }
 }
 

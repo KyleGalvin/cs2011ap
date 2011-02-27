@@ -14,41 +14,41 @@ namespace AP
 {
     class Program : GameWindow
     {
-        public Player player;
-        public GameState gameState;
-        // Screen dimensions
-        const int screenX = 800;
-        const int screenY = 800;
-        //camera related things
-        Vector3d up = new Vector3d(0.0, 1.0, 0.0);
-        Vector3d viewDirection = new Vector3d(0.0, 0.0, 1.0);
-        private double viewDist = 23.0;
+		#region Fields (23) 
+
+        public static CollisionAI collisionAI;
+        CreateLevel currentLevel;
         // Default position and velocity
         Vector3 defaultPosition = new Vector3(0, 0, 0);
         Vector3 defaultVelocity = new Vector3(0, 0, 0);
-
-        private int zombieIterator = 0;
+        private int enemyIdentifier = 0;
         private bool enemySpawned = false;
-        private int zombieCount = 0;
-
+        public GameState gameState;
+        List<int> heightSquares = new List<int>();
+        public static LoadedObjects loadedObjects = new LoadedObjects();
+        public Player player;
+        // Screen dimensions
+        const int screenX = 800;
+        const int screenY = 800;
         //List<Bullet> bulletList = new List<Bullet>();
         //List<Enemy> enemyList = new List<Enemy>();
         //List<Player> playerList = new List<Player>();
         List<EnemySpawn> spawns = new List<EnemySpawn>();
-
-        private int enemyIdentifier = 0;
-
-        List<int> xPosSquares = new List<int>();
-        List<int> yPosSquares = new List<int>();
+        //camera related things
+        Vector3d up = new Vector3d(0.0, 1.0, 0.0);
+        Vector3d viewDirection = new Vector3d(0.0, 0.0, 1.0);
+        private double viewDist = 23.0;
         List<int> widthSquares = new List<int>();
-        List<int> heightSquares = new List<int>();
         List<int> xPosSpawn = new List<int>();
+        List<int> xPosSquares = new List<int>();
         List<int> yPosSpawn = new List<int>();
+        List<int> yPosSquares = new List<int>();
+        private int zombieCount = 0;
+        private int zombieIterator = 0;
 
-        CreateLevel currentLevel;
+		#endregion Fields 
 
-        public static LoadedObjects loadedObjects = new LoadedObjects();
-        public static CollisionAI collisionAI;
+		#region Constructors (1) 
 
         /// <summary>Creates a window with the specified title.</summary>
         public Program()
@@ -56,8 +56,47 @@ namespace AP
         {
             VSync = VSyncMode.On;
         }
-        
-        /// <summary>Load resources here.</summary>
+
+		#endregion Constructors 
+
+		#region Methods (7) 
+
+		// Public Methods (1) 
+
+        /// <summary>
+        /// Dirties the net hack.
+        /// </summary>
+        /// <param name="s">The s.</param>
+        /// <returns></returns>
+        public NetLib.NetManager DirtyNetHack(ref GameState s)
+        {
+            //create client and/or server
+            Console.WriteLine("[s]erver or [c]lient");
+            string val = Console.ReadLine();
+
+            if (val == "s")
+            {
+                player = new Player();
+                gameState.Players.Add(player);
+                return new NetLib.HostManager(9999,ref s);
+            }
+            else
+            {
+                player = new Player(new Vector3(5,5,0), 0);
+                Console.WriteLine("enter server IP:");
+                val = Console.ReadLine();
+                Network.Server serv = new Network.Server("Serv",IPAddress.Parse(val));
+                NetLib.NetManager nman = new NetLib.ClientManager(9999, ref s,serv);
+                while (nman.myConnections.Count == 0){}
+                nman.Connected = true;
+                return nman;
+            }
+        }
+		// Protected Methods (4) 
+
+        /// <summary>
+        /// Load resources here.
+        /// </summary>
         /// <param name="e">Not used.</param>
         protected override void OnLoad(EventArgs e)
         {
@@ -104,29 +143,108 @@ namespace AP
             Console.WriteLine("Connected!");
         }
 
-        public NetLib.NetManager DirtyNetHack(ref GameState s)
+        /// <summary>
+        /// Called when it is time to render the next frame. Add your rendering code here.
+        /// </summary>
+        /// <param name="e">Contains timing information.</param>
+        protected override void OnRenderFrame(FrameEventArgs e)
         {
-            //create client and/or server
-            Console.WriteLine("[s]erver or [c]lient");
-            string val = Console.ReadLine();
+            //Console.WriteLine(gameState.Players.Count);
+            base.OnRenderFrame(e);
+            int i = 0;
+            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadIdentity();
 
-            if (val == "s")
+            Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist),
+                                              OpenTK.Vector3d.Zero, up);
+            GL.LoadMatrix(ref camera);
+
+            int h = 0;
+            foreach (Player p in gameState.Players)
             {
-                player = new Player();
-                gameState.Players.Add(player);
-                return new NetLib.HostManager(9999,ref s);
+                Console.WriteLine("Player " + h + ": xpos: " + p.xPos + " ypos: " + p.yPos);
+                p.draw();
+                h++;
             }
-            else
+             
+            GL.Translate(-player.xPos, -player.yPos, 0);
+
+            foreach (Bullet bullet in gameState.Bullets)
             {
-                player = new Player(new Vector3(5,5,0), 0);
-                Console.WriteLine("enter server IP:");
-                val = Console.ReadLine();
-                Network.Server serv = new Network.Server("Serv",IPAddress.Parse(val));
-                NetLib.NetManager nman = new NetLib.ClientManager(9999, ref s,serv);
-                while (nman.myConnections.Count == 0){}
-                nman.Connected = true;
-                return nman;
+                bullet.draw();
             }
+
+
+            GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
+            foreach (var member in gameState.Enemies)
+            {
+                //member.Update(ref playerList,ref enemyList, ref xPosSquares,ref yPosSquares);
+                member.draw();
+            }
+
+            zombieIterator++;
+            if( zombieCount < 20 )
+            {
+            foreach (var spawn in spawns)
+            {
+                spawn.draw();
+                if (zombieIterator == 60)
+                {
+                    //need to ping server for a UID
+                    gameState.Enemies.Add(spawn.spawnEnemy(0));
+                    enemySpawned = true;
+                    zombieCount++;
+                
+                }
+            }
+            if (enemySpawned)
+            {
+                zombieIterator = 0;
+                enemySpawned = false;
+            }
+            }
+
+            GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
+            //change this to be the same way as you do the walls
+            for(int x = 0; x < 5; x++)
+                for (int y = 0; y < 5; y++)
+                {
+                    GL.PushMatrix();
+                    GL.Translate(-10 + x * 5.75, -10 + y * 5.75, 0);
+                    loadedObjects.DrawObject(1); //grassssssssssssss
+                    GL.PopMatrix();
+                }
+
+            i = 0;
+            foreach (var x in xPosSquares)
+            {
+                if (widthSquares[i] > 1)
+                {
+                    for (int idx = 0; idx < widthSquares[i]; idx++)
+                    {
+                        GL.LoadMatrix(ref camera);
+                        GL.Translate(-player.xPos, -player.yPos, 0);
+                        GL.Translate(x + idx - 0.5f, yPosSquares[i] - 0.5f, 0.5f);
+                        loadedObjects.DrawObject(0);
+                    }
+                }
+
+                if (heightSquares[i] > 1)
+                {
+                    for (int idx = 0; idx < heightSquares[i]; idx++)
+                    {
+                        GL.LoadMatrix(ref camera);
+                        GL.Translate(-player.xPos, -player.yPos, 0);
+                        GL.Translate(x - 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
+                        loadedObjects.DrawObject(0);
+                    }
+                }
+
+                i++;
+            }
+            
+            SwapBuffers();
         }
 
         /// <summary>
@@ -241,6 +359,7 @@ namespace AP
             }
             GC.Collect();
         }
+		// Private Methods (2) 
 
         /// <summary>
         /// Assign passed enemy object a unique enemyIdentifier
@@ -250,110 +369,6 @@ namespace AP
         private void assignEnemyID( Enemy enemy )
         {
             enemy.enemyID = enemyIdentifier++;
-        }
-
-        /// <summary>
-        /// Called when it is time to render the next frame. Add your rendering code here.
-        /// </summary>
-        /// <param name="e">Contains timing information.</param>
-        protected override void OnRenderFrame(FrameEventArgs e)
-        {
-            //Console.WriteLine(gameState.Players.Count);
-            base.OnRenderFrame(e);
-            int i = 0;
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-
-            Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist),
-                                              OpenTK.Vector3d.Zero, up);
-            GL.LoadMatrix(ref camera);
-
-            int h = 0;
-            foreach (Player p in gameState.Players)
-            {
-                Console.WriteLine("Player " + h + ": xpos: " + p.xPos + " ypos: " + p.yPos);
-                p.draw();
-                h++;
-            }
-             
-            GL.Translate(-player.xPos, -player.yPos, 0);
-
-            foreach (Bullet bullet in gameState.Bullets)
-            {
-                bullet.draw();
-            }
-
-
-            GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
-            foreach (var member in gameState.Enemies)
-            {
-                //member.Update(ref playerList,ref enemyList, ref xPosSquares,ref yPosSquares);
-                member.draw();
-            }
-
-            zombieIterator++;
-            if( zombieCount < 20 )
-            {
-            foreach (var spawn in spawns)
-            {
-                spawn.draw();
-                if (zombieIterator == 60)
-                {
-                    //need to ping server for a UID
-                    gameState.Enemies.Add(spawn.spawnEnemy(0));
-                    enemySpawned = true;
-                    zombieCount++;
-                
-                }
-            }
-            if (enemySpawned)
-            {
-                zombieIterator = 0;
-                enemySpawned = false;
-            }
-            }
-
-            GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
-            //change this to be the same way as you do the walls
-            for(int x = 0; x < 5; x++)
-                for (int y = 0; y < 5; y++)
-                {
-                    GL.PushMatrix();
-                    GL.Translate(-10 + x * 5.75, -10 + y * 5.75, 0);
-                    loadedObjects.DrawObject(1); //grassssssssssssss
-                    GL.PopMatrix();
-                }
-
-            i = 0;
-            foreach (var x in xPosSquares)
-            {
-                if (widthSquares[i] > 1)
-                {
-                    for (int idx = 0; idx < widthSquares[i]; idx++)
-                    {
-                        GL.LoadMatrix(ref camera);
-                        GL.Translate(-player.xPos, -player.yPos, 0);
-                        GL.Translate(x + idx - 0.5f, yPosSquares[i] - 0.5f, 0.5f);
-                        loadedObjects.DrawObject(0);
-                    }
-                }
-
-                if (heightSquares[i] > 1)
-                {
-                    for (int idx = 0; idx < heightSquares[i]; idx++)
-                    {
-                        GL.LoadMatrix(ref camera);
-                        GL.Translate(-player.xPos, -player.yPos, 0);
-                        GL.Translate(x - 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
-                        loadedObjects.DrawObject(0);
-                    }
-                }
-
-                i++;
-            }
-            
-            SwapBuffers();
         }
 
         static void Main(string[] args)
@@ -370,5 +385,7 @@ namespace AP
                 game.Run(28.0);
             }
         }
+
+		#endregion Methods 
     }
 }

@@ -8,12 +8,24 @@ namespace AP
 {
     public class CreateLevel
     {
-        private enum objTypes { wall };
+		#region Fields (3) 
+
         // Read a document
         XmlDocument doc = new XmlDocument();
-        XmlElement root; 
-        XmlNodeList nodes; 
-        public CreateLevel( int levelNum )
+         XmlNodeList nodes;
+        XmlElement root;
+
+		#endregion Fields 
+
+		#region Enums (1) 
+
+        private enum objTypes { wall };
+
+		#endregion Enums 
+
+		#region Constructors (1) 
+
+         public CreateLevel( int levelNum )
         {
             switch( levelNum )
             {
@@ -26,6 +38,21 @@ namespace AP
             }
         }
 
+		#endregion Constructors 
+
+		#region Methods (1) 
+
+		// Public Methods (1) 
+
+         /// <summary>
+         /// Parses the file.
+         /// </summary>
+         /// <param name="x">The x.</param>
+         /// <param name="y">The y.</param>
+         /// <param name="h">The height.</param>
+         /// <param name="w">The width.</param>
+         /// <param name="xSpawn">The x spawn.</param>
+         /// <param name="ySpawn">The y spawn.</param>
         public void parseFile(ref List<int> x, ref List<int> y, ref List<int> h, ref List<int> w, ref List<int> xSpawn, ref List<int> ySpawn)
         {
             Console.WriteLine("Creating level...");
@@ -75,5 +102,7 @@ namespace AP
             }*/
             //reader = null;
         }
+
+		#endregion Methods 
     }
 }

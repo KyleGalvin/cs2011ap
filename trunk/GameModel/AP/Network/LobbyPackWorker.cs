@@ -6,12 +6,38 @@ namespace NetLib
 {
     public class LobbyPackWorker : PackWorker
     {
+		#region Fields (1) 
+
         public ListBox list;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         public LobbyPackWorker(ref ListBox list)
         {
             this.list = list;
         }
 
+		#endregion Constructors 
+
+		#region Methods (3) 
+
+		// Public Methods (3) 
+
+        /// <summary>
+        /// Handles the create.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
+        public override void HandleCreate(NetPackage pack)
+        {
+            //start game. no body
+        }
+
+        /// <summary>
+        /// Handles the describe.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
         public override void HandleDescribe(NetPackage pack)
         {
             if (pack.typeofobj == (UInt32)Type.Building)
@@ -25,6 +51,10 @@ namespace NetLib
             }
         }
 
+        /// <summary>
+        /// Handles the request.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
         public override void HandleRequest(NetPackage pack)
         {
             Console.WriteLine("HERE");
@@ -32,10 +62,7 @@ namespace NetLib
             list.Items.Add("PlayerName");
         }
 
-        public override void HandleCreate(NetPackage pack)
-        {
-            //start game. no body
-        }
+		#endregion Methods 
     }
 
 }

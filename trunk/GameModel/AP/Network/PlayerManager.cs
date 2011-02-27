@@ -14,10 +14,16 @@ namespace NetLib
 
 public abstract class PlayerManager : NetManager
 {
+		#region Fields (4) 
+
     private Thread broadcastThread;
-    private bool TimesUp;
     private List<IPAddress> ServerIps = new List<IPAddress>();
     public GameState State;
+    private bool TimesUp;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
 
 	public PlayerManager(int newPort,  ref GameState StateRef): base(newPort)
 	{
@@ -25,7 +31,25 @@ public abstract class PlayerManager : NetManager
         State = StateRef;
     }
 
+		#endregion Constructors 
+
+		#region Methods (5) 
+
+		// Public Methods (1) 
+
+    /// <summary>
+    /// Syncs the state.
+    /// </summary>
+        public abstract void SyncState();
+		// Private Methods (4) 
+
         //automatically find server on subnet
+        /// <summary>
+        /// Finds the server.
+        /// </summary>
+        /// <param name="port">The port.</param>
+        /// <param name="broadcastEP">The broadcast EP.</param>
+        /// <returns></returns>
         private IPEndPoint FindServer(int port, IPEndPoint broadcastEP)
         {
             //broadcast
@@ -57,26 +81,10 @@ public abstract class PlayerManager : NetManager
             }
             return ServerIps.Count==0?null:new IPEndPoint(ServerIps.First(),port);
         }
-    
 
-	    private void SendBroadcast(IPEndPoint broadcastEP)
-	    {
-	        Socket BC = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-
-	        System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
-
-	        try
-	        {
-	            BC.SendTo(encoding.GetBytes("Client Broadcast"), broadcastEP);
-	            Console.WriteLine("Broadcast sent");
-	        }
-	        catch
-	        {
-	            Console.WriteLine("Could not broadcast request for server");
-	            Console.WriteLine("Broadcast May be disabled...");
-	        }
-	    }
-
+        /// <summary>
+        /// Listenfors the broad cast.
+        /// </summary>
 	    private void ListenforBroadCast()
 	    {
 	        bool once=false;
@@ -103,6 +111,12 @@ public abstract class PlayerManager : NetManager
                 }
             }
         }
+
+        /// <summary>
+        /// Called when [timed event].
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             if (broadcastThread.IsAlive)
@@ -113,6 +127,24 @@ public abstract class PlayerManager : NetManager
             TimesUp = true;
         }
 
-        public abstract void SyncState();
+	    private void SendBroadcast(IPEndPoint broadcastEP)
+	    {
+	        Socket BC = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+
+	        System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+
+	        try
+	        {
+	            BC.SendTo(encoding.GetBytes("Client Broadcast"), broadcastEP);
+	            Console.WriteLine("Broadcast sent");
+	        }
+	        catch
+	        {
+	            Console.WriteLine("Could not broadcast request for server");
+	            Console.WriteLine("Broadcast May be disabled...");
+	        }
+	    }
+
+		#endregion Methods 
 	}
 }

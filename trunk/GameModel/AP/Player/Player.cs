@@ -9,11 +9,16 @@ namespace AP
 {
     public class Player : Position
     {
-        
-        private int playerId;
+		#region Fields (4) 
+
         public int modelNumber;
+        private int playerId;
         public string playerName;
         public Weapon weapons = new Weapon();
+
+		#endregion Fields 
+
+		#region Constructors (2) 
 
         public Player( Vector3 position, int ID )
         {
@@ -37,50 +42,24 @@ namespace AP
             radius = 0.1f;
         }
 
+		#endregion Constructors 
+
+		#region Methods (5) 
+
+		// Public Methods (5) 
+
+        /// <summary>
+        /// Assigns the player ID.
+        /// </summary>
+        /// <param name="ID">The ID.</param>
         public void assignPlayerID( int ID )
         {
             playerId = ID;
         }
-        
-        
 
-        public void makeMove( int x, int y)
-        {
-            prevXPos = xPos;
-            prevYPos = yPos;            
-            xPos += x * this.speed;
-            yPos += y * this.speed;
-            setAngle();
-            position = new Vector3(xPos, yPos,0);
-        }
-
-        public void move(int x, int y)
-        {
-            float len = (float)Math.Sqrt(x * x + y * y);
-            float moveX;
-            float moveY;
-            if (xPos + x * this.speed < 7 && xPos + x * this.speed > -8 && yPos + y * this.speed < 6 && yPos + y * this.speed > -7) //wallCheck
-            {
-                if (!Program.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
-                    makeMove(x, y);
-                else
-                {
-                    //move player to middle if touching a zombie
-                    //dont get hit by a zombie in the middle or you get stuck
-                    //change this later to damage I guess
-                    xPos = 0;
-                    yPos = 0;
-                }
-            }
-        }
-
-        public void loseHealth( float damage )
-        {
-            life -= damage;
-            //-update damage bar
-            //-send update health bar packet
-        }
-
+        /// <summary>
+        /// Draws this instance.
+        /// </summary>
         public void draw()
         {
             float colorR = 0.0f;
@@ -107,5 +86,58 @@ namespace AP
 
             GL.End();*/
         }
+
+        /// <summary>
+        /// Loses the health.
+        /// </summary>
+        /// <param name="damage">The damage.</param>
+        public void loseHealth( float damage )
+        {
+            life -= damage;
+            //-update damage bar
+            //-send update health bar packet
+        }
+
+        /// <summary>
+        /// Makes the move.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        public void makeMove( int x, int y)
+        {
+            prevXPos = xPos;
+            prevYPos = yPos;            
+            xPos += x * this.speed;
+            yPos += y * this.speed;
+            setAngle();
+            position = new Vector3(xPos, yPos,0);
+        }
+
+        /// <summary>
+        /// Moves the specified x and y.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        public void move(int x, int y)
+        {
+            float len = (float)Math.Sqrt(x * x + y * y);
+            float moveX;
+            float moveY;
+            if (xPos + x * this.speed < 7 && xPos + x * this.speed > -8 && yPos + y * this.speed < 6 && yPos + y * this.speed > -7) //wallCheck
+            {
+                if (!Program.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                    makeMove(x, y);
+                else
+                {
+                    //move player to middle if touching a zombie
+                    //dont get hit by a zombie in the middle or you get stuck
+                    //change this later to damage I guess
+                    xPos = 0;
+                    yPos = 0;
+                }
+            }
+        }
+
+		#endregion Methods 
     }
 }
