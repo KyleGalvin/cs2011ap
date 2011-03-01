@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace NetLib
 {
+    /// <summary>
+    /// Holds the client connection and everyone connected to it. If your a client you will have one if your a server you will have up to 4
+    /// </summary>
 	public class Connection
 	{
 		#region Fields (4) 

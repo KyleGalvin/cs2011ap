@@ -4,6 +4,9 @@ using System.Text;
 
 namespace AP
 {
+    /// <summary>
+    /// Collection of objects that represent the game.
+    /// </summary>
     public class GameState
     {
 		#region Fields (4) 

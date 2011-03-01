@@ -6,6 +6,10 @@ using OpenTK;
 
 namespace AP
 {
+    /// <summary>
+    /// The class that will keep track of weapons and ammunition for a player.
+    /// Each player will have it's own instance of this class.
+    /// </summary>
     public class Weapon : Position
     {
 		#region Fields (14) 

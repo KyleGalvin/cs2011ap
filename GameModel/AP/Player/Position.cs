@@ -6,6 +6,9 @@ using OpenTK;
 
 namespace AP
 {
+    /// <summary>
+    /// The superclass for all things that will move around our map (players, enemies and bullets).
+    /// </summary>
     public class Position// : IDisposable
     {
         public float xPos { get; set; }

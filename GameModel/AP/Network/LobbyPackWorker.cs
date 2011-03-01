@@ -4,6 +4,9 @@ using System.Windows.Forms;
 
 namespace NetLib
 {
+    /// <summary>
+    /// Executes the packet commands for the lobby
+    /// </summary>
     public class LobbyPackWorker : PackWorker
     {
 		#region Fields (1) 

@@ -6,7 +6,9 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace AP
-{
+     /// <summary>
+     /// The basic bullet class. It will keep track of bullet lifetime as well as movement.
+     /// </summary>
     public class Bullet: Position
     {
 		#region Fields (4) 
@@ -20,7 +22,13 @@ namespace AP
 		#endregion Fields 
 
 		#region Constructors (1) 
-
+        /// <summary>
+        /// This is the bullet constructor. It sets up the attributes of a basic bullet
+        /// </summary>
+        /// <param name="position">This is the point that the bullet starts at</param>
+        /// <param name="velocity">The velocity of the bullet</param>
+        /// <output>
+        ///   </output>
         public Bullet(Vector3 position, Vector3 velocity)
         {
             radius = 0.1f;
@@ -60,9 +68,12 @@ namespace AP
         }
 
         /// <summary>
-        /// Kills the projectile.
+        /// Called from our main program in order to see if a bullets lifetime has expired
         /// </summary>
         /// <returns></returns>
+        /// <output>
+        /// The output will be true if the bullet has reached 0 lifetime, false otherwise.
+        ///   </output>
         public bool killProjectile()
         {
             if (lifeTime <= 0)
@@ -71,8 +82,11 @@ namespace AP
         }
 
         /// <summary>
-        /// Moves this instance.
+        /// Called on update to move the bullet.
         /// </summary>
+        /// <output>
+        /// No output, but the location of the bullet is changed. The lifetime of the bullet is also decremented.
+        ///   </output>
         public void move()
         {
             xPos += xVel * speed;
@@ -82,13 +96,17 @@ namespace AP
         }
 
         /// <summary>
-        /// Sets the direction by mouse.
+        /// This method is called in order to set the velocity of the bullet based on where the mouse is on the screen.
+        /// It will set the bullet on a path that will lead directly to the cursor's position.
         /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
-        /// <param name="screenX">The screen X.</param>
-        /// <param name="screenY">The screen Y.</param>
-        /// <param name="player">The player.</param>
+        /// <param name="x">The x position of the cursor in pixels.</param>
+        /// <param name="y">The y position of the cursor in pixels.</param>
+        /// <param name="screenX">The width of the game window.</param>
+        /// <param name="screenY">The height of the game window.</param>
+        /// <param name="player">A reference to the players location.</param>
+        /// <output>
+        /// No output but the velocity of the bullet will be set after calling this function.
+        ///   </output>
         public void setDirectionByMouse(float x, float y, int screenX, int screenY, ref Player player)
         {
             float mx = (float)(x - screenX / 2) / (screenX * 0.3f);

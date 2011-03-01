@@ -4,7 +4,7 @@ using AP;
 namespace NetLib
 {
     /// <summary>
-    /// Summary description for Class1
+    /// Executes the packet commands
     /// </summary>
     public abstract class PackWorker
     {

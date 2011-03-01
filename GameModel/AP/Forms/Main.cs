@@ -14,19 +14,29 @@ using NetLib;
 
 namespace AP.Forms
 {
+    /// <summary>
+    /// The main form the user sees when they start the game
+    /// </summary>
     public partial class Main : Form
     {
-        private List<Server> ServerIps = new List<Server>();
-        private Thread broadcastThread;
-        private Thread broadcastThread2;
-        private bool TimesUp;
-        private int port = 9999;
-        private bool checkServers = false;
+		#region Fields (11) 
+
         IPAddress broadcast = IPAddress.Parse("192.168.105.255");
         private IPEndPoint broadcastEP;
-        private UdpClient listener;
+        private Thread broadcastThread;
+        private Thread broadcastThread2;
+        private bool checkServers = false;
         private IPEndPoint groupEP;
         private bool listen;
+        private UdpClient listener;
+        private int port = 9999;
+        private List<Server> ServerIps = new List<Server>();
+        private bool TimesUp;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         public Main()
         {
             InitializeComponent();
@@ -34,70 +44,25 @@ namespace AP.Forms
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-            Environment.Exit(0);
-        }
+		#endregion Constructors 
 
-        private void btn_Refresh_Click(object sender, EventArgs e)
-        {
-            if (checkServers) return;
+		#region Delegates and Events (1) 
 
-            if (!listen)
-            {
-                //These need to be set for the server check to run correctly
-                broadcastEP = new IPEndPoint(broadcast, port);
-                listener = new UdpClient(port);
-                groupEP = new IPEndPoint(IPAddress.Any, port);
-                listen = true;
-            }
-            //This makes sure the thread only runs one at a time.
-            checkServers = true;
-            broadcastThread2 = new Thread(FetchServers);
-            broadcastThread2.Start();
-        }
+		// Delegates (1) 
+
         public delegate void SetListDelegate();
-        // This method is passed in to the SetTextCallBack delegate
-        // to set the Text property of textBox1.
-        private void SetList()
-        {
-            foreach(var x in ServerIps)
-            {
-                lst_Servers.Items.Add(x);
-            }
-        }
 
+		#endregion Delegates and Events 
 
-        private void FetchServers()
-        {
-            while (checkServers)
-            {
-                //Try to connect to server via broadcast
-                FindServer(port, broadcastEP);
-                //Once the thread stops we check this flag to allow it to check again
-                checkServers = false;
-                //ServerIps.Add(new Server("Test", IPAddress.Any));
-                if (this.lst_Servers.InvokeRequired)
-                {
-                    // It's on a different thread, so use Invoke.
-                    SetListDelegate d = new SetListDelegate(SetList);
-                    this.Invoke
-                        (d);
-                }
-                else
-                {
-                    // It's on the same thread, no need for Invoke
-                    SetList();
-                }
+		#region Methods (8) 
 
-            }
-        }
+		// Private Methods (8) 
+
         /// <summary>
         /// This handles the display of the lobby windows when hosting a game.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void btn_Host_Click(object sender, EventArgs e)
         {
             if(listener!=null) listener.Close();
@@ -125,6 +90,12 @@ namespace AP.Forms
                 }
             }
         }
+
+        /// <summary>
+        /// Handles the Click event of the btn_Join control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void btn_Join_Click(object sender, EventArgs e)
         {
             if (lst_Servers.SelectedIndex < 0)
@@ -134,6 +105,69 @@ namespace AP.Forms
             }
             joinLobby();
         }
+
+        /// <summary>
+        /// Handles the Click event of the btn_Refresh control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void btn_Refresh_Click(object sender, EventArgs e)
+        {
+            if (checkServers) return;
+
+            if (!listen)
+            {
+                //These need to be set for the server check to run correctly
+                broadcastEP = new IPEndPoint(broadcast, port);
+                listener = new UdpClient(port);
+                groupEP = new IPEndPoint(IPAddress.Any, port);
+                listen = true;
+            }
+            //This makes sure the thread only runs one at a time.
+            checkServers = true;
+            broadcastThread2 = new Thread(FetchServers);
+            broadcastThread2.Start();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the button1 control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+            Environment.Exit(0);
+        }
+
+        /// <summary>
+        /// Fetches the servers.
+        /// </summary>
+        private void FetchServers()
+        {
+            while (checkServers)
+            {
+                //Try to connect to server via broadcast
+                FindServer(port, broadcastEP);
+                //Once the thread stops we check this flag to allow it to check again
+                checkServers = false;
+                //ServerIps.Add(new Server("Test", IPAddress.Any));
+                if (this.lst_Servers.InvokeRequired)
+                {
+                    // It's on a different thread, so use Invoke.
+                    SetListDelegate d = new SetListDelegate(SetList);
+                    this.Invoke
+                        (d);
+                }
+                else
+                {
+                    // It's on the same thread, no need for Invoke
+                    SetList();
+                }
+
+            }
+        }
+
         /// <summary>
         /// Called when the user selects a lobby to join
         /// </summary>
@@ -144,6 +178,11 @@ namespace AP.Forms
             lobby.ShowDialog();
         }
 
+        /// <summary>
+        /// Handles the DoubleClick event of the lst_Servers control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void lst_Servers_DoubleClick(object sender, EventArgs e)
         {
             if (lst_Servers.SelectedIndex > 0)
@@ -153,12 +192,30 @@ namespace AP.Forms
             }
             joinLobby();
         }
+
+        // This method is passed in to the SetTextCallBack delegate
+        // to set the Text property of textBox1.
+        /// <summary>
+        /// Sets the list.
+        /// </summary>
+        private void SetList()
+        {
+            foreach(var x in ServerIps)
+            {
+                lst_Servers.Items.Add(x);
+            }
+        }
+
+		#endregion Methods 
+
+
+
         #region "Broadcast Functions"
         /// <summary>
-        /// automatically find server on subnet
+        /// Automatically find server on subnet
         /// </summary>
-        /// <param name="port"></param>
-        /// <param name="broadcastEP"></param>
+        /// <param name="port">The port.</param>
+        /// <param name="broadcastEP">The broadcast EP.</param>
         /// <returns></returns>
         public List<Server> FindServer(int port, IPEndPoint broadcastEP)
         {
@@ -191,6 +248,10 @@ namespace AP.Forms
             return ServerIps;
         }
 
+        /// <summary>
+        /// Sends the broadcast.
+        /// </summary>
+        /// <param name="broadcastEP">The broadcast EP.</param>
         private void SendBroadcast(IPEndPoint broadcastEP)
         {
             Socket BC = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
@@ -209,6 +270,9 @@ namespace AP.Forms
             }
         }
 
+        /// <summary>
+        /// Listenfors the broad cast.
+        /// </summary>
         private void ListenforBroadCast()
         {
             bool once = false;
@@ -231,6 +295,11 @@ namespace AP.Forms
                 }
             }
         }
+        /// <summary>
+        /// Called when [timed event].
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
             Console.WriteLine("Listening Stopped (Timeout Reached)");

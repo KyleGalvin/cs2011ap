@@ -10,6 +10,9 @@ using AP.Network;
 
 namespace NetLib
 {
+    /// <summary>
+    /// The network library for the client
+    /// </summary>
 	public class ClientManager : PlayerManager
 	{
 		#region Fields (1) 

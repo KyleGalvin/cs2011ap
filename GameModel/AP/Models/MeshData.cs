@@ -5,15 +5,13 @@ using System.Text;
 
 namespace AP
 {
-    /**
-     * <summary>
-     * A class containing all the necessary data for a mesh: Points, normal vectors, UV coordinates,
-     * and indices into each.
-     * Regardless of how the mesh file represents geometry, this is what we load it into,
-     * because this is most similar to how OpenGL represents geometry.
-     * </summary>
-     */
-    // XXX: Sources: http://www.opentk.com/files/ObjMeshLoader.cs, OOGL (MS3D), Icarus (Colladia)
+    /// <summary>
+    /// A class containing all the necessary data for a mesh: Points, normal vectors, UV coordinates,
+    /// and indices into each.
+    /// Regardless of how the mesh file represents geometry, this is what we load it into,
+    /// because this is most similar to how OpenGL represents geometry.
+    /// Sources: http://www.opentk.com/files/ObjMeshLoader.cs, OOGL (MS3D), Icarus (Colladia)
+    /// </summary>
     public class MeshData
     {
 		#region Fields (4) 

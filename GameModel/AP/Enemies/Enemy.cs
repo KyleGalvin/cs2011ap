@@ -5,6 +5,11 @@ using System.Text;
 
 namespace AP
 {
+    /// <summary>
+    /// The superclass of game enemies. It contains the definitions of the attributes and functions used by
+    /// all enemy types in the game. This includes things like damage and life with abstract functions like
+    /// move and draw.
+    /// </summary>
     public abstract class Enemy : Position
     {
 		#region Fields (1) 

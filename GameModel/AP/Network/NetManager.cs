@@ -7,6 +7,9 @@ using AP;
 
 namespace NetLib
 {
+    /// <summary>
+    /// The network driver. Basically the network interface
+    /// </summary>
 	public abstract class NetManager
 	{
 		#region Fields (12) 

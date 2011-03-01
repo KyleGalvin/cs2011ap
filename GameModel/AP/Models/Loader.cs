@@ -8,6 +8,9 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AP
 {
+    /// <summary>
+    /// 
+    /// </summary>
     class Loader
     {
 		#region Methods (6) 

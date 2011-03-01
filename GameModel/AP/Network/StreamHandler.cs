@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace NetLib
 {
+    /// <summary>
+    /// Handles the incoming/out-going data
+    /// </summary>
     public class StreamHandler
     {
 		#region Fields (3) 

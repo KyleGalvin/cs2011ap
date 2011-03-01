@@ -25,6 +25,9 @@ namespace NetLib
         Connection = 0x08000000
     }
 
+    /// <summary>
+    /// Can interpret the command and data associated with a packet.
+    /// </summary>
 	public class PackageInterpreter
 	{
 		#region Constructors (1) 

@@ -9,6 +9,9 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AP
 {
+    /// <summary>
+    /// The class in charge of loading and drawing our 3d mesh objects.
+    /// </summary>
     class LoadedObjects : Loader
     {
 		#region Fields (8) 
@@ -37,21 +40,24 @@ namespace AP
 		// Public Methods (3) 
 
         /// <summary>
-        /// Draws the object.
+        /// This is called to draw a specific object into the game.
         /// </summary>
-        /// <param name="objNumber">The obj number.</param>
+        /// <param name="objNumber">The object to draw</param>
         public void DrawObject(int objNumber)
         {
             DrawBuffer(objNumber);
         }
 
         /// <summary>
-        /// Loads the object.
+        /// A function called that will load the desired object/texture/scale into memory.
         /// </summary>
-        /// <param name="objPath">The obj path.</param>
-        /// <param name="texPath">The tex path.</param>
-        /// <param name="scale">The scale.</param>
+        /// <param name="objPath">The path to the .obj file.</param>
+        /// <param name="texPath">The path to the texture.</param>
+        /// <param name="scale">The scale that the object should be loaded at.</param>
         /// <returns></returns>
+        /// <output>
+        /// An integer representing the number to access the model.
+        ///   </output>
         public int LoadObject(String objPath, String texPath, float scale)
         {
             m.Add(LoadFile(objPath, scale));
@@ -61,9 +67,12 @@ namespace AP
         }
 
         /// <summary>
-        /// Unloads the object.
+        /// A function called that remove a model/texture from memory.
+        /// This isn't yet fully ready to be used.
+        /// It will need to eventually flag the slot in the list as free rather than remove it.
+        /// This is so that the objnumbers stored elsewhere wont need to be updated.
         /// </summary>
-        /// <param name="objNumber">The obj number.</param>
+        /// <param name="objNumber">The object number to be removed.</param>
         public void UnloadObject(int objNumber)
         {
             m.RemoveAt(objNumber);
@@ -78,9 +87,9 @@ namespace AP
 		// Private Methods (2) 
 
         /// <summary>
-        /// Draws the buffer.
+        /// This is called to draw a specific buffer.
         /// </summary>
-        /// <param name="objNumber">The obj number.</param>
+        /// <param name="objNumber">The object to draw</param>
         void DrawBuffer(int objNumber)
         {
             // Push current Array Buffer state so we can restore it later
@@ -109,9 +118,9 @@ namespace AP
         }
 
         /// <summary>
-        /// Loads the buffers.
+        /// This is called to load the models buffers into memory.
         /// </summary>
-        /// <param name="objNumber">The obj number.</param>
+        /// <param name="objNumber">The object number being loaded.</param>
         void LoadBuffers(int objNumber)
         {
             float[] verts, norms, texcoords;

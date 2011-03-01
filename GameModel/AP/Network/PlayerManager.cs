@@ -12,6 +12,9 @@ using AP;
 namespace NetLib
 {
 
+    /// <summary>
+    /// Network manager specific to the player.
+    /// </summary>
 public abstract class PlayerManager : NetManager
 {
 		#region Fields (4) 
