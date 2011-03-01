@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{53AD52AF-F8AF-4DF6-880A-BEEDDD323E48}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -139,11 +139,9 @@
     <Compile Include="Enemies\Zombie.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Graphics\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="AP_TemporaryKey.pfx" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -214,6 +212,9 @@
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Graphics\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

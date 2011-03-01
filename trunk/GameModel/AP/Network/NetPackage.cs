@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace NetLib
 {
+    /// <summary>
+    /// Representation of a packet
+    /// </summary>
 	public class NetPackage
 	{
 		#region Fields (10) 

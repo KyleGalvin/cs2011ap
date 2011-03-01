@@ -6,6 +6,9 @@ using System.Xml;
 
 namespace AP
 {
+    /// <summary>
+    /// Handles the level creation
+    /// </summary>
     public class CreateLevel
     {
 		#region Fields (3) 

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace AP.Network
 {
+    /// <summary>
+    /// Used to hold the information about the server.
+    /// </summary>
     public class Server
     {
 		#region Fields (2) 

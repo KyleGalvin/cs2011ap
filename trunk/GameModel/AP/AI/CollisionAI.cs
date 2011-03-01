@@ -5,13 +5,31 @@ using System.Text;
 
 namespace AP
 {
+    /// <summary>
+    /// The class that is used for collision detectiong and enemy AI.
+    /// It keeps a seperate version of the game state which it is able to understand
+    /// and use to efficiently run it's checks.
+    /// </summary>
     class CollisionAI
     {
-        private int Tiles = 50;
+		#region Fields (3) 
+
+        bool[,] blockedByWall;
         //private float TileSize = 1;
         List<Enemy>[,] tileList;
-        bool[,] blockedByWall;
+        private int Tiles = 50;
 
+		#endregion Fields 
+
+		#region Constructors (1) 
+
+        /// <summary>
+        /// Constructor to set up the basic game state as the AI will need to look at it.
+        /// </summary>
+        /// <param name="xWalls">The levels x wall positions.</param>
+        /// <param name="yWalls">The levels y wall positions.</param>
+        /// <param name="xSize">The x size of the walls.</param>
+        /// <param name="ySize">The y size of the walls..</param>
         public CollisionAI(ref List<int> xWalls, ref List<int> yWalls, ref List<int> xSize, ref List<int> ySize)
         {
             tileList = new List<Enemy>[Tiles, Tiles];
@@ -44,97 +62,21 @@ namespace AP
             Console.WriteLine("wall count{0}", wallCount);
         }
 
-        public void updateState(ref List<Enemy> enemyList)
-        {
-            //clear the tiles from the last update
-            for (int i = 0; i < Tiles - 1; i++)
-                for (int j = 0; j < Tiles - 1; j++)
-                    tileList[i, j].Clear();
+		#endregion Constructors 
 
-            foreach (var member in enemyList)
-            {
-                int x = -1, y = -1;
-                for (int i = 0; i < Tiles; i++)
-                {
-                    if (member.xPos <= i - Tiles / 2 && x == -1)
-                    {
-                        x = i;
-                    }
-                    if (member.yPos <= i - Tiles / 2 && y == -1)
-                    {
-                        y = i;
-                    }
-                }
-                if (x != -1 && y != -1)
-                {
-                    tileList[x, y].Add(member);
-                    //Console.WriteLine("Enemy x: " + member.xPos + " added to x tile: " + x);
-                }
-                else
-                    Console.WriteLine("Failed to add an enemy to the tile list");
-            }
-        }
+		#region Methods (4) 
 
-        public bool checkForMovementCollision(Position source, out float moveAwayFromX, out float moveAwayFromY)
-        {
-            Enemy enemyHit;
-            //disabling the buggy wall check for now
-            //if (checkForWallCollision(source, out moveAwayFromX, out moveAwayFromY))
-                //return true;
-            return checkForCollision(source, out moveAwayFromX, out moveAwayFromY, out enemyHit);
-        }
+		// Public Methods (4) 
 
-        public bool checkForWallCollision(Position source, out float moveAwayFromX, out float moveAwayFromY)
-        {
-            int i = -1;
-            int j = -1;
-            for (int l = 0; l < Tiles; l++)
-            {
-                if (source.xPos <= l - Tiles / 2 && i == -1)
-                {
-                    i = l;
-                }
-                if (source.yPos <= l - Tiles / 2 && j == -1)
-                {
-                    j = l;
-                }
-            }
-            if (i != -1 && j != -1)
-            {
-                if (blockedByWall[i, j])
-                {
-                    moveAwayFromX = i - Tiles / 2;
-                    moveAwayFromY = j - Tiles / 2;
-                        int integerDropY = (int)source.yPos;
-                        int integerDropX = (int)source.xPos;
-                            if (source.yPos - integerDropY > -0.5f && source.yPos - integerDropY < 0.5f)
-                            {
-                                moveAwayFromX = source.xPos;
-                                moveAwayFromY = source.yPos - 50;
-                            }
-                            if (source.xPos - integerDropX > -0.5f && source.xPos - integerDropX < 0.5f)
-                            {
-                                moveAwayFromX = source.xPos - 50;
-                                moveAwayFromY = source.yPos;
-                            }
-                       
-                        //Console.WriteLine("{0} {1} {2} {3}", source.xPos, source.yPos, source.xPos - integerDropX, source.yPos - integerDropY);
-                        return true;
-                }
-                //Console.WriteLine("{0}", i);
-                /*
-                if (blockedByWall[i, j])
-                {
-                    moveAwayFromX = i + 0.5f;
-                    moveAwayFromY = j + 0.5f;
-                    return true;
-                }*/
-            }
-            moveAwayFromX = 0;
-            moveAwayFromY = 0;
-            return false;
-        }
-
+        /// <summary>
+        /// Checks to see if the source has collided with a zombie.
+        /// </summary>
+        /// <param name="source">The object that is being checked for collisions.</param>
+        /// <param name="moveAwayFromX">The x position of a found object.</param>
+        /// <param name="moveAwayFromY">The y positions of a found object.</param>
+        /// <param name="enemyHit">The enemy that was hit.</param>
+        /// <returns></returns>
+        /// <output>Returns true if collided with a zombie. It also returns a ref to the enemy and it's centers positions as outs</output>
         public bool checkForCollision(Position source, out float moveAwayFromX, out float moveAwayFromY, out Enemy enemyHit)
         {
             int i = -1;
@@ -275,5 +217,118 @@ namespace AP
             moveAwayFromY = 0;
             return false;                    
         }
+
+        /// <summary>
+        /// Checks for movement collision.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="moveAwayFromX">The move away from X.</param>
+        /// <param name="moveAwayFromY">The move away from Y.</param>
+        /// <returns></returns>
+        public bool checkForMovementCollision(Position source, out float moveAwayFromX, out float moveAwayFromY)
+        {
+            Enemy enemyHit;
+            //disabling the buggy wall check for now
+            //if (checkForWallCollision(source, out moveAwayFromX, out moveAwayFromY))
+                //return true;
+            return checkForCollision(source, out moveAwayFromX, out moveAwayFromY, out enemyHit);
+        }
+
+        /// <summary>
+        /// Checks for wall collision.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="moveAwayFromX">The move away from X.</param>
+        /// <param name="moveAwayFromY">The move away from Y.</param>
+        /// <returns></returns>
+        public bool checkForWallCollision(Position source, out float moveAwayFromX, out float moveAwayFromY)
+        {
+            int i = -1;
+            int j = -1;
+            for (int l = 0; l < Tiles; l++)
+            {
+                if (source.xPos <= l - Tiles / 2 && i == -1)
+                {
+                    i = l;
+                }
+                if (source.yPos <= l - Tiles / 2 && j == -1)
+                {
+                    j = l;
+                }
+            }
+            if (i != -1 && j != -1)
+            {
+                if (blockedByWall[i, j])
+                {
+                    moveAwayFromX = i - Tiles / 2;
+                    moveAwayFromY = j - Tiles / 2;
+                        int integerDropY = (int)source.yPos;
+                        int integerDropX = (int)source.xPos;
+                            if (source.yPos - integerDropY > -0.5f && source.yPos - integerDropY < 0.5f)
+                            {
+                                moveAwayFromX = source.xPos;
+                                moveAwayFromY = source.yPos - 50;
+                            }
+                            if (source.xPos - integerDropX > -0.5f && source.xPos - integerDropX < 0.5f)
+                            {
+                                moveAwayFromX = source.xPos - 50;
+                                moveAwayFromY = source.yPos;
+                            }
+                       
+                        //Console.WriteLine("{0} {1} {2} {3}", source.xPos, source.yPos, source.xPos - integerDropX, source.yPos - integerDropY);
+                        return true;
+                }
+                //Console.WriteLine("{0}", i);
+                /*
+                if (blockedByWall[i, j])
+                {
+                    moveAwayFromX = i + 0.5f;
+                    moveAwayFromY = j + 0.5f;
+                    return true;
+                }*/
+            }
+            moveAwayFromX = 0;
+            moveAwayFromY = 0;
+            return false;
+        }
+
+        /// <summary>
+        /// Sets up the enemy tile lists to be relevant.
+        /// Called every game update.
+        /// </summary>
+        /// <param name="enemyList">The current enemyList</param>
+        /// <output>None.</output>
+        public void updateState(ref List<Enemy> enemyList)
+        {
+            //clear the tiles from the last update
+            for (int i = 0; i < Tiles - 1; i++)
+                for (int j = 0; j < Tiles - 1; j++)
+                    tileList[i, j].Clear();
+
+            foreach (var member in enemyList)
+            {
+                int x = -1, y = -1;
+                for (int i = 0; i < Tiles; i++)
+                {
+                    if (member.xPos <= i - Tiles / 2 && x == -1)
+                    {
+                        x = i;
+                    }
+                    if (member.yPos <= i - Tiles / 2 && y == -1)
+                    {
+                        y = i;
+                    }
+                }
+                if (x != -1 && y != -1)
+                {
+                    tileList[x, y].Add(member);
+                    //Console.WriteLine("Enemy x: " + member.xPos + " added to x tile: " + x);
+                }
+                else
+                    Console.WriteLine("Failed to add an enemy to the tile list");
+            }
+        }
+
+		#endregion Methods 
     }
 }

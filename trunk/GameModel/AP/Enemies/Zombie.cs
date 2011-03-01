@@ -6,6 +6,9 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AP
 {
+    /// <summary>
+    /// Basic Zombie class.
+    /// </summary>
     public class Zombie : Enemy
     {
 		#region Fields (1) 

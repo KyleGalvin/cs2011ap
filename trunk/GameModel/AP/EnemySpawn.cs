@@ -6,6 +6,9 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 namespace AP
 {
+    /// <summary>
+    /// Controls the spawning of enemies
+    /// </summary>
     class EnemySpawn : Position
     {
 		#region Constructors (1) 

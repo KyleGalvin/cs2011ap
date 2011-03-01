@@ -6,6 +6,9 @@ using AP;
 
 namespace NetLib
 {
+    /// <summary>
+    /// Network manager specific to the game host.
+    /// </summary>
     public class HostManager : PlayerManager
     {
 		#region Fields (1) 

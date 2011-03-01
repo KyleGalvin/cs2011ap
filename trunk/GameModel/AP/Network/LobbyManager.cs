@@ -9,6 +9,9 @@ using System.Windows.Forms;
 
 namespace NetLib
 {
+    /// <summary>
+    /// Network manager specific to the lobby.
+    /// </summary>
 	public class LobbyManager : NetManager
 	{
 		#region Fields (3) 

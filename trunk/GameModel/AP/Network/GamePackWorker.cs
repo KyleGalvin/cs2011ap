@@ -4,6 +4,9 @@ using System.Linq;
 using AP;
 namespace NetLib
 {
+    /// <summary>
+    /// Executes the packet commands for the game
+    /// </summary>
     public class GamePackWorker : PackWorker
     {
 		#region Fields (2) 

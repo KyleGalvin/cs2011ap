@@ -7,6 +7,9 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AP
 {
+    /// <summary>
+    /// The class that will keep track of a players state and handle the movement and actions of the player.
+    /// </summary>
     public class Player : Position
     {
 		#region Fields (4) 
@@ -19,7 +22,11 @@ namespace AP
 		#endregion Fields 
 
 		#region Constructors (2) 
-
+        /// <summary>
+        /// The constructor for a player. It will set all the player parameters to default values.
+        /// </summary>
+        /// <param name="position">The starting position of the player.</param>
+        /// <param name="ID">The player ID</param>
         public Player( Vector3 position, int ID )
         {
             this.position = position;
@@ -32,6 +39,9 @@ namespace AP
             radius = 0.1f;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Player"/> class.
+        /// </summary>
         public Player()
         {
             this.position = position;
@@ -99,10 +109,13 @@ namespace AP
         }
 
         /// <summary>
-        /// Makes the move.
+        /// A function that moves the player to a new position relative to his current position and speed.
         /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
+        /// <param name="x">The x direction that the player is trying to move.</param>
+        /// <param name="y">The y direction that the player is trying to move.</param>
+        /// <output>
+        /// No output, but the players position is updated.
+        ///   </output>
         public void makeMove( int x, int y)
         {
             prevXPos = xPos;
@@ -114,10 +127,12 @@ namespace AP
         }
 
         /// <summary>
-        /// Moves the specified x and y.
+        /// The move function is called when a movement key is pressed.
+        /// It will check to see if the player is able to move and if so call makeMove().
+        /// If it see that the player has collided with a zombie it will move him to the middle.
         /// </summary>
-        /// <param name="x">The x.</param>
-        /// <param name="y">The y.</param>
+        /// <param name="x">The x direction that the player is trying to move.</param>
+        /// <param name="y">The y direction that the player is trying to move.</param>
         public void move(int x, int y)
         {
             float len = (float)Math.Sqrt(x * x + y * y);

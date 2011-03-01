@@ -5,6 +5,9 @@ using System.Text;
 
 namespace AP
 {
+    /// <summary>
+    /// This class is used for the stationary boss
+    /// </summary>
     public class StationaryBoss: Enemy
     {
 		#region Constructors (1) 
