@@ -6,6 +6,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace AP
+{
      /// <summary>
      /// The basic bullet class. It will keep track of bullet lifetime as well as movement.
      /// </summary>
