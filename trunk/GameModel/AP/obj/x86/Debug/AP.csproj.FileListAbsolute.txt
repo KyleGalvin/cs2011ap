@@ -44,3 +44,25 @@ C:\Users\chgalvin\Desktop\cs2011ap\GameModel\AP\obj\x86\Debug\AP.exe.manifest
 C:\Users\chgalvin\Desktop\cs2011ap\GameModel\AP\obj\x86\Debug\AP.application
 C:\Users\Gage\Desktop\GameModelCOMMENTZ\AP\obj\x86\Debug\AP.exe
 C:\Users\Gage\Desktop\GameModelCOMMENTZ\AP\obj\x86\Debug\AP.pdb
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\AP.exe
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\AP.pdb
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\AP.exe.config
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\AP.exe.manifest
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\AP.application
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\AP.exe
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\AP.pdb
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\OpenTK.Compatibility.dll
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\OpenTK.dll
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\OpenTK.GLControl.dll
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\OpenTK.xml
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\OpenTK.Compatibility.xml
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\bin\Debug\OpenTK.GLControl.xml
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\AP.csproj.ResolveComReference.cache
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\AP.Forms.Main.resources
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\ResGen.read.1.tlog
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\AP.exe.manifest
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\AP\asdf\obj\x86\Debug\AP.application

@@ -101,7 +101,7 @@ namespace AP
         protected override void OnLoad(EventArgs e)
         {
             // Create 
-            
+            player = new Player();
             gameState = new GameState();
             currentLevel = new CreateLevel(1);
             currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
@@ -138,9 +138,9 @@ namespace AP
             Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
             player.modelNumber = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
 
-            NetLib.NetManager nman = DirtyNetHack(ref gameState);
-            while (!nman.Connected) { }
-            Console.WriteLine("Connected!");
+            //NetLib.NetManager nman = DirtyNetHack(ref gameState);
+            //while (!nman.Connected) { }
+            //Console.WriteLine("Connected!");
         }
 
         /// <summary>
