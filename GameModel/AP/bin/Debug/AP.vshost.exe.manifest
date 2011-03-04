@@ -52,14 +52,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AP.exe" size="33280">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="AP.exe" size="59392">
       <assemblyIdentity name="AP" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>IPqy09hAuoaQouw4ckHyrXQAnd0=</dsig:DigestValue>
+        <dsig:DigestValue>2TTv1RUNxeuVG6wwZTK+lzWAiKc=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -99,22 +99,31 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="bin\Debug\AP.exe" size="33280">
+  <file name="AP.exe.config" size="144">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>pQ//3iH3U8MMXFyRhjt7N7c21FA=</dsig:DigestValue>
+      <dsig:DigestValue>cpzNzlRjZspwKGLNlX6RAlU3880=</dsig:DigestValue>
     </hash>
   </file>
-  <file name="bin\Debug\AP.pdb" size="89600">
+  <file name="bin\Debug\AP.exe" size="58880">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>1r38S8wm70m0hFeW2txBSKueuSY=</dsig:DigestValue>
+      <dsig:DigestValue>jZ9L5g/NIguUGKPuB6hZwSRElu8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="bin\Debug\AP.pdb" size="187904">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>xcOAFPyiDgzgwNkLTZZqykrmDYE=</dsig:DigestValue>
     </hash>
   </file>
   <file name="Levels\level1.xml" size="1062" writeableType="applicationData">
