@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<level1>
+  Level 1 - ROFLPewPew
+  <!-- Vieiwing Distance -->
+  <viewDist dist="23"/>
+  
+  <objects>
+	<!-- Enemy Spawns -->
+	<spawnObject>
+		<spawn x="-8" y="-5">Spawn1</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+	<spawnObject>
+		<spawn x="8" y="5">Spawn2</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+    
+	<!-- Boss -->
+	<boss type="StationaryBoss" x="20" y="20" life="1000"/>  
+	
+	<!-- Walls -->
+	<wallObject>
+		<wall id="1" x="-8" y="7" scale="1" width="17" height="1"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="-8" y="-4" scale="1" width="1" height="11"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="8" y="-7" scale="1" width="1" height="12"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="-8" y="-7" scale="1" width="17" height="1"/>
+	</wallObject>
+  </objects>
+  
+</level1>
