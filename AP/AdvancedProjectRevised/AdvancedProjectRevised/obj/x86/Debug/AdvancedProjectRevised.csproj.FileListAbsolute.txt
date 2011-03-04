@@ -1,0 +1,16 @@
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.pdb
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.dll
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.dll
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.dll
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
