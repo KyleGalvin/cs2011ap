@@ -5,8 +5,6 @@ using System.Threading;
 using System.Collections.Generic;
 using AP;
 
-namespace NetLib
-{
     /// <summary>
     /// The network driver. Basically the network interface
     /// </summary>
@@ -156,5 +154,5 @@ namespace NetLib
 		#endregion Methods 
 	}
 	
-}
+
 

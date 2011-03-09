@@ -9,9 +9,6 @@ using System.Collections.Generic;
 using Timer = System.Threading.Timer;
 using AP;
 
-namespace NetLib
-{
-
     /// <summary>
     /// Network manager specific to the player.
     /// </summary>
@@ -150,4 +147,3 @@ public abstract class PlayerManager : NetManager
 
 		#endregion Methods 
 	}
-}

@@ -4,8 +4,6 @@ using System.Threading;
 using System.Net.Sockets;
 using AP;
 
-namespace NetLib
-{
     /// <summary>
     /// Network manager specific to the game host.
     /// </summary>
@@ -98,4 +96,4 @@ namespace NetLib
         //{
         //}
     }
-}
+

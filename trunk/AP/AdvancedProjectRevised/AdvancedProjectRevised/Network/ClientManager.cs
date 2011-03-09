@@ -6,10 +6,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Text;
 using AP;
-using AP.Network;
 
-namespace NetLib
-{
     /// <summary>
     /// The network library for the client
     /// </summary>
@@ -26,12 +23,18 @@ namespace NetLib
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientManager"/> class.
+        /// As a client, it is our task to update our game state as the server dictates
+        /// as well as to request our player's actions be performed on the server.
+        /// In this manner, the host becomes the central game authority.
         /// </summary>
         /// <param name="port">The port.</param>
         /// <param name="State">The state.</param>
         /// <param name="serv">The server.</param>
         public ClientManager(int port, ref GameState State,Server serv): base(port, ref State)
 		{
+            //we have just recieved the signal to connect to a new game, along with the relevent host IP
+            //We must connect to the given IP before the game starts
+
 			//set up variables
             IsLobby = false;
             client = new TcpClient();
@@ -40,8 +43,9 @@ namespace NetLib
 
             Console.WriteLine("Port: {0} IP: {1}",port,serv.ServerIP);
 			Console.WriteLine("Waiting for connections...");
-			client.Connect(serverEndPoint);
+			client.Connect(serverEndPoint);//wait until we are connected to the server. 
 			
+            //we make a point of saving the server connection for future transmissions
 			lock(this){
 				myConnections.Add(new Connection(client));
 				Console.WriteLine("Connected to {0}",client.Client.RemoteEndPoint);
@@ -49,6 +53,7 @@ namespace NetLib
 			
 			NetworkStream clientStream = client.GetStream();
 			
+            //spawn a thread to listen to the server's signals/communication.
 			Console.WriteLine("Creating listener thread for reading server communications...");
             Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
             clientThread.Start(myConnections[(myConnections.Count - 1)]);
@@ -92,25 +97,6 @@ namespace NetLib
                     Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
                     c.Write(data);
 
-            }
-        }
-
-        /// <summary>
-        /// Servers the handshake.
-        /// </summary>
-        /// <param name="Username">The username.</param>
-        public void ServerHandshake(String Username)
-        {
-            List<byte[]> data = myProtocol.encodeComm(Action.Describe, Type.Player, Username);
-            foreach (Connection c in myConnections)
-            {
-                foreach (NetPackage p in myOutgoing)
-                {
-                    //worker.
-
-                    //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
-                }
             }
         }
 
@@ -194,5 +180,5 @@ namespace NetLib
 
 		#endregion Methods 
 	}
-}
+
 

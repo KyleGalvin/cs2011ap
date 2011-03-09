@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace AP.Network
-{
     /// <summary>
     /// Used to hold the information about the server.
     /// </summary>
@@ -44,4 +42,3 @@ namespace AP.Network
 
 		#endregion Methods 
     }
-}
