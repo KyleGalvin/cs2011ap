@@ -7,8 +7,7 @@ using System.Collections.Generic;
 using AP;
 using System.Windows.Forms;
 
-namespace NetLib
-{
+
     /// <summary>
     /// Network manager specific to the lobby.
     /// </summary>
@@ -189,5 +188,5 @@ namespace NetLib
 
 		#endregion Methods 
     }
-}
+
 
