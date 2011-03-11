@@ -165,9 +165,12 @@ using System.Collections.Generic;
             List<byte[]> result = new List<byte[]>();
             //each type of object has a different composure.
             //here we define the structure of all possible types
+            Console.WriteLine("Incoming type: " + (Type)t);
             switch (t)
             {
+                
                 case Type.AI:
+                    Console.WriteLine("AI");
                     AP.Enemy e = (AP.Enemy)(object)obj;
                     result.Add(BitConverter.GetBytes(e.UID));
                     result.Add(BitConverter.GetBytes(e.xPos));
@@ -176,8 +179,10 @@ using System.Collections.Generic;
                     result.Add(BitConverter.GetBytes(e.yVel));
                     break;
                 case Type.Building:
+                    Console.WriteLine("Building");
                     break;
                 case Type.Bullet:
+                    Console.WriteLine("Bullet");
                     AP.Bullet b = (AP.Bullet)(object)obj;
                     result.Add(BitConverter.GetBytes(b.UID));
                     result.Add(BitConverter.GetBytes(b.xPos));
@@ -186,8 +191,10 @@ using System.Collections.Generic;
                     result.Add(BitConverter.GetBytes(b.yVel));
                     break;
                 case Type.Explosion:
+                    Console.WriteLine("Explosion");
                     break;
                 case Type.Player:
+                    Console.WriteLine("Player");
                     AP.Player p = (AP.Player)(object)obj;
                     result.Add(BitConverter.GetBytes(p.UID));
                     result.Add(BitConverter.GetBytes(p.xPos));
@@ -196,6 +203,7 @@ using System.Collections.Generic;
                     result.Add(BitConverter.GetBytes(p.yVel));
                     break;
                 case Type.Powerup:
+                    Console.WriteLine("AI");
                     break;
                 default:
                     break;

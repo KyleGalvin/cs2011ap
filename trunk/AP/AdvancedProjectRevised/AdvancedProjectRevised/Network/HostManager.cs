@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Net.Sockets;
+using OpenTK;
 using AP;
 
     /// <summary>
@@ -13,7 +14,6 @@ using AP;
 
         //HACK todo
         int i = 0;
-
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -39,6 +39,10 @@ using AP;
             NetPackage pack = new NetPackage();
 
             client = myConnection.GetClient();
+            Player p = new Player(new Vector3(0.5f, 0.5f, 0), State.Players.Count);
+            p.timestamp = 0;
+            State.Players.Add( p );
+           
             Console.WriteLine("client {0} has connected.", client.Client.RemoteEndPoint);
 
             while (true)
