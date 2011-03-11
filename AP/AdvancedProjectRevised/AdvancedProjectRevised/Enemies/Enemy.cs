@@ -72,6 +72,26 @@ public abstract void move(float x, float y);
             yPos = y;
         }
 
+        public void updateTimeStamp()
+        {
+            if( timestamp != -1 )
+                timestamp = DateTime.Now.Ticks;
+        }
+        public bool decreaseHealth()
+        {
+            health--;
+            if (health <= 0)
+            {
+                timestamp = -1;
+                return true;
+            }
+            return false;
+        }
+        public void destroyTimeStamp()
+        {
+            timestamp = -1;
+        }
+
 		#endregion Methods 
     }
 }

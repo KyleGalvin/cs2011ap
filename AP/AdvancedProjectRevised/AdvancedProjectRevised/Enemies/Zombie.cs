@@ -19,7 +19,6 @@ namespace AP
 
 		#region Constructors (1) 
 
- //not sure how this should properly be inheirited so just putting it here for now
         /// <summary>
         /// Initialize the creation of a zombie enemy.
         /// -Zombie's life: 1 hit.
@@ -33,6 +32,8 @@ namespace AP
             enemyID = ID;
             speed = (float)0.05;
             radius = 0.08f;
+            health = 1;
+            updateTimeStamp();
         }
 
 		#endregion Constructors 
@@ -60,6 +61,8 @@ namespace AP
             Program.loadedObjects.DrawObject(drawNumber);
             GL.PopMatrix();
         }
+
+        
 
         /// <summary>
         /// Moves the zombie enemy using the passed x and y positions as
@@ -99,6 +102,7 @@ namespace AP
                 move(-x / len, -y / len);
             }
             setAngle();
+            updateTimeStamp();
         }
 
 		#endregion Methods 
