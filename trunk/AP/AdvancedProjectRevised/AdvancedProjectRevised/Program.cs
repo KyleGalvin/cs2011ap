@@ -83,8 +83,8 @@ namespace AP
             }
             else
             {
-                player = new Player(new Vector3(5,5,0), 0);
-                gameState.Players.Add(player);
+                //player = new Player(new Vector3(5,5,0), 0);
+                //gameState.Players.Add(player);
                 Console.WriteLine("enter server IP:");
                 val = Console.ReadLine();
                 Server serv = new Server("Serv",IPAddress.Parse(val));
@@ -137,12 +137,14 @@ namespace AP
             //loading a cube... so easy
             loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//Bricks.png", 1.0f);            
             loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
+
             Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
-            player.modelNumber = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
+            
 
             net = DirtyNetHack(ref gameState);
             while (!net.Connected) { }
             Console.WriteLine("Connected!");
+            player.modelNumber = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
         }
 
         /// <summary>
@@ -163,26 +165,40 @@ namespace AP
             GL.LoadMatrix(ref camera);
 
             int h = 0;
-            foreach (Player p in gameState.Players)
+            lock (gameState)
             {
-                //5Console.WriteLine("Player " + h + ": xpos: " + p.xPos + " ypos: " + p.yPos);
-                p.draw();
-                h++;
+                player.draw();
+                foreach (Player p in gameState.Players)
+                {
+                    if (p != player)
+                    {
+                        //GL.Translate(-player.xPos, -player.yPos, 0);
+                        p.draw();
+                    }
+                    h++;
+
+                }
             }
              
             GL.Translate(-player.xPos, -player.yPos, 0);
 
-            foreach (Bullet bullet in gameState.Bullets)
+            lock (gameState)
             {
-                bullet.draw();
+                foreach (Bullet bullet in gameState.Bullets)
+                {
+                    bullet.draw();
+                }
             }
 
 
             GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
-            foreach (var member in gameState.Enemies)
+            lock (gameState)
             {
-                //member.Update(ref playerList,ref enemyList, ref xPosSquares,ref yPosSquares);
-                member.draw();
+                foreach (var member in gameState.Enemies)
+                {
+                    //member.Update(ref playerList,ref enemyList, ref xPosSquares,ref yPosSquares);
+                    member.draw();
+                }
             }
 
             zombieIterator++;
@@ -193,10 +209,13 @@ namespace AP
                 spawn.draw();
                 if (zombieIterator == 60)
                 {
-                    //need to ping server for a UID
-                    gameState.Enemies.Add(spawn.spawnEnemy(0));
-                    enemySpawned = true;
-                    zombieCount++;
+                    lock (gameState)
+                    {
+                        //need to ping server for a UID
+                        //gameState.Enemies.Add(spawn.spawnEnemy(0));
+                        enemySpawned = true;
+                        zombieCount++;
+                    }
                 
                 }
             }
