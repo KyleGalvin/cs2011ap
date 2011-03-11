@@ -25,6 +25,12 @@ namespace AP
         public float yVel { get; set; }
         public int enemyID;
         public float radius{ get; set; }
+        public long timestamp;
+
+        public Position()
+        {
+            timestamp = 0;
+        }
 
         //radian constants for angle based calculations
         const float PI = 3.1415926f;

@@ -33,7 +33,7 @@ using AP;
         /// <summary>
         /// Syncs the state.
         /// </summary>
-        public override void SyncState()
+        public override void SyncState(GameState s)
         {
             if (i == 0)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 
 namespace AP
 {
@@ -25,13 +26,20 @@ namespace AP
             Players = new List<AP.Player>();
             Enemies = new List<AP.Enemy>();
             Bullets = new List<AP.Bullet>();
+
+            public void Timestamp(Position Obj)
+            {
+                DateTime t = DateTime.Now;
+                Obj.timestamp = t.Ticks;
+            }
+
         }
 
-		#endregion Constructors 
+		#endregion Constructors
 
-		#region Methods (2) 
+		#region Methods (2)
 
-		// Public Methods (2) 
+		// Public Methods (2)
 
         /// <summary>
         /// Counts this instance.

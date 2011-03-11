@@ -40,7 +40,7 @@ public abstract class PlayerManager : NetManager
     /// <summary>
     /// Syncs the state.
     /// </summary>
-        public abstract void SyncState();
+        public abstract void SyncState(GameState s);
 		// Private Methods (4) 
 
         //automatically find server on subnet

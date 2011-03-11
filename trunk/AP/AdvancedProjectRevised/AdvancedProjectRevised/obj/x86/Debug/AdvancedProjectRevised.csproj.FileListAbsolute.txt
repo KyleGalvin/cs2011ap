@@ -14,3 +14,21 @@ c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\Advan
 c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
 c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
 c:\users\crix\documents\visual studio 2010\Projects\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.pdb
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.dll
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.dll
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.dll
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.read.1.tlog
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
