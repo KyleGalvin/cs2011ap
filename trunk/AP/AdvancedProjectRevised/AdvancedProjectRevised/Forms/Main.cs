@@ -9,8 +9,6 @@ using System.Text;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
-using AP.Network;
-using NetLib;
 
 namespace AP.Forms
 {
