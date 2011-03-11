@@ -26,13 +26,6 @@ namespace AP
             Players = new List<AP.Player>();
             Enemies = new List<AP.Enemy>();
             Bullets = new List<AP.Bullet>();
-
-            public void Timestamp(Position Obj)
-            {
-                DateTime t = DateTime.Now;
-                Obj.timestamp = t.Ticks;
-            }
-
         }
 
 		#endregion Constructors
@@ -57,6 +50,12 @@ namespace AP
         public int getEnemyUID()
         {
             return (enemyIDs++);
+        }
+
+        public void Timestamp(Position Obj)
+        {
+            DateTime t = DateTime.Now;
+            Obj.timestamp = t.Ticks;
         }
 
 		#endregion Methods 
