@@ -121,15 +121,19 @@ using AP;
         /// <summary>
         /// Syncs the state.
         /// </summary>
-        public override void SyncState()
+        public override void SyncState(GameState s)
         {
-            if (i == 0)
+            foreach (Bullet b in s.Bullets)
             {
-                SendObjs<AP.Player>(Action.Create, State.Players);
+
             }
-            else
+            foreach (Enemy e in s.Enemies)
             {
-                SendObjs<AP.Player>(Action.Update, State.Players);
+
+            }
+            foreach (Player p in s.Players)
+            {
+
             }
         }
 		// Protected Methods (1) 

@@ -45,6 +45,7 @@ namespace AP
         List<int> yPosSquares = new List<int>();
         private int zombieCount = 0;
         private int zombieIterator = 0;
+        PlayerManager net;
 
 		#endregion Fields 
 
@@ -68,7 +69,7 @@ namespace AP
         /// </summary>
         /// <param name="s">The s.</param>
         /// <returns></returns>
-        public NetManager DirtyNetHack(ref GameState s)
+        public PlayerManager DirtyNetHack(ref GameState s)
         {
             //create client and/or server
             Console.WriteLine("[s]erver or [c]lient");
@@ -83,10 +84,11 @@ namespace AP
             else
             {
                 player = new Player(new Vector3(5,5,0), 0);
+                gameState.Players.Add(player);
                 Console.WriteLine("enter server IP:");
                 val = Console.ReadLine();
                 Server serv = new Server("Serv",IPAddress.Parse(val));
-                NetManager nman = new ClientManager(9999, ref s,serv);
+                PlayerManager nman = new ClientManager(9999, ref s,serv);
                 while (nman.myConnections.Count == 0){}
                 nman.Connected = true;
                 return nman;
@@ -138,8 +140,8 @@ namespace AP
             Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
             player.modelNumber = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
 
-            NetManager nman = DirtyNetHack(ref gameState);
-            while (!nman.Connected) { }
+            net = DirtyNetHack(ref gameState);
+            while (!net.Connected) { }
             Console.WriteLine("Connected!");
         }
 
@@ -243,7 +245,10 @@ namespace AP
 
                 i++;
             }
-            
+
+            //this updates our game state to the most current version
+            net.SyncState(gameState);
+
             SwapBuffers();
         }
 
