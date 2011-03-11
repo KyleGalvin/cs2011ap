@@ -64,7 +64,6 @@ using System.Collections.Generic;
 				header = BitConverter.ToUInt32(incoming,0);
                 typeofobj = (header & 0x0F000000) >> 24;
 				action = (header & 0xF0000000);
-                Console.WriteLine("action: {0}", (Action)action);
                 if (this.isLobby)
                 {
                     sizeofobj = 1;
@@ -81,7 +80,7 @@ using System.Collections.Generic;
 			}
 			else
 			{
-                Console.WriteLine("Data {0} of {1}: {2}", body.Count, ((myInterpreter.GetCount(header)*sizeofobj) + 1),BitConverter.ToString(body[body.Count-1]));
+                //Console.WriteLine("Data {0} of {1}: {2}", body.Count, ((myInterpreter.GetCount(header)*sizeofobj) + 1),BitConverter.ToString(body[body.Count-1]));
 				if(body.Count == (myInterpreter.GetCount(header)*sizeofobj))
 				{
 					complete = true;
