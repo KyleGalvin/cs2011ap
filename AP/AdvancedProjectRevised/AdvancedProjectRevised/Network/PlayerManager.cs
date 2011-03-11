@@ -19,6 +19,7 @@ public abstract class PlayerManager : NetManager
     private Thread broadcastThread;
     private List<IPAddress> ServerIps = new List<IPAddress>();
     public GameState State;
+    private DateTime lastFrameTime;
     private bool TimesUp;
 
 		#endregion Fields 
@@ -40,7 +41,160 @@ public abstract class PlayerManager : NetManager
     /// <summary>
     /// Syncs the state.
     /// </summary>
-        public abstract void SyncState(GameState s);
+    public void SyncState(GameState s)
+    {
+        List<Enemy> enemyUpdateList = new List<Enemy>();
+        List<Enemy> enemyAddList = new List<Enemy>();
+        List<Enemy> enemyDeleteList = new List<Enemy>();
+        List<Bullet> bulletUpdateList = new List<Bullet>();
+        List<Bullet> bulletAddList = new List<Bullet>();
+        List<Bullet> bulletDeleteList = new List<Bullet>();
+        List<Player> playerUpdateList = new List<Player>();
+        List<Player> playerAddList = new List<Player>();
+        List<Player> playerDeleteList = new List<Player>();
+        foreach( Bullet b in s.Bullets )
+        {
+            if( b.timestamp > lastFrameTime.Ticks )
+            {
+                bulletUpdateList.Add(b);
+                this.SendObjs<Bullet>( Action.Update, bulletUpdateList );
+            }
+            else if ( b.timestamp == 0 )
+            {
+                bulletAddList.Add(b);
+                this.SendObjs<Bullet>( Action.Create, bulletAddList );
+            }
+            else if ( b.timestamp == -1 )
+            {
+                bulletDeleteList.Add(b);
+                this.SendObjs<Bullet>( Action.Delete, bulletDeleteList );
+            }
+            b.timestamp = DateTime.Now.Ticks;
+        }
+        foreach( Player p in s.Players )
+        {
+            if( p.timestamp > lastFrameTime.Ticks )
+            {
+                playerUpdateList.Add(p);
+                this.SendObjs<Player>( Action.Update, playerUpdateList );
+            }
+            else if ( p.timestamp == 0 )
+            {
+                playerAddList.Add(p);
+                this.SendObjs<Player>( Action.Create, playerAddList );
+            }
+            else if ( p.timestamp == -1 )
+            {
+                playerDeleteList.Add(p);
+                this.SendObjs<Player>( Action.Delete, playerDeleteList );
+            }
+            p.timestamp = DateTime.Now.Ticks;
+        }
+        foreach( Enemy e in s.Enemies )
+        {
+            if( e.timestamp > lastFrameTime.Ticks )
+            {
+                enemyUpdateList.Add(e);
+            }
+            else if ( e.timestamp == 0 )
+            {
+                enemyAddList.Add(e);
+            }
+            else if ( e.timestamp == -1 )
+            {
+                enemyDeleteList.Add(e);
+            }
+            e.timestamp = DateTime.Now.Ticks;
+        }
+        this.SendObjs<Enemy>( Action.Update, enemyUpdateList );
+        this.SendObjs<Player>( Action.Create, playerUpdateList );
+        this.SendObjs<Bullet>( Action.Delete, bulletUpdateList );
+        this.SendObjs<Enemy>( Action.Update, enemyAddList );
+        this.SendObjs<Player>( Action.Create, playerAddList );
+        this.SendObjs<Bullet>( Action.Delete, bulletAddList );
+        this.SendObjs<Enemy>( Action.Update, enemyDeleteList );
+        this.SendObjs<Player>( Action.Create, playerDeleteList );
+        this.SendObjs<Bullet>( Action.Delete, bulletDeleteList );
+        lastFrameTime = DateTime.Now;
+    }
+
+    /*public void logic<T>(  obj )
+    {
+        List<T> updateList = new List<T>();
+        List<T> addList = new List<T>();
+        List<T> deleteList = new List<T>();
+        if( obj.timestamp > lastFrameTime.Ticks )
+        {
+            updateList.Add(p);
+            this.SendObjs<T>( Action.Update, updateList );
+        }
+        else if ( obj.timestamp == 0 )
+        {
+            addList.Add(p);
+            this.SendObjs<T>( Action.Create, addList );
+        }
+        else if ( obj.timestamp == -1 )
+        {
+            deleteList.Add(p);
+            this.SendObjs<T>( Action.Delete, deleteList );
+        }
+        lastFrameTime = DateTime.Now;
+    }*/
+
+    /*public void modifyStateElement()
+    {
+        switch()
+        {
+            case enemyModification:
+            {
+	            var foundEnemy = 	from e in <enemyList>
+						            select e
+						            where e.id = $
+						            select e;
+						
+	            using(foundEnemy)
+	            {
+		            e.xPos = <packetInfo>;
+		            e.yPos = <packetInfo>;
+		            e.xVel = <packetInfo>;
+		            e.yVel = <packetInfo>;
+		            e.life = <packetInfo>;
+	            }
+	            break;
+            }
+            case playerModification:
+            {
+	            var foundPlayer = 	from p in <playerList>
+						            select p
+						            where p.id = #
+						            select p;
+						
+	            using(foundPlayer)
+	            {
+		            p.xPos = <packetInfo>;
+		            p.yPos = <packetInfo>;
+		            p.xVel = <packetInfo>;
+		            p.yVel = <packetInfo>;
+		            p.life = <packetInfo>;
+	            }
+	            break;
+            }
+            case bulletModification:
+            {
+	            var foundBullet = 	from b in <List>
+						            select b
+						            where b.id = #
+						            select b;
+						
+	            using(foundBullet)
+	            {
+		            b.xPos = <packetInfo>;
+		            b.yPos = <packetInfo>;
+	            }
+	            break;
+            }
+        }
+    }*/
 		// Private Methods (4) 
 
         //automatically find server on subnet
