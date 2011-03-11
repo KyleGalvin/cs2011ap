@@ -45,6 +45,11 @@ namespace AP
 
 		// Public Methods (11) 
 
+        public void updateTimeStamp()
+        {
+            timestamp = DateTime.Now.Ticks;
+        }
+
         /// <summary>
         /// Determines whether this instance can shoot.
         /// </summary>
