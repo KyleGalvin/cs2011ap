@@ -117,25 +117,6 @@ using AP;
                 }
             }
         }
-
-        /// <summary>
-        /// Syncs the state.
-        /// </summary>
-        public override void SyncState(GameState s)
-        {
-            foreach (Bullet b in s.Bullets)
-            {
-
-            }
-            foreach (Enemy e in s.Enemies)
-            {
-
-            }
-            foreach (Player p in s.Players)
-            {
-
-            }
-        }
 		// Protected Methods (1) 
 
         /// <summary>
