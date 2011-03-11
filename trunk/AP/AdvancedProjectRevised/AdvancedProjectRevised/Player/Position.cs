@@ -26,6 +26,7 @@ namespace AP
         public int enemyID;
         public float radius{ get; set; }
         public long timestamp;
+        protected int health = 0;
 
         public Position()
         {
