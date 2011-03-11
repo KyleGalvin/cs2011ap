@@ -27,24 +27,6 @@ using AP;
 		#endregion Constructors 
 
 		#region Methods (2) 
-
-		// Public Methods (1) 
-
-        /// <summary>
-        /// Syncs the state.
-        /// </summary>
-        public override void SyncState(GameState s)
-        {
-            if (i == 0)
-            {
-                SendObjs<AP.Player>(Action.Create, State.Players);
-            }
-            else
-            {
-                SendObjs<AP.Player>(Action.Update, State.Players);
-            }
-               
-        }
 		// Protected Methods (1) 
 
         /// <summary>

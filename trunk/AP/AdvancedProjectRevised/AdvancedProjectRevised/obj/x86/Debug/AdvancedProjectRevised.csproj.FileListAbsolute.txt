@@ -32,3 +32,5 @@ C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResour
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\March11\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\Users\Crix\Documents\Visual Studio 2010\Projects\March11\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb

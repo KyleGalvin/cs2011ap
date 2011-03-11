@@ -352,7 +352,9 @@ namespace AP
                 bool hit = collisionAI.checkForCollision(bullet, out moveX, out moveY, out enemyHit);
                 if (hit)
                 {
-                    gameState.Enemies.Remove(enemyHit);
+
+                    if(enemyHit.decreaseHealth())
+                        gameState.Enemies.Remove(enemyHit);
                     GC.Collect();
                     tmpBullet.Add(bullet);
                 }
