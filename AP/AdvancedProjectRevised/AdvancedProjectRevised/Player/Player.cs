@@ -69,6 +69,8 @@ namespace AP
 
         public void updateTimeStamp()
         {
+
+            //Console.WriteLine(timestamp);
             timestamp = DateTime.Now.Ticks;
         }
 

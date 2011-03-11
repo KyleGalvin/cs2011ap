@@ -25,12 +25,12 @@ namespace AP
         public float yVel { get; set; }
         public int enemyID;
         public float radius{ get; set; }
-        public long timestamp;
+        public long timestamp = 0;
         protected int health = 0;
 
         public Position()
         {
-            timestamp = 0;
+            timestamp = DateTime.Now.Ticks;
         }
 
         //radian constants for angle based calculations
