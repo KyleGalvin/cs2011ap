@@ -67,6 +67,11 @@ namespace AP
             playerId = ID;
         }
 
+        public void updateTimeStamp()
+        {
+            timestamp = DateTime.Now.Ticks;
+        }
+
         /// <summary>
         /// Draws this instance.
         /// </summary>
