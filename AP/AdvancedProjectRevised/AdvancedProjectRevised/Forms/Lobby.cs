@@ -5,8 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using NetLib;
-using AP.Network;
 
 namespace AP.Forms
 {
