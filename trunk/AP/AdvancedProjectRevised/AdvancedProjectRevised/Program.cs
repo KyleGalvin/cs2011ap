@@ -68,7 +68,7 @@ namespace AP
         /// </summary>
         /// <param name="s">The s.</param>
         /// <returns></returns>
-        public NetLib.NetManager DirtyNetHack(ref GameState s)
+        public NetManager DirtyNetHack(ref GameState s)
         {
             //create client and/or server
             Console.WriteLine("[s]erver or [c]lient");
@@ -78,15 +78,15 @@ namespace AP
             {
                 player = new Player();
                 gameState.Players.Add(player);
-                return new NetLib.HostManager(9999,ref s);
+                return new HostManager(9999,ref s);
             }
             else
             {
                 player = new Player(new Vector3(5,5,0), 0);
                 Console.WriteLine("enter server IP:");
                 val = Console.ReadLine();
-                Network.Server serv = new Network.Server("Serv",IPAddress.Parse(val));
-                NetLib.NetManager nman = new NetLib.ClientManager(9999, ref s,serv);
+                Server serv = new Server("Serv",IPAddress.Parse(val));
+                NetManager nman = new ClientManager(9999, ref s,serv);
                 while (nman.myConnections.Count == 0){}
                 nman.Connected = true;
                 return nman;
@@ -138,9 +138,9 @@ namespace AP
             Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
             player.modelNumber = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
 
-            //NetLib.NetManager nman = DirtyNetHack(ref gameState);
-            //while (!nman.Connected) { }
-            //Console.WriteLine("Connected!");
+            NetManager nman = DirtyNetHack(ref gameState);
+            while (!nman.Connected) { }
+            Console.WriteLine("Connected!");
         }
 
         /// <summary>
@@ -163,7 +163,7 @@ namespace AP
             int h = 0;
             foreach (Player p in gameState.Players)
             {
-                Console.WriteLine("Player " + h + ": xpos: " + p.xPos + " ypos: " + p.yPos);
+                //5Console.WriteLine("Player " + h + ": xpos: " + p.xPos + " ypos: " + p.yPos);
                 p.draw();
                 h++;
             }
