@@ -64,6 +64,11 @@ using AP;
 
 		#region Methods (6) 
 
+        public override void SyncState(GameState s)
+        {
+
+        }
+
 		// Public Methods (5) 
 
         /// <summary>
@@ -139,7 +144,7 @@ using AP;
                 {
                     //read package data
                     Console.WriteLine("attempt to read pack:");
-                    pack = myConnection.ReadPackage();
+                    //pack = myConnection.ReadPackage();
                     Console.WriteLine("Package recieved!");
                 }
                 catch
@@ -153,7 +158,7 @@ using AP;
                 //	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
                 //	break;
                 //}
-                packetSwitcher(pack);
+                //packetSwitcher(pack);
             }
 
             lock (this)

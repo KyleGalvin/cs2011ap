@@ -14,7 +14,7 @@ namespace AP
     {
 		#region Fields (4) 
 
-        public int modelNumber;
+        public int modelNumber = 3;
         private int playerId;
         public string playerName;
         public Weapon weapons = new Weapon();
@@ -87,6 +87,35 @@ namespace AP
             GL.Translate(0, 0, 0.4f);
             GL.Rotate(angle - 90, 0, 0, 1);
             GL.Rotate(180, 0, 1.0f, 0);            
+            Program.loadedObjects.DrawObject(modelNumber);
+            GL.PopMatrix();
+            /*GL.Begin( BeginMode.Polygon);
+
+            GL.Color3(colorR, colorG, colorB);
+            GL.Vertex3(-radius, 0, 0.01f);
+            GL.Vertex3(-radius * 0.7, radius * 0.7, 0.01f);
+            GL.Vertex3(0, radius, 0.01f);
+            GL.Vertex3(radius * 0.7, radius * 0.7, 0.01f);
+            GL.Vertex3(radius, 0, 0.01f);
+            GL.Vertex3(radius * 0.7, -radius * 0.7, 0.01f);
+            GL.Vertex3(0, -radius, 0.01f);
+            GL.Vertex3(-radius * 0.7, -radius * 0.7, 0.01f);
+
+            GL.End();*/
+        }
+
+        /// <summary>
+        /// Draws this instance.
+        /// </summary>
+        public void drawOtherPlayer()
+        {
+            float colorR = 0.0f;
+            float colorG = 0.0f;
+            float colorB = 1.0f;
+            float radius = 0.1f;
+            GL.PushMatrix();
+            GL.Rotate(angle - 90, 0, 0, 1);
+            GL.Rotate(180, 0, 1.0f, 0);
             Program.loadedObjects.DrawObject(modelNumber);
             GL.PopMatrix();
             /*GL.Begin( BeginMode.Polygon);
