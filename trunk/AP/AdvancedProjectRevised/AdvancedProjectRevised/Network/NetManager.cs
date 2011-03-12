@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
 using AP;
+using OpenTK;
 
     /// <summary>
     /// The network driver. Basically the network interface
@@ -46,6 +47,11 @@ using AP;
 
 		#region Methods (4) 
 
+        public void setRole(String role)
+        {
+            myRole = role;
+        }
+
 		// Public Methods (3) 
 
         //protected NetManager(int newPort)
@@ -87,12 +93,16 @@ using AP;
                 Connection lastCon = myConnections[myConnections.Count - 1];
                 lastCon.myStream.myPackage.isLobby = IsLobby;
 
-
-				
 				Console.WriteLine("Starting the {0}th connection",myConnections.Count);
 				//create a thread to handle communication
 				Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
 				clientThread.Start(myConnections[(myConnections.Count -1)]);
+                if (Connected && String.Compare(myRole, "server")==0)
+                {
+                    Player p = new Player(new Vector3(5.0f, 5.0f, 0), State.Players.Count);
+                    p.timestamp = 0;
+                    State.Players.Add(p);
+                }
 			}
 		}
 
