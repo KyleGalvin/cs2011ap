@@ -137,9 +137,9 @@ using AP;
         /// <typeparam name="T"></typeparam>
         /// <param name="a">A.</param>
         /// <param name="Objs">The objs.</param>
-        public void SendObjs<T>(Action a,List<T> Objs)
+        public void SendObjs<T>(Action a,List<T> Objs, Type objType)
         {
-            List<byte[]> data = myProtocol.encodeObjs(a, Type.Player, Objs);
+            List<byte[]> data = myProtocol.encodeObjs(a, objType , Objs);
             foreach (Connection c in myConnections)
             {
                 //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );

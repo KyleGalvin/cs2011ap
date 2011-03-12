@@ -103,7 +103,7 @@ public class LobbyManager : NetManager
             //      Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
             //      break;
             //}
-            packetSwitcher(pack);
+            //packetSwitcher(pack);
         }
 
         lock (this)
