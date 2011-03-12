@@ -118,10 +118,7 @@ using AP;
             NetPackage pack = new NetPackage();
 
             client = myConnection.GetClient();
-            Player p = new Player(new Vector3(5.0f, 5.0f, 0), State.Players.Count);
-            p.timestamp = 0;
-            State.Players.Add( p );
-           
+
             Console.WriteLine("client {0} has connected.", client.Client.RemoteEndPoint);
 
 

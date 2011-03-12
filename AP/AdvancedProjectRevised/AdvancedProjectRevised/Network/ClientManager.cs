@@ -66,7 +66,7 @@ using AP;
 
         public override void SyncState(GameState s)
         {
-            case enemyModification:
+            /*case enemyModification:
             {
 	            var foundEnemy = 	from e in <enemyList>
 						            select e
@@ -152,22 +152,22 @@ using AP;
 		            enemyList.remove(e);
 	            }
 	            break;
-            }
+            }*/
 
-            case createEnemy:
-            {
-	            <enemyList>.add(new Enemy(/*info*/));
-	            break;
-            }
-            case createPlayer:
-            {
-	            <playerList>.add(new Player(/*info*/));
-	            break;
-            }
-            case createBullet:
-            {
-	            <bulletList>.add(new Bullet(/*info*/));
-            }
+            //case createEnemy:
+            //{
+            //    <enemyList>.add(new Enemy(/*info*/));
+            //    break;
+            //}
+            //case createPlayer:
+            //{
+            //    <playerList>.add(new Player(/*info*/));
+            //    break;
+            //}
+            //case createBullet:
+            //{
+            //    <bulletList>.add(new Bullet(/*info*/));
+            //}
         }
 
 		// Public Methods (5) 
