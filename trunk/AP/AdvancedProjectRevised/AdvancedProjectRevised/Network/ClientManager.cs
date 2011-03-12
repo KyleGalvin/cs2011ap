@@ -64,8 +64,8 @@ using AP;
 
 		#region Methods (6) 
 
-        public override void SyncState(GameState s)
-        {
+        //public override void SyncState(GameState s)
+       // {
             /*case enemyModification:
             {
 	            var foundEnemy = 	from e in <enemyList>
@@ -168,7 +168,7 @@ using AP;
             //{
             //    <bulletList>.add(new Bullet(/*info*/));
             //}
-        }
+       // }
 
 		// Public Methods (5) 
 
@@ -245,7 +245,7 @@ using AP;
                 {
                     //read package data
                     Console.WriteLine("attempt to read pack:");
-                    //pack = myConnection.ReadPackage();
+                    pack = myConnection.ReadPackage();
                     Console.WriteLine("Package recieved!");
                 }
                 catch
@@ -259,7 +259,7 @@ using AP;
                 //	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
                 //	break;
                 //}
-                //packetSwitcher(pack);
+                packetSwitcher(pack);
             }
 
             lock (this)

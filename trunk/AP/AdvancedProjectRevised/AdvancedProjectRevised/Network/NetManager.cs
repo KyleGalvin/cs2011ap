@@ -23,8 +23,8 @@ using OpenTK;
 		protected String myRole;
 		protected int port;
 		protected Thread respondThread;
-        static public GameState State;
         protected PackWorker worker;
+        public GameState State;
 
 		#endregion Fields 
 

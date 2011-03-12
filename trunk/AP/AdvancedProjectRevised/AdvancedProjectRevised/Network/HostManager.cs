@@ -30,7 +30,7 @@ using AP;
 		#region Methods (2) 
 		// Protected Methods (1) 
 
-        public override void SyncState(GameState s)
+        /*public override void SyncState(GameState s)
         {
             List<Enemy> enemyUpdateList = new List<Enemy>();
             List<Enemy> enemyAddList = new List<Enemy>();
@@ -106,7 +106,7 @@ using AP;
             this.SendObjs<Player>(Action.Create, playerDeleteList, Type.Player);
             this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
             lastFrameTime = DateTime.Now;
-        }
+        }*/
 
         /// <summary>
         /// Handles the incoming comm.
@@ -129,7 +129,7 @@ using AP;
                 {
                     //read package data
                     Console.WriteLine("attempt to read pack:");
-                    //pack = myConnection.ReadPackage();
+                    pack = myConnection.ReadPackage();
                     Console.WriteLine("Package recieved!");
                 }
                 catch
@@ -143,7 +143,7 @@ using AP;
                 //	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
                 //	break;
                 //}
-                //packetSwitcher(pack);
+                packetSwitcher(pack);
             }
 
             lock (this)
