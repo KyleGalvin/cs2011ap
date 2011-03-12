@@ -12,7 +12,7 @@ using AP;
 
         //private List<AP.Position> GameState;
         PackageInterpreter myInterpreter = new PackageInterpreter();
-        GameState State;
+        
 
 		#endregion Fields 
 

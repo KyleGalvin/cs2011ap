@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AP;
+using OpenTK;
 
     /// <summary>
     /// Executes the packet commands
@@ -8,7 +9,7 @@ using AP;
     public abstract class PackWorker
     {
 		#region Fields (1) 
-
+        protected GameState State;
         //private List<AP.Position> GameState;
         protected PackageInterpreter myInterpreter = new PackageInterpreter();
 
@@ -32,6 +33,11 @@ using AP;
         /// <param name="pack">The pack.</param>
         public virtual void HandleCreate(NetPackage pack)
         {
+            if (pack.typeofobj.Equals(Type.Player))
+            {
+                Console.WriteLine("FUCKKKKKKKKKKK YA!");
+                State.Players.Add( new Player( new Vector3((float)BitConverter.ToDouble(pack.body[1],0), (float)BitConverter.ToDouble(pack.body[2],0), 0), BitConverter.ToInt32(pack.body[0],0) ));
+            }
         }
 
         /// <summary>

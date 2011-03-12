@@ -18,7 +18,6 @@ public abstract class PlayerManager : NetManager
 
     private Thread broadcastThread;
     private List<IPAddress> ServerIps = new List<IPAddress>();
-    public GameState State;
     protected DateTime lastFrameTime;
     private bool TimesUp;
 
