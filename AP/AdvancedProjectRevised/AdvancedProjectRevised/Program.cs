@@ -74,12 +74,15 @@ namespace AP
             //create client and/or server
             Console.WriteLine("[s]erver or [c]lient");
             string val = Console.ReadLine();
+            PlayerManager manager;
 
             if (val == "s")
             {
                 player = new Player();
                 gameState.Players.Add(player);
-                return new HostManager(9999,ref s);
+                manager = new HostManager(9999, ref s);
+                manager.setRole("server");
+                return manager;
             }
             else
             {
@@ -88,10 +91,11 @@ namespace AP
                 Console.WriteLine("enter server IP:");
                 val = Console.ReadLine();
                 Server serv = new Server("Serv",IPAddress.Parse(val));
-                PlayerManager nman = new ClientManager(9999, ref s,serv);
-                while (nman.myConnections.Count == 0){}
-                nman.Connected = true;
-                return nman;
+                manager = new ClientManager(9999, ref s,serv);
+                manager.setRole("client");
+                while (manager.myConnections.Count == 0){}
+                manager.Connected = true;
+                return manager;
             }
         }
 		// Protected Methods (4) 
@@ -103,12 +107,10 @@ namespace AP
         protected override void OnLoad(EventArgs e)
         {
             // Create 
-            player = new Player();
             gameState = new GameState();
             currentLevel = new CreateLevel(1);
             currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
             collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
-            gameState.Players.Add(player);
             if ( xPosSpawn.Count > 0 )
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
@@ -164,24 +166,20 @@ namespace AP
                                               OpenTK.Vector3d.Zero, up);
             GL.LoadMatrix(ref camera);
 
-            int h = 0;
+            player.draw();
+            
+            GL.Translate(-player.xPos, -player.yPos, 0);
             lock (gameState)
             {
-                player.draw();
+
                 foreach (Player p in gameState.Players)
                 {
                     if (p != player)
                     {
-                        //GL.Translate(-player.xPos, -player.yPos, 0);
                         p.draw();
                     }
-                    h++;
-
                 }
             }
-             
-            GL.Translate(-player.xPos, -player.yPos, 0);
-
             lock (gameState)
             {
                 foreach (Bullet bullet in gameState.Bullets)
