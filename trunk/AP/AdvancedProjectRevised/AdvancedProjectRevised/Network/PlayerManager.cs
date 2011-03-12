@@ -41,7 +41,7 @@ public abstract class PlayerManager : NetManager
     /// <summary>
     /// Syncs the state.
     /// </summary>
-    public abstract void SyncState(GameState s);
+    
 
     /*public void modifyStateElement()
     {
@@ -200,6 +200,95 @@ public abstract class PlayerManager : NetManager
 	            Console.WriteLine("Broadcast May be disabled...");
 	        }
 	    }
+
+        public void SyncState(GameState s)
+        {
+            SyncStateIncoming(s);//handle incoming packets
+            SyncStateOutgoing(s);//send relevent data out to connections
+        }
+
+        public void SyncStateIncoming(GameState s)
+        {
+        }
+
+        public void SyncStateOutgoing(GameState s)
+        {
+            List<Enemy> enemyUpdateList = new List<Enemy>();
+            List<Enemy> enemyAddList = new List<Enemy>();
+            List<Enemy> enemyDeleteList = new List<Enemy>();
+            List<Bullet> bulletUpdateList = new List<Bullet>();
+            List<Bullet> bulletAddList = new List<Bullet>();
+            List<Bullet> bulletDeleteList = new List<Bullet>();
+            List<Player> playerUpdateList = new List<Player>();
+            List<Player> playerAddList = new List<Player>();
+            List<Player> playerDeleteList = new List<Player>();
+
+            foreach (Bullet b in s.Bullets)
+            {
+                if (b.timestamp > lastFrameTime.Ticks)
+                {
+                    bulletUpdateList.Add(b);
+                    this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
+                }
+                else if (b.timestamp == 0)
+                {
+                    bulletAddList.Add(b);
+                    this.SendObjs<Bullet>(Action.Create, bulletAddList, Type.Bullet);
+                }
+                else if (b.timestamp == -1)
+                {
+                    bulletDeleteList.Add(b);
+                    this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
+                }
+                b.timestamp = DateTime.Now.Ticks;
+            }
+            foreach (Player p in s.Players)
+            {
+                if (p.timestamp > lastFrameTime.Ticks)
+                {
+                    playerUpdateList.Add(p);
+                    this.SendObjs<Player>(Action.Update, playerUpdateList, Type.Player);
+                }
+                else if (p.timestamp == 0)
+                {
+                    playerAddList.Add(p);
+                    this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
+                }
+                else if (p.timestamp == -1)
+                {
+                    playerDeleteList.Add(p);
+                    this.SendObjs<Player>(Action.Delete, playerDeleteList, Type.Player);
+                }
+                p.timestamp = DateTime.Now.Ticks;
+            }
+            foreach (Enemy e in s.Enemies)
+            {
+                if (e.timestamp > lastFrameTime.Ticks)
+                {
+                    enemyUpdateList.Add(e);
+                }
+                else if (e.timestamp == 0)
+                {
+                    enemyAddList.Add(e);
+                }
+                else if (e.timestamp == -1)
+                {
+                    enemyDeleteList.Add(e);
+                }
+                e.timestamp = DateTime.Now.Ticks;
+            }
+            this.SendObjs<Enemy>(Action.Update, enemyUpdateList, Type.AI);
+            this.SendObjs<Player>(Action.Create, playerUpdateList, Type.Player);
+            this.SendObjs<Bullet>(Action.Delete, bulletUpdateList, Type.Bullet);
+            this.SendObjs<Enemy>(Action.Update, enemyAddList, Type.AI);
+            this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
+            this.SendObjs<Bullet>(Action.Delete, bulletAddList, Type.Bullet);
+            this.SendObjs<Enemy>(Action.Update, enemyDeleteList, Type.AI);
+            this.SendObjs<Player>(Action.Create, playerDeleteList, Type.Player);
+            this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
+            lastFrameTime = DateTime.Now;
+
+        }
 
 		#endregion Methods 
 	}
