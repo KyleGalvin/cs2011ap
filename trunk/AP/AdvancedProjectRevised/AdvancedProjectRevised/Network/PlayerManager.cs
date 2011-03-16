@@ -40,7 +40,6 @@ public abstract class PlayerManager : NetManager
     /// <summary>
     /// Syncs the state.
     /// </summary>
-    
 
     /*public void modifyStateElement()
     {
@@ -200,14 +199,19 @@ public abstract class PlayerManager : NetManager
 	        }
 	    }
 
-        public void SyncState(GameState s)
+        public void SyncState(ref GameState s)
         {
             SyncStateIncoming(s);//handle incoming packets
             SyncStateOutgoing(s);//send relevent data out to connections
+            lock (s)
+            {
+                s = State;
+            }
         }
 
         public void SyncStateIncoming(GameState s)
         {
+
         }
 
         public void SyncStateOutgoing(GameState s)

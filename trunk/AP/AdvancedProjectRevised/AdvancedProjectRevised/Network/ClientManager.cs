@@ -186,7 +186,7 @@ using AP;
                     //worker.
 
                     //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
+                    //c.Write(data);
                 }
             }
         }
@@ -201,7 +201,7 @@ using AP;
             foreach (Connection c in myConnections)
             {
                     Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
+                   // c.Write(data);
 
             }
         }
@@ -219,7 +219,7 @@ using AP;
                     //worker.
 
                     //Console.WriteLine("Writing model to stream: {0}",BitConverter.ToString(data[0],0)  );
-                    c.Write(data);
+                   // c.Write(data);
                 }
             }
         }
@@ -244,9 +244,10 @@ using AP;
                 try
                 {
                     //read package data
-                    Console.WriteLine("attempt to read pack:");
+                    //Console.WriteLine("attempt to read pack:");
                     pack = myConnection.ReadPackage();
-                    Console.WriteLine("Package recieved!");
+                    //Console.WriteLine("Package recieved!");
+                    //Console.WriteLine("incoming id " + BitConverter.ToInt32( pack.body[0],0 )+"incoming x:" + BitConverter.ToInt32( pack.body[1],0 )+ " incoming y:" + BitConverter.ToInt32( pack.body[2],0));
                 }
                 catch
                 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
     public enum Action
     {
-        Create = 0x00000000,
+        Create = 0x60000000,
         Delete = 0x10000000,
         Update = 0x20000000,
         Request = 0x30000000,
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
     public enum Type
     {
-        Player = 0x00000000,
+        Player = 0x09000000,
         AI = 0x01000000,
         Building = 0x03000000,
         Bullet = 0x04000000,

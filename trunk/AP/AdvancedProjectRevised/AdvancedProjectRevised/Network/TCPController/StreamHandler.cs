@@ -39,7 +39,7 @@ using System.Collections.Generic;
         public NetPackage ReadPackage()
         {
 
-
+            myPackage=new NetPackage();
             //keep reading from stream until pack.iscomplete is true
             byte[] rawMessage = new byte[4];
 
@@ -47,8 +47,6 @@ using System.Collections.Generic;
             int i = 0;
             int bytesRead = 0;
             Console.WriteLine("Waiting for incoming data from...");
-            bytesRead += myStream.Read(rawMessage, 0, 4);//read header
-            myPackage.Recieve(rawMessage);
 
             while (myPackage.IsComplete() == false)
             {//recieve body
@@ -71,7 +69,6 @@ using System.Collections.Generic;
                 myStream.Write(chunk32, 0, 4);//write the data in 32 bit blocks
             }
             myStream.Flush();
-            Console.WriteLine("Write multi data to socket here");
         }
 
         /// <summary>

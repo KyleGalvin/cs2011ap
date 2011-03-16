@@ -85,6 +85,7 @@ using AP;
                 {
                     List<AP.Player> result = new List<AP.Player>();
                     result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                    result.Last().modelNumber = Program.spritenum;
                     State.Players.AddRange(result);
                     Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
                 }
@@ -156,6 +157,7 @@ using AP;
                     //todo TEST!! This will probably break
                     State.Players.Where(y => y.UID == UID ).First().Update(
                         pack.body[1], pack.body[2], pack.body[3], pack.body[4]);
+                    Console.WriteLine("HANDLE UPDATE: " + pack.body[0] + " " +  pack.body[1] + " " + pack.body[2] + " " + pack.body[3] + " " + pack.body[4]);
                 }
                 else if ((Type)t == Type.Bullet)
                 {
