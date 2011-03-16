@@ -68,33 +68,33 @@ using AP;
         /// <param name="pack">The pack.</param>
         public override void HandleCreate(NetPackage pack)
         {
-            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj << 24));
+            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj));
 
             //i=1 initially since the header is not data
             for (int i = 0; i < pack.count; i++)
             {
-                UInt32 t = pack.typeofobj << 24;
+                UInt32 t = pack.typeofobj;
                 if ((Type)t == Type.AI)
                 {
                     List<AP.Enemy> result = new List<AP.Enemy>();
-                    result.Add(CreateAI(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                    result.Add(CreateAI(pack.body.GetRange((int)(i * myTypeSize)+1, 5)));
                     State.Enemies.AddRange(result);
                     Console.WriteLine("Created {0} AI objects from remote network command!", result.Count);
                 }
                 else if ((Type)t == Type.Player)
                 {
                     List<AP.Player> result = new List<AP.Player>();
-                    result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize), 5)));
+                    result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize)+1, 5)));
                     result.Last().modelNumber = Program.spritenum;
                     State.Players.AddRange(result);
                     Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
                 }
                 else if ((Type)t == Type.Bullet)
                 {
-                    List<AP.Player> result = new List<AP.Player>();
-                    result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize), 5)));
-                    State.Players.AddRange(result);
-                    Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
+                    //List<AP.Player> result = new List<AP.Player>();
+                    ////result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize)+1, 5)));
+                    //State.Players.AddRange(result);
+                    //Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
                 }
             }
 
@@ -117,6 +117,14 @@ using AP;
         {
         }
 
+        public override void HandleIdentify(NetPackage pack)
+        {
+            State.myUID = BitConverter.ToInt32(pack.body[1], 0);
+            Console.WriteLine("MY UID is set to " + State.myUID);
+            Console.WriteLine("PACKAGE " + BitConverter.ToInt32(pack.body[1], 0));
+        }
+
+
         /// <summary>
         /// Handles the text.
         /// </summary>
@@ -137,16 +145,16 @@ using AP;
         /// </summary>
         /// <param name="pack">The pack.</param>
         /// <returns></returns>
-        public List<AP.Position> HandleUpdate(NetPackage pack)
+        public override void HandleUpdate(NetPackage pack)
         {
             List<AP.Position> result = new List<AP.Position>();
 
-            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj << 24));
+            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj ));
             //i=1 initially since the header is not data
             for (int i = 0; i < pack.count; i++)
             {
-                var UID = BitConverter.ToUInt32(pack.body[0], 0);
-                UInt32 t = pack.typeofobj << 24;
+                var UID = BitConverter.ToUInt32(pack.body[(i*(int)myTypeSize)+1], 0);
+                UInt32 t = pack.typeofobj;
                 if ((Type)t == Type.AI)
                 {
                     State.Enemies.Where(y => y.UID == UID).First().Update(
@@ -155,9 +163,9 @@ using AP;
                 else if ((Type)t == Type.Player)
                 {
                     //todo TEST!! This will probably break
-                    State.Players.Where(y => y.UID == UID ).First().Update(
+                    State.Players.Where(y => y.playerId == UID ).First().Update(
                         pack.body[1], pack.body[2], pack.body[3], pack.body[4]);
-                    Console.WriteLine("HANDLE UPDATE: " + pack.body[0] + " " +  pack.body[1] + " " + pack.body[2] + " " + pack.body[3] + " " + pack.body[4]);
+                   Console.WriteLine("HANDLE UPDATE: " +  (float)BitConverter.ToSingle(pack.body[0],0) + " " +   (float)BitConverter.ToSingle(pack.body[1],0) + " " +  (float)BitConverter.ToSingle(pack.body[2],0) + " " +  (float)BitConverter.ToSingle(pack.body[3],0) + " " +  BitConverter.ToSingle(pack.body[4],0));
                 }
                 else if ((Type)t == Type.Bullet)
                 {
@@ -167,7 +175,7 @@ using AP;
                 }
             }
             Console.WriteLine("Created {0} objects from remote network command!", result.Count);
-            return result;
+            //return result;
         
         }
 

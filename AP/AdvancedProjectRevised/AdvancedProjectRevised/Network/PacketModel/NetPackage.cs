@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
     /// <summary>
     /// Representation of a packet
@@ -18,6 +19,7 @@ using System.Collections.Generic;
 		public UInt32 sizeofobj;
 		public UInt32 totalSize;
 		public UInt32 typeofobj;
+        public List<byte[]> newbody;
 
 		#endregion Fields 
 
@@ -29,6 +31,7 @@ using System.Collections.Generic;
 			complete = false;
 			header = 0;
 			body = new List<byte[]>();
+            newbody = new List<byte[]>();
 		}
 
 		#endregion Constructors 
@@ -57,14 +60,15 @@ using System.Collections.Generic;
 		{
 			//we only intend to recieve 4 bytes at a time
             //Console.WriteLine("Float: "+BitConverter.ToSingle(incoming,0)+" Int: "+BitConverter.ToInt32(incoming,0));
-			body.Add(incoming);
-			
+            body.Add(incoming.ToList().ToArray());
+            Console.WriteLine(incoming[0] + " " + incoming[1] + " " + incoming[2] + " " + incoming[3]);
+            
 			if(body.Count == 1)
 			{
 				//no header has been created. We naievely assume the data read is a header
 				
 				header = BitConverter.ToUInt32(incoming,0);
-                typeofobj = (header & 0x0F000000) >> 24;
+                typeofobj = (header & 0x0F000000) ;
 				action = (header & 0xF0000000);
                 if (this.isLobby)
                 {
@@ -72,12 +76,12 @@ using System.Collections.Generic;
                 }
                 else
                 {
-                    sizeofobj = myInterpreter.GetTypeSize((Type)(0x01000000));
+                    sizeofobj = myInterpreter.GetTypeSize((Type)(typeofobj));
                 }
                // Console.WriteLine("action: {0}", (Action)action);
                 count = myInterpreter.GetCount(header);
                 //Console.WriteLine("type: {0}", (Type)typeofobj);
-				Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,count,action);
+                Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}", sizeofobj, ((Type)(typeofobj)).ToString(), count, ((Action)action).ToString());
                 Console.WriteLine(header);
 			}
 			else
