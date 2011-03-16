@@ -24,7 +24,7 @@ using OpenTK;
 		protected int port;
 		protected Thread respondThread;
         protected PackWorker worker;
-        public GameState State;
+        public  GameState State;
 
 		#endregion Fields 
 
@@ -93,6 +93,8 @@ using OpenTK;
                 Connection lastCon = myConnections[myConnections.Count - 1];
                 lastCon.myStream.myPackage.isLobby = IsLobby;
 
+                lastCon.playerUID = myConnections.Count;
+
 				Console.WriteLine("Starting the {0}th connection",myConnections.Count);
 				//create a thread to handle communication
 				Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
@@ -123,6 +125,7 @@ using OpenTK;
                 if (pack.action == (UInt32)Action.Create)
                 {
                     worker.HandleCreate(pack);
+                 
                     Console.WriteLine("Create command triggered by incoming packet header");
                 }
                 if (pack.action == (UInt32)Action.Update)

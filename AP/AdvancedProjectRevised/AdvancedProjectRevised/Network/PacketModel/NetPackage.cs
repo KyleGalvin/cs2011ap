@@ -45,6 +45,7 @@ using System.Collections.Generic;
         /// </returns>
 		public bool IsComplete()
 		{
+
 			return complete;
 		}
 
@@ -55,6 +56,7 @@ using System.Collections.Generic;
 		public void Recieve(byte[] incoming)
 		{
 			//we only intend to recieve 4 bytes at a time
+            //Console.WriteLine("Float: "+BitConverter.ToSingle(incoming,0)+" Int: "+BitConverter.ToInt32(incoming,0));
 			body.Add(incoming);
 			
 			if(body.Count == 1)
@@ -72,17 +74,19 @@ using System.Collections.Generic;
                 {
                     sizeofobj = myInterpreter.GetTypeSize((Type)(0x01000000));
                 }
-                Console.WriteLine("action: {0}", (Action)action);
+               // Console.WriteLine("action: {0}", (Action)action);
                 count = myInterpreter.GetCount(header);
-                Console.WriteLine("action: {0}", (Type)typeofobj);
+                //Console.WriteLine("type: {0}", (Type)typeofobj);
 				Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}",sizeofobj,typeofobj,count,action);
                 Console.WriteLine(header);
 			}
 			else
 			{
+   
                 //Console.WriteLine("Data {0} of {1}: {2}", body.Count, ((myInterpreter.GetCount(header)*sizeofobj) + 1),BitConverter.ToString(body[body.Count-1]));
-				if(body.Count == (myInterpreter.GetCount(header)*sizeofobj))
+				if(body.Count == ((myInterpreter.GetCount(header)*sizeofobj))+1)
 				{
+                    Console.WriteLine("Packet complete: " + body.Count);
 					complete = true;
 				}
 			}

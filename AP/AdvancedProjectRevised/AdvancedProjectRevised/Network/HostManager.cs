@@ -115,8 +115,7 @@ using AP;
         protected override void HandleIncomingComm(object connection)
         {
             Connection myConnection = (Connection)connection;
-            NetPackage pack = new NetPackage();
-
+            
             client = myConnection.GetClient();
 
             Console.WriteLine("client {0} has connected.", client.Client.RemoteEndPoint);
@@ -124,6 +123,7 @@ using AP;
 
             while (true)
             {
+                NetPackage pack = new NetPackage();
                 Console.WriteLine("Size of game state: {0}", State.Enemies.Count + State.Players.Count);
                 try
                 {
@@ -131,6 +131,7 @@ using AP;
                     Console.WriteLine("attempt to read pack:");
                     pack = myConnection.ReadPackage();
                     Console.WriteLine("Package recieved!");
+                    Console.WriteLine("incoming x:" + pack.body[1] + " incoming y:" + pack.body[2]);
                 }
                 catch
                 {

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 		private TcpClient myClient;
         public StreamHandler myStream;
         public string playerName;
-        public int playerUID;
+        public int playerUID { get; set; }
 
 		#endregion Fields 
 
@@ -49,13 +49,14 @@ using System.Collections.Generic;
 			return myStream.ReadPackage();
 		}
 
+
         /// <summary>
         /// Writes the specified data to a communication packet.
         /// </summary>
         /// <param name="data">The data.</param>
 		public void Write(List<byte[]> data)
 		{
-			myStream.Write(data);
+			//myStream.Write(data);
 		}
 
         /// <summary>
@@ -64,7 +65,7 @@ using System.Collections.Generic;
         /// <param name="data">The data.</param>
 		public void Write(byte[] data)
 		{
-			myStream.Write(data);
+			//myStream.Write(data);
 		}
 
 		#endregion Methods 
