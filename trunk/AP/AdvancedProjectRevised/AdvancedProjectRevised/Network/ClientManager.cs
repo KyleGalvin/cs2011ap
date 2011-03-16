@@ -43,7 +43,8 @@ using AP;
 
             Console.WriteLine("Port: {0} IP: {1}",port,serv.ServerIP);
 			Console.WriteLine("Waiting for connections...");
-			client.Connect(serverEndPoint);//wait until we are connected to the server. 
+			
+            client.Connect(serverEndPoint);//wait until we are connected to the server. 
 			
             //we make a point of saving the server connection for future transmissions
 			lock(this){
@@ -248,10 +249,12 @@ using AP;
                     pack = myConnection.ReadPackage();
                     //Console.WriteLine("Package recieved!");
                     //Console.WriteLine("incoming id " + BitConverter.ToInt32( pack.body[0],0 )+"incoming x:" + BitConverter.ToInt32( pack.body[1],0 )+ " incoming y:" + BitConverter.ToInt32( pack.body[2],0));
+                    packetSwitcher(pack);
                 }
-                catch
+                catch(Exception e)
                 {
                     //a socket error has occured
+                    Console.WriteLine(e.ToString());
                     break;
                 }
 
@@ -260,7 +263,7 @@ using AP;
                 //	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
                 //	break;
                 //}
-                packetSwitcher(pack);
+                
             }
 
             lock (this)

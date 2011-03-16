@@ -16,7 +16,7 @@ namespace AP
         public List<AP.Enemy> Enemies;
         private int enemyIDs = 4;
         public List<AP.Player> Players;
-
+        public int myUID;
 		#endregion Fields 
 
 		#region Constructors (1) 

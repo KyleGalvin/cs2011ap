@@ -14,7 +14,7 @@ namespace AP
 {
     class Program : GameWindow
     {
-        #region Fields (23)
+		#region Fields (23) 
 
         public static CollisionAI collisionAI;
         public static int spritenum;
@@ -48,22 +48,22 @@ namespace AP
         private int zombieIterator = 0;
         PlayerManager net;
 
-        #endregion Fields
+		#endregion Fields 
 
-        #region Constructors (1)
+		#region Constructors (1) 
 
         /// <summary>Creates a window with the specified title.</summary>
         public Program()
-            : base(100, 100, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
+            : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
             VSync = VSyncMode.On;
         }
 
-        #endregion Constructors
+		#endregion Constructors 
 
-        #region Methods (7)
+		#region Methods (7) 
 
-        // Public Methods (1) 
+		// Public Methods (1) 
 
         /// <summary>
         /// Dirties the net hack.
@@ -74,7 +74,7 @@ namespace AP
         {
             //create client and/or server
             //Console.WriteLine("[s]erver or [c]lient");
-            //  string val = Console.ReadLine();
+          //  string val = Console.ReadLine();
             PlayerManager manager;
 
             //if (val == "s")
@@ -87,19 +87,19 @@ namespace AP
             //}
             //else
             //{
-            //player = new Player(new Vector3(5,5,0), 0);
-            //gameState.Players.Add(player);
-            //Console.WriteLine("enter server IP:");
-            //val = Console.ReadLine();
-            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.171"));
-            manager = new ClientManager(9999, ref s, serv);
-            manager.setRole("client");
-            while (manager.myConnections.Count == 0) { }
-            manager.Connected = true;
-            return manager;
-            // }
+                //player = new Player(new Vector3(5,5,0), 0);
+                //gameState.Players.Add(player);
+                //Console.WriteLine("enter server IP:");
+                //val = Console.ReadLine();
+                Server serv = new Server("Serv",IPAddress.Parse("192.168.0.197"));
+                manager = new ClientManager(9999, ref s,serv);
+                manager.setRole("client");
+                while (manager.myConnections.Count == 0){}
+                manager.Connected = true;
+                return manager;
+           // }
         }
-        // Protected Methods (4) 
+		// Protected Methods (4) 
 
         /// <summary>
         /// Load resources here.
@@ -112,19 +112,19 @@ namespace AP
             currentLevel = new CreateLevel(1);
             currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
             collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
-            if (xPosSpawn.Count > 0)
+            if ( xPosSpawn.Count > 0 )
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
             }
-            if (xPosSpawn.Count > 1)
+            if ( xPosSpawn.Count > 1 )
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1]));
             }
-            if (xPosSpawn.Count > 2)
+            if ( xPosSpawn.Count > 2 )
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2]));
             }
-            if (xPosSpawn.Count > 3)
+            if ( xPosSpawn.Count > 3 )
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
             }
@@ -136,10 +136,10 @@ namespace AP
             GL.EnableClientState(ArrayCap.NormalArray);
             GL.EnableClientState(ArrayCap.TextureCoordArray);
             GL.EnableClientState(ArrayCap.IndexArray);
-
+            
             //loading a cube... so easy
-            loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//Bricks.png", 1.0f);
-            loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
+            //loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);            
+            //loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
 
             Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
 
@@ -158,124 +158,127 @@ namespace AP
         /// <param name="e">Contains timing information.</param>
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            //Console.WriteLine(gameState.Players.Count);
-            base.OnRenderFrame(e);
-            int i = 0;
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-
-            Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist),
-                                              OpenTK.Vector3d.Zero, up);
-            //GL.LoadMatrix(ref camera);
-
-            //player.draw();
-
-            //GL.Translate(-player.xPos, -player.yPos, 0);
-            lock (gameState)
+            if (gameState.Players.Count > 0)
             {
+                //Console.WriteLine(gameState.Players.Count);
+                base.OnRenderFrame(e);
+                int i = 0;
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                GL.MatrixMode(MatrixMode.Modelview);
+                GL.LoadIdentity();
 
-                foreach (Player p in gameState.Players)
+                Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist),
+                                                  OpenTK.Vector3d.Zero, up);
+                GL.LoadMatrix(ref camera);
+
+                //player.draw();
+
+                //GL.Translate(-gameState.Players.Where(y=>y.playerId==gameState.myUID).First().xPos, -gameState.Players.Where(y=>y.playerId==gameState.myUID).First().yPos, 0);
+                /*lock (gameState)
                 {
-                    if (p.UID == net.myConnections[0].playerUID)
+
+                    foreach (Player p in gameState.Players)
                     {
-                        GL.LoadMatrix(ref camera);
-                        p.draw();
-                    }
-                    else
-                    {
-                        GL.Translate(-player.xPos, -player.yPos, 0);
-                        p.draw();
-                    }
-                }
-            }
-            lock (gameState)
-            {
-                foreach (Bullet bullet in gameState.Bullets)
-                {
-                    bullet.draw();
-                }
-            }
-
-
-            GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
-            lock (gameState)
-            {
-                foreach (var member in gameState.Enemies)
-                {
-                    //member.Update(ref playerList,ref enemyList, ref xPosSquares,ref yPosSquares);
-                    member.draw();
-                }
-            }
-
-            zombieIterator++;
-            if (zombieCount < 20)
-            {
-                foreach (var spawn in spawns)
-                {
-                    spawn.draw();
-                    if (zombieIterator == 60)
-                    {
-                        lock (gameState)
+                        if (p.UID == net.myConnections[0].playerUID)
                         {
-                            //need to ping server for a UID
-                            //gameState.Enemies.Add(spawn.spawnEnemy(0));
-                            enemySpawned = true;
-                            zombieCount++;
+                            GL.LoadMatrix(ref camera);
+                            p.draw();
                         }
-
+                        else
+                        {
+                            GL.Translate(-player.xPos, -player.yPos, 0);
+                            p.draw();
+                        }
                     }
-                }
-                if (enemySpawned)
+                }*/
+                lock (gameState)
                 {
-                    zombieIterator = 0;
-                    enemySpawned = false;
-                }
-            }
-
-            GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
-            //change this to be the same way as you do the walls
-            for (int x = 0; x < 5; x++)
-                for (int y = 0; y < 5; y++)
-                {
-                    GL.PushMatrix();
-                    GL.Translate(-10 + x * 5.75, -10 + y * 5.75, 0);
-                    loadedObjects.DrawObject(1); //grassssssssssssss
-                    GL.PopMatrix();
-                }
-
-            i = 0;
-            foreach (var x in xPosSquares)
-            {
-                if (widthSquares[i] > 1)
-                {
-                    for (int idx = 0; idx < widthSquares[i]; idx++)
+                    foreach (Bullet bullet in gameState.Bullets)
                     {
-                        GL.LoadMatrix(ref camera);
-                        GL.Translate(-player.xPos, -player.yPos, 0);
-                        GL.Translate(x + idx - 0.5f, yPosSquares[i] - 0.5f, 0.5f);
-                        loadedObjects.DrawObject(0);
+                        bullet.draw();
                     }
                 }
 
-                if (heightSquares[i] > 1)
+
+                GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
+                lock (gameState)
                 {
-                    for (int idx = 0; idx < heightSquares[i]; idx++)
+                    foreach (var member in gameState.Enemies)
                     {
-                        GL.LoadMatrix(ref camera);
-                        GL.Translate(-player.xPos, -player.yPos, 0);
-                        GL.Translate(x - 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
-                        loadedObjects.DrawObject(0);
+                        //member.Update(ref playerList,ref enemyList, ref xPosSquares,ref yPosSquares);
+                        member.draw();
                     }
                 }
 
-                i++;
+                zombieIterator++;
+                if (zombieCount < 20)
+                {
+                    foreach (var spawn in spawns)
+                    {
+                        spawn.draw();
+                        if (zombieIterator == 60)
+                        {
+                            lock (gameState)
+                            {
+                                //need to ping server for a UID
+                                //gameState.Enemies.Add(spawn.spawnEnemy(0));
+                                enemySpawned = true;
+                                zombieCount++;
+                            }
+
+                        }
+                    }
+                    if (enemySpawned)
+                    {
+                        zombieIterator = 0;
+                        enemySpawned = false;
+                    }
+                }
+
+                GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
+                //change this to be the same way as you do the walls
+                for (int x = 0; x < 5; x++)
+                    for (int y = 0; y < 5; y++)
+                    {
+                        GL.PushMatrix();
+                        GL.Translate(-10 + x * 5.75, -10 + y * 5.75, 0);
+                        loadedObjects.DrawObject(1); //grassssssssssssss
+                        GL.PopMatrix();
+                    }
+
+                i = 0;
+                foreach (var x in xPosSquares)
+                {
+                    if (widthSquares[i] > 1)
+                    {
+                        for (int idx = 0; idx < widthSquares[i]; idx++)
+                        {
+                            GL.LoadMatrix(ref camera);
+                            //GL.Translate(-player.xPos, -player.yPos, 0);
+                            GL.Translate(x + idx - 0.5f, yPosSquares[i] - 0.5f, 0.5f);
+                            loadedObjects.DrawObject(0);
+                        }
+                    }
+
+                    if (heightSquares[i] > 1)
+                    {
+                        for (int idx = 0; idx < heightSquares[i]; idx++)
+                        {
+                            GL.LoadMatrix(ref camera);
+                            //GL.Translate(-player.xPos, -player.yPos, 0);
+                            GL.Translate(x - 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
+                            loadedObjects.DrawObject(0);
+                        }
+                    }
+
+                    i++;
+                }
+
+                //this updates our game state to the most current version
+                //net.SyncState(ref gameState);
+
+                SwapBuffers();
             }
-
-            //this updates our game state to the most current version
-            net.SyncState(ref gameState);
-
-            SwapBuffers();
         }
 
         /// <summary>
@@ -298,109 +301,119 @@ namespace AP
         /// Called when it is time to setup the next frame. Add you game logic here.
         /// </summary>
         /// <param name="e">Contains timing information for framerate independent logic.</param>
-        protected override void OnUpdateFrame(FrameEventArgs e)
+        protected override void  OnUpdateFrame(FrameEventArgs e)
         {
+
             if (Keyboard[Key.W] && Keyboard[Key.D])
-                player.move(1, 1);
+            {
+                //player.move(1, 1);
+             
+                net.SendObjs<int>(Action.Request, new List<int>() { 1, 1 }, Type.Move);
+            }
             else if (Keyboard[Key.W] && Keyboard[Key.A])
-                player.move(-1, 1);
+            {
+                net.SendObjs<int>(Action.Request, new List<int>() { -1, 1 }, Type.Move);
+            }
             else if (Keyboard[Key.S] && Keyboard[Key.D])
-                player.move(1, -1);
+            {
+                net.SendObjs<int>(Action.Request, new List<int>() { 1, -1 }, Type.Move);
+            }
             else if (Keyboard[Key.S] && Keyboard[Key.A])
-                player.move(-1, -1);
+                net.SendObjs<int>(Action.Request, new List<int>() { -1, -1 }, Type.Move);
             else if (Keyboard[Key.W])
-                player.move(0, 1);
+                net.SendObjs<int>(Action.Request, new List<int>() { 0, 1 }, Type.Move);
             else if (Keyboard[Key.S])
-                player.move(0, -1);
+                net.SendObjs<int>(Action.Request, new List<int>() { 0, -1 }, Type.Move);
             else if (Keyboard[Key.A])
-                player.move(-1, 0);
+                net.SendObjs<int>(Action.Request, new List<int>() { -1, 0 }, Type.Move);
             else if (Keyboard[Key.D])
-                player.move(1, 0);
+                net.SendObjs<int>(Action.Request, new List<int>() { 1, 0 }, Type.Move);
             else if (Keyboard[Key.Escape])
                 Exit();
 
-            if (Keyboard[OpenTK.Input.Key.Up])
-            {
-                viewDist *= 1.1f;
-                Console.WriteLine("View distance: {0}", viewDist);
-            }
-            else if (Keyboard[OpenTK.Input.Key.Down])
-            {
-                viewDist *= 0.9f;
-                Console.WriteLine("View distance: {0}", viewDist);
-            }
-
-            if (Keyboard[Key.Number1])
-            {
-                player.weapons.equipPistol();
-            }
-            if (Keyboard[Key.Number2])
-            {
-                player.weapons.equipRifle();
-            }
-            if (Keyboard[Key.Number3])
-            {
-                player.weapons.equipShotgun();
-            }
-            if (Keyboard[Key.Number4])
-            {
-                player.weapons.equipRocket();
-            }
-
-            float wheelD = Mouse.WheelDelta;
-            viewDirection.Y += wheelD / 10;
-            viewDirection.Z += wheelD / 10;
-
-            collisionAI.updateState(ref gameState.Enemies);
-            foreach (var member in gameState.Enemies)
-            {
-                member.moveTowards(player);
-            }
-
-            if (Mouse[OpenTK.Input.MouseButton.Left] == true)
-            {
-                if (player.weapons.canShoot())
+                if (Keyboard[OpenTK.Input.Key.Up])
                 {
-                    player.weapons.shoot(ref gameState.Bullets, ref player, screenX, screenY, Mouse.X, Mouse.Y);
+                    viewDist *= 1.1f;
+                    Console.WriteLine("View distance: {0}", viewDist);
                 }
-            }
-            // player.weapons.updateBulletCooldown();
-
-            List<Bullet> tmpBullet = new List<Bullet>();
-            foreach (Bullet bullet in gameState.Bullets)
-            {
-                bullet.move();
-                if (bullet.killProjectile())
-                    tmpBullet.Add(bullet);
-                float moveX;
-                float moveY;
-                Enemy enemyHit;
-                bool hit = collisionAI.checkForCollision(bullet, out moveX, out moveY, out enemyHit);
-                if (hit)
+                else if (Keyboard[OpenTK.Input.Key.Down])
                 {
-
-                    if (enemyHit.decreaseHealth())
-                        gameState.Enemies.Remove(enemyHit);
-                    GC.Collect();
-                    tmpBullet.Add(bullet);
+                    viewDist *= 0.9f;
+                    Console.WriteLine("View distance: {0}", viewDist);
                 }
-            }
 
-            foreach (Bullet bullet in tmpBullet)
-            {
-                gameState.Bullets.Remove(bullet);
-            }
+                if (Keyboard[Key.Number1])
+                {
+                    player.weapons.equipPistol();
+                }
+                if (Keyboard[Key.Number2])
+                {
+                    player.weapons.equipRifle();
+                }
+                if (Keyboard[Key.Number3])
+                {
+                    player.weapons.equipShotgun();
+                }
+                if (Keyboard[Key.Number4])
+                {
+                    player.weapons.equipRocket();
+                }
 
-            GC.Collect();
+                float wheelD = Mouse.WheelDelta;
+                viewDirection.Y += wheelD / 10;
+                viewDirection.Z += wheelD / 10;
+
+                collisionAI.updateState(ref gameState.Enemies);
+                foreach (var member in gameState.Enemies)
+                {
+                    member.moveTowards(player);
+                }
+
+                if (Mouse[OpenTK.Input.MouseButton.Left] == true)
+                {
+                    if (player.weapons.canShoot())
+                    {
+                        player.weapons.shoot(ref gameState.Bullets, ref player, screenX, screenY, Mouse.X, Mouse.Y);
+                    }
+                }
+                // player.weapons.updateBulletCooldown();
+
+                List<Bullet> tmpBullet = new List<Bullet>();
+                foreach (Bullet bullet in gameState.Bullets)
+                {
+                    bullet.move();
+                    if (bullet.killProjectile())
+                        tmpBullet.Add(bullet);
+                    float moveX;
+                    float moveY;
+                    Enemy enemyHit;
+                    bool hit = collisionAI.checkForCollision(bullet, out moveX, out moveY, out enemyHit);
+                    if (hit)
+                    {
+
+                        if (enemyHit.decreaseHealth())
+                            gameState.Enemies.Remove(enemyHit);
+                        GC.Collect();
+                        tmpBullet.Add(bullet);
+                    }
+                }
+
+                foreach (Bullet bullet in tmpBullet)
+                {
+                    gameState.Bullets.Remove(bullet);
+                }
+
+                GC.Collect();
+            
         }
-        // Private Methods (2) 
+		// Private Methods (2) 
 
         /// <summary>
         /// Assign passed enemy object a unique enemyIdentifier
         /// </summary>
         /// <param name="enemy">Passed enemy object.</param>
         /// <output>None.</output>
-        private void assignEnemyID(Enemy enemy)
+        private void assignEnemyID( Enemy enemy )
         {
             enemy.enemyID = enemyIdentifier++;
         }
@@ -414,12 +427,12 @@ namespace AP
             // - get client info
             //Form1 form = new Form1();
 
-            using (Program game = new Program())
+            using( Program game = new Program() )
             {
                 game.Run(28.0);
             }
         }
 
-        #endregion Methods
+		#endregion Methods 
     }
 }

@@ -203,10 +203,10 @@ public abstract class PlayerManager : NetManager
         {
             SyncStateIncoming(s);//handle incoming packets
             SyncStateOutgoing(s);//send relevent data out to connections
-            lock (s)
-            {
-                s = State;
-            }
+            //lock (s)
+            //{
+            s = State;
+            //}
         }
 
         public void SyncStateIncoming(GameState s)

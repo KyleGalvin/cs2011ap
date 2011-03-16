@@ -93,7 +93,7 @@ using OpenTK;
                 Connection lastCon = myConnections[myConnections.Count - 1];
                 lastCon.myStream.myPackage.isLobby = IsLobby;
 
-                lastCon.playerUID = myConnections.Count;
+                //lastCon.playerUID = myConnections.Count;
 
 				Console.WriteLine("Starting the {0}th connection",myConnections.Count);
 				//create a thread to handle communication
@@ -130,7 +130,7 @@ using OpenTK;
                 }
                 if (pack.action == (UInt32)Action.Update)
                 {
-
+                    worker.HandleUpdate(pack);
                 }
                 if (pack.action == (UInt32)Action.Request)
                 {
@@ -139,6 +139,10 @@ using OpenTK;
                 if (pack.action == (UInt32)Action.Describe)
                 {
                     worker.HandleDescribe(pack);
+                }
+                if (pack.action == (UInt32)Action.Identify)
+                {
+                    worker.HandleIdentify(pack);
                 }
 
             }
