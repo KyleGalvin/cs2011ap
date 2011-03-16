@@ -14,9 +14,10 @@ namespace AP
 {
     class Program : GameWindow
     {
-		#region Fields (23) 
+        #region Fields (23)
 
         public static CollisionAI collisionAI;
+        public static int spritenum;
         CreateLevel currentLevel;
         // Default position and velocity
         Vector3 defaultPosition = new Vector3(0, 0, 0);
@@ -47,22 +48,22 @@ namespace AP
         private int zombieIterator = 0;
         PlayerManager net;
 
-		#endregion Fields 
+        #endregion Fields
 
-		#region Constructors (1) 
+        #region Constructors (1)
 
         /// <summary>Creates a window with the specified title.</summary>
         public Program()
-            : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
+            : base(100, 100, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
             VSync = VSyncMode.On;
         }
 
-		#endregion Constructors 
+        #endregion Constructors
 
-		#region Methods (7) 
+        #region Methods (7)
 
-		// Public Methods (1) 
+        // Public Methods (1) 
 
         /// <summary>
         /// Dirties the net hack.
@@ -72,33 +73,33 @@ namespace AP
         public PlayerManager DirtyNetHack(ref GameState s)
         {
             //create client and/or server
-            Console.WriteLine("[s]erver or [c]lient");
-            string val = Console.ReadLine();
+            //Console.WriteLine("[s]erver or [c]lient");
+            //  string val = Console.ReadLine();
             PlayerManager manager;
 
-            if (val == "s")
-            {
-                player = new Player();
-                gameState.Players.Add(player);
-                manager = new HostManager(9999, ref s);
-                manager.setRole("server");
-                return manager;
-            }
-            else
-            {
-                //player = new Player(new Vector3(5,5,0), 0);
-                //gameState.Players.Add(player);
-                Console.WriteLine("enter server IP:");
-                val = Console.ReadLine();
-                Server serv = new Server("Serv",IPAddress.Parse(val));
-                manager = new ClientManager(9999, ref s,serv);
-                manager.setRole("client");
-                while (manager.myConnections.Count == 0){}
-                manager.Connected = true;
-                return manager;
-            }
+            //if (val == "s")
+            //{
+            //    player = new Player();
+            //    gameState.Players.Add(player);
+            //    manager = new HostManager(9999, ref s);
+            //    manager.setRole("server");
+            //    return manager;
+            //}
+            //else
+            //{
+            //player = new Player(new Vector3(5,5,0), 0);
+            //gameState.Players.Add(player);
+            //Console.WriteLine("enter server IP:");
+            //val = Console.ReadLine();
+            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.171"));
+            manager = new ClientManager(9999, ref s, serv);
+            manager.setRole("client");
+            while (manager.myConnections.Count == 0) { }
+            manager.Connected = true;
+            return manager;
+            // }
         }
-		// Protected Methods (4) 
+        // Protected Methods (4) 
 
         /// <summary>
         /// Load resources here.
@@ -111,19 +112,19 @@ namespace AP
             currentLevel = new CreateLevel(1);
             currentLevel.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
             collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
-            if ( xPosSpawn.Count > 0 )
+            if (xPosSpawn.Count > 0)
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
             }
-            if ( xPosSpawn.Count > 1 )
+            if (xPosSpawn.Count > 1)
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1]));
             }
-            if ( xPosSpawn.Count > 2 )
+            if (xPosSpawn.Count > 2)
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2]));
             }
-            if ( xPosSpawn.Count > 3 )
+            if (xPosSpawn.Count > 3)
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
             }
@@ -135,18 +136,20 @@ namespace AP
             GL.EnableClientState(ArrayCap.NormalArray);
             GL.EnableClientState(ArrayCap.TextureCoordArray);
             GL.EnableClientState(ArrayCap.IndexArray);
-            
+
             //loading a cube... so easy
-            loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//Bricks.png", 1.0f);            
+            loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//Bricks.png", 1.0f);
             loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
 
             Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
-            
+
 
             net = DirtyNetHack(ref gameState);
             while (!net.Connected) { }
             Console.WriteLine("Connected!");
-            player.modelNumber = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
+            //player = new Player();
+            //gameState.Players.Add(player);
+            spritenum = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
         }
 
         /// <summary>
@@ -164,18 +167,24 @@ namespace AP
 
             Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist),
                                               OpenTK.Vector3d.Zero, up);
-            GL.LoadMatrix(ref camera);
+            //GL.LoadMatrix(ref camera);
 
-            player.draw();
-            
-            GL.Translate(-player.xPos, -player.yPos, 0);
+            //player.draw();
+
+            //GL.Translate(-player.xPos, -player.yPos, 0);
             lock (gameState)
             {
 
                 foreach (Player p in gameState.Players)
                 {
-                    if (p != player)
+                    if (p.UID == net.myConnections[0].playerUID)
                     {
+                        GL.LoadMatrix(ref camera);
+                        p.draw();
+                    }
+                    else
+                    {
+                        GL.Translate(-player.xPos, -player.yPos, 0);
                         p.draw();
                     }
                 }
@@ -200,33 +209,33 @@ namespace AP
             }
 
             zombieIterator++;
-            if( zombieCount < 20 )
+            if (zombieCount < 20)
             {
-            foreach (var spawn in spawns)
-            {
-                spawn.draw();
-                if (zombieIterator == 60)
+                foreach (var spawn in spawns)
                 {
-                    lock (gameState)
+                    spawn.draw();
+                    if (zombieIterator == 60)
                     {
-                        //need to ping server for a UID
-                        //gameState.Enemies.Add(spawn.spawnEnemy(0));
-                        enemySpawned = true;
-                        zombieCount++;
+                        lock (gameState)
+                        {
+                            //need to ping server for a UID
+                            //gameState.Enemies.Add(spawn.spawnEnemy(0));
+                            enemySpawned = true;
+                            zombieCount++;
+                        }
+
                     }
-                
                 }
-            }
-            if (enemySpawned)
-            {
-                zombieIterator = 0;
-                enemySpawned = false;
-            }
+                if (enemySpawned)
+                {
+                    zombieIterator = 0;
+                    enemySpawned = false;
+                }
             }
 
             GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
             //change this to be the same way as you do the walls
-            for(int x = 0; x < 5; x++)
+            for (int x = 0; x < 5; x++)
                 for (int y = 0; y < 5; y++)
                 {
                     GL.PushMatrix();
@@ -264,7 +273,7 @@ namespace AP
             }
 
             //this updates our game state to the most current version
-            net.SyncState(gameState);
+            net.SyncState(ref gameState);
 
             SwapBuffers();
         }
@@ -300,13 +309,13 @@ namespace AP
             else if (Keyboard[Key.S] && Keyboard[Key.A])
                 player.move(-1, -1);
             else if (Keyboard[Key.W])
-                player.move(0,1);
+                player.move(0, 1);
             else if (Keyboard[Key.S])
-                player.move(0,-1);
+                player.move(0, -1);
             else if (Keyboard[Key.A])
-                player.move(-1,0);
+                player.move(-1, 0);
             else if (Keyboard[Key.D])
-                player.move(1,0);
+                player.move(1, 0);
             else if (Keyboard[Key.Escape])
                 Exit();
 
@@ -355,7 +364,7 @@ namespace AP
                     player.weapons.shoot(ref gameState.Bullets, ref player, screenX, screenY, Mouse.X, Mouse.Y);
                 }
             }
-            player.weapons.updateBulletCooldown();
+            // player.weapons.updateBulletCooldown();
 
             List<Bullet> tmpBullet = new List<Bullet>();
             foreach (Bullet bullet in gameState.Bullets)
@@ -370,7 +379,7 @@ namespace AP
                 if (hit)
                 {
 
-                    if(enemyHit.decreaseHealth())
+                    if (enemyHit.decreaseHealth())
                         gameState.Enemies.Remove(enemyHit);
                     GC.Collect();
                     tmpBullet.Add(bullet);
@@ -381,16 +390,17 @@ namespace AP
             {
                 gameState.Bullets.Remove(bullet);
             }
+
             GC.Collect();
         }
-		// Private Methods (2) 
+        // Private Methods (2) 
 
         /// <summary>
         /// Assign passed enemy object a unique enemyIdentifier
         /// </summary>
         /// <param name="enemy">Passed enemy object.</param>
         /// <output>None.</output>
-        private void assignEnemyID( Enemy enemy )
+        private void assignEnemyID(Enemy enemy)
         {
             enemy.enemyID = enemyIdentifier++;
         }
@@ -404,12 +414,12 @@ namespace AP
             // - get client info
             //Form1 form = new Form1();
 
-            using( Program game = new Program() )
+            using (Program game = new Program())
             {
                 game.Run(28.0);
             }
         }
 
-		#endregion Methods 
+        #endregion Methods
     }
 }
