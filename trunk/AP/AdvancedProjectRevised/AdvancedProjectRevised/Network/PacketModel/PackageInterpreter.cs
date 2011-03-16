@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
     public enum Action
     {
@@ -9,6 +10,7 @@ using System.Collections.Generic;
         Request = 0x30000000,
         Describe = 0x40000000,
         Text = 0x50000000,
+        Identify=0x70000000
     }
 
     public enum Type
@@ -20,7 +22,8 @@ using System.Collections.Generic;
         Explosion = 0x05000000,
         Powerup = 0x06000000,
         Text = 0x07000000,
-        Connection = 0x08000000
+        Connection = 0x08000000,
+        Move=0x0A000000
     }
 
     /// <summary>
@@ -144,6 +147,10 @@ using System.Collections.Generic;
                 return 0x5;
             case Type.Text:
                 return 0x1;
+            case Type.Connection:
+                return 0x1;
+            case Type.Move:
+                return 0x2;
 			default:
 				return 0x0;
 			}				
@@ -204,6 +211,12 @@ using System.Collections.Generic;
                     break;
                 case Type.Powerup:
                     Console.WriteLine("AI");
+                    break;
+                case Type.Move:
+                    Console.WriteLine("Move");
+                    List<int> o = ((int[])((object)obj)).ToList();
+                    result.Add(BitConverter.GetBytes(o[0]));
+                    result.Add(BitConverter.GetBytes(o[1]));
                     break;
                 default:
                     break;

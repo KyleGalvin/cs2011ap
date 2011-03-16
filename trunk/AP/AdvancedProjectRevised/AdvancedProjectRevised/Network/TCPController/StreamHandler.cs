@@ -38,7 +38,7 @@ using System.Collections.Generic;
         /// <returns></returns>
         public NetPackage ReadPackage()
         {
-
+            Console.WriteLine("HERHE");
             myPackage=new NetPackage();
             //keep reading from stream until pack.iscomplete is true
             byte[] rawMessage = new byte[4];

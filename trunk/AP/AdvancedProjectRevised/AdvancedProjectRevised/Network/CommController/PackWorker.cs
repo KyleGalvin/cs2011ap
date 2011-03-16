@@ -33,11 +33,7 @@ using OpenTK;
         /// <param name="pack">The pack.</param>
         public virtual void HandleCreate(NetPackage pack)
         {
-            if (pack.typeofobj.Equals(Type.Player))
-            {
-                Console.WriteLine("FUCKKKKKKKKKKK YA!");
-                State.Players.Add( new Player( new Vector3((float)BitConverter.ToDouble(pack.body[1],0), (float)BitConverter.ToDouble(pack.body[2],0), 0), BitConverter.ToInt32(pack.body[0],0) ));
-            }
+            
         }
 
         /// <summary>
@@ -48,6 +44,14 @@ using OpenTK;
         {
         }
 
+        public virtual void HandleIdentify(NetPackage pack)
+        {
+
+        }
+        public virtual void HandleUpdate(NetPackage pack)
+        {
+
+        }
         /// <summary>
         /// Handles the request.
         /// </summary>
