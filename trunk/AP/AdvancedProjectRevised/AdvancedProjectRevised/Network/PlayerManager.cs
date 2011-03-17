@@ -201,20 +201,14 @@ public abstract class PlayerManager : NetManager
 	        }
 	    }
 
-        public void SyncState(GameState s, ref Player player)
+        public void SyncState()
         {
-            //SyncStateIncoming(s);//handle incoming packets
-            SyncStateOutgoing(s, ref player);//send relevent data out to connections
+            SyncStateOutgoing();//send relevent data out to connections
         }
 
-
-        public void SyncStateIncoming(GameState s)
+        public void SyncStateOutgoing()
         {
-
-        }
-
-        public void SyncStateOutgoing(GameState s, ref Player player)
-        {
+            GameState s = State;
             List<Enemy> enemyUpdateList = new List<Enemy>();
             List<Enemy> enemyAddList = new List<Enemy>();
             List<Enemy> enemyDeleteList = new List<Enemy>();

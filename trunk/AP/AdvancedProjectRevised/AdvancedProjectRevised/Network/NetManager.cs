@@ -187,8 +187,11 @@ using OpenTK;
         /// <param name="Objs">The objs.</param>
         public void SendObjs<T>(Action a, List<T> Objs, Type objType, Connection myConnection)
         {
-            List<byte[]> data = myProtocol.encodeObjs(a, objType, Objs);
-            myConnection.Write(data);
+            if (a != Action.Identify)
+            {
+                List<byte[]> data = myProtocol.encodeObjs(a, objType, Objs);
+                myConnection.Write(data);
+            }
         }
 		// Protected Methods (1) 
 
