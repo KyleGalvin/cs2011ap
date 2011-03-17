@@ -10,7 +10,7 @@ using AP;
     /// <summary>
     /// The network library for the client
     /// </summary>
-	public class ClientManager : PlayerManager
+	public class ClientManager : NetManager
 	{
 		#region Fields (1) 
 

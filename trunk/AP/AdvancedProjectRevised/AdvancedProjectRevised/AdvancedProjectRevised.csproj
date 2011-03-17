@@ -53,39 +53,17 @@
     <Compile Include="Enemies\StationaryBoss.cs" />
     <Compile Include="Enemies\Zombie.cs" />
     <Compile Include="EnemySpawn.cs" />
-    <Compile Include="Forms\Lobby.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Lobby.Designer.cs">
-      <DependentUpon>Lobby.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Lobby_Dialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Lobby_Dialog.Designer.cs">
-      <DependentUpon>Lobby_Dialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\Main.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\Main.Designer.cs">
-      <DependentUpon>Main.cs</DependentUpon>
-    </Compile>
     <Compile Include="GameState.cs" />
     <Compile Include="Levels\CreateLevel.cs" />
     <Compile Include="Models\LoadedObjects.cs" />
     <Compile Include="Models\Loader.cs" />
     <Compile Include="Models\MeshData.cs" />
-    <Compile Include="Network\LobbyManager.cs" />
     <Compile Include="Network\ClientManager.cs" />
-    <Compile Include="Network\CommController\GamePackWorker.cs" />
-    <Compile Include="Network\CommController\LobbyPackWorker.cs" />
     <Compile Include="Network\CommController\PackWorker.cs" />
     <Compile Include="Network\HostManager.cs" />
     <Compile Include="Network\NetManager.cs" />
     <Compile Include="Network\PacketModel\NetPackage.cs" />
     <Compile Include="Network\PacketModel\PackageInterpreter.cs" />
-    <Compile Include="Network\PlayerManager.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\TCPController\Connection.cs" />
     <Compile Include="Network\TCPController\StreamHandler.cs" />
@@ -99,17 +77,6 @@
     <Compile Include="Weapons\Rocket.cs" />
     <Compile Include="Weapons\Shotgun.cs" />
     <Compile Include="Weapons\Weapon.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Forms\Lobby.resx">
-      <DependentUpon>Lobby.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Lobby_Dialog.resx">
-      <DependentUpon>Lobby_Dialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\Main.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

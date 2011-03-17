@@ -46,7 +46,7 @@ namespace AP
         List<int> yPosSquares = new List<int>();
         private int zombieCount = 0;
         private int zombieIterator = 0;
-        PlayerManager net;
+        NetManager net;
 
 		#endregion Fields 
 
@@ -70,12 +70,12 @@ namespace AP
         /// </summary>
         /// <param name="s">The s.</param>
         /// <returns></returns>
-        public PlayerManager StartNetwork(ref GameState s)
+        public NetManager StartNetwork(ref GameState s)
         {
             //create client and/or server
             Console.WriteLine("[s]erver or [c]lient");
             string val = Console.ReadLine();
-            PlayerManager manager;
+            NetManager manager;
 
             if (val == "s")
             {
@@ -90,7 +90,7 @@ namespace AP
             }
             else
             {
-                Server serv = new Server("Serv",IPAddress.Parse("192.168.0.0"));
+                Server serv = new Server("Serv",IPAddress.Parse("192.168.0.191"));
                 manager = new ClientManager(9999, ref s,serv);
                 manager.setRole("client");
                 while (manager.myConnections.Count == 0){}
