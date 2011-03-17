@@ -15,7 +15,8 @@ namespace AP
 		#region Fields (4) 
 
         public int modelNumber = 3;
-        private int playerId;
+        //todo make this private again
+        public int playerId;
         public string playerName;
         public Weapon weapons = new Weapon();
 

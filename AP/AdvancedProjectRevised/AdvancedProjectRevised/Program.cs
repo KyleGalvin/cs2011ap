@@ -70,34 +70,34 @@ namespace AP
         /// </summary>
         /// <param name="s">The s.</param>
         /// <returns></returns>
-        public PlayerManager DirtyNetHack(ref GameState s)
+        public PlayerManager StartNetwork(ref GameState s)
         {
             //create client and/or server
-            //Console.WriteLine("[s]erver or [c]lient");
-          //  string val = Console.ReadLine();
+            Console.WriteLine("[s]erver or [c]lient");
+            string val = Console.ReadLine();
             PlayerManager manager;
 
-            //if (val == "s")
-            //{
-            //    player = new Player();
-            //    gameState.Players.Add(player);
-            //    manager = new HostManager(9999, ref s);
-            //    manager.setRole("server");
-            //    return manager;
-            //}
-            //else
-            //{
-                //player = new Player(new Vector3(5,5,0), 0);
-                //gameState.Players.Add(player);
-                //Console.WriteLine("enter server IP:");
-                //val = Console.ReadLine();
-                Server serv = new Server("Serv",IPAddress.Parse("192.168.0.197"));
+            if (val == "s")
+            {
+                player = new Player();
+                gameState.Players.Add(player);
+                manager = new HostManager(9999, ref s);
+                manager.setRole("server");
+                return manager;
+            }
+            else
+            {
+                player = new Player(new Vector3(5, 5, 0), 0);
+                gameState.Players.Add(player);
+                Console.WriteLine("enter server IP:");
+                val = Console.ReadLine();
+                Server serv = new Server("Serv",IPAddress.Parse(val));
                 manager = new ClientManager(9999, ref s,serv);
                 manager.setRole("client");
                 while (manager.myConnections.Count == 0){}
                 manager.Connected = true;
                 return manager;
-           // }
+            }
         }
 		// Protected Methods (4) 
 
@@ -138,18 +138,22 @@ namespace AP
             GL.EnableClientState(ArrayCap.IndexArray);
             
             //loading a cube... so easy
-            //loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);            
-            //loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
+            loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);            
+            loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
 
             Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
 
 
-            net = DirtyNetHack(ref gameState);
+            net = StartNetwork(ref gameState);
             while (!net.Connected) { }
             Console.WriteLine("Connected!");
             //player = new Player();
             //gameState.Players.Add(player);
             spritenum = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
+            if (net.getRole() == "server")
+            {
+                Console.ReadLine();
+            }
         }
 
         /// <summary>

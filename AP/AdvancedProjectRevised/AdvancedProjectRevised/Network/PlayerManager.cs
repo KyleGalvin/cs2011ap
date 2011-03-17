@@ -20,7 +20,9 @@ public abstract class PlayerManager : NetManager
     private List<IPAddress> ServerIps = new List<IPAddress>();
     protected DateTime lastFrameTime;
     private bool TimesUp;
-
+    private bool done = false;
+    private bool change = false;
+    private int playerUID = 0;
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -199,22 +201,19 @@ public abstract class PlayerManager : NetManager
 	        }
 	    }
 
-        public void SyncState(ref GameState s)
+        public void SyncState(GameState s, ref Player player)
         {
-            SyncStateIncoming(s);//handle incoming packets
-            SyncStateOutgoing(s);//send relevent data out to connections
-            //lock (s)
-            //{
-            s = State;
-            //}
+            //SyncStateIncoming(s);//handle incoming packets
+            SyncStateOutgoing(s, ref player);//send relevent data out to connections
         }
+
 
         public void SyncStateIncoming(GameState s)
         {
 
         }
 
-        public void SyncStateOutgoing(GameState s)
+        public void SyncStateOutgoing(GameState s, ref Player player)
         {
             List<Enemy> enemyUpdateList = new List<Enemy>();
             List<Enemy> enemyAddList = new List<Enemy>();
@@ -226,45 +225,53 @@ public abstract class PlayerManager : NetManager
             List<Player> playerAddList = new List<Player>();
             List<Player> playerDeleteList = new List<Player>();
 
-            foreach (Bullet b in s.Bullets)
+            /*foreach (Bullet b in s.Bullets)
             {
                 if (b.timestamp > lastFrameTime.Ticks)
                 {
                     bulletUpdateList.Add(b);
-                    this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
                 }
                 else if (b.timestamp == 0)
                 {
                     bulletAddList.Add(b);
-                    this.SendObjs<Bullet>(Action.Create, bulletAddList, Type.Bullet);
                 }
                 else if (b.timestamp == -1)
                 {
                     bulletDeleteList.Add(b);
-                    this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
                 }
                 b.timestamp = DateTime.Now.Ticks;
-            }
-            foreach (Player p in s.Players)
+            }*/
+            for (int x = 0; x < s.Players.Count; x++)
             {
-                if (p.timestamp > lastFrameTime.Ticks)
+                Player p = s.Players[x];
+                if (p.timestamp > 0)
+                    p.updateTimeStamp();
+            }
+
+            for (int x = 0; x < s.Players.Count; x++)
+            {
+                Player p = s.Players[x];
+                if (p.timestamp >= lastFrameTime.Ticks)
                 {
+                    Console.WriteLine("PLAYERMANAGER UPDATE");
                     playerUpdateList.Add(p);
-                    this.SendObjs<Player>(Action.Update, playerUpdateList, Type.Player);
                 }
                 else if (p.timestamp == 0)
                 {
+                    p.playerId = playerUID;
+                    playerUID++;
+                    Console.WriteLine("PLAYERMANAGER CREATE");
                     playerAddList.Add(p);
-                    this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
+                    //State.Players.Add(p);
+                    p.updateTimeStamp();
+
                 }
                 else if (p.timestamp == -1)
                 {
                     playerDeleteList.Add(p);
-                    this.SendObjs<Player>(Action.Delete, playerDeleteList, Type.Player);
                 }
-                p.timestamp = DateTime.Now.Ticks;
             }
-            foreach (Enemy e in s.Enemies)
+            /*foreach (Enemy e in s.Enemies)
             {
                 if (e.timestamp > lastFrameTime.Ticks)
                 {
@@ -279,19 +286,55 @@ public abstract class PlayerManager : NetManager
                     enemyDeleteList.Add(e);
                 }
                 e.timestamp = DateTime.Now.Ticks;
+            }*/
+            if (playerAddList.Count > 0)
+                this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
+            //this.SendObjs<Enemy>(Action.Update, enemyUpdateList, Type.AI);
+            if (playerUpdateList.Count > 0)
+                this.SendObjs<Player>(Action.Update, playerUpdateList, Type.Player);
+            //this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
+            //this.SendObjs<Enemy>(Action.Create, enemyAddList, Type.AI);
+            //this.SendObjs<Bullet>(Action.Create, bulletAddList, Type.Bullet);
+            //this.SendObjs<Enemy>(Action.Delete, enemyDeleteList, Type.AI);
+            //this.SendObjs<Player>(Action.Delete, playerDeleteList, Type.Player);
+            //this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
+            /*if (!done)
+            {
+                playerAddList.Add(player);
+                this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
+                done = true;
             }
-            this.SendObjs<Enemy>(Action.Update, enemyUpdateList, Type.AI);
-            this.SendObjs<Player>(Action.Create, playerUpdateList, Type.Player);
-            this.SendObjs<Bullet>(Action.Delete, bulletUpdateList, Type.Bullet);
-            this.SendObjs<Enemy>(Action.Update, enemyAddList, Type.AI);
-            this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
-            this.SendObjs<Bullet>(Action.Delete, bulletAddList, Type.Bullet);
-            this.SendObjs<Enemy>(Action.Update, enemyDeleteList, Type.AI);
-            this.SendObjs<Player>(Action.Create, playerDeleteList, Type.Player);
-            this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
-            lastFrameTime = DateTime.Now;
+            else
+            {
+                if( change )
+                {
+                    player.move(0, 1);
+                    player.move(0, 1);
+                    player.move(0, 1);
+                    player.move(0, 1);
+                    player.move(0, 1);
+                    change = false;
+                }
+                else
+                {
+                    player.move(1,0);
+                    player.move(1, 0);
+                    player.move(1, 0);
+                    player.move(1, 0);
+                    player.move(1, 0);
+                    change = true;
+                }
+                playerUpdateList.Add(player);
+                this.SendObjs<Player>(Action.Update, playerUpdateList, Type.Player);
+            }*/
 
+            lastFrameTime = DateTime.Now;
         }
 
 		#endregion Methods 
-	}
+	
+        public string getRole()
+        {
+            return myRole;
+        }
+}

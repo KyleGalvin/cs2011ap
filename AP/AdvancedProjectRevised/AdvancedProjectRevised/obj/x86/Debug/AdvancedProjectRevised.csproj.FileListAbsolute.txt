@@ -36,3 +36,13 @@ C:\Users\Crix\Documents\Visual Studio 2010\Projects\March11\AdvancedProjectRevis
 C:\Users\Crix\Documents\Visual Studio 2010\Projects\March11\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
 C:\AP3\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
 C:\AP3\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.read.1.tlog
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
