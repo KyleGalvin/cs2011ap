@@ -22,7 +22,7 @@ public abstract class PlayerManager : NetManager
     private bool TimesUp;
     private bool done = false;
     private bool change = false;
-    private int playerUID = 0;
+    private int playerUID = -1;
 		#endregion Fields 
 
 		#region Constructors (1) 
