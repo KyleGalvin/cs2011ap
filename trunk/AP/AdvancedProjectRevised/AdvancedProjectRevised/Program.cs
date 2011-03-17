@@ -80,17 +80,15 @@ namespace AP
             if (val == "s")
             {
                 player = new Player();
+                player.assignPlayerID(0);
                 gameState.Players.Add(player);
+                gameState.myUID = player.playerId;
                 manager = new HostManager(9999, ref s);
                 manager.setRole("server");
                 return manager;
             }
             else
             {
-                player = new Player(new Vector3(5, 5, 0), 0);
-                gameState.Players.Add(player);
-                Console.WriteLine("enter server IP:");
-                val = Console.ReadLine();
                 Server serv = new Server("Serv",IPAddress.Parse(val));
                 manager = new ClientManager(9999, ref s,serv);
                 manager.setRole("client");
@@ -278,8 +276,11 @@ namespace AP
                     i++;
                 }
 
-                //this updates our game state to the most current version
-                //net.SyncState(ref gameState);
+                if (net.getRole() == "server")
+                {
+                    //this updates our game state to the most current version
+                    net.SyncState();
+                }
 
                 SwapBuffers();
             }
