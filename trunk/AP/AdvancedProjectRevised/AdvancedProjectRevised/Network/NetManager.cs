@@ -284,6 +284,11 @@ using System.Text;
             myRole = role;
         }
 
+        public string getRole()
+        {
+            return myRole;
+        }
+
 		// Public Methods (3) 
 
         //protected NetManager(int newPort)
