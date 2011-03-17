@@ -56,7 +56,7 @@ using System.Collections.Generic;
         /// <param name="data">The data.</param>
 		public void Write(List<byte[]> data)
 		{
-			//myStream.Write(data);
+			myStream.Write(data);
 		}
 
         /// <summary>
@@ -65,7 +65,7 @@ using System.Collections.Generic;
         /// <param name="data">The data.</param>
 		public void Write(byte[] data)
 		{
-			//myStream.Write(data);
+			myStream.Write(data);
 		}
 
 		#endregion Methods 

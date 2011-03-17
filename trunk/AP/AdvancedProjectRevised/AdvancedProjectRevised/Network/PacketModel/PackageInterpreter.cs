@@ -105,14 +105,25 @@ using System.Linq;
         {
 
             List<byte[]> result = new List<byte[]>();
-            UInt32 count = (UInt32)objs.Count;
-            count = count << 16;
-            UInt32 header = (UInt32)a ^ (UInt32)t ^ count;
-            result.Add(BitConverter.GetBytes(header));
-
-            foreach (T obj in objs)
+            if (a == Action.Identify)
             {
-                result.AddRange(serialize<T>(t, obj)); 
+                AP.Player tempPlayer = (AP.Player)(object)objs[0];
+                UInt32 header = (UInt32)a ^ (UInt32)t ^ (1 << 16);
+                result.Add(BitConverter.GetBytes(header));
+                result.Add(BitConverter.GetBytes(tempPlayer.playerId));
+            }
+            else
+            {
+                UInt32 count = (UInt32)objs.Count;
+                count = count << 16;
+                UInt32 header = (UInt32)a ^ (UInt32)t ^ count;
+                //Console.WriteLine("HEADER: ACTION: " + (UInt32)a + " TYPE: " + (UInt32)t + " COUNT: " + count );
+                result.Add(BitConverter.GetBytes(header));
+
+                foreach (T obj in objs)
+                {
+                    result.AddRange(serialize<T>(t, obj));
+                }
             }
             return result;
         }
@@ -210,7 +221,7 @@ using System.Linq;
                     result.Add(BitConverter.GetBytes(p.yVel));
                     break;
                 case Type.Powerup:
-                    Console.WriteLine("AI");
+                    Console.WriteLine("Powerup");
                     break;
                 case Type.Move:
                     Console.WriteLine("Move");

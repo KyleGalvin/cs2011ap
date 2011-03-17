@@ -113,8 +113,9 @@ using AP;
         /// Handles the request.
         /// </summary>
         /// <param name="pack">The pack.</param>
-        public override void HandleRequest(NetPackage pack)
+        public override void HandleRequest(NetPackage pack, Connection conn)
         {
+            State.Players.Where(y => y.playerId == conn.playerUID).First().move(BitConverter.ToInt32(pack.body[1], 0), BitConverter.ToInt32(pack.body[2], 0));
         }
 
         public override void HandleIdentify(NetPackage pack)

@@ -31,7 +31,6 @@ using System.Linq;
 			complete = false;
 			header = 0;
 			body = new List<byte[]>();
-            newbody = new List<byte[]>();
 		}
 
 		#endregion Constructors 
@@ -59,9 +58,7 @@ using System.Linq;
 		public void Recieve(byte[] incoming)
 		{
 			//we only intend to recieve 4 bytes at a time
-            //Console.WriteLine("Float: "+BitConverter.ToSingle(incoming,0)+" Int: "+BitConverter.ToInt32(incoming,0));
             body.Add(incoming.ToList().ToArray());
-            Console.WriteLine(incoming[0] + " " + incoming[1] + " " + incoming[2] + " " + incoming[3]);
             
 			if(body.Count == 1)
 			{
@@ -78,16 +75,13 @@ using System.Linq;
                 {
                     sizeofobj = myInterpreter.GetTypeSize((Type)(typeofobj));
                 }
-               // Console.WriteLine("action: {0}", (Action)action);
                 count = myInterpreter.GetCount(header);
-                //Console.WriteLine("type: {0}", (Type)typeofobj);
                 Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}", sizeofobj, ((Type)(typeofobj)).ToString(), count, ((Action)action).ToString());
                 Console.WriteLine(header);
 			}
 			else
 			{
    
-                //Console.WriteLine("Data {0} of {1}: {2}", body.Count, ((myInterpreter.GetCount(header)*sizeofobj) + 1),BitConverter.ToString(body[body.Count-1]));
 				if(body.Count == ((myInterpreter.GetCount(header)*sizeofobj))+1)
 				{
                     Console.WriteLine("Packet complete: " + body.Count);

@@ -38,7 +38,7 @@ using System.Collections.Generic;
         /// <returns></returns>
         public NetPackage ReadPackage()
         {
-            Console.WriteLine("HERHE");
+            
             myPackage=new NetPackage();
             //keep reading from stream until pack.iscomplete is true
             byte[] rawMessage = new byte[4];
@@ -65,7 +65,7 @@ using System.Collections.Generic;
         {
             foreach (byte[] chunk32 in data)
             {
-                Console.WriteLine("Writing to stream: {0}", BitConverter.ToString(chunk32));
+                //Console.WriteLine("Writing to stream: {0}", BitConverter.ToString(chunk32));
                 myStream.Write(chunk32, 0, 4);//write the data in 32 bit blocks
             }
             myStream.Flush();
