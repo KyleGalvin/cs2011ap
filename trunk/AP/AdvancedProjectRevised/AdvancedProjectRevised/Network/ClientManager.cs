@@ -249,7 +249,7 @@ using AP;
                     pack = myConnection.ReadPackage();
                     //Console.WriteLine("Package recieved!");
                     //Console.WriteLine("incoming id " + BitConverter.ToInt32( pack.body[0],0 )+"incoming x:" + BitConverter.ToInt32( pack.body[1],0 )+ " incoming y:" + BitConverter.ToInt32( pack.body[2],0));
-                    packetSwitcher(pack);
+                    packetSwitcher(pack, myConnection);
                 }
                 catch(Exception e)
                 {

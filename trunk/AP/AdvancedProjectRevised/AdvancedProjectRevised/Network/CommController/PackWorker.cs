@@ -56,7 +56,7 @@ using OpenTK;
         /// Handles the request.
         /// </summary>
         /// <param name="pack">The pack.</param>
-        public virtual void HandleRequest(NetPackage pack)
+        public virtual void HandleRequest(NetPackage pack, Connection conn)
         {
             
         }

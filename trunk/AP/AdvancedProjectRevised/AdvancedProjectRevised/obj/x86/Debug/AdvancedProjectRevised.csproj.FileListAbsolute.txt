@@ -46,3 +46,11 @@ C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\Adva
 C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
 C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog
 C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.pdb
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.dll
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.dll
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.dll
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml
+C:\Documents and Settings\Caitlin_\Desktop\APMErging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml

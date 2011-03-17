@@ -56,7 +56,7 @@ using System.Windows.Forms;
         /// Handles the request.
         /// </summary>
         /// <param name="pack">The pack.</param>
-        public override void HandleRequest(NetPackage pack)
+        public void HandleRequest(NetPackage pack)
         {
             Console.WriteLine("HERE");
             //join game. pack.body contains game name
