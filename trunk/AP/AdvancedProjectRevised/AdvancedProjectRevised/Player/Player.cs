@@ -16,7 +16,7 @@ namespace AP
 
         public int modelNumber = 3;
         //todo make this private again
-        public int playerId;
+        public int playerId = -1;
         public string playerName;
         public Weapon weapons = new Weapon();
 

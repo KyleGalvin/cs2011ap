@@ -81,15 +81,16 @@ namespace AP
             {
                 player = new Player();
                 player.assignPlayerID(0);
-                gameState.Players.Add(player);
-                gameState.myUID = player.playerId;
+                
                 manager = new HostManager(9999, ref s);
+                manager.State.Players.Add(player);
+                manager.State.myUID = player.playerId;
                 manager.setRole("server");
                 return manager;
             }
             else
             {
-                Server serv = new Server("Serv",IPAddress.Parse(val));
+                Server serv = new Server("Serv",IPAddress.Parse("192.168.0.0"));
                 manager = new ClientManager(9999, ref s,serv);
                 manager.setRole("client");
                 while (manager.myConnections.Count == 0){}

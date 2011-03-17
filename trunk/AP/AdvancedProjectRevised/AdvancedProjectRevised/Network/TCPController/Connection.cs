@@ -21,6 +21,7 @@ using System.Collections.Generic;
 
 		public Connection(object client)
 		{
+            playerUID = -1;
 			myClient = (TcpClient)client;
 			myStream = new StreamHandler(myClient.GetStream());
 		}
