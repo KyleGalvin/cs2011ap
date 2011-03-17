@@ -9,7 +9,7 @@ using AP;
     /// <summary>
     /// Network manager specific to the game host.
     /// </summary>
-    public class HostManager : PlayerManager
+    public class HostManager : NetManager
     {
 		#region Fields (1) 
 
