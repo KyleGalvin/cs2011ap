@@ -30,7 +30,7 @@ namespace AP
 
         public Position()
         {
-            timestamp = DateTime.Now.Ticks;
+            timestamp =0;
         }
 
         //radian constants for angle based calculations
@@ -55,10 +55,10 @@ namespace AP
         /// <param name="_yVel">The _y vel.</param>
         public void Update(byte[] _xPos, byte[] _yPos, byte[] _xVel, byte[] _yVel)
         {
-            xPos = (float)BitConverter.ToDouble(_xPos, 0);
-            yPos = (float)BitConverter.ToDouble(_yPos, 0);
-            xVel = (float)BitConverter.ToDouble(_xVel, 0);
-            yVel = (float)BitConverter.ToDouble(_yVel, 0);
+            xPos = (float)BitConverter.ToSingle(_xPos, 0);
+            yPos = (float)BitConverter.ToSingle(_yPos, 0);
+            xVel = (float)BitConverter.ToSingle(_xVel, 0);
+            yVel = (float)BitConverter.ToSingle(_yVel, 0);
         }
         /*public void Dispose()
         {
