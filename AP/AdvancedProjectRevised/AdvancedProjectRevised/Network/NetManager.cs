@@ -49,6 +49,7 @@ using System.Text;
 			port = newPort;
             worker = new PackWorker(ref StateRef);
             State = StateRef;
+            lastFrameTime = DateTime.Now;
 		}
 
 	    protected NetManager()
