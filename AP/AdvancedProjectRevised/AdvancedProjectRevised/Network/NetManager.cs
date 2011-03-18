@@ -198,19 +198,19 @@ using System.Text;
                     p.updateTimeStamp();
             }
 
-            for (int x = 0; x < s.Players.Count; x++)
+            foreach (Player p in s.Players.OrderBy(y=>y.timestamp))
             {
-                Player p = s.Players[x];
                 if (p.timestamp >= lastFrameTime.Ticks)
                 {
-                    Console.WriteLine("PLAYERMANAGER UPDATE");
+                    Console.WriteLine("PLAYERMANAGER UPDATE for player" +p.playerId +" timestamp is : " +p.timestamp + " Last ticks:" + lastFrameTime.Ticks);
+                   
                     playerUpdateList.Add(p);
                 }
                 else if (p.timestamp == 0)
                 {
-                    p.playerId = playerUID;
-                    playerUID++;
-                    Console.WriteLine("PLAYERMANAGER CREATE");
+                    //p.playerId = playerUID;
+                    //playerUID++;
+                    Console.WriteLine("PLAYERMANAGER CREATEfor player" + p.playerId + " timestamp is : " + p.timestamp + " Last ticks:" + lastFrameTime.Ticks);
                     playerAddList.Add(p);
                     //State.Players.Add(p);
                     p.updateTimeStamp();
