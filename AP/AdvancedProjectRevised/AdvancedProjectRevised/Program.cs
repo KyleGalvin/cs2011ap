@@ -90,7 +90,7 @@ namespace AP
             }
             else
             {
-                Server serv = new Server("Serv",IPAddress.Parse("192.168.0.191"));
+                Server serv = new Server("Serv",IPAddress.Parse("192.168.105.127"));
                 manager = new ClientManager(9999, ref s,serv);
                 manager.setRole("client");
                 while (manager.myConnections.Count == 0){}
@@ -202,7 +202,14 @@ namespace AP
                     }
                 }
 
-
+                //foreach (var x in gameState.Players)
+                //{
+                //    x.draw();
+                //}
+                for (var g = 0; g < gameState.Players.Count; g++)
+                {
+                    gameState.Players[g].draw();
+                }
                 GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
                 lock (gameState)
                 {
@@ -329,7 +336,10 @@ namespace AP
             else if (Keyboard[Key.W])
                 net.SendObjs<int>(Action.Request, new List<int>() { 0, 1 }, Type.Move);
             else if (Keyboard[Key.S])
-                net.SendObjs<int>(Action.Request, new List<int>() { 0, -1 }, Type.Move);
+            {
+                var temp=new List<int>() { 0, -1 };
+                net.SendObjs<int>(Action.Request, temp, Type.Move);
+            }
             else if (Keyboard[Key.A])
                 net.SendObjs<int>(Action.Request, new List<int>() { -1, 0 }, Type.Move);
             else if (Keyboard[Key.D])
@@ -377,10 +387,10 @@ namespace AP
 
                 if (Mouse[OpenTK.Input.MouseButton.Left] == true)
                 {
-                    if (player.weapons.canShoot())
-                    {
-                        player.weapons.shoot(ref gameState.Bullets, ref player, screenX, screenY, Mouse.X, Mouse.Y);
-                    }
+                    //if (player.weapons.canShoot())
+                    //{
+                        //player.weapons.shoot(ref gameState.Bullets, ref player, screenX, screenY, Mouse.X, Mouse.Y);
+                    //}
                 }
                 // player.weapons.updateBulletCooldown();
 
@@ -408,6 +418,7 @@ namespace AP
                 {
                     gameState.Bullets.Remove(bullet);
                 }
+                gameState = net.State;
 
                 GC.Collect();
             

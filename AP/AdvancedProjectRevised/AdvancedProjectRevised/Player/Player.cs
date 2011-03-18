@@ -85,7 +85,7 @@ namespace AP
             float colorB = 1.0f;
             float radius = 0.1f;
             GL.PushMatrix();
-            GL.Translate(0, 0, 0.4f);
+            GL.Translate(xPos, yPos, 0.4f);
             GL.Rotate(angle - 90, 0, 0, 1);
             GL.Rotate(180, 0, 1.0f, 0);            
             Program.loadedObjects.DrawObject(modelNumber);

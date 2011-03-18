@@ -66,7 +66,7 @@
     <Compile Include="Network\PacketModel\PackageInterpreter.cs" />
     <Compile Include="Network\Server.cs" />
     <Compile Include="Network\TCPController\Connection.cs" />
-    <Compile Include="Network\TCPController\StreamHandler.cs" />
+    <Compile Include="Network\StreamHandler.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="Player\Position.cs" />
     <Compile Include="Program.cs" />

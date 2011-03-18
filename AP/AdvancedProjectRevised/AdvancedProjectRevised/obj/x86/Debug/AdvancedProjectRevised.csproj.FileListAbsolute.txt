@@ -63,3 +63,14 @@ C:\Users\Crix\Desktop\AP - Good March 16\AdvancedProjectRevised\AdvancedProjectR
 C:\Users\Crix\Desktop\AP - Good March 16\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
 C:\Users\Crix\Desktop\AP - Good March 16\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
 C:\Users\Crix\Desktop\AP - Good March 16\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.pdb
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.dll
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.dll
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.dll
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
+C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
