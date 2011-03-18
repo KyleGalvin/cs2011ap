@@ -59,7 +59,7 @@ using System.Linq;
 		{
 			//we only intend to recieve 4 bytes at a time
             body.Add(incoming.ToList().ToArray());
-            
+            Console.WriteLine(incoming[0] + incoming[1] + incoming[2] + incoming[3]);
 			if(body.Count == 1)
 			{
 				//no header has been created. We naievely assume the data read is a header

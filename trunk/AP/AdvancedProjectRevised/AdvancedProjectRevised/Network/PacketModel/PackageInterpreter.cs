@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
     public enum Action
     {
@@ -161,7 +162,7 @@ using System.Linq;
             case Type.Connection:
                 return 0x1;
             case Type.Move:
-                return 0x2;
+                return 0x1;
 			default:
 				return 0x0;
 			}				
@@ -225,9 +226,9 @@ using System.Linq;
                     break;
                 case Type.Move:
                     Console.WriteLine("Move");
-                    List<int> o = ((int[])((object)obj)).ToList();
-                    result.Add(BitConverter.GetBytes(o[0]));
-                    result.Add(BitConverter.GetBytes(o[1]));
+                    
+                    result.Add(BitConverter.GetBytes((int)(object)obj));
+                    //result.Add(BitConverter.GetBytes(o[1]));
                     break;
                 default:
                     break;
