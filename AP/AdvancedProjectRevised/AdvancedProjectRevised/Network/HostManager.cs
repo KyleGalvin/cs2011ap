@@ -49,10 +49,10 @@ using AP;
                 try
                 {
                     //read package data
-                    //Console.WriteLine("attempt to read pack:");
-                    //pack = myConnection.ReadPackage();
-                    //packetSwitcher(pack, myConnection);
-                    //Console.WriteLine("Package recieved!");
+                    Console.WriteLine("attempt to read pack:");
+                    pack = myConnection.ReadPackage();
+                    packetSwitcher(pack, myConnection);
+                    Console.WriteLine("Package recieved!");
                 }
                 catch (Exception e)
                 {
