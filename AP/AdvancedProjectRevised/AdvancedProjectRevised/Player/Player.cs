@@ -33,9 +33,12 @@ namespace AP
             this.position = position;
             xPos = position.X;
             yPos = position.Y;
+            prevXPos = xPos;
+            prevYPos = yPos; 
             life = 100;
             //client assigns passed ID from server.
             playerId = ID;
+            Console.WriteLine("Setting the playerUID for " + playerId);
             speed = 0.1f;
             radius = 0.1f;
         }
@@ -46,6 +49,8 @@ namespace AP
         public Player()
         {
             this.position = position;
+            prevXPos = xPos;
+            prevYPos = yPos;  
             life = 100;
             xPos = 0;
             yPos = 0;
@@ -88,7 +93,7 @@ namespace AP
             GL.Translate(xPos, yPos, 0.4f);
             GL.Rotate(angle - 90, 0, 0, 1);
             GL.Rotate(180, 0, 1.0f, 0);            
-            Program.loadedObjects.DrawObject(modelNumber);
+            //Program.loadedObjects.DrawObject(modelNumber);
             GL.PopMatrix();
             /*GL.Begin( BeginMode.Polygon);
 
@@ -117,7 +122,7 @@ namespace AP
             GL.PushMatrix();
             GL.Rotate(angle - 90, 0, 0, 1);
             GL.Rotate(180, 0, 1.0f, 0);
-            Program.loadedObjects.DrawObject(modelNumber);
+            //Program.loadedObjects.DrawObject(modelNumber);
             GL.PopMatrix();
             /*GL.Begin( BeginMode.Polygon);
 
@@ -188,6 +193,7 @@ namespace AP
                     yPos = 0;
                 }
             }
+            timestamp = DateTime.Now.Ticks;
         }
 
 		#endregion Methods 
