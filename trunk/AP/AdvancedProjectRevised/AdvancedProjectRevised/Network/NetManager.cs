@@ -202,15 +202,17 @@ using System.Text;
             {
                 if (p.timestamp >= lastFrameTime.Ticks)
                 {
-                    Console.WriteLine("PLAYERMANAGER UPDATE for player" +p.playerId +" timestamp is : " +p.timestamp + " Last ticks:" + lastFrameTime.Ticks);
-                   
-                    playerUpdateList.Add(p);
+                    //Console.WriteLine("PLAYERMANAGER UPDATE for player" +p.playerId +" timestamp is : " +p.timestamp + " Last ticks:" + lastFrameTime.Ticks);
+                    if (p.prevXPos != p.xPos || p.prevYPos != p.yPos)
+                    {
+                        playerUpdateList.Add(p);
+                        p.prevYPos = p.yPos;
+                        p.prevXPos = p.xPos;
+                    }
                 }
                 else if (p.timestamp == 0)
                 {
-                    //p.playerId = playerUID;
-                    //playerUID++;
-                    Console.WriteLine("PLAYERMANAGER CREATEfor player" + p.playerId + " timestamp is : " + p.timestamp + " Last ticks:" + lastFrameTime.Ticks);
+                    //Console.WriteLine("PLAYERMANAGER CREATEfor player" + p.playerId + " timestamp is : " + p.timestamp + " Last ticks:" + lastFrameTime.Ticks);
                     playerAddList.Add(p);
                     //State.Players.Add(p);
                     p.updateTimeStamp();
@@ -373,8 +375,8 @@ using System.Text;
             {
                 if (pack.action == (UInt32)Action.Text)
                 {
-                    string Message = worker.HandleText(pack);
-                    Console.WriteLine(Message);
+                    string message = worker.HandleText(pack);
+                    Console.WriteLine(message);
                 }
                 if (pack.action == (UInt32)Action.Create)
                 {
@@ -413,7 +415,6 @@ using System.Text;
             List<byte[]> data = myProtocol.encodeObjs(a, objType, Objs);
             for (int i = 0; i < myConnections.Count; i++)
             {
-                Console.WriteLine("SENDING STUFF!");
                 myConnections[i].Write(data);
             }
         }
