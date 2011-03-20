@@ -16,7 +16,7 @@ namespace AP.Forms
 		#region Fields (2) 
 
         private ClientManager clientManager;
-        private LobbyManager lobbyManager;
+        //private LobbyManager lobbyManager;
 
 		#endregion Fields 
 
@@ -42,7 +42,7 @@ namespace AP.Forms
             var port = 9999;
             InitializeComponent();
             lbl_Name.Text = _Name;
-            lobbyManager = new LobbyManager(port, ref lst_Players) { LobbyName = _Name };
+            //lobbyManager = new LobbyManager(port, ref lst_Players) { LobbyName = _Name };
             
         }
 
