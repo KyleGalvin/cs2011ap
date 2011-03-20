@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.Drawing.Imaging;
+using AP.Forms;
 using OpenTK;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL;
@@ -26,7 +27,7 @@ namespace AP
         private bool enemySpawned = false;
         public GameState gameState;
         List<int> heightSquares = new List<int>();
-        public static LoadedObjects loadedObjects = new LoadedObjects();
+        //public static LoadedObjects loadedObjects = new LoadedObjects();
         public Player player;
         // Screen dimensions
         const int screenX = 800;
@@ -137,10 +138,10 @@ namespace AP
             GL.EnableClientState(ArrayCap.IndexArray);
             
             //loading a cube... so easy
-            loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);            
-            loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
+            //loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);            
+            //loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
 
-            Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
+            //Zombie.drawNumber = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
 
 
             net = StartNetwork(ref gameState);
@@ -148,7 +149,7 @@ namespace AP
             Console.WriteLine("Connected!");
             //player = new Player();
             //gameState.Players.Add(player);
-            spritenum = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
+            //spritenum = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
             if (net.getRole() == "server")
             {
                 Console.ReadLine();
@@ -252,7 +253,7 @@ namespace AP
                     {
                         GL.PushMatrix();
                         GL.Translate(-10 + x * 5.75, -10 + y * 5.75, 0);
-                        loadedObjects.DrawObject(1); //grassssssssssssss
+                        //loadedObjects.DrawObject(1); //grassssssssssssss
                         GL.PopMatrix();
                     }
 
@@ -266,7 +267,7 @@ namespace AP
                             GL.LoadMatrix(ref camera);
                             //GL.Translate(-player.xPos, -player.yPos, 0);
                             GL.Translate(x + idx - 0.5f, yPosSquares[i] - 0.5f, 0.5f);
-                            loadedObjects.DrawObject(0);
+                            //loadedObjects.DrawObject(0);
                         }
                     }
 
@@ -277,7 +278,7 @@ namespace AP
                             GL.LoadMatrix(ref camera);
                             //GL.Translate(-player.xPos, -player.yPos, 0);
                             GL.Translate(x - 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
-                            loadedObjects.DrawObject(0);
+                            //loadedObjects.DrawObject(0);
                         }
                     }
 
@@ -444,10 +445,15 @@ namespace AP
             // - get client info
             //Form1 form = new Form1();
 
-            using( Program game = new Program() )
+            using (Program game = new Program())
             {
                 game.Run(28.0);
+
             }
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new Main());
+            
         }
 
 		#endregion Methods 
