@@ -118,7 +118,7 @@ using System.Collections;
                 UInt32 count = (UInt32)objs.Count;
                 count = count << 16;
                 UInt32 header = (UInt32)a ^ (UInt32)t ^ count;
-                //Console.WriteLine("HEADER: ACTION: " + (UInt32)a + " TYPE: " + (UInt32)t + " COUNT: " + count );
+                //Console.WriteLine("HEADER: ACTION: " + (Action)a + " TYPE: " + (Type)t + " COUNT: " + count );
                 result.Add(BitConverter.GetBytes(header));
 
                 foreach (T obj in objs)
@@ -179,12 +179,10 @@ using System.Collections;
         /// turns a list of objects into a serialized network stream
         private List<byte[]> serialize<T>(Type t, T obj)
         {
-
-            Console.WriteLine(obj.GetType());
             List<byte[]> result = new List<byte[]>();
             //each type of object has a different composure.
             //here we define the structure of all possible types
-            Console.WriteLine("Incoming type: " + (Type)t);
+            //Console.WriteLine("Incoming type: " + (Type)t);
             switch (t)
             {
                 
@@ -213,9 +211,9 @@ using System.Collections;
                     Console.WriteLine("Explosion");
                     break;
                 case Type.Player:
-                    Console.WriteLine("Player");
+                    //Console.WriteLine("Player");
                     AP.Player p = (AP.Player)(object)obj;
-                    result.Add(BitConverter.GetBytes(p.UID));
+                    result.Add(BitConverter.GetBytes(p.playerId));
                     result.Add(BitConverter.GetBytes(p.xPos));
                     result.Add(BitConverter.GetBytes(p.yPos));
                     result.Add(BitConverter.GetBytes(p.xVel));
