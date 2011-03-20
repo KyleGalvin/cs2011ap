@@ -58,7 +58,7 @@ namespace AP
             GL.Translate(xPos, yPos, 0.2f);
             GL.Rotate(angle - 115, 0, 0, 1);
             GL.Rotate(90, 1.0, 0, 0);
-            Program.loadedObjects.DrawObject(drawNumber);
+            //Program.loadedObjects.DrawObject(drawNumber);
             GL.PopMatrix();
         }
 
