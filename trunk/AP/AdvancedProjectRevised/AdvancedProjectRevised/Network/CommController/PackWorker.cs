@@ -113,7 +113,19 @@ using OpenTK;
         /// <param name="pack">The pack.</param>
         public void HandleRequest(NetPackage pack, Connection conn)
         {
-            State.Players.Where(y => y.playerId == conn.playerUID).First().move(BitConverter.ToInt32(pack.body[1], 0), BitConverter.ToInt32(pack.body[2], 0));
+            UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj));
+            //for (int i = 0; i < pack.count; i++)
+            //{
+                UInt32 t = pack.typeofobj;
+                if ((Type) t == Type.Move)
+                {
+                    Console.WriteLine("Handle request");
+                    Console.WriteLine("Player before handling move request: xPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().xPos + " yPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().yPos);
+                    State.Players.Where(y => y.playerId == conn.playerUID).First().move(BitConverter.ToInt32(pack.body[1], 0), BitConverter.ToInt32(pack.body[2], 0));
+                    Console.WriteLine("Player after handling move request: xPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().xPos + " yPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().yPos);
+                
+                }
+            //}
         }
 
         public void HandleIdentify(NetPackage pack)
