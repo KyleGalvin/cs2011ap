@@ -206,7 +206,7 @@ namespace AP.Forms
 
 		#endregion Methods 
 
-
+        private SplashScreen Splash = new SplashScreen();
 
         #region "Broadcast Functions"
         /// <summary>
@@ -308,5 +308,11 @@ namespace AP.Forms
             }
         }
         #endregion
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+            Splash.Run();
+            
+        }
     }
 }
