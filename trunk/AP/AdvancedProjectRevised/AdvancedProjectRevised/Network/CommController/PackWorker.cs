@@ -46,8 +46,10 @@ using OpenTK;
         /// <param name="data">The data.</param>
         /// <returns></returns>
         public AP.Bullet CreateBullet(List<byte[]> data)
-        {
-            return new AP.Bullet(new Vector3(BitConverter.ToSingle(data[1], 0), (BitConverter.ToSingle(data[2], 0)), 0), new Vector3(BitConverter.ToSingle(data[3], 0), (BitConverter.ToSingle(data[4], 0)), 0));
+        {   
+            Bullet b = new AP.Bullet( new OpenTK.Vector3(BitConverter.ToSingle(data[1], 0), BitConverter.ToSingle(data[2], 0),0), new OpenTK.Vector2(BitConverter.ToSingle(data[3], 0), BitConverter.ToSingle(data[4], 0)));
+            b.setID(BitConverter.ToInt32( data[0],0));
+            return b;
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ using OpenTK;
         /// <returns></returns>
         public AP.Player CreatePlayer(List<byte[]> data)
         {
-            return new AP.Player(new OpenTK.Vector3(5, 5, 0), BitConverter.ToInt32(data[0], 0));
+            return new AP.Player(new OpenTK.Vector3(BitConverter.ToSingle( data[1],0),BitConverter.ToSingle( data[2],0), 0), BitConverter.ToInt32(data[0], 0));
         }
 
         public void HandleDelete(NetPackage pack)
@@ -106,6 +108,8 @@ using OpenTK;
                 {
                     List<AP.Bullet> result = new List<AP.Bullet>();
                     result.Add(CreateBullet(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
+                    State.Bullets.AddRange(result);
+                    Console.WriteLine("Created {0} Bullet objects from remote network command!", result.Count);
                 }
             }
 
@@ -187,21 +191,14 @@ using OpenTK;
                 if ((Type)t == Type.AI)
                 {
                     State.Enemies.Where(y => y.UID == UID).First().Update(
-                        pack.body[1], pack.body[2], pack.body[3], pack.body[4]);
+                        pack.body[(i * (int)myTypeSize) + 1], pack.body[(i * (int)myTypeSize) + 2], pack.body[(i * (int)myTypeSize) + 3], pack.body[(i * (int)myTypeSize) + 4]);
                 }
                 else if ((Type)t == Type.Player)
                 {
-                    //todo TEST!! This will probably break
                     State.Players.Where(y => y.playerId == UID).First().Update(
                         pack.body[(i * (int)myTypeSize) + 2], pack.body[(i * (int)myTypeSize) + 3]
                         , pack.body[(i * (int)myTypeSize) + 4], pack.body[(i * (int)myTypeSize) + 5]);
                     //Console.WriteLine("HANDLE UPDATE: " + (float)BitConverter.ToSingle(pack.body[0], 0) + " " + (float)BitConverter.ToSingle(pack.body[1], 0) + " " + (float)BitConverter.ToSingle(pack.body[2], 0) + " " + (float)BitConverter.ToSingle(pack.body[3], 0) + " " + BitConverter.ToSingle(pack.body[4], 0));
-                }
-                else if ((Type)t == Type.Bullet)
-                {
-                    //todo TEST!! This will probably break
-                    State.Bullets.Where(y => y.UID == UID).First().Update(
-                        pack.body[1], pack.body[2], pack.body[3], pack.body[4]);
                 }
             }
             Console.WriteLine("Created {0} objects from remote network command!", result.Count);
