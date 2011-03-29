@@ -74,3 +74,11 @@ C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
 C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml
 C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
 C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.read.1.tlog
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
