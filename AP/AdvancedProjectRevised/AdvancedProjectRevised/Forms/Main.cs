@@ -81,10 +81,10 @@ namespace AP.Forms
                 {//Starts the game
                     //todo Maybe it should keep the window open in case we want to come back
                     Hide();
-                    using (Program game = new Program())
-                    {
-                        game.Run(28.0);
-                    }
+                    //using (Program game = new Program())
+                    //{
+                        //game.Run(28.0);
+                   // }
                 }
             }
         }
@@ -206,7 +206,7 @@ namespace AP.Forms
 
 		#endregion Methods 
 
-        private SplashScreen Splash = new SplashScreen();
+        //private SplashScreen Splash = new SplashScreen();
 
         #region "Broadcast Functions"
         /// <summary>
@@ -311,7 +311,7 @@ namespace AP.Forms
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            Splash.Run();
+            //Splash.Run();
             
         }
     }

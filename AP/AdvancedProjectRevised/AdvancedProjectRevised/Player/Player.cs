@@ -73,13 +73,6 @@ namespace AP
             playerId = ID;
         }
 
-        public void updateTimeStamp()
-        {
-
-            //Console.WriteLine(timestamp);
-            timestamp = DateTime.Now.Ticks;
-        }
-
         /// <summary>
         /// Draws this instance.
         /// </summary>
@@ -90,53 +83,11 @@ namespace AP
             float colorB = 1.0f;
             float radius = 0.1f;
             GL.PushMatrix();
-            GL.Translate(xPos, yPos, 0.4f);
+            GL.Translate(0, 0, 0.4f);
             GL.Rotate(angle - 90, 0, 0, 1);
             GL.Rotate(180, 0, 1.0f, 0);            
-            //Program.loadedObjects.DrawObject(modelNumber);
+            ClientProgram.loadedObjects.DrawObject(modelNumber);
             GL.PopMatrix();
-            /*GL.Begin( BeginMode.Polygon);
-
-            GL.Color3(colorR, colorG, colorB);
-            GL.Vertex3(-radius, 0, 0.01f);
-            GL.Vertex3(-radius * 0.7, radius * 0.7, 0.01f);
-            GL.Vertex3(0, radius, 0.01f);
-            GL.Vertex3(radius * 0.7, radius * 0.7, 0.01f);
-            GL.Vertex3(radius, 0, 0.01f);
-            GL.Vertex3(radius * 0.7, -radius * 0.7, 0.01f);
-            GL.Vertex3(0, -radius, 0.01f);
-            GL.Vertex3(-radius * 0.7, -radius * 0.7, 0.01f);
-
-            GL.End();*/
-        }
-
-        /// <summary>
-        /// Draws this instance.
-        /// </summary>
-        public void drawOtherPlayer()
-        {
-            float colorR = 0.0f;
-            float colorG = 0.0f;
-            float colorB = 1.0f;
-            float radius = 0.1f;
-            GL.PushMatrix();
-            GL.Rotate(angle - 90, 0, 0, 1);
-            GL.Rotate(180, 0, 1.0f, 0);
-            //Program.loadedObjects.DrawObject(modelNumber);
-            GL.PopMatrix();
-            /*GL.Begin( BeginMode.Polygon);
-
-            GL.Color3(colorR, colorG, colorB);
-            GL.Vertex3(-radius, 0, 0.01f);
-            GL.Vertex3(-radius * 0.7, radius * 0.7, 0.01f);
-            GL.Vertex3(0, radius, 0.01f);
-            GL.Vertex3(radius * 0.7, radius * 0.7, 0.01f);
-            GL.Vertex3(radius, 0, 0.01f);
-            GL.Vertex3(radius * 0.7, -radius * 0.7, 0.01f);
-            GL.Vertex3(0, -radius, 0.01f);
-            GL.Vertex3(-radius * 0.7, -radius * 0.7, 0.01f);
-
-            GL.End();*/
         }
 
         /// <summary>
@@ -182,17 +133,34 @@ namespace AP
             float moveY;
             if (xPos + x * this.speed < 7 && xPos + x * this.speed > -8 && yPos + y * this.speed < 6 && yPos + y * this.speed > -7) //wallCheck
             {
-                if (!Program.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
-                    makeMove(x, y);
+                if (ClientProgram.multiplayer)
+                {
+                    if (!ServerProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                        makeMove(x, y);
+                    else
+                    {
+                        //move player to middle if touching a zombie
+                        //dont get hit by a zombie in the middle or you get stuck
+                        //change this later to damage I guess
+                        //xPos = 0;
+                        //yPos = 0;
+                    }
+                }
                 else
                 {
-                    //move player to middle if touching a zombie
-                    //dont get hit by a zombie in the middle or you get stuck
-                    //change this later to damage I guess
-                    xPos = 0;
-                    yPos = 0;
+                    if (!ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                        makeMove(x, y);
+                    else
+                    {
+                        //move player to middle if touching a zombie
+                        //dont get hit by a zombie in the middle or you get stuck
+                        //change this later to damage I guess
+                        //xPos = 0;
+                        //yPos = 0;
+                    }
                 }
-            }
+                }
+            
             timestamp = DateTime.Now.Ticks;
         }
 

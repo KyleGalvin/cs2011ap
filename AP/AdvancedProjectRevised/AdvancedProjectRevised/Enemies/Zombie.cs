@@ -58,7 +58,7 @@ namespace AP
             GL.Translate(xPos, yPos, 0.2f);
             GL.Rotate(angle - 115, 0, 0, 1);
             GL.Rotate(90, 1.0, 0, 0);
-            //Program.loadedObjects.DrawObject(drawNumber);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie);
             GL.PopMatrix();
         }
 
@@ -91,16 +91,33 @@ namespace AP
             float len = (float)Math.Sqrt(x * x + y * y);
             float moveX;
             float moveY;
-            if (!Program.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
-                move(x / len, y / len); //free to move where you want
-            else
-            { //standing in something, move away from it
-                x = moveX - xPos;
-                y = moveY - yPos;
+            if (ClientProgram.multiplayer)
+            {
+                if (!ServerProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                    move(x / len, y / len); //free to move where you want
+                else
+                { //standing in something, move away from it
+                    x = moveX - xPos;
+                    y = moveY - yPos;
 
-                len = (float)Math.Sqrt(x * x + y * y);
-                move(-x / len, -y / len);
+                    len = (float)Math.Sqrt(x * x + y * y);
+                    move(-x / len, -y / len);
+                }
             }
+            else
+            {
+                if (!ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                    move(x / len, y / len); //free to move where you want
+                else
+                { //standing in something, move away from it
+                    x = moveX - xPos;
+                    y = moveY - yPos;
+
+                    len = (float)Math.Sqrt(x * x + y * y);
+                    move(-x / len, -y / len);
+                }
+            }
+            
             setAngle();
             updateTimeStamp();
         }

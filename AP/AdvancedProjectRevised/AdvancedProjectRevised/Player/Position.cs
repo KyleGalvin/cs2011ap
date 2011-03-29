@@ -37,6 +37,16 @@ namespace AP
         const float PI = 3.1415926f;
         protected const float RAD_TO_DEG = 180.0f / PI;
 
+        public void updateTimeStamp()
+        {
+            timestamp = DateTime.Now.Ticks;
+        }
+
+        public void setID(int id)
+        {
+            UID = id;
+        }
+
         /// <summary>
         /// Sets the angle.
         /// </summary>

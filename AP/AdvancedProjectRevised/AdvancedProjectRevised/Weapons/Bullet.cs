@@ -19,6 +19,8 @@ namespace AP
         private int lifeTime = 30;
         float xVel = 0;
         float yVel = 0;
+        public Vector3 mousePos;
+        public Vector2 velocity;
 
 		#endregion Fields 
 
@@ -30,14 +32,26 @@ namespace AP
         /// <param name="velocity">The velocity of the bullet</param>
         /// <output>
         ///   </output>
-        public Bullet(Vector3 position, Vector3 velocity)
+        public Bullet(Vector3 position, Vector3 mousePos)
         {
             radius = 0.1f;
             this.position = position;
             xPos = position.X;
             yPos = position.Y;
-            this.velocity = velocity;
             speed = 2.0f;
+            this.mousePos = mousePos;
+            timestamp = 0;
+        }
+
+        public Bullet(Vector3 position, Vector2 velocity)
+        {
+            radius = 0.1f;
+            this.position = position;
+            xPos = position.X;
+            yPos = position.Y;
+            speed = 2.0f;
+            this.velocity = velocity;
+            timestamp = 0;
         }
 
 		#endregion Constructors 
@@ -108,10 +122,11 @@ namespace AP
         /// <output>
         /// No output but the velocity of the bullet will be set after calling this function.
         ///   </output>
-        public void setDirectionByMouse(float x, float y, int screenX, int screenY, ref Player player)
+        public void setDirectionByMouse(Vector2 mousePosition, Vector2 screenRes)
         {
-            float mx = (float)(x - screenX / 2) / (screenX * 0.3f);
-            float my = (float)(y - screenY / 2) / (screenY * 0.3f);
+
+            float mx = (float)(mousePosition.X - screenRes.X / 2) / (screenRes.X * 0.3f);
+            float my = (float)(mousePosition.Y - screenRes.Y / 2) / (screenRes.Y * 0.3f);
 
             xVel = -mx;
             yVel = -my;

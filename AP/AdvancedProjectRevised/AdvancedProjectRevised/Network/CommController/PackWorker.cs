@@ -45,9 +45,9 @@ using OpenTK;
         /// </summary>
         /// <param name="data">The data.</param>
         /// <returns></returns>
-        public AP.Player CreateBullet(List<byte[]> data)
+        public AP.Bullet CreateBullet(List<byte[]> data)
         {
-            return new AP.Player(new OpenTK.Vector3(0, 0, 0), BitConverter.ToInt32(data[0], 0));
+            return new AP.Bullet(new Vector3(BitConverter.ToSingle(data[1], 0), (BitConverter.ToSingle(data[2], 0)), 0), new Vector3(BitConverter.ToSingle(data[3], 0), (BitConverter.ToSingle(data[4], 0)), 0));
         }
 
         /// <summary>
@@ -83,16 +83,14 @@ using OpenTK;
                 {
                     List<AP.Player> result = new List<AP.Player>();
                     result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
-                    result.Last().modelNumber = Program.spritenum;
+                    result.Last().modelNumber = ClientProgram.loadedObjectPlayer;
                     State.Players.AddRange(result);
                     Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
                 }
                 else if ((Type)t == Type.Bullet)
                 {
-                    //List<AP.Player> result = new List<AP.Player>();
-                    ////result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize)+1, 5)));
-                    //State.Players.AddRange(result);
-                    //Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
+                    List<AP.Bullet> result = new List<AP.Bullet>();
+                    result.Add(CreateBullet(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
                 }
             }
 
@@ -114,8 +112,8 @@ using OpenTK;
         public void HandleRequest(NetPackage pack, Connection conn)
         {
             UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj));
-            //for (int i = 0; i < pack.count; i++)
-            //{
+            for (int i = 0; i < pack.count; i++)
+            {
                 UInt32 t = pack.typeofobj;
                 if ((Type) t == Type.Move)
                 {
@@ -123,9 +121,13 @@ using OpenTK;
                     Console.WriteLine("Player before handling move request: xPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().xPos + " yPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().yPos);
                     State.Players.Where(y => y.playerId == conn.playerUID).First().move(BitConverter.ToInt32(pack.body[1], 0), BitConverter.ToInt32(pack.body[2], 0));
                     Console.WriteLine("Player after handling move request: xPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().xPos + " yPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().yPos);
-                
                 }
-            //}
+                if ((Type)t == Type.Bullet)
+                {
+                    State.Players.Where(y => y.playerId == conn.playerUID).First().weapons.shoot(ref State.Bullets, new Vector3(BitConverter.ToSingle(pack.body[(int)(i*myTypeSize)+2], 0), BitConverter.ToSingle(pack.body[(int)(i*myTypeSize)+3], 0), 0), new Vector2(800, 800), new Vector2(BitConverter.ToSingle(pack.body[(int)(i*myTypeSize)+4], 0), BitConverter.ToSingle(pack.body[(int)(i*myTypeSize)+5], 0)));
+                    Console.WriteLine("Player before handling move request: xPos: " + State.Bullets.Last().xPos + " yPos: " + State.Bullets.Last().yPos);
+                }
+            }
         }
 
         public void HandleIdentify(NetPackage pack)
