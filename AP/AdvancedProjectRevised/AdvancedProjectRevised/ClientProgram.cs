@@ -64,6 +64,7 @@ namespace AP
             if (val == "m")
                 multiplayer = true;
 
+
             VSync = VSyncMode.On;
         }
 
@@ -74,11 +75,9 @@ namespace AP
         /// <returns></returns>
         public NetManager StartNetwork(ref GameState s)
         {
-            //create client and/or server
-            string val = Console.ReadLine();
             NetManager manager;
 
-            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.127"));
+            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.211"));
             manager = new ClientManager(9999, ref s, serv);
             manager.setRole("client");
             while (manager.myConnections.Count == 0) { }
@@ -188,10 +187,10 @@ namespace AP
 
                  Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist), OpenTK.Vector3d.Zero, up);
                  GL.LoadMatrix(ref camera);
-
+                 Player player = new Player();
                  if (multiplayer)
                  {
-                     var player = gameState.Players.Where(y => y.playerId == gameState.myUID).First();
+                     player = gameState.Players.Where(y => y.playerId == gameState.myUID).First();
                      lock (gameState)
                      {
                          player.draw();
@@ -464,22 +463,26 @@ namespace AP
                  viewDirection.Y += wheelD / 10;
                  viewDirection.Z += wheelD / 10;
 
-                 collisionAI.updateState(ref gameState.Enemies);
-
-                 foreach (var member in gameState.Enemies)
+                 if (!multiplayer)
                  {
-                     member.moveTowards(player);
+                     collisionAI.updateState(ref gameState.Enemies);
+                 
+
+                     foreach (var member in gameState.Enemies)
+                     {
+                         member.moveTowards(player);
+                     }
                  }
 
                  if (Mouse[OpenTK.Input.MouseButton.Left] == true)
                  {
                      if(multiplayer)
                      {
-                         if (player.weapons.canShoot())
-                         {
-                             soundHandler.play(SoundHandler.EXPLOSION);
-                             player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y));
-                         }
+                        // if (player.weapons.canShoot())
+                         //{
+                             //soundHandler.play(SoundHandler.EXPLOSION);
+                             //player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y));
+                        // }
                      }
                      else
                      {
@@ -491,8 +494,10 @@ namespace AP
                      }
                      
                  }
-                  player.weapons.updateBulletCooldown();
-
+                 if (!multiplayer)
+                 {
+                     player.weapons.updateBulletCooldown();
+                 }
                 /* List<Bullet> tmpBullet = new List<Bullet>();
                  foreach (Bullet bullet in gameState.Bullets)
                  {

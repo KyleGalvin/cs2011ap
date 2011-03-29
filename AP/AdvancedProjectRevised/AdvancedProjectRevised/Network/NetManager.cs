@@ -100,7 +100,7 @@ using System.Text;
         private void ListenforBroadCast()
         {
             bool once = false;
-            IPAddress broadcast = IPAddress.Parse("192.168.105.255");
+            IPAddress broadcast = IPAddress.Parse("192.168.105.211");
             IPEndPoint broadcastEP = new IPEndPoint(broadcast, port);
             string msg = String.Empty;
             UdpClient listener = new UdpClient(port);
