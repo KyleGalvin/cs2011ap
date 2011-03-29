@@ -11,7 +11,7 @@ using System.Collections;
         Request = 0x30000000,
         Describe = 0x40000000,
         Text = 0x50000000,
-        Identify=0x70000000,
+        Identify=0x70000000
     }
 
     public enum Type

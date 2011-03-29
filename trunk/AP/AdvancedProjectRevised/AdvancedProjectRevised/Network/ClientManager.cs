@@ -14,9 +14,6 @@ using AP;
 	{
 		#region Fields (1) 
 
-        //HACK todo
-        int i = 0;
-
 		#endregion Fields 
 
 		#region Constructors (1) 

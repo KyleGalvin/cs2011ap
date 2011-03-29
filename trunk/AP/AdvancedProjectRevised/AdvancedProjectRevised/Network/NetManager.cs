@@ -383,6 +383,10 @@ using System.Text;
             Console.WriteLine("PACKET SWITCHED");
             if (pack.IsComplete())//we've accumulated the amount of data our header predicts
             {
+                if (pack.action == (UInt32)Action.Delete)
+                {
+                    worker.HandleDelete(pack);
+                }
                 if (pack.action == (UInt32)Action.Text)
                 {
                     string message = worker.HandleText(pack);
@@ -408,14 +412,14 @@ using System.Text;
                 }
                 if (pack.action == (UInt32)Action.Identify)
                 {
-                    worker.HandleIdentify(pack);
+                    myConnections[0].playerUID = worker.HandleIdentify(pack);
                 }
 
             }
         }
 
         /// <summary>
-        /// Sends the objs.
+        /// Sends the objs. (server side specific)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="a">A.</param>
@@ -429,7 +433,7 @@ using System.Text;
             }
         }
         /// <summary>
-        /// Sends the objs.
+        /// Sends the objs. (client side specific)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="a">A.</param>

@@ -60,6 +60,21 @@ using OpenTK;
             return new AP.Player(new OpenTK.Vector3(5, 5, 0), BitConverter.ToInt32(data[0], 0));
         }
 
+        public void HandleDelete(NetPackage pack)
+        {
+            Int32 myTypeSize = (Int32)myInterpreter.GetTypeSize((Type)(pack.typeofobj));
+
+            for (int i = 0; i < pack.count; i++)
+            {
+                UInt32 t = pack.typeofobj;
+                if ((Type)t == Type.Bullet)
+                {
+                    Int32 ID = BitConverter.ToInt32(pack.body[(i*myTypeSize)+1], 0);
+                    State.Bullets.Remove(State.Bullets.Where(y => y.UID == ID).First()) ;
+                }
+            }
+        }
+
         /// <summary>
         /// Handles the create.
         /// </summary>
@@ -130,11 +145,12 @@ using OpenTK;
             }
         }
 
-        public void HandleIdentify(NetPackage pack)
+        public int HandleIdentify(NetPackage pack)
         {
             State.myUID = BitConverter.ToInt32(pack.body[1], 0);
             Console.WriteLine("MY UID is set to " + State.myUID);
             Console.WriteLine("PACKAGE " + BitConverter.ToInt32(pack.body[1], 0));
+            return State.myUID;
         }
 
 
