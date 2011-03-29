@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AP
 {
-    class Rifle//:Rocket
+    class Rifle//:Bullet
     {
     }
 }

@@ -24,7 +24,7 @@ using System.Text;
 		protected List<byte[]> myData;
         public Queue<NetPackage> myOutgoing;
         protected PackageInterpreter myProtocol;
-		protected String myRole;
+		public static String myRole;
 		protected int port;
 		protected Thread respondThread;
         protected PackWorker worker;
@@ -175,27 +175,31 @@ using System.Text;
             List<Player> playerAddList = new List<Player>();
             List<Player> playerDeleteList = new List<Player>();
 
-            /*foreach (Bullet b in s.Bullets)
+            foreach (Bullet b in s.Bullets.OrderBy(y=>y.timestamp))
             {
-                if (b.timestamp > lastFrameTime.Ticks)
+                if (b.timestamp == -1)
                 {
-                    bulletUpdateList.Add(b);
+                    bulletDeleteList.Add(b);
+                    State.Bullets.Remove(b);
                 }
                 else if (b.timestamp == 0)
                 {
                     bulletAddList.Add(b);
                 }
-                else if (b.timestamp == -1)
+                else if (b.timestamp >= lastFrameTime.Ticks)
                 {
-                    bulletDeleteList.Add(b);
+                    bulletUpdateList.Add(b);
+                    b.timestamp = -2; 
                 }
-                b.timestamp = DateTime.Now.Ticks;
-            }*/
+                
+                if( b.timestamp >= 0 )
+                    b.timestamp = DateTime.Now.Ticks;
+            }
+
             for (int x = 0; x < s.Players.Count; x++)
             {
-                Player p = s.Players[x];
-                if (p.timestamp > 0)
-                    p.updateTimeStamp();
+                if (s.Players[x].timestamp > 0)
+                    s.Players[x].updateTimeStamp();
             }
 
             foreach (Player p in s.Players.OrderBy(y=>y.timestamp))
@@ -244,9 +248,15 @@ using System.Text;
             //this.SendObjs<Enemy>(Action.Update, enemyUpdateList, Type.AI);
             if (playerUpdateList.Count > 0)
                 this.SendObjs<Player>(Action.Update, playerUpdateList, Type.Player);
+
             //this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
             //this.SendObjs<Enemy>(Action.Create, enemyAddList, Type.AI);
-            //this.SendObjs<Bullet>(Action.Create, bulletAddList, Type.Bullet);
+            if (bulletDeleteList.Count > 0)
+                this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
+            if (bulletAddList.Count > 0)
+                this.SendObjs<Bullet>(Action.Create, bulletAddList, Type.Bullet);
+            if (bulletUpdateList.Count > 0)
+                this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
             //this.SendObjs<Enemy>(Action.Delete, enemyDeleteList, Type.AI);
             //this.SendObjs<Player>(Action.Delete, playerDeleteList, Type.Player);
             //this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
@@ -350,8 +360,8 @@ using System.Text;
                     {
                         if (myConnections[i].playerUID < 0)
                         {
-                            myConnections[i].playerUID = i + 1;
-                            p = new Player(new Vector3(5.0f, 5.0f, 0), i + 1);
+                            myConnections[i].playerUID = i;
+                            p = new Player(new Vector3(0.0f, 0.0f, 0), i);
                             p.timestamp = 0;
                             State.Players.Add(p);
                             tempPlayerList.Add(p);
@@ -426,11 +436,8 @@ using System.Text;
         /// <param name="Objs">The objs.</param>
         public void SendObjs<T>(Action a, List<T> Objs, Type objType, Connection myConnection)
         {
-            if (a == Action.Identify || a == Action.Request)
-            {
-                List<byte[]> data = myProtocol.encodeObjs(a, objType, Objs);
-                myConnection.Write(data);
-            }
+            List<byte[]> data = myProtocol.encodeObjs(a, objType, Objs);
+            myConnection.Write(data);
         }
 		// Protected Methods (1) 
 

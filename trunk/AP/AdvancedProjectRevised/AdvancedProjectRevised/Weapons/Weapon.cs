@@ -36,7 +36,7 @@ namespace AP
         public Weapon()
         {
             pistolEquipped = true;
-            bulletCooldown = 0;
+            bulletCooldown = 1;
         }
 
 		#endregion Constructors 
@@ -156,27 +156,62 @@ namespace AP
         /// <param name="screenY">The screen Y.</param>
         /// <param name="mouseX">The mouse X.</param>
         /// <param name="mouseY">The mouse Y.</param>
-        public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
+        //public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
+        public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition, ref Player player)
         {
-            if(pistolEquipped)
+            if (pistolEquipped)
             {
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mouseX, mouseY, screenX, screenY, ref player);
-            } else if( rifleEquipped ) {
+                bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
+            }
+            else if (rifleEquipped)
+            {
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mouseX, mouseY, screenX, screenY, ref player);
-            } else if ( shotgunEquipped ) {
+                bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
+            }
+            else if (shotgunEquipped)
+            {
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mouseX, mouseY, screenX, screenY, ref player);
+                bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mouseX, mouseY * 1.15f, screenX, screenY, ref player);
+                bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mouseX, mouseY * 0.85f, screenX, screenY, ref player);
-            } else if (rocketEquipped ) {
+                bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
+            }
+            else if (rocketEquipped)
+            {
                 bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mouseX, mouseY, screenX, screenY, ref player);
+                bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
             }
         }
+
+        /// <summary>
+        /// Shoots the specified bullet.
+        /// </summary>
+        /// <param name="bulletList">The bullet list.</param>
+        /// <param name="player">The player.</param>
+        /// <param name="screenX">The screen X.</param>
+        /// <param name="screenY">The screen Y.</param>
+        /// <param name="mouseX">The mouse X.</param>
+        /// <param name="mouseY">The mouse Y.</param>
+        //public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
+        public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition)
+        {
+            if (ClientProgram.multiplayer)
+            {
+                Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0));
+                b.setDirectionByMouse(mousePosition, screenSize);
+                b.mousePos.X = b.xVel;
+                b.mousePos.Y = b.yVel;
+                b.setID(ServerProgram.bulletID++);
+                bulletList.Add(b);
+            }
+            else
+            {
+                
+            }
+        }
+
 
         /// <summary>
         /// Called when shotgun is attained

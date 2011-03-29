@@ -11,7 +11,7 @@ using System.Collections;
         Request = 0x30000000,
         Describe = 0x40000000,
         Text = 0x50000000,
-        Identify=0x70000000
+        Identify=0x70000000,
     }
 
     public enum Type
@@ -149,22 +149,22 @@ using System.Collections;
             
 			switch (type)//these values need to be sorted out when the protocol is more sound
 			{
-			case Type.Player:
-				return 0x5;
-			case Type.AI:
-				return 0x5;
-			case Type.Building:
-				return 0x5;
-            case Type.Bullet:
-                return 0x5;
-            case Type.Text:
-                return 0x1;
-            case Type.Connection:
-                return 0x1;
-            case Type.Move:
-                return 0x1;
-			default:
-				return 0x0;
+			    case Type.Player:
+				    return 0x5;
+			    case Type.AI:
+				    return 0x5;
+			    case Type.Building:
+				    return 0x5;
+                case Type.Bullet:
+                    return 0x5;
+                case Type.Text:
+                    return 0x1;
+                case Type.Connection:
+                    return 0x1;
+                case Type.Move:
+                    return 0x1;
+			    default:
+				    return 0x0;
 			}				
 		}
 		// Private Methods (1) 
@@ -199,13 +199,20 @@ using System.Collections;
                     Console.WriteLine("Building");
                     break;
                 case Type.Bullet:
-                    Console.WriteLine("Bullet");
-                    AP.Bullet b = (AP.Bullet)(object)obj;
-                    result.Add(BitConverter.GetBytes(b.UID));
-                    result.Add(BitConverter.GetBytes(b.xPos));
-                    result.Add(BitConverter.GetBytes(b.yPos));
-                    result.Add(BitConverter.GetBytes(b.xVel));
-                    result.Add(BitConverter.GetBytes(b.yVel));
+                    //Console.WriteLine("Bullet");
+                    if (NetManager.myRole == "server")
+                    {
+                        AP.Bullet b = (AP.Bullet)(object)obj;
+                        result.Add(BitConverter.GetBytes(b.UID));
+                        result.Add(BitConverter.GetBytes(b.xPos));
+                        result.Add(BitConverter.GetBytes(b.yPos));
+                        result.Add(BitConverter.GetBytes(b.xVel));
+                        result.Add(BitConverter.GetBytes(b.yVel));
+                    }
+                    else
+                    {
+
+                    }
                     break;
                 case Type.Explosion:
                     Console.WriteLine("Explosion");
@@ -224,7 +231,6 @@ using System.Collections;
                     break;
                 case Type.Move:
                     Console.WriteLine("Move");
-                    
                     result.Add(BitConverter.GetBytes((int)(object)obj));
                     //result.Add(BitConverter.GetBytes(o[1]));
                     break;
