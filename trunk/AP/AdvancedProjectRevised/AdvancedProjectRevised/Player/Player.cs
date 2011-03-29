@@ -20,6 +20,10 @@ namespace AP
         public string playerName;
         public Weapon weapons = new Weapon();
 
+        bool incWalk = true;
+        float legAngle = 0.0f;
+        public bool walking = false; 
+
 		#endregion Fields 
 
 		#region Constructors (2) 
@@ -35,7 +39,7 @@ namespace AP
             yPos = position.Y;
             prevXPos = xPos;
             prevYPos = yPos; 
-            life = 100;
+            health = 100;
             //client assigns passed ID from server.
             playerId = ID;
             Console.WriteLine("Setting the playerUID for " + playerId);
@@ -51,7 +55,7 @@ namespace AP
             this.position = position;
             prevXPos = xPos;
             prevYPos = yPos;  
-            life = 100;
+            health = 100;
             xPos = 0;
             yPos = 0;
             speed = 0.1f;
@@ -82,11 +86,50 @@ namespace AP
             float colorG = 0.0f;
             float colorB = 1.0f;
             float radius = 0.1f;
+            /*
             GL.PushMatrix();
             GL.Translate(0, 0, 0.4f);
             GL.Rotate(angle - 90, 0, 0, 1);
             GL.Rotate(180, 0, 1.0f, 0);            
             ClientProgram.loadedObjects.DrawObject(modelNumber);
+            GL.PopMatrix();*/
+
+            GL.PushMatrix();
+            GL.Translate(0, 0, 0.4f);
+            GL.Rotate(angle - 90, 0, 0, 1);
+            GL.Rotate(180, 0, 1.0f, 0); 
+
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectPlayer); //body 
+
+            GL.PushMatrix();
+            if (walking)
+            {
+                GL.Rotate(legAngle, 1.0, 0, 0);
+                GL.Translate(0, legAngle / 20 * 0.08f, 0);
+            }
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectPlayer + 2); //right leg 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            if (walking)
+                GL.Rotate(-legAngle, 1.0, 0, 0);
+            GL.Translate(0.08f, 0, 0);
+            if (walking)
+                GL.Translate(0, -legAngle / 20 * 0.08f, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectPlayer + 1); //left leg 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            if (walking)
+                GL.Rotate(legAngle, 1.0, 0, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectPlayer + 3); //left arm 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            if (walking)
+                GL.Rotate(-legAngle, 1.0, 0, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectPlayer + 4); //right arm 
+            GL.PopMatrix();
             GL.PopMatrix();
         }
 
@@ -96,7 +139,7 @@ namespace AP
         /// <param name="damage">The damage.</param>
         public void loseHealth( float damage )
         {
-            life -= damage;
+            health -= (int)damage;
             //-update damage bar
             //-send update health bar packet
         }
@@ -117,6 +160,20 @@ namespace AP
             yPos += y * this.speed;
             setAngle();
             position = new Vector3(xPos, yPos,0);
+
+            walking = true;
+            if (incWalk)
+            {
+                legAngle += 8;
+                if (legAngle > 35)
+                    incWalk = false;
+            }
+            else
+            {
+                legAngle -= 8;
+                if (legAngle < -35)
+                    incWalk = true;
+            } 
         }
 
         /// <summary>
@@ -148,18 +205,19 @@ namespace AP
                 }
                 else
                 {
-                    if (!ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
-                        makeMove(x, y);
-                    else
+                    bool soundPlayed = false;
+                    makeMove(x, y);
+                    if (ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
                     {
-                        //move player to middle if touching a zombie
-                        //dont get hit by a zombie in the middle or you get stuck
-                        //change this later to damage I guess
-                        //xPos = 0;
-                        //yPos = 0;
+                        health--;
+                        if (!soundPlayed)
+                        {
+                            ClientProgram.soundHandler.play(SoundHandler.INJURED);
+                            soundPlayed = true;
+                        }
                     }
                 }
-                }
+            }
             
             timestamp = DateTime.Now.Ticks;
         }

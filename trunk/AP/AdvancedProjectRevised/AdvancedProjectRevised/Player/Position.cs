@@ -19,14 +19,13 @@ namespace AP
         public Vector3 position {get; set;}
         public Vector3 velocity { get; set; }
         public int UID { get; set; }
-        public float life { get; set; }
         protected float speed { get; set; }
         public float xVel { get; set; }
         public float yVel { get; set; }
         public int enemyID;
         public float radius{ get; set; }
         public long timestamp = 0;
-        protected int health = 0;
+        public int health;
 
         public Position()
         {

@@ -16,7 +16,7 @@ namespace AP
 
         bool[,] blockedByWall;
         //private float TileSize = 1;
-        List<Enemy>[,] tileList;
+        List<Position>[,] tileList;
         private int Tiles = 50;
 
 		#endregion Fields 
@@ -32,13 +32,13 @@ namespace AP
         /// <param name="ySize">The y size of the walls..</param>
         public CollisionAI(ref List<int> xWalls, ref List<int> yWalls, ref List<int> xSize, ref List<int> ySize)
         {
-            tileList = new List<Enemy>[Tiles, Tiles];
+            tileList = new List<Position>[Tiles, Tiles];
             blockedByWall = new bool[Tiles, Tiles];
             int wallCount = 0;
             for (int i = 0; i < Tiles; i++)
                 for (int j = 0; j < Tiles; j++)
                 {
-                    tileList[i, j] = new List<Enemy>();
+                    tileList[i, j] = new List<Position>();
                     bool blocked = false;
                     for (int w = 0; w < xWalls.Count; w++)
                     {
