@@ -18,7 +18,7 @@ namespace AP
         /// <param name="ID">The ID.</param>
         public StationaryBoss(int ID)
         {
-            life = (int)Life.Boss;
+            health = (int)Life.Boss;
             enemyID = ID;
         }
 

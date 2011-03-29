@@ -19,6 +19,12 @@ namespace AP
         public static int loadedObjectPlayer;
         public static int loadedObjectZombie;
 
+        public static SoundHandler soundHandler;
+        ImageHandler imageHandler;
+        TextHandler textHandler;
+        private int imageLifeBarBG;
+        private int imageLifeBar;
+
         CreateLevel level;
 
         // Screen dimensions
@@ -91,6 +97,12 @@ namespace AP
             level = new CreateLevel(1);
             level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
 
+            soundHandler = new SoundHandler();
+            textHandler = new TextHandler("../../Images/mybitmapfont.png");
+            imageHandler = new ImageHandler();
+            imageLifeBarBG = imageHandler.loadImage("../../Images/LifeBarBg.png");
+            imageLifeBar = imageHandler.loadImage("../../Images/LifeBar.png");
+
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
@@ -102,8 +114,20 @@ namespace AP
             //Load Mesh Data into a buffer to be referenced in the future.
             loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
             loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
-            loadedObjectZombie = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
-            loadedObjectPlayer = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
+            //loadedObjectZombie = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
+            //loadedObjectPlayer = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
+
+            loadedObjectPlayer = loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//Player.png", 0.08f);
+            loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//Player.png", 0.08f);
+            loadedObjects.LoadObject("Objects//PlayerRightLeg.obj", "Objects//Player.png", 0.08f);
+            loadedObjects.LoadObject("Objects//PlayerLeftArm.obj", "Objects//Player.png", 0.08f);
+            loadedObjects.LoadObject("Objects//PlayerRightArm.obj", "Objects//Player.png", 0.08f);
+
+            loadedObjectZombie = loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//zombie.png", 0.08f);
+            loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//zombie.png", 0.08f);
+            loadedObjects.LoadObject("Objects//PlayerRightLeg.obj", "Objects//zombie.png", 0.08f);
+            loadedObjects.LoadObject("Objects//PlayerLeftArm.obj", "Objects//zombie.png", 0.08f);
+            loadedObjects.LoadObject("Objects//PlayerRightArm.obj", "Objects//zombie.png", 0.08f);
 
             if (multiplayer)
             {
@@ -114,6 +138,7 @@ namespace AP
             else
             {
                 player = new Player();
+                player.assignPlayerID(0);
                 gameState.Players.Add(player);
                 setUpLevel();
             }
@@ -302,7 +327,18 @@ namespace AP
 
                      i++;
                  }
-            
+
+               // Lifebar
+                TexUtil.InitTexturing();
+                imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * player.health * 0.01f);
+                imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
+
+                //Text
+                foreach (Player p in gameState.Players)
+                {
+                    textHandler.writeText("Player " + (p.playerId+1) + " Score: " + 10000, 2, 21.2f, 98.1f, 0);
+                }
+
                 SwapBuffers();
             }
         }
@@ -329,6 +365,12 @@ namespace AP
         /// <param name="e">Contains timing information for framerate independent logic.</param>
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            if (multiplayer)
+            {
+            }
+            else
+                player.walking = false;
+
 
              if (Keyboard[Key.W] && Keyboard[Key.D])
              {
@@ -435,6 +477,7 @@ namespace AP
                      {
                          if (player.weapons.canShoot())
                          {
+                             soundHandler.play(SoundHandler.EXPLOSION);
                              player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y));
                          }
                      }
@@ -442,9 +485,11 @@ namespace AP
                      {
                          if (player.weapons.canShoot())
                          {
+                             soundHandler.play(SoundHandler.SILENCER);
                              player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y), ref player);
                          }
                      }
+                     
                  }
                   player.weapons.updateBulletCooldown();
 
@@ -488,6 +533,7 @@ namespace AP
                                  gameState.Enemies.Remove(enemyHit);
                              GC.Collect();
                              bullet.timestamp = -1;
+                             soundHandler.play(SoundHandler.ZOMBIE);
                          }
                      }
                  

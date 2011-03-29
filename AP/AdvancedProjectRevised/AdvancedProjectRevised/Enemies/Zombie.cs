@@ -11,9 +11,12 @@ namespace AP
     /// </summary>
     public class Zombie : Enemy
     {
-		#region Fields (1) 
+		#region Fields (4) 
 
         public static int drawNumber;
+        bool incWalk = true;
+        float legAngle = 0.0f;
+        public bool walking = false; 
 
 		#endregion Fields 
 
@@ -28,10 +31,10 @@ namespace AP
         /// <output>None.</output>
         public Zombie( int ID )
         {
-            life = (int)Life.Zombie;
+            health = (int)Life.Zombie;
             enemyID = ID;
             speed = (float)0.05;
-            radius = 0.08f;
+            radius = 0.25f;
             health = 1;
             updateTimeStamp();
         }
@@ -55,10 +58,42 @@ namespace AP
         public override void draw()
         {
             GL.PushMatrix();
-            GL.Translate(xPos, yPos, 0.2f);
-            GL.Rotate(angle - 115, 0, 0, 1);
-            GL.Rotate(90, 1.0, 0, 0);
-            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie);
+            GL.Translate(xPos, yPos, 0);
+            GL.Translate(0, 0, 0.4f);
+            GL.Rotate(angle - 90, 0, 0, 1);
+            GL.Rotate(180, 0, 1.0f, 0); 
+
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie); //body 
+
+            GL.PushMatrix();
+            if (walking)
+            {
+                GL.Rotate(legAngle, 1.0, 0, 0);
+                GL.Translate(0, legAngle / 20 * 0.08f, 0);
+            }
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 2); //right leg 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            if (walking)
+                GL.Rotate(-legAngle, 1.0, 0, 0);
+            GL.Translate(0.08f, 0, 0);
+            if (walking)
+                GL.Translate(0, -legAngle / 20 * 0.08f, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 1); //left leg 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            if (walking)
+                GL.Rotate(legAngle - 90, 1.0, 0, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 3); //left arm 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            if (walking)
+                GL.Rotate(-legAngle - 90, 1.0, 0, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 4); //right arm 
+            GL.PopMatrix();
             GL.PopMatrix();
         }
 
@@ -88,6 +123,20 @@ namespace AP
             prevXPos = xPos;
             prevYPos = yPos;
 
+            walking = true;
+            if (incWalk)
+            {
+                legAngle += 8;
+                if (legAngle > 35)
+                    incWalk = false;
+            }
+            else
+            {
+                legAngle -= 8;
+                if (legAngle < -35)
+                    incWalk = true;
+            } 
+
             float len = (float)Math.Sqrt(x * x + y * y);
             float moveX;
             float moveY;
@@ -106,6 +155,9 @@ namespace AP
             }
             else
             {
+                move(x / len, y / len);
+                setAngle();
+                move(-x / len, -y / len);
                 if (!ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
                     move(x / len, y / len); //free to move where you want
                 else
@@ -118,7 +170,7 @@ namespace AP
                 }
             }
             
-            setAngle();
+            
             updateTimeStamp();
         }
 
