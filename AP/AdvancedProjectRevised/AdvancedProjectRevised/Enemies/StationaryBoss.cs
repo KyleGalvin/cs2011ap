@@ -66,6 +66,11 @@ namespace AP
             //no need to move a stationary boss :)
         }
 
-		#endregion Methods 
+        public override void moveTowards(float p, float p_2)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion Methods 
     }
 }

@@ -20,13 +20,14 @@ namespace AP
         public static int loadedObjectZombie;
         public static int loadedBloodTexture;
         public EffectsHandler effectsHandler = new EffectsHandler();
-
+        private List<Wall> walls = new List<Wall>();
+        public Tiles tiles;
         public static SoundHandler soundHandler;
         ImageHandler imageHandler;
         TextHandler textHandler;
         private int imageLifeBarBG;
         private int imageLifeBar;
-
+        private PathFinder mPathFinder;
         CreateLevel level;
 
         // Screen dimensions
@@ -158,6 +159,13 @@ namespace AP
         private void setUpLevel()
         {
             collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
+            for (int i = 0; i < xPosSquares.Count; i++)
+            {
+                walls.Add(new Wall(xPosSquares[i], yPosSquares[i], heightSquares[i], widthSquares[i]));
+            }
+            tiles = new Tiles(walls);
+            mPathFinder = new PathFinder(tiles.byteList());
+            player.tiles = tiles;
             setSpawns();
         }
 
@@ -318,7 +326,7 @@ namespace AP
                          for (int idx = 0; idx < widthSquares[i]; idx++)
                          {
                              GL.PushMatrix();
-                             GL.Translate(x + idx - 0.5f, yPosSquares[i] - 0.5f, 0.5f);
+                             GL.Translate(x + idx + 0.5f, yPosSquares[i] - 0.5f, 0.5f);
                              loadedObjects.DrawObject(loadedObjectWall);
                              GL.PopMatrix();
                          }
@@ -329,7 +337,7 @@ namespace AP
                          for (int idx = 0; idx < heightSquares[i]; idx++)
                          {
                              GL.PushMatrix();
-                             GL.Translate(x - 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
+                             GL.Translate(x + 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
                              loadedObjects.DrawObject(loadedObjectWall);
                              GL.PopMatrix();
                          }
@@ -353,7 +361,10 @@ namespace AP
                     imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
                     textHandler.writeText("Player " + (p.playerId+1) + " Score: " + 10000, 2, 21.2f, 98.1f, 0);
                 }
-
+                foreach (var x in tiles.tileList)
+                {
+                    x.draw();
+                }
                 SwapBuffers();
             }
         }
@@ -483,11 +494,49 @@ namespace AP
                  if (!multiplayer)
                  {
                      collisionAI.updateState(ref gameState.Enemies);
-                 
+
 
                      foreach (var member in gameState.Enemies)
                      {
-                         member.moveTowards(player);
+                         //Find closest player
+                         var playerPos = tiles.returnTilePos(player);
+                         var enemyPos = tiles.returnTilePos(member);
+                         //Check to see how close the zombie is to the player
+                         float x1 = player.xPos - member.xPos;
+                         float y1 = player.yPos - member.yPos;
+                         float len1 = (float) Math.Sqrt(x1*x1 + y1*y1);
+                         if (len1 < 1)
+                         {
+                             member.moveTowards(player);
+                         }
+                             //Find a path
+                         else if (enemyPos != null)
+                         {
+                             if (playerPos != null)
+                             {
+                                 List<PathFinderNode> path = mPathFinder.FindPath(enemyPos[0], enemyPos[1], playerPos[0],
+                                                                                  playerPos[1]);
+                                 //Give next X Y Coords
+                                 if (path != null && path.Count > 1)
+                                 {
+                                     var nextMove = tiles.returnCoords(path[1].X, path[1].Y);
+                                     //Move towards them
+                                     //Calculates the len between the moves
+                                     float x = nextMove[0] - member.xPos;
+                                     float y = nextMove[1] - member.yPos;
+                                     float len = (float) Math.Sqrt(x*x + y*y);
+                                     if (len < 1 && path.Count > 2)
+                                     {
+                                         nextMove = tiles.returnCoords(path[2].X, path[2].Y);
+                                         member.moveTowards(nextMove[0], nextMove[1]);
+                                     }
+                                     else
+                                     {
+                                         member.moveTowards(nextMove[0], nextMove[1]);
+                                     }
+                                 }
+                             }
+                         }
                      }
                  }
 
