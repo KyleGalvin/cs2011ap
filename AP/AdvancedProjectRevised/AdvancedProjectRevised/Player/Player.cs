@@ -24,6 +24,8 @@ namespace AP
         float legAngle = 0.0f;
         public bool walking = false; 
 
+        public int score = 0;
+
 		#endregion Fields 
 
 		#region Constructors (2) 
@@ -82,10 +84,6 @@ namespace AP
         /// </summary>
         public void draw()
         {
-            float colorR = 0.0f;
-            float colorG = 0.0f;
-            float colorB = 1.0f;
-            float radius = 0.1f;
             /*
             GL.PushMatrix();
             GL.Translate(0, 0, 0.4f);

@@ -41,7 +41,6 @@ namespace AP
         public void drawImage(int imageNum, float x, float y, float size, float percentwid)
         {
             // Write something centered in the viewport, set color to white to draw in proper color
-            GL.Color3(1.0f, 1.0f, 1.0f);
             textImage.drawImageAt(size, x, y, 0, calculateCurrentWidth(imageNum,percentwid), height[imageNum], imageNum);
 
         }

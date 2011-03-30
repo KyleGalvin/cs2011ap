@@ -32,7 +32,7 @@ namespace AP
         /// <param name="velocity">The velocity of the bullet</param>
         /// <output>
         ///   </output>
-        public Bullet(Vector3 position, Vector3 mousePos)
+        public Bullet(Vector3 position, Vector3 mousePos, int life)
         {
             radius = 0.1f;
             this.position = position;
@@ -41,6 +41,7 @@ namespace AP
             speed = 2.0f;
             this.mousePos = mousePos;
             timestamp = 0;
+            lifeTime = life;
         }
 
         public Bullet(Vector3 position, Vector2 velocity)
@@ -65,7 +66,7 @@ namespace AP
         /// </summary>
         public void draw()
         {
-            GL.Begin(BeginMode.Polygon);
+            /*GL.Begin(BeginMode.Polygon);
             
             GL.Color3(0.0f, 0.0f, 0.0f);
             GL.Vertex3(xPos - radius, yPos, 0.1f);
@@ -76,7 +77,13 @@ namespace AP
             GL.Vertex3(xPos + radius * 0.7, yPos - radius * 0.7, 0.1f);
             GL.Vertex3(xPos, yPos - radius, 0.1f);
             GL.Vertex3(xPos - radius * 0.7, yPos - radius * 0.7, 0.1f); 
-            GL.End();
+            GL.End();*/
+
+            GL.PushMatrix();
+            GL.Translate(xPos, yPos, 0.5f);
+            GL.Rotate(angle - 90, 0, 0, 1);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectBullet); //body 
+            GL.PopMatrix();
 
             //if (prevBullet != null)
                 //prevBullet.draw();
@@ -103,7 +110,7 @@ namespace AP
         /// No output, but the location of the bullet is changed. The lifetime of the bullet is also decremented.
         ///   </output>
         public void move()
-        {
+        {            
             xPos += xVel * speed;
             yPos += yVel * speed;
 
@@ -124,7 +131,6 @@ namespace AP
         ///   </output>
         public void setDirectionByMouse(Vector2 mousePosition, Vector2 screenRes)
         {
-
             float mx = (float)(mousePosition.X - screenRes.X / 2) / (screenRes.X * 0.3f);
             float my = (float)(mousePosition.Y - screenRes.Y / 2) / (screenRes.Y * 0.3f);
 
@@ -140,6 +146,29 @@ namespace AP
 
             xVel *= -1;
             yVel *= 1;
+
+            prevXPos = xPos;
+            prevYPos = yPos;
+            move();
+            setAngle();
+        }
+
+        public void setDirectionToPosition(float xTarget, float yTarget)
+        {
+            xVel = xPos - xTarget;
+            yVel = yPos - yTarget;
+
+            float len = (float)Math.Sqrt(xVel * xVel + yVel * yVel);
+            xVel /= len;
+            yVel /= len;
+
+            xVel /= 10;
+            yVel /= 10;
+
+            prevXPos = xPos;
+            prevYPos = yPos;
+            move();
+            setAngle();
         }
 
 		#endregion Methods 
