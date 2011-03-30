@@ -158,15 +158,25 @@ namespace AP
                 move(x / len, y / len);
                 setAngle();
                 move(-x / len, -y / len);
-                if (!ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
-                    move(x / len, y / len); //free to move where you want
-                else
+                if (ClientProgram.collisionAI.checkForCollisionWithPlayers(this, out moveX, out moveY))
                 { //standing in something, move away from it
                     x = moveX - xPos;
                     y = moveY - yPos;
 
                     len = (float)Math.Sqrt(x * x + y * y);
                     move(-x / len, -y / len);
+                }     
+                else if (ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                { //standing in something, move away from it
+                    x = moveX - xPos;
+                    y = moveY - yPos;
+
+                    len = (float)Math.Sqrt(x * x + y * y);
+                    move(-x / len, -y / len);
+                }                    
+                else
+                {
+                    move(x / len, y / len); //free to move where you want
                 }
             }
             

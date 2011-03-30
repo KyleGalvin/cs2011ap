@@ -131,8 +131,7 @@ using OpenTK;
         public void HandleRequest(NetPackage pack, Connection conn)
         {
             UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj));
-            for (int i = 0; i < pack.count; i++)
-            {
+            
                 UInt32 t = pack.typeofobj;
                 if ((Type) t == Type.Move)
                 {
@@ -143,10 +142,13 @@ using OpenTK;
                 }
                 if ((Type)t == Type.Bullet)
                 {
-                    State.Players.Where(y => y.playerId == conn.playerUID).First().weapons.shoot(ref State.Bullets, new Vector3(BitConverter.ToSingle(pack.body[(int)(i*myTypeSize)+2], 0), BitConverter.ToSingle(pack.body[(int)(i*myTypeSize)+3], 0), 0), new Vector2(800, 800), new Vector2(BitConverter.ToSingle(pack.body[(int)(i*myTypeSize)+4], 0), BitConverter.ToSingle(pack.body[(int)(i*myTypeSize)+5], 0)));
-                    Console.WriteLine("Player before handling move request: xPos: " + State.Bullets.Last().xPos + " yPos: " + State.Bullets.Last().yPos);
+                    for (int i = 0; i < pack.count; i++)
+                    {
+                        State.Players.Where(y => y.playerId == conn.playerUID).First().weapons.shoot(ref State.Bullets, new Vector3(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 2], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 3], 0), 0), new Vector2(800, 800), new Vector2(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 4], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 5], 0)));
+                        Console.WriteLine("Player before handling move request: xPos: " + State.Bullets.Last().xPos + " yPos: " + State.Bullets.Last().yPos);
+                    }
                 }
-            }
+            
         }
 
         public int HandleIdentify(NetPackage pack)

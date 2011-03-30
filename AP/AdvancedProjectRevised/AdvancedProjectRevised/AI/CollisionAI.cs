@@ -16,8 +16,10 @@ namespace AP
 
         bool[,] blockedByWall;
         //private float TileSize = 1;
-        List<Position>[,] tileList;
+        List<Position>[,] tileListEnemies;
+        List<Player> playerList = new List<Player>();
         private int Tiles = 50;
+        
 
 		#endregion Fields 
 
@@ -32,13 +34,13 @@ namespace AP
         /// <param name="ySize">The y size of the walls..</param>
         public CollisionAI(ref List<int> xWalls, ref List<int> yWalls, ref List<int> xSize, ref List<int> ySize)
         {
-            tileList = new List<Position>[Tiles, Tiles];
+            tileListEnemies = new List<Position>[Tiles, Tiles];
             blockedByWall = new bool[Tiles, Tiles];
             int wallCount = 0;
             for (int i = 0; i < Tiles; i++)
                 for (int j = 0; j < Tiles; j++)
                 {
-                    tileList[i, j] = new List<Position>();
+                    tileListEnemies[i, j] = new List<Position>();
                     bool blocked = false;
                     for (int w = 0; w < xWalls.Count; w++)
                     {
@@ -68,6 +70,11 @@ namespace AP
 
 		// Public Methods (4) 
 
+        public void addToPlayerList(ref Player p)
+        {
+            playerList.Add(p);
+        }
+
         /// <summary>
         /// Checks to see if the source has collided with a zombie.
         /// </summary>
@@ -95,7 +102,7 @@ namespace AP
             if (i != -1 && j != -1)
             {
                 if (i < Tiles - 1 && j < Tiles - 1)
-                    foreach (Enemy b in tileList[i + 1, j + 1])
+                    foreach (Enemy b in tileListEnemies[i + 1, j + 1])
                     {
                         float diffX = source.xPos - b.xPos;
                         float diffY = source.yPos - b.yPos;
@@ -108,7 +115,7 @@ namespace AP
                         }
                     }
                 if (i < Tiles - 1)
-                    foreach (Enemy b in tileList[i + 1, j])
+                    foreach (Enemy b in tileListEnemies[i + 1, j])
                     {
                         float diffX = source.xPos - b.xPos;
                         float diffY = source.yPos - b.yPos;
@@ -121,7 +128,7 @@ namespace AP
                         }
                     }
                 if (i < Tiles - 1 && j > 0)
-                    foreach (Enemy b in tileList[i + 1, j - 1])
+                    foreach (Enemy b in tileListEnemies[i + 1, j - 1])
                     {
                         float diffX = source.xPos - b.xPos;
                         float diffY = source.yPos - b.yPos;
@@ -134,7 +141,7 @@ namespace AP
                         }
                     }
                 if (j < Tiles - 1)
-                    foreach (Enemy b in tileList[i, j + 1])
+                    foreach (Enemy b in tileListEnemies[i, j + 1])
                     {
                         float diffX = source.xPos - b.xPos;
                         float diffY = source.yPos - b.yPos;
@@ -146,7 +153,7 @@ namespace AP
                             return true;
                         }
                     }
-                foreach (Enemy b in tileList[i, j])
+                foreach (Enemy b in tileListEnemies[i, j])
                 {
                     float diffX = source.xPos - b.xPos;
                     float diffY = source.yPos - b.yPos;
@@ -159,7 +166,7 @@ namespace AP
                     }
                 }
                 if (j > 0)
-                    foreach (Enemy b in tileList[i, j - 1])
+                    foreach (Enemy b in tileListEnemies[i, j - 1])
                     {
                         float diffX = source.xPos - b.xPos;
                         float diffY = source.yPos - b.yPos;
@@ -172,7 +179,7 @@ namespace AP
                         }
                     }
                 if (i > 0 && j < Tiles - 1)
-                    foreach (Enemy b in tileList[i - 1, j + 1])
+                    foreach (Enemy b in tileListEnemies[i - 1, j + 1])
                     {
                         float diffX = source.xPos - b.xPos;
                         float diffY = source.yPos - b.yPos;
@@ -185,7 +192,7 @@ namespace AP
                         }
                     }
                 if (i > 0)
-                    foreach (Enemy b in tileList[i - 1, j])
+                    foreach (Enemy b in tileListEnemies[i - 1, j])
                     {
                         float diffX = source.xPos - b.xPos;
                         float diffY = source.yPos - b.yPos;
@@ -198,7 +205,7 @@ namespace AP
                         }
                     }
                 if (i > 0 && j > 0)
-                    foreach (Enemy b in tileList[i - 1, j - 1])
+                    foreach (Enemy b in tileListEnemies[i - 1, j - 1])
                     {
                         float diffX = source.xPos - b.xPos;
                         float diffY = source.yPos - b.yPos;
@@ -216,6 +223,25 @@ namespace AP
             moveAwayFromX = 0;
             moveAwayFromY = 0;
             return false;                    
+        }
+
+        public bool checkForCollisionWithPlayers(Position source, out float moveAwayFromX, out float moveAwayFromY)
+        {
+            //check collisions with players first
+            foreach (Player p in playerList)
+            {
+                float diffX = source.xPos - p.xPos;
+                float diffY = source.yPos - p.yPos;
+                if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= source.radius + p.radius)
+                {
+                    moveAwayFromX = p.xPos;
+                    moveAwayFromY = p.yPos;
+                    return true;
+                }
+            }
+            moveAwayFromX = 0;
+            moveAwayFromY = 0;
+            return false;
         }
 
         /// <summary>
@@ -303,7 +329,7 @@ namespace AP
             //clear the tiles from the last update
             for (int i = 0; i < Tiles - 1; i++)
                 for (int j = 0; j < Tiles - 1; j++)
-                    tileList[i, j].Clear();
+                    tileListEnemies[i, j].Clear();
 
             foreach (var member in enemyList)
             {
@@ -321,7 +347,7 @@ namespace AP
                 }
                 if (x != -1 && y != -1)
                 {
-                    tileList[x, y].Add(member);
+                    tileListEnemies[x, y].Add(member);
                     //Console.WriteLine("Enemy x: " + member.xPos + " added to x tile: " + x);
                 }
                 else

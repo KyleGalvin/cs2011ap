@@ -192,30 +192,20 @@ namespace AP
             {
                 if (ClientProgram.multiplayer)
                 {
-                    if (!ServerProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                    //if (!ServerProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
                         makeMove(x, y);
-                    else
-                    {
+                    //else
+                    //{
                         //move player to middle if touching a zombie
                         //dont get hit by a zombie in the middle or you get stuck
                         //change this later to damage I guess
                         //xPos = 0;
                         //yPos = 0;
-                    }
+                    //}
                 }
                 else
                 {
-                    bool soundPlayed = false;
                     makeMove(x, y);
-                    if (ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
-                    {
-                        health--;
-                        if (!soundPlayed)
-                        {
-                            ClientProgram.soundHandler.play(SoundHandler.INJURED);
-                            soundPlayed = true;
-                        }
-                    }
                 }
             }
             

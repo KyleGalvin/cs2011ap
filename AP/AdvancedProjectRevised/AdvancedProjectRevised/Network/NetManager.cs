@@ -347,12 +347,12 @@ using System.Text;
 
                 Console.WriteLine("Starting the {0}th connection", myConnections.Count);
                 //create a thread to handle communication
-                if (!createdIncomingCommThread)
-                {
+                //if (!createdIncomingCommThread)
+                //{
                     Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
                     clientThread.Start(myConnections[(myConnections.Count - 1)]);
-                    createdIncomingCommThread = true;
-                }
+                    //createdIncomingCommThread = true;
+                //}
 
                 if (Connected && String.Compare(myRole, "server") == 0)
                 {
