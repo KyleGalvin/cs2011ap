@@ -12,7 +12,7 @@ public class SoundHandler
     public const String INJURED = "../../Sounds/injured3.wav";
     public const String ZOMBIE = "../../Sounds/zombie1.wav";
     private const int maxSounds = 10;
-    private Boolean soundsOn = true;
+    private Boolean soundsOn = false;
 
     public int injuredSoundCooldown = 0;
     
@@ -36,6 +36,12 @@ public class SoundHandler
     {
         soundsOn = state;
     }
+
+    public Boolean getSoundState()
+    {
+        return soundsOn;
+    }
+
     public void play(String soundPath)
     {
 
