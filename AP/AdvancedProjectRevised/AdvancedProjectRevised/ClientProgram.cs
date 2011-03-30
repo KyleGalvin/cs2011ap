@@ -69,15 +69,10 @@ namespace AP
         private Player player;
 
         /// <summary>Creates a window with the specified title.</summary>
-        public ClientProgram()
+        public ClientProgram(bool multi)
             : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
-            Console.WriteLine("[s]ingle player or [m]ultiplayer");
-            string val = Console.ReadLine();
-            if (val == "m")
-                multiplayer = true;
-
-
+            multiplayer = multi;
             VSync = VSyncMode.On;
         }
 
