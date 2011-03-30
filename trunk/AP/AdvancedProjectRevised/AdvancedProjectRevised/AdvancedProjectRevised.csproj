@@ -112,6 +112,7 @@
     <Compile Include="TextSound\SoundHandler.cs" />
     <Compile Include="TextSound\TexLib.cs" />
     <Compile Include="Weapons\Bullet.cs" />
+    <Compile Include="Weapons\Crate.cs" />
     <Compile Include="Weapons\Pistol.cs" />
     <Compile Include="Weapons\Rifle.cs" />
     <Compile Include="Weapons\Rocket.cs" />

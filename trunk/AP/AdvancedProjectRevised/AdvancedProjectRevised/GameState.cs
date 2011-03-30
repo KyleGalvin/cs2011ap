@@ -16,6 +16,7 @@ namespace AP
         public List<AP.Enemy> Enemies;
         private int enemyIDs = 4;
         public List<AP.Player> Players;
+        public List<AP.Crate> Crates;
         public int myUID;
 		#endregion Fields 
 
@@ -26,6 +27,7 @@ namespace AP
             Players = new List<AP.Player>();
             Enemies = new List<AP.Enemy>();
             Bullets = new List<AP.Bullet>();
+            Crates = new List<AP.Crate>();
         }
 
 		#endregion Constructors

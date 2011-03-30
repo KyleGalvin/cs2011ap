@@ -18,16 +18,20 @@ namespace AP
         Vector3 defaultVelocity = new Vector3(0, 0, 0);
         private bool grenadeAvailable = false;
         private UInt16 grenadeCount = 3;
-        private bool pistolEquipped = false;
+        public bool pistolEquipped = false;
         private bool rifleAvailable = false;
         private UInt16 rifleBulletCount = 0;
-        private bool rifleEquipped = false;
+        public bool rifleEquipped = false;
         private bool rocketAvailable = false;
         private UInt16 rocketBulletCount = 0;
-        private bool rocketEquipped = false;
+        public bool rocketEquipped = false;
         private bool shotgunAvailable = false;
         private UInt16 shotgunBulletCount = 0;
-        private bool shotgunEquipped = false;
+        public bool shotgunEquipped = false;
+
+        public int rifleAmmo = 50;
+        public int rifleBurstCooldown = 0;
+        public int shotgunAmmo = 10;
 
 		#endregion Fields 
 
@@ -58,10 +62,48 @@ namespace AP
         /// </returns>
         public bool canShoot()
         {
+            
             if (bulletCooldown <= 0)
             {
-                bulletCooldown = 10;
-                return true;
+                if (pistolEquipped)
+                {
+                    bulletCooldown = 10;
+                    ClientProgram.soundHandler.play(SoundHandler.EXPLOSION);
+                    return true;
+                }
+                else if (rifleEquipped)
+                {
+                    if (rifleBurstCooldown < 2)
+                    {
+                        bulletCooldown = 3;
+                        rifleBurstCooldown++;
+                    }
+                    else
+                    {
+                        bulletCooldown = 10;
+                        rifleBurstCooldown = 0;
+                    }
+                    if (rifleAmmo <= 0)
+                    {
+                        equipPistol();
+                    }
+                    else
+                    {
+                        ClientProgram.soundHandler.play(SoundHandler.EXPLOSION);
+                        return true;
+                    }
+                }
+                else if (shotgunEquipped)
+                {
+                    bulletCooldown = 10;
+                    if (shotgunAmmo <= 0)
+                        equipPistol();
+                    else
+                    {
+                        ClientProgram.soundHandler.play(SoundHandler.EXPLOSION);
+                        return true;
+                    }
+                }                
             }
             return false;
         }
@@ -161,26 +203,48 @@ namespace AP
         {
             if (pistolEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 40));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
             }
             else if (rifleEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 30));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
+                rifleAmmo--;
             }
             else if (shotgunEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity));
+                float mx = (float)(mousePosition.X - screenSize.X / 2) / (screenSize.X * 0.3f);
+                float my = (float)(mousePosition.Y - screenSize.Y / 2) / (screenSize.Y * 0.3f);
+
+                float xVelo = -mx;
+                float yVelo = -my;
+
+                float len = (float)Math.Sqrt(xVelo * xVelo + yVelo * yVelo);
+                xVelo /= len;
+                yVelo /= len;
+
+                xVelo /= 10;
+                yVelo /= -10;
+
+                int spread = 100; //higher spread value makes the spread cover less area
+                Vector2 spreadTarget = new Vector2(player.xPos + xVelo * spread, player.yPos + yVelo * spread);
+
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
-                bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
-                bulletList.Add(new Bullet(player.position, defaultVelocity));
-                bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Last().setDirectionToPosition(spreadTarget.X + 1, spreadTarget.Y + 1);
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Last().setDirectionToPosition(spreadTarget.X - 1, spreadTarget.Y + 1);
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Last().setDirectionToPosition(spreadTarget.X - 1, spreadTarget.Y - 1);
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Last().setDirectionToPosition(spreadTarget.X + 1, spreadTarget.Y - 1);
+                shotgunAmmo--;
             }
             else if (rocketEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 45));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
             }
         }
@@ -199,7 +263,7 @@ namespace AP
         {
             if (ClientProgram.multiplayer)
             {
-                Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0));
+                Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30);
                 b.setDirectionByMouse(mousePosition, screenSize);
                 b.mousePos.X = b.xVel;
                 b.mousePos.Y = b.yVel;
