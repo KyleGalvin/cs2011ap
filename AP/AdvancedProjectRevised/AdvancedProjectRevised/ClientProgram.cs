@@ -18,6 +18,8 @@ namespace AP
         public static int loadedObjectGrass;
         public static int loadedObjectPlayer;
         public static int loadedObjectZombie;
+        public static int loadedBloodTexture;
+        public EffectsHandler effectsHandler = new EffectsHandler();
 
         public static SoundHandler soundHandler;
         ImageHandler imageHandler;
@@ -75,6 +77,7 @@ namespace AP
         /// <returns></returns>
         public NetManager StartNetwork(ref GameState s)
         {
+            //create client and/or server
             NetManager manager;
 
             Server serv = new Server("Serv", IPAddress.Parse("192.168.105.211"));
@@ -99,6 +102,8 @@ namespace AP
             soundHandler = new SoundHandler();
             textHandler = new TextHandler("../../Images/mybitmapfont.png");
             imageHandler = new ImageHandler();
+            effectsHandler = new EffectsHandler();
+
             imageLifeBarBG = imageHandler.loadImage("../../Images/LifeBarBg.png");
             imageLifeBar = imageHandler.loadImage("../../Images/LifeBar.png");
 
@@ -128,11 +133,17 @@ namespace AP
             loadedObjects.LoadObject("Objects//PlayerLeftArm.obj", "Objects//zombie.png", 0.08f);
             loadedObjects.LoadObject("Objects//PlayerRightArm.obj", "Objects//zombie.png", 0.08f);
 
+            loadedBloodTexture = loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood1.png", 0.4f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood2.png", 0.4f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood3.png", 0.4f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood4.png", 0.4f);
+
             if (multiplayer)
             {
                 net = StartNetwork(ref gameState);
                 while (!net.Connected) { }
                 Console.WriteLine("Connected!");
+                //add players to collisionAI here
             }
             else
             {
@@ -140,6 +151,7 @@ namespace AP
                 player.assignPlayerID(0);
                 gameState.Players.Add(player);
                 setUpLevel();
+                collisionAI.addToPlayerList(ref player);
             }
         }
 
@@ -327,6 +339,8 @@ namespace AP
                      i++;
                  }
 
+                 effectsHandler.drawEffects();
+
                // Lifebar
                 TexUtil.InitTexturing();
                 imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * player.health * 0.01f);
@@ -370,6 +384,7 @@ namespace AP
             else
                 player.walking = false;
 
+            effectsHandler.updateEffects();
 
              if (Keyboard[Key.W] && Keyboard[Key.D])
              {
@@ -488,7 +503,7 @@ namespace AP
                      {
                          if (player.weapons.canShoot())
                          {
-                             soundHandler.play(SoundHandler.SILENCER);
+                             soundHandler.play(SoundHandler.EXPLOSION);
                              player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y), ref player);
                          }
                      }
@@ -533,6 +548,8 @@ namespace AP
                          bool hit = collisionAI.checkForCollision(bullet, out moveX, out moveY, out enemyHit);
                          if (hit)
                          {
+                             //ADAM
+                             effectsHandler.addBlood(moveX, moveY); //needs to be on the server too
                              tmpBullet.Add(bullet);
                              if (enemyHit.decreaseHealth())
                                  gameState.Enemies.Remove(enemyHit);
@@ -544,9 +561,26 @@ namespace AP
                  
 
                      foreach (Bullet bullet in tmpBullet)
-                     {
+                     {                         
                          gameState.Bullets.Remove(bullet);
                      }
+
+                     //ADAM
+                     /*
+                      * MOVE THIS TO SERVER STUFFFFFFFFFFF
+                      * 
+                      */
+                     float moveX2, moveY2;
+                     if (collisionAI.checkForMovementCollision(player, out moveX2, out moveY2))
+                     {
+                         player.health--;
+                         if (ClientProgram.soundHandler.injuredSoundCooldown <= 0)
+                         {
+                             ClientProgram.soundHandler.play(SoundHandler.INJURED);
+                             ClientProgram.soundHandler.injuredSoundCooldown = 14;
+                         }
+                     }
+                     ClientProgram.soundHandler.injuredSoundCooldown--;
                  }
             GC.Collect();
         }
