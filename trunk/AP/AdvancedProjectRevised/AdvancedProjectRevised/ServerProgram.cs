@@ -24,6 +24,11 @@ namespace AP
         List<int> xPosSquares = new List<int>();
         List<int> yPosSpawn = new List<int>();
         List<int> yPosSquares = new List<int>();
+        public static List<int> xPosPlayerSpawn = new List<int>();
+        public static List<int> yPosPlayerSpawn = new List<int>();
+        public static List<int> playerSpawnID = new List<int>();
+
+
         List<EnemySpawn> spawns = new List<EnemySpawn>();
         private int zombieCount = 0;
         private int zombieIterator = 0;
@@ -81,7 +86,7 @@ namespace AP
         private void setUpLevel()
         {
             level = new CreateLevel(currentLevel);
-            level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
+            level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn, ref xPosPlayerSpawn, ref yPosPlayerSpawn, ref playerSpawnID);
             
             collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
             for (int i = 0; i < xPosSquares.Count; i++)
@@ -90,7 +95,8 @@ namespace AP
             }
             tiles = new Tiles(walls);
             mPathFinder = new PathFinder(tiles.byteList());
-
+            
+            
             setSpawns();
         }
 
@@ -112,6 +118,14 @@ namespace AP
             if (xPosSpawn.Count > 3)
             {
                 spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
+            }
+            if (xPosSpawn.Count > 4)
+            {
+                spawns.Add(new EnemySpawn(xPosSpawn[4], yPosSpawn[4]));
+            }
+            if (xPosSpawn.Count > 5)
+            {
+                spawns.Add(new EnemySpawn(xPosSpawn[5], yPosSpawn[5]));
             }
         }
     }
