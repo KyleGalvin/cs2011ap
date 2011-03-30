@@ -199,10 +199,9 @@ namespace AP
 
                  Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist), OpenTK.Vector3d.Zero, up);
                  GL.LoadMatrix(ref camera);
-                 Player player = new Player();
                  if (multiplayer)
                  {
-                     player = gameState.Players.Where(y => y.playerId == gameState.myUID).First();
+                     Player player = gameState.Players.Where(y => y.playerId == gameState.myUID).First();
                      lock (gameState)
                      {
                          player.draw();
@@ -342,13 +341,16 @@ namespace AP
                  effectsHandler.drawEffects();
 
                // Lifebar
-                TexUtil.InitTexturing();
-                imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * player.health * 0.01f);
-                imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
+                 //TexUtil.InitTexturing();
+                 //imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * player.health * 0.01f);
+                 //imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
 
                 //Text
                 foreach (Player p in gameState.Players)
                 {
+                    TexUtil.InitTexturing();
+                    imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * p.health * 0.01f);
+                    imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
                     textHandler.writeText("Player " + (p.playerId+1) + " Score: " + 10000, 2, 21.2f, 98.1f, 0);
                 }
 
@@ -493,11 +495,11 @@ namespace AP
                  {
                      if(multiplayer)
                      {
-                        // if (player.weapons.canShoot())
+                         //if (player.weapons.canShoot())
                          //{
-                             //soundHandler.play(SoundHandler.EXPLOSION);
-                             //player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y));
-                        // }
+                         //    soundHandler.play(SoundHandler.EXPLOSION);
+                         //    player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y));
+                         //}
                      }
                      else
                      {
