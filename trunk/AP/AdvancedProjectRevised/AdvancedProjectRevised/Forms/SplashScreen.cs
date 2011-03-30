@@ -48,5 +48,9 @@ namespace AP
                 client.Run(28.0);
             }
         }
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+        }
     }
 }
