@@ -8,10 +8,10 @@ namespace AP
     public class Tiles
     {
         public Tile[,] tileList;
-        private float maxX;
-        private float minX;
-        private float maxY;
-        private float minY;
+        public float maxX;
+        public float minX;
+        public float maxY;
+        public float minY;
         public Tiles(float _minX, float _maxX, float _minY, float _maxY)
         {
             minX = _minX;
