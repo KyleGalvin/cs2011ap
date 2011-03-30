@@ -50,6 +50,7 @@
     <Compile Include="AI\EnemyAI.cs" />
     <Compile Include="ClientProgram.cs" />
     <Compile Include="Controls\Controls.cs" />
+    <Compile Include="EffectsHandler.cs" />
     <Compile Include="Enemies\Enemy.cs" />
     <Compile Include="Enemies\StationaryBoss.cs" />
     <Compile Include="Enemies\Zombie.cs" />

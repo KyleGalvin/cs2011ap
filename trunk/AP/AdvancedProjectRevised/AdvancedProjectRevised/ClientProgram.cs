@@ -341,9 +341,9 @@ namespace AP
                  effectsHandler.drawEffects();
 
                // Lifebar
-                 //TexUtil.InitTexturing();
-                 //imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * player.health * 0.01f);
-                 //imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
+                //TexUtil.InitTexturing();
+                //imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * player.health * 0.01f);
+                //imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
 
                 //Text
                 foreach (Player p in gameState.Players)

@@ -13,6 +13,8 @@ public class SoundHandler
     public const String ZOMBIE = "../../Sounds/zombie1.wav";
     private const int maxSounds = 10;
     private Boolean soundsOn = true;
+
+    public int injuredSoundCooldown = 0;
     
     private int arraySpot = 0;
     int[] bufferList;
