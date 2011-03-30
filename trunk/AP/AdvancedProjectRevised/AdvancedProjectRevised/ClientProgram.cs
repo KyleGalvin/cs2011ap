@@ -78,7 +78,7 @@ namespace AP
             //create client and/or server
             NetManager manager;
 
-            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.211"));
+            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.75"));
             manager = new ClientManager(9999, ref s, serv);
             manager.setRole("client");
             while (manager.myConnections.Count == 0) { }
@@ -217,7 +217,6 @@ namespace AP
 
                              if (p.playerId != player.playerId)
                              {
-                                 Console.WriteLine("x:" + p.xPos + " y:" + p.yPos);
                                  GL.PushMatrix();
                                  GL.Translate(p.xPos, p.yPos, 0);
                                  p.draw();
@@ -357,10 +356,6 @@ namespace AP
                     imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * p.health * 0.01f);
                     imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
                     textHandler.writeText("Player " + (p.playerId+1) + " Score: " + 10000, 2, 21.2f, 98.1f, 0);
-                }
-                foreach (var x in tiles.tileList)
-                {
-                    x.draw();
                 }
                 SwapBuffers();
             }
