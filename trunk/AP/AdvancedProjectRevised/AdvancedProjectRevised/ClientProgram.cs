@@ -13,12 +13,16 @@ namespace AP
 {
     class ClientProgram : GameWindow
     {
+        private Random rand = new Random();
+
         public static LoadedObjects loadedObjects = new LoadedObjects();
         public static int loadedObjectWall;
         public static int loadedObjectGrass;
         public static int loadedObjectPlayer;
         public static int loadedObjectZombie;
         public static int loadedBloodTexture;
+        public static int loadedObjectBullet;
+        public static int loadedObjectCrate;
         public EffectsHandler effectsHandler = new EffectsHandler();
 
         public static SoundHandler soundHandler;
@@ -27,6 +31,15 @@ namespace AP
         private int imageLifeBarBG;
         private int imageLifeBar;
 
+        private int imagePistolSelected;
+        private int imagePistolAvailable;
+        private int imageRifleSelected;
+        private int imageRifleAvailable;
+        private int imageRifleUnavailable;
+        private int imageShotgunSelected;
+        private int imageShotgunAvailable;
+        private int imageShotgunUnavailable;
+
         CreateLevel level;
 
         private List<Wall> walls = new List<Wall>();
@@ -34,8 +47,8 @@ namespace AP
         private PathFinder mPathFinder;
 
         // Screen dimensions
-        private const int screenX = 800;
-        private const int screenY = 800;
+        private const int screenX = 700;
+        private const int screenY = 700;
 
         //camera related things
         Vector3d up = new Vector3d(0.0, 1.0, 0.0);
@@ -110,8 +123,19 @@ namespace AP
             imageHandler = new ImageHandler();
             effectsHandler = new EffectsHandler();
 
+            soundHandler.playSong(SoundHandler.BACKGROUND);
+
             imageLifeBarBG = imageHandler.loadImage("../../Images/LifeBarBg.png");
             imageLifeBar = imageHandler.loadImage("../../Images/LifeBar.png");
+
+            imagePistolSelected = imageHandler.loadImage("Objects//Guns//Pistol_selected.png");
+            imagePistolAvailable = imageHandler.loadImage("Objects//Guns//Pistol_available.png");
+            imageRifleSelected = imageHandler.loadImage("Objects//Guns//Rifle_selected.png");
+            imageRifleAvailable = imageHandler.loadImage("Objects//Guns//Rifle_available.png");
+            imageRifleUnavailable = imageHandler.loadImage("Objects//Guns//Rifle_unavailable.png");
+            imageShotgunSelected = imageHandler.loadImage("Objects//Guns//Shotgun_selected.png");
+            imageShotgunAvailable = imageHandler.loadImage("Objects//Guns//Shotgun_available.png");
+            imageShotgunUnavailable = imageHandler.loadImage("Objects//Guns//Shotgun_unavailable.png");
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
@@ -123,9 +147,11 @@ namespace AP
 
             //Load Mesh Data into a buffer to be referenced in the future.
             loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
-            loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
-            //loadedObjectZombie = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
-            //loadedObjectPlayer = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
+            loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass.png", 5);
+            loadedObjectBullet = loadedObjects.LoadObject("Objects//bullet.obj", "Objects//bullet.png", 0.04f);
+            loadedObjectCrate = loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//rifleCrate.png", 0.5f);
+                loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//shotgunCrate.png", 0.5f);
+
 
             loadedObjectPlayer = loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//Player.png", 0.08f);
             loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//Player.png", 0.08f);
@@ -218,7 +244,7 @@ namespace AP
         /// <param name="e">Contains timing information.</param>
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-
+            GL.Color3(1.0f, 1.0f, 1.0f); //reset colors
             if (gameState.Players.Count > 0)
             {
                 base.OnRenderFrame(e);
@@ -257,43 +283,33 @@ namespace AP
                     GL.Translate(-player.xPos, -player.yPos, 0);
                 }
 
-                lock (gameState)
-                {
-                    foreach (Bullet bullet in gameState.Bullets)
-                    {
-                        GL.PushMatrix();
-                        bullet.draw();
-                        GL.PopMatrix();
-                    }
-                }
+                 lock (gameState)
+                 {
+                     foreach (Bullet bullet in gameState.Bullets)
+                     {
+                         GL.PushMatrix();
+                         bullet.draw();
+                         GL.PopMatrix();
+                     }
+
+                     foreach (Crate crate in gameState.Crates)
+                     {
+                         GL.PushMatrix();
+                         crate.draw();
+                         GL.PopMatrix();
+                     }
+                 }
+                 
+                
+                 //float tempX;
+                 //float tempY;
+                 //GL.Translate(-gameState.Players.Where(y=>y.playerId==gameState.myUID).First().xPos, -gameState.Players.Where(y=>y.playerId==gameState.myUID).First().yPos, 0);
+                 //lock (gameState)
+                 //{
 
 
 
-                GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
-                lock (gameState)
-                {
-                    foreach (var member in gameState.Enemies)
-                    {
-                        member.draw();
-                    }
-                }
-
-                if (!multiplayer)
-                {
-                    zombieIterator++;
-                        foreach (var spawn in spawns)
-                        {
-                            if (zombieCount < 2)
-                            {
-                                if (zombieIterator == 60)
-                                {
-                                    lock (gameState)
-                                    {
-                                        //need to ping server for a UID
-                                        gameState.Enemies.Add(spawn.spawnEnemy(0));
-                                        enemySpawned = true;
-                                        zombieCount++;
-                                    }
+                 
 
                                 }
                             }
@@ -350,11 +366,72 @@ namespace AP
                 //Text
                 foreach (Player p in gameState.Players)
                 {
-                    TexUtil.InitTexturing();
-                    imageHandler.drawImage(imageLifeBar, 0.7f, 93.84f, 0.5f, 1.89f * p.health * 0.01f);
-                    imageHandler.drawImage(imageLifeBarBG, 0, 93, 0.5f, 1.0f);
-                    textHandler.writeText("Player " + (p.playerId + 1) + " Score: " + 10000, 2, 21.2f, 98.1f, 0);
+                    if (p.playerId == gameState.myUID)
+                    {
+                        //life bar
+                        TexUtil.InitTexturing();
+                        GL.Color3(1.0f, 0.0f, 0.0f);
+                        imageHandler.drawImage(imageLifeBar, 0.9f, 97.2f, 0.68f, 1.89f * p.health * 0.01f);
+                        GL.Color3(1.0f, 1.0f, 1.0f);
+                        imageHandler.drawImage(imageLifeBarBG, 0, 96, 0.68f, 1.0f);
+
+                        //text stuff
+                        GL.Color3(1.0f, 0.0f, 0.0f);
+                        textHandler.writeText("Player " + (p.playerId + 1), 2, 55.0f, 98.1f, 0);
+                        textHandler.writeText("Score: " + p.score, 2, 87.0f, 98.1f, 0);
+                        p.score++;
+
+                        //gun images
+                        GL.Color3(1.0f, 1.0f, 1.0f);
+                        if (p.weapons.pistolEquipped)
+                            imageHandler.drawImage(imagePistolSelected, 0.7f, 89.0f, 1.0f, 1.0f);
+                        else
+                            imageHandler.drawImage(imagePistolAvailable, 0.7f, 89.0f, 1.0f, 1.0f);
+                        if (p.weapons.rifleEquipped)
+                            imageHandler.drawImage(imageRifleSelected, 8.0f, 89.0f, 1.0f, 1.0f);
+                        else if(p.weapons.rifleAmmo <= 0)
+                            imageHandler.drawImage(imageRifleUnavailable, 8.0f, 89.0f, 1.0f, 1.0f);
+                        else
+                            imageHandler.drawImage(imageRifleAvailable, 8.0f, 89.0f, 1.0f, 1.0f);
+                        textHandler.writeText(p.weapons.rifleAmmo.ToString(), 2, 13.0f, 85.0f, 0);
+                        if (p.weapons.shotgunEquipped)
+                            imageHandler.drawImage(imageShotgunSelected, 21.5f, 89.0f, 1.0f, 1.0f);
+                        else if (p.weapons.shotgunAmmo <= 0)
+                            imageHandler.drawImage(imageShotgunUnavailable, 21.5f, 89.0f, 1.0f, 1.0f);
+                        else
+                            imageHandler.drawImage(imageShotgunAvailable, 21.5f, 89.0f, 1.0f, 1.0f);
+                        textHandler.writeText(p.weapons.shotgunAmmo.ToString(), 2, 28.0f, 85.0f, 0);
+                    }
                 }
+
+               //ADAM
+               //move this into the for loop as an else     
+                int horizontalInc = 0;
+                GL.Color3(0.0f, 0.0f, 1.0f);
+                imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
+                GL.Color3(1.0f, 1.0f, 1.0f);
+                imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
+                GL.Color3(0.0f, 0.0f, 1.0f);
+                textHandler.writeText("Player " + 2, 2, 12.0f + horizontalInc, 6.0f, 0);
+                textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
+
+                horizontalInc += 37;
+                GL.Color3(0.0f, 1.0f, 0.0f);
+                imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
+                GL.Color3(1.0f, 1.0f, 1.0f);
+                imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
+                GL.Color3(0.0f, 1.0f, 0.0f);
+                textHandler.writeText("Player " + 3, 2, 12.0f + horizontalInc, 6.0f, 0);
+                textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
+
+                horizontalInc += 37;
+                GL.Color3(0.9f, 0.9f, 0.2f);
+                imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
+                GL.Color3(1.0f, 1.0f, 1.0f);
+                imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
+                GL.Color3(0.9f, 0.9f, 0.2f);
+                textHandler.writeText("Player " + 4, 2, 12.0f + horizontalInc, 6.0f, 0);
+                textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
 
                 SwapBuffers();
             }
@@ -450,11 +527,23 @@ namespace AP
              else if (Keyboard[Key.Escape])
                  Exit();
 
-             if (Keyboard[Key.F1])
-                 if(soundHandler.getSoundState())
-                    soundHandler.setSoundState(false);
+             if (Keyboard[Key.F1] && !soundHandler.pressingF1)
+             {
+                 if (soundHandler.getSoundState())
+                 {
+                     soundHandler.setSoundState(false);
+                     soundHandler.stopSong();
+                 }
                  else
+                 {
                      soundHandler.setSoundState(true);
+                     //soundHandler.playSong(SoundHandler.BACKGROUND);
+                     soundHandler.continueSong();
+                 }
+                 soundHandler.pressingF1 = true;
+             }
+             else
+                 soundHandler.pressingF1 = false;
 
                  if (Keyboard[OpenTK.Input.Key.Up])
                  {
@@ -488,6 +577,12 @@ namespace AP
                  viewDirection.Y += wheelD / 10;
                  viewDirection.Z += wheelD / 10;
 
+                 if (Keyboard[Key.Left])
+                     viewDirection.Y += 0.1f;
+                 if (Keyboard[Key.Right])
+                     viewDirection.Y -= 0.1f;
+
+
                  if (!multiplayer)
                  {
                      collisionAI.updateState(ref gameState.Enemies);
@@ -496,6 +591,32 @@ namespace AP
                      foreach (var member in gameState.Enemies)
                      {
                          member.moveTowards(player);
+                     }
+                 }
+
+            //ADAM
+            //move to serverrrrr
+            //logic for picking up ammo crates
+                 if (!multiplayer)
+                 {
+                     List<Crate> cratesToRemove = new List<Crate>();
+                     foreach (Crate crate in gameState.Crates)
+                     {
+                         float diffX = player.xPos - crate.xPos;
+                         float diffY = player.yPos - crate.yPos;
+                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= player.radius + crate.radius)
+                         {
+                             if (crate.crateType == 0)
+                                 player.weapons.rifleAmmo += 25;
+                             else if (crate.crateType == 1)
+                                 player.weapons.shotgunAmmo += 5;
+                             cratesToRemove.Add(crate);
+                             soundHandler.play(SoundHandler.RELOAD);
+                         }
+                     }
+                     foreach (Crate crate in cratesToRemove)
+                     {
+                         gameState.Crates.Remove(crate);
                      }
                  }
 
@@ -512,9 +633,8 @@ namespace AP
                      else
                      {
                          if (player.weapons.canShoot())
-                         {
-                             soundHandler.play(SoundHandler.SILENCER);
-                             player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y), ref player);
+                         {                             
+                             player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(screenX, screenY), new Vector2(Mouse.X, Mouse.Y), ref player);
                          }
                      }
                      
@@ -522,7 +642,42 @@ namespace AP
                  if (!multiplayer)
                  {
                      player.weapons.updateBulletCooldown();
+                     if (player.weapons.rifleBurstCooldown != 0)
+                     {
+                         if (player.weapons.canShoot())
+                         {
+                             player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(screenX, screenY), new Vector2(Mouse.X, Mouse.Y), ref player);
+                         }
+                     }
                  }
+                 if (!multiplayer)
+                 {
+                     zombieIterator++;
+                     if (zombieCount < 100)
+                     {
+                         foreach (var spawn in spawns)
+                         {
+                             spawn.draw();
+                             if (zombieIterator == 40)
+                             {
+                                 lock (gameState)
+                                 {
+                                     //need to ping server for a UID
+                                     gameState.Enemies.Add(spawn.spawnEnemy(0));
+                                     enemySpawned = true;
+                                     zombieCount++;
+                                 }
+
+                             }
+                         }
+                         if (enemySpawned)
+                         {
+                             zombieIterator = 0;
+                             enemySpawned = false;
+                         }
+                     }
+                 }
+
                  
                  if (!multiplayer)
                  {
@@ -550,6 +705,8 @@ namespace AP
                              GC.Collect();
                              bullet.timestamp = -1;
                              soundHandler.play(SoundHandler.ZOMBIE);
+                             if (rand.Next(0, 10) < 1) //new ammo crate
+                                 gameState.Crates.Add(new Crate(new Vector2(enemyHit.xPos, enemyHit.yPos)));
                          }
                      }
                  
@@ -582,6 +739,7 @@ namespace AP
                      }
                      ClientProgram.soundHandler.injuredSoundCooldown--;
                  }
+
             GC.Collect();
         }
 
