@@ -31,16 +31,22 @@ namespace AP
         private  GameState gameState;
         public ServerProgram()
         {
-            setUpLevel();
             
             // Set up the spawn locations for enemies
             setSpawns();
             gameState = new GameState();
             net = new HostManager(9999, ref gameState);
             net.setRole("server");
+            setUpLevel();
             while (!net.Connected) { }
             Console.WriteLine("Connected!");
             Console.ReadLine();
+
+            foreach (var x in gameState.Players)
+            {
+                x.tiles = tiles;
+            }
+
             gameTime.Elapsed += new ElapsedEventHandler(gameLoop);
             gameTime.Enabled = true;
         }
@@ -84,10 +90,7 @@ namespace AP
             }
             tiles = new Tiles(walls);
             mPathFinder = new PathFinder(tiles.byteList());
-            foreach (var x in gameState.Players)
-            {
-                x.tiles = tiles;
-            }
+
             setSpawns();
         }
 
