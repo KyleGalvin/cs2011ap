@@ -34,7 +34,9 @@ namespace AP
             {
                 case 1:
                     doc.Load("level1.xml");
-                    //doc.Load("level2.xml");
+                    break;
+                case 2:
+                    doc.Load("level2.xml");
                     break;
                 default:
                     break;
@@ -56,15 +58,24 @@ namespace AP
          /// <param name="w">The width.</param>
          /// <param name="xSpawn">The x spawn.</param>
          /// <param name="ySpawn">The y spawn.</param>
-        public void parseFile(ref List<int> x, ref List<int> y, ref List<int> h, ref List<int> w, ref List<int> xSpawn, ref List<int> ySpawn)
+        public void parseFile(ref List<int> x, ref List<int> y, ref List<int> h, ref List<int> w, ref List<int> xSpawn, ref List<int> ySpawn, ref List<int> xPlayerSpawn, ref List<int> yPlayerSpawn, ref List<int> playerSpawnID)
         {
             Console.WriteLine("Creating level...");
             root = doc.DocumentElement;
+
             nodes = root.SelectNodes("objects/spawnObject");
             foreach (XmlNode node in nodes)
             {
                 xSpawn.Add(Convert.ToInt32(node["spawn"].GetAttribute("x")));
                 ySpawn.Add(Convert.ToInt32(node["spawn"].GetAttribute("y")));
+            }
+
+            nodes = root.SelectNodes("objects/playerSpawnObject");
+            foreach (XmlNode node in nodes)
+            {
+                xPlayerSpawn.Add(Convert.ToInt32(node["playerSpawn"].GetAttribute("x")));
+                yPlayerSpawn.Add(Convert.ToInt32(node["playerSpawn"].GetAttribute("y")));
+                playerSpawnID.Add(Convert.ToInt32(node["playerSpawn"].GetAttribute("id")));
             }
 
             nodes = root.SelectNodes("objects/wallObject");
@@ -74,36 +85,7 @@ namespace AP
                 y.Add(Convert.ToInt32(node["wall"].GetAttribute("y")));
                 h.Add(Convert.ToInt32(node["wall"].GetAttribute("height")));
                 w.Add(Convert.ToInt32(node["wall"].GetAttribute("width")));
-                /*Console.WriteLine("Ouput id: " + node["wall"].GetAttribute("id"));
-                Console.WriteLine("Ouput x: " + node["wall"].GetAttribute("x"));
-                Console.WriteLine("Ouput y: " + node["wall"].GetAttribute("y"));
-                Console.WriteLine("Ouput scale: " + node["wall"].GetAttribute("scale"));
-                Console.WriteLine("Ouput width: " + node["wall"].GetAttribute("width"));
-                Console.WriteLine("Ouput length: " + node["wall"].GetAttribute("length"));
-                Console.WriteLine();*/
             }
-            /*while (reader.Read())
-            {
-                switch (reader.NodeType)
-                {
-                    case XmlNodeType.Element: // The node is an element.
-                        reader.
-                        //Console.Write("<" + reader.Name);
-
-                        while (reader.MoveToNextAttribute()) // Read the attributes.
-                            Console.Write(" " + reader.Name + "='" + reader.Value + "'");
-                        //Console.WriteLine(">");
-                        break;
-                    case XmlNodeType.Text: //Display the text in each element.
-                        Console.WriteLine(reader.Value);
-                        break;
-                    case XmlNodeType.EndElement: //Display the end of the element.
-                        Console.Write("</" + reader.Name);
-                        Console.WriteLine(">");
-                        break;
-                }
-            }*/
-            //reader = null;
         }
 
 		#endregion Methods 
