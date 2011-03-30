@@ -31,8 +31,8 @@ namespace AP
         CreateLevel level;
 
         // Screen dimensions
-        private const int screenX = 800;
-        private const int screenY = 800;
+        private const int screenX = 600;
+        private const int screenY = 600;
 
         //camera related things
         Vector3d up = new Vector3d(0.0, 1.0, 0.0);
@@ -59,13 +59,10 @@ namespace AP
         private Player player;
 
         /// <summary>Creates a window with the specified title.</summary>
-        public ClientProgram()
+        public ClientProgram(bool multiplaya)
             : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
-            Console.WriteLine("[s]ingle player or [m]ultiplayer");
-            string val = Console.ReadLine();
-            if (val == "m")
-                multiplayer = true;
+            multiplayer = multiplaya;
 
 
             VSync = VSyncMode.On;
@@ -118,7 +115,7 @@ namespace AP
 
             //Load Mesh Data into a buffer to be referenced in the future.
             loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
-            loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass2.png", 5);
+            loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass.png", 5);
             //loadedObjectZombie = loadedObjects.LoadObject("Objects//zombie.obj", "Objects//Zomble.png", 0.08f);
             //loadedObjectPlayer = loadedObjects.LoadObject("Objects//Player.obj", "Objects//Player.png", 0.08f);
 
@@ -525,6 +522,12 @@ namespace AP
                                      float x = nextMove[0] - member.xPos;
                                      float y = nextMove[1] - member.yPos;
                                      float len = (float) Math.Sqrt(x*x + y*y);
+                                     //if (tiles.isWall(x/len, y/len))
+                                     //{
+                                     //    Console.WriteLine("in the wall");
+                                     //    member.move(-x / len, -y / len);
+                                     //}
+                                     //else
                                      if (len < 1 && path.Count > 2)
                                      {
                                          nextMove = tiles.returnCoords(path[2].X, path[2].Y);
@@ -555,7 +558,7 @@ namespace AP
                          if (player.weapons.canShoot())
                          {
                              soundHandler.play(SoundHandler.EXPLOSION);
-                             player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y), ref player);
+                             player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(screenX, screenY), new Vector2(Mouse.X, Mouse.Y), ref player);
                          }
                      }
                      
@@ -590,6 +593,12 @@ namespace AP
                      List<Bullet> tmpBullet = new List<Bullet>();
                      foreach (Bullet bullet in gameState.Bullets)
                      {
+                         if(tiles.isWall(bullet.xPos,bullet.yPos))
+                         {
+                             tmpBullet.Add(bullet);
+                         }
+                         else
+                         {
                          bullet.move();
                          if (bullet.killProjectile())
                              tmpBullet.Add(bullet);
@@ -607,6 +616,7 @@ namespace AP
                              GC.Collect();
                              bullet.timestamp = -1;
                              soundHandler.play(SoundHandler.ZOMBIE);
+                         }
                          }
                      }
                  
