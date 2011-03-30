@@ -28,6 +28,9 @@
 		<wall id="1" x="-8" y="-4" scale="1" width="1" height="11"/>
 	</wallObject>
 	<wallObject>
+		<wall id="1" x="1" y="-4" scale="1" width="1" height="11"/>
+	</wallObject>
+	<wallObject>
 		<wall id="1" x="8" y="-7" scale="1" width="1" height="12"/>
 	</wallObject>
 	<wallObject>

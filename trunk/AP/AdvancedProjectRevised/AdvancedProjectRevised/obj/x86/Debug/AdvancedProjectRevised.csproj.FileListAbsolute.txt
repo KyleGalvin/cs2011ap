@@ -82,3 +82,15 @@ C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResour
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.pdb
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
+C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache

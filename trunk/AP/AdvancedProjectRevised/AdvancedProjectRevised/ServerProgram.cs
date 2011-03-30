@@ -14,9 +14,10 @@ namespace AP
         public static int bulletID = 0;
         CreateLevel level;
         private int currentLevel = 1;
-
+        private List<Wall> walls = new List<Wall>();
+        public Tiles tiles;
         private bool enemySpawned = false;
-
+        private PathFinder mPathFinder;
         List<int> heightSquares = new List<int>();
         List<int> widthSquares = new List<int>();
         List<int> xPosSpawn = new List<int>();
@@ -77,7 +78,16 @@ namespace AP
             level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
             
             collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
-
+            for (int i = 0; i < xPosSquares.Count; i++)
+            {
+                walls.Add(new Wall(xPosSquares[i], yPosSquares[i], heightSquares[i], widthSquares[i]));
+            }
+            tiles = new Tiles(walls);
+            mPathFinder = new PathFinder(tiles.byteList());
+            foreach (var x in gameState.Players)
+            {
+                x.tiles = tiles;
+            }
             setSpawns();
         }
 

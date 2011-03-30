@@ -91,6 +91,7 @@ public abstract void move(float x, float y);
         {
             timestamp = -1;
         }
+        public abstract void moveTowards(float p, float p_2);
 
 		#endregion Methods 
     }
