@@ -13,7 +13,7 @@ namespace AP
     class CollisionAI
     {
 		#region Fields (3) 
-
+        public Tiles wallTiles;
         bool[,] blockedByWall;
         //private float TileSize = 1;
         List<Position>[,] tileListEnemies;
@@ -257,6 +257,13 @@ namespace AP
             //disabling the buggy wall check for now
             //if (checkForWallCollision(source, out moveAwayFromX, out moveAwayFromY))
                 //return true;
+            if (wallTiles != null)
+            {
+                if (wallTiles.isWall(source.xPos, source.yPos))
+                {
+                    //return true;
+                }
+            }
             return checkForCollision(source, out moveAwayFromX, out moveAwayFromY, out enemyHit);
         }
 

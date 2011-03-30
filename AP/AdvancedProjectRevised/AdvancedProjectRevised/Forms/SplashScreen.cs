@@ -37,7 +37,7 @@ namespace AP
             {
                 client.Run(28.0);
             }
-            
+            Application.Exit();
         }
 
         private void btn_Multiplayer_Click(object sender, EventArgs e)
@@ -47,6 +47,7 @@ namespace AP
             {
                 client.Run(28.0);
             }
+            Application.Exit();
         }
         protected override void OnPaint(PaintEventArgs e)
         {
