@@ -23,10 +23,10 @@ namespace AP
         }
         public Tiles(List<Wall> walls)
         {
-            minX = walls.Min(y => y.xPos) - 1;
-            maxX = walls.Max(y => y.xPos) + 1;
-            minY = walls.Min(y => y.yPos) - 1;
-            maxY = walls.Max(y => y.yPos) + 1;
+            minX = walls.Min(y => y.xPos) - 2;
+            maxX = walls.Max(y => y.xPos) + 2;
+            minY = walls.Min(y => y.yPos) - 2;
+            maxY = walls.Max(y => y.yPos) + 2;
             this.walls = walls;
             calculateTiles(walls);
         }
@@ -74,24 +74,33 @@ namespace AP
         public List<float> returnCoords(int i, int j)
         {
             var returnList = new List<float>();
-            returnList.Add(minX + i + 0.5f);
-            returnList.Add(minY + j - 0.5f);
+            returnList.Add(minX + i +0.5f );
+            returnList.Add(minY + j -0.5f);
             return returnList;
         }
 
         public byte[,] byteList()
         {
             var returnList = new byte[tileList.GetUpperBound(0) + 1, tileList.GetUpperBound(1) + 1];
+            for (int index00 = 0; index00 <= returnList.GetUpperBound(0); index00++)
+                for (int index01 = 0; index01 <= returnList.GetUpperBound(1); index01++)
+                {
+                    returnList[index00, index01]=1;
+                }
             for (int i0 = 0; i0 <= tileList.GetUpperBound(0); i0++)
                 for (int i1 = 0; i1 <= tileList.GetUpperBound(1); i1++)
                 {
                     if (tileList[i0, i1].isWall)
                     {
                         returnList[i0, i1] = 0;
+                        
                     }
                     else
                     {
-                        returnList[i0, i1] = 1;
+                        if (returnList[i0, i1] != 0)
+                        {
+                            returnList[i0, i1] = 1;
+                        }
                     }
                 }
             return returnList;
