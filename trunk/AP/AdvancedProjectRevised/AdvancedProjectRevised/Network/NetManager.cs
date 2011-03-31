@@ -186,11 +186,11 @@ using System.Text;
                 {
                     bulletAddList.Add(b);
                 }
-                else if (b.timestamp >= lastFrameTime.Ticks)
+                /*else if (b.timestamp >= lastFrameTime.Ticks)
                 {
                     bulletUpdateList.Add(b);
                     b.timestamp = -2; 
-                }
+                }*/
                 
                 if( b.timestamp >= 0 )
                     b.timestamp = DateTime.Now.Ticks;

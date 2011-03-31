@@ -49,7 +49,7 @@ namespace AP
             radius = 0.1f;
         }
 
-        /// <summary>
+        /// <summary> 
         /// Initializes a new instance of the <see cref="Player"/> class.
         /// </summary>
         public Player()

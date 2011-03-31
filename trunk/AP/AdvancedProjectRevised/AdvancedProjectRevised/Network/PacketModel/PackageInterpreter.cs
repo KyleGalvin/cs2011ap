@@ -204,8 +204,8 @@ using System.Collections;
                         result.Add(BitConverter.GetBytes(b.UID));
                         result.Add(BitConverter.GetBytes(b.xPos));
                         result.Add(BitConverter.GetBytes(b.yPos));
-                        result.Add(BitConverter.GetBytes(b.xVel));
-                        result.Add(BitConverter.GetBytes(b.yVel));
+                        result.Add(BitConverter.GetBytes(b.velocity.X));
+                        result.Add(BitConverter.GetBytes(b.velocity.Y));
                     }
                     else
                     {

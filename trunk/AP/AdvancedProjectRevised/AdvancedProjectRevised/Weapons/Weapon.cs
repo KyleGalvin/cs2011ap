@@ -261,19 +261,12 @@ namespace AP
         //public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
         public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition)
         {
-            if (ClientProgram.multiplayer)
-            {
+                //multiplayer server side handle shoot only!
                 Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30);
                 b.setDirectionByMouse(mousePosition, screenSize);
-                b.mousePos.X = b.xVel;
-                b.mousePos.Y = b.yVel;
                 b.setID(ServerProgram.bulletID++);
                 bulletList.Add(b);
-            }
-            else
-            {
-                
-            }
+
         }
 
 

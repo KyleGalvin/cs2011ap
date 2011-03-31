@@ -16,7 +16,7 @@ namespace AP
 
         //private Bullet prevBullet = null;
         private float direction = 1.0f;
-        private int lifeTime = 30;
+        public int lifeTime = 30;
         float xVel = 0;
         float yVel = 0;
         public Vector3 mousePos;
@@ -153,7 +153,8 @@ namespace AP
 
             xVel *= -1;
             yVel *= 1;
-
+            velocity.X = xVel;
+            velocity.Y = yVel;
             prevXPos = xPos;
             prevYPos = yPos;
             move();
