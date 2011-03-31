@@ -36,7 +36,6 @@ namespace AP
         private  GameState gameState;
         public ServerProgram()
         {
-            
             // Set up the spawn locations for enemies
             setSpawns();
             gameState = new GameState();
@@ -61,8 +60,11 @@ namespace AP
             List<Bullet> bulletDelete = new List<Bullet>();
             foreach (Bullet bullet in gameState.Bullets)
             {
-                //if( bullet.timestamp > 0)
-                    //bullet.move();
+                if (bullet.killProjectile())
+                    bullet.timestamp = -1;
+
+                if( bullet.timestamp > 0)
+                    bullet.move();
                 
 
                 /*float moveX;
@@ -76,8 +78,6 @@ namespace AP
                     GC.Collect();
                     bullet.timestamp = -1;
                 }*/
-                if (bullet.killProjectile())
-                    bullet.timestamp = -1;
             }
 
             net.SyncStateOutgoing();

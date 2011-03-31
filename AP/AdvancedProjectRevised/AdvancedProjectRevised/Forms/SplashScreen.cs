@@ -26,8 +26,9 @@ namespace AP
 
         private void btn_Server_Click(object sender, EventArgs e)
         {
-            ServerProgram server = new ServerProgram();
             this.Visible = false;
+            ServerProgram server = new ServerProgram();
+            
         }
 
         private void btn_Singleplayer_Click(object sender, EventArgs e)
