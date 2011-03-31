@@ -11,7 +11,7 @@ using OpenTK.Input;
 
 namespace AP
 {
-    class ClientProgram : GameWindow
+    public class ClientProgram : GameWindow
     {
         private Random rand = new Random();
 
@@ -73,19 +73,31 @@ namespace AP
         private int zombieCount = 0;
         private int zombieIterator = 0;
 
+        private int ZombieCountTotal = 20;
         private int zombieKillCount = 0;
         private bool levelComplete = false;
 
-        private NetManager net;
+        public static NetManager net;
         private GameState gameState;
         public static bool multiplayer = false;
         private Player player;
+
+        private ClientMultiPlayer multiPlayerClient;
+        private ClientSinglePlayer singlePlayerClient;
 
         /// <summary>Creates a window with the specified title.</summary>
         public ClientProgram(bool multi)
             : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
             multiplayer = multi;
+            if (multiplayer)
+            {
+                multiPlayerClient = new ClientMultiPlayer();
+            }
+            else
+            {
+                singlePlayerClient = new ClientSinglePlayer();
+            }
             VSync = VSyncMode.On;
         }
 
@@ -147,11 +159,10 @@ namespace AP
 
             //Load Mesh Data into a buffer to be referenced in the future.
             loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
-            loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass.png", 5);
+            loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//dry_grass.png", 5);
             loadedObjectBullet = loadedObjects.LoadObject("Objects//bullet.obj", "Objects//bullet.png", 0.04f);
             loadedObjectCrate = loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//rifleCrate.png", 0.5f);
-                loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//shotgunCrate.png", 0.5f);
-
+            loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//shotgunCrate.png", 0.5f);
 
             loadedObjectPlayer = loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//Player.png", 0.08f);
             loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//Player.png", 0.08f);
@@ -196,7 +207,6 @@ namespace AP
                 }
                 tiles = new Tiles(walls);
                 mPathFinder = new PathFinder(tiles.byteList());
-                collisionAI.wallTiles = tiles;
                 foreach (var x in gameState.Players)
                 {
                     x.tiles = tiles;
@@ -299,63 +309,17 @@ namespace AP
                          crate.draw();
                          GL.PopMatrix();
                      }
-                     collisionAI.updateState(ref gameState.Enemies);
-                     foreach (Zombie zombie in gameState.Enemies)
+                 }
+
+                 GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
+                 lock (gameState)
+                 {
+                     foreach (var member in gameState.Enemies)
                      {
-                         
-                         GL.PushMatrix();
-                         zombie.draw();
-                         GL.PopMatrix();
-
-                         //Find closest player
-                         var playerPos = tiles.returnTilePos(player);
-                         var enemyPos = tiles.returnTilePos(zombie);
-                         //Check to see how close the zombie is to the player
-                         float x1 = player.xPos - zombie.xPos;
-                         float y1 = player.yPos - zombie.yPos;
-                         float len1 = (float) Math.Sqrt(x1*x1 + y1*y1);
-                         if (len1 < 1)
-                         {
-                             zombie.moveTowards(player);
-                         }
-                         //Find a path
-                         else if (enemyPos != null)
-                         {
-                             if (playerPos != null)
-                             {
-                                 List<PathFinderNode> path = mPathFinder.FindPath(enemyPos[0], enemyPos[1], playerPos[0],
-                                                                                  playerPos[1]);
-                                 //Give next X Y Coords
-                                 if (path != null && path.Count > 1)
-                                 {
-                                     var nextMove = tiles.returnCoords(path[1].X, path[1].Y);
-                                     //Move towards them
-                                     //Calculates the len between the moves
-                                     float x = nextMove[0] - zombie.xPos;
-                                     float y = nextMove[1] - zombie.yPos;
-                                     float len = (float) Math.Sqrt(x*x + y*y);
-                                     if (len < 1 && path.Count > 2)
-                                     {
-                                         nextMove = tiles.returnCoords(path[2].X, path[2].Y);
-                                         zombie.moveTowards(nextMove[0], nextMove[1]);
-                                     }
-                                     else
-                                     {
-                                         zombie.moveTowards(nextMove[0], nextMove[1]);
-                                     }
-                                 }
-                             }
-                         }
-
+                         member.draw();
                      }
                  }
-                 
-                
-                        if (enemySpawned)
-                        {
-                            zombieIterator = 0;
-                            enemySpawned = false;
-                        }
+
 
                 GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
                 //change this to be the same way as you do the walls
@@ -489,6 +453,35 @@ namespace AP
             GL.LoadMatrix(ref projection);
         }
 
+        // moves the player
+        public void movePlayer(int x, int y)
+        {
+            if (!multiplayer)
+            {
+                player.move(x, y);
+            }
+            else
+            {
+                multiPlayerClient.move(x, y);
+            }
+        }
+
+        // toggle sound
+        public void toggleSound()
+        {
+            if (soundHandler.getSoundState())
+            {
+                soundHandler.setSoundState(false);
+                soundHandler.stopSong();
+            }
+            else
+            {
+                soundHandler.setSoundState(true);
+                soundHandler.playSong(SoundHandler.BACKGROUND);
+                soundHandler.continueSong();
+            }
+        }
+
         /// <summary>
         /// Called when it is time to setup the next frame. Add you game logic here.
         /// </summary>
@@ -502,121 +495,61 @@ namespace AP
                 player.walking = false;
 
             effectsHandler.updateEffects();
+            
+            // Move your player
+            if (Keyboard[Key.W] && Keyboard[Key.D])
+                movePlayer(1, 1);
+            else if (Keyboard[Key.W] && Keyboard[Key.A])
+                movePlayer(-1, 1);
+            else if (Keyboard[Key.S] && Keyboard[Key.D])
+                movePlayer(1,-1);
+            else if (Keyboard[Key.S] && Keyboard[Key.A])
+                movePlayer( -1, -1 );
+            else if (Keyboard[Key.W])
+                movePlayer( 0, 1 );
+            else if (Keyboard[Key.S])
+                movePlayer( 0, -1 );
+            else if (Keyboard[Key.A])
+                movePlayer(-1, 0);
+            else if (Keyboard[Key.D])
+                movePlayer( 1, 0 );
+            else if (Keyboard[Key.Escape])
+                Exit();
 
-             if (Keyboard[Key.W] && Keyboard[Key.D])
-             {
-                 if( multiplayer )
-                     net.SendObjs<int>(Action.Request, new List<int>() { 1, 1 }, Type.Move);
-                 else
-                    player.move(1, 1);
-             }
-             else if (Keyboard[Key.W] && Keyboard[Key.A])
-             {
-                 if (multiplayer)
-                     net.SendObjs<int>(Action.Request, new List<int>() { -1, 1 }, Type.Move);
-                 else
-                     player.move(-1, 1);
-             }
-             else if (Keyboard[Key.S] && Keyboard[Key.D])
-             {
-                 if (multiplayer)
-                     net.SendObjs<int>(Action.Request, new List<int>() { 1, -1 }, Type.Move);
-                 else
-                     player.move(1, -1);
-                 
-             }
-             else if (Keyboard[Key.S] && Keyboard[Key.A])
-             {
-                 if (multiplayer)
-                     net.SendObjs<int>(Action.Request, new List<int>() { -1, -1 }, Type.Move);
-                 else
-                     player.move(-1, -1);
-             }
-             else if (Keyboard[Key.W])
-             {
-                 if (multiplayer)
-                     net.SendObjs<int>(Action.Request, new List<int>() { 0, 1 }, Type.Move);
-                 else
-                     player.move(0, 1);
-             }
-             else if (Keyboard[Key.S])
-             {
-                 if (multiplayer)
-                     net.SendObjs<int>(Action.Request, new List<int>() { 0, -1 }, Type.Move);
-                 else
-                     player.move(0, -1);
-             }
-             else if (Keyboard[Key.A])
-             {
-                 if (multiplayer)
-                     net.SendObjs<int>(Action.Request, new List<int>() { -1, 0 }, Type.Move);
-                 else
-                     player.move(-1, 0);
-             }
-             else if (Keyboard[Key.D])
-             {
-                 if (multiplayer)
-                     net.SendObjs<int>(Action.Request, new List<int>() { 1, 0 }, Type.Move);
-                 else
-                     player.move(1, 0);
-             }
-             else if (Keyboard[Key.Escape])
-                 Exit();
+            // Toggle the sound on/off
+            if (Keyboard[Key.F1] && !soundHandler.pressingF1)
+            {
+                toggleSound();
+                soundHandler.pressingF1 = true;
+            }
+            else
+                soundHandler.pressingF1 = false;
 
-             if (Keyboard[Key.F1] && !soundHandler.pressingF1)
-             {
-                 if (soundHandler.getSoundState())
-                 {
-                     soundHandler.setSoundState(false);
-                     soundHandler.stopSong();
-                 }
-                 else
-                 {
-                     soundHandler.setSoundState(true);
-                     //soundHandler.playSong(SoundHandler.BACKGROUND);
-                     soundHandler.continueSong();
-                 }
-                 soundHandler.pressingF1 = true;
-             }
-             else
-                 soundHandler.pressingF1 = false;
+            // Change the view distance to be farther or closer to the point of reference.
+            if (Keyboard[OpenTK.Input.Key.Up])
+                viewDist *= 1.1f;
+            else if (Keyboard[OpenTK.Input.Key.Down])
+                viewDist *= 0.9f;
 
-                 if (Keyboard[OpenTK.Input.Key.Up])
-                 {
-                     viewDist *= 1.1f;
-                     Console.WriteLine("View distance: {0}", viewDist);
-                 }
-                 else if (Keyboard[OpenTK.Input.Key.Down])
-                 {
-                     viewDist *= 0.9f;
-                     Console.WriteLine("View distance: {0}", viewDist);
-                 }
+            // Equip a weapon
+            if (Keyboard[Key.Number1])
+                player.weapons.equipPistol();
+            if (Keyboard[Key.Number2])
+                player.weapons.equipRifle();
+            if (Keyboard[Key.Number3])
+                player.weapons.equipShotgun();
+            if (Keyboard[Key.Number4])
+                player.weapons.equipRocket();
 
-                 if (Keyboard[Key.Number1])
-                 {
-                     player.weapons.equipPistol();
-                 }
-                 if (Keyboard[Key.Number2])
-                 {
-                     player.weapons.equipRifle();
-                 }
-                 if (Keyboard[Key.Number3])
-                 {
-                     player.weapons.equipShotgun();
-                 }
-                 if (Keyboard[Key.Number4])
-                 {
-                     player.weapons.equipRocket();
-                 }
+            float wheelD = Mouse.WheelDelta;
+            viewDirection.Y += wheelD / 10;
+            viewDirection.Z += wheelD / 10;
 
-                 float wheelD = Mouse.WheelDelta;
-                 viewDirection.Y += wheelD / 10;
-                 viewDirection.Z += wheelD / 10;
+            if (Keyboard[Key.Left])
+                viewDirection.Y += 0.1f;
+            if (Keyboard[Key.Right])
+                viewDirection.Y -= 0.1f;
 
-                 if (Keyboard[Key.Left])
-                     viewDirection.Y += 0.1f;
-                 if (Keyboard[Key.Right])
-                     viewDirection.Y -= 0.1f;
 
             //ADAM
             //move to serverrrrr
@@ -677,7 +610,7 @@ namespace AP
                  if (!multiplayer)
                  {
                      zombieIterator++;
-                     if (zombieCount < 100)
+                     if (zombieCount < 15)
                      {
                          foreach (var spawn in spawns)
                          {
@@ -744,7 +677,7 @@ namespace AP
                          gameState.Bullets.Remove(bullet);
                      }
 
-                     if (zombieKillCount >= 2)
+                     if (zombieKillCount >= ZombieCountTotal-1)
                      {
                          levelComplete = true;
                          Console.WriteLine("HELLO");
@@ -770,6 +703,5 @@ namespace AP
 
             GC.Collect();
         }
-
     }
 }
