@@ -10,7 +10,7 @@ namespace AP
     /// It keeps a seperate version of the game state which it is able to understand
     /// and use to efficiently run it's checks.
     /// </summary>
-    class CollisionAI
+    public class CollisionAI
     {
 		#region Fields (3) 
         public Tiles wallTiles;

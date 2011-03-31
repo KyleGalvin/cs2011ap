@@ -82,22 +82,12 @@ namespace AP
         public static bool multiplayer = false;
         private Player player;
 
-        private ClientMultiPlayer multiPlayerClient;
-        private ClientSinglePlayer singlePlayerClient;
-
         /// <summary>Creates a window with the specified title.</summary>
         public ClientProgram(bool multi)
             : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
             multiplayer = multi;
-            if (multiplayer)
-            {
-                multiPlayerClient = new ClientMultiPlayer();
-            }
-            else
-            {
-                singlePlayerClient = new ClientSinglePlayer();
-            }
+            
             VSync = VSyncMode.On;
         }
 
@@ -489,7 +479,7 @@ namespace AP
             }
             else
             {
-                multiPlayerClient.move(x, y);
+                net.SendObjs<int>(Action.Request,new List<int>(){x,y},Type.Move );
             }
         }
 

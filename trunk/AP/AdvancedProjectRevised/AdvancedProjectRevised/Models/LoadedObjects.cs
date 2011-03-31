@@ -12,7 +12,7 @@ namespace AP
     /// <summary>
     /// The class in charge of loading and drawing our 3d mesh objects.
     /// </summary>
-    class LoadedObjects : Loader
+    public class LoadedObjects : Loader
     {
 		#region Fields (8) 
 
