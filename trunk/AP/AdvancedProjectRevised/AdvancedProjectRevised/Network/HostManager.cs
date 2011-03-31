@@ -11,11 +11,7 @@ using AP;
     /// </summary>
     public class HostManager : NetManager
     {
-		#region Fields (1) 
 
-        //HACK todo
-        int i = 0;
-		#endregion Fields 
 
 		#region Constructors (1) 
 
@@ -60,13 +56,6 @@ using AP;
                     Console.WriteLine(e.ToString());
                     break;
                 }
-
-                //if (bytesRead == 0)//nothing was read from socket
-                //{
-                //	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
-                //	break;
-                //}
-
             }
 
             lock (this)
@@ -77,9 +66,5 @@ using AP;
         }
 
 		#endregion Methods 
-
-        //ConnectGame(IPEndPoint host)
-        //{
-        //}
     }
 
