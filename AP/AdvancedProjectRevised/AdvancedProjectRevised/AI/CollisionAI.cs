@@ -355,10 +355,10 @@ namespace AP
                 if (x != -1 && y != -1)
                 {
                     tileListEnemies[x, y].Add(member);
-                    //Console.WriteLine("Enemy x: " + member.xPos + " added to x tile: " + x);
+                    Console.WriteLine("Enemy x: " + member.xPos + " added to x tile: " + x);
                 }
-                else
-                    Console.WriteLine("Failed to add an enemy to the tile list");
+                //else
+                  //  Console.WriteLine("Failed to add an enemy to the tile list");
             }
         }
 
