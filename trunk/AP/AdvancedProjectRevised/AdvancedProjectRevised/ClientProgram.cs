@@ -298,28 +298,20 @@ namespace AP
                          crate.draw();
                          GL.PopMatrix();
                      }
+                     foreach (Zombie zombie in gameState.Enemies)
+                     {
+                         GL.PushMatrix();
+                         zombie.draw();
+                         GL.PopMatrix();
+                     }
                  }
                  
                 
-                 //float tempX;
-                 //float tempY;
-                 //GL.Translate(-gameState.Players.Where(y=>y.playerId==gameState.myUID).First().xPos, -gameState.Players.Where(y=>y.playerId==gameState.myUID).First().yPos, 0);
-                 //lock (gameState)
-                 //{
-
-
-
-                 
-
-                                }
-                            }
-                        }
                         if (enemySpawned)
                         {
                             zombieIterator = 0;
                             enemySpawned = false;
                         }
-                }
 
                 GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
                 //change this to be the same way as you do the walls
