@@ -209,7 +209,12 @@ using System.Collections;
                     }
                     else
                     {
-
+                        AP.Bullet b = (AP.Bullet)(object)obj;
+                        result.Add(BitConverter.GetBytes(b.UID));
+                        result.Add(BitConverter.GetBytes(b.xPos));
+                        result.Add(BitConverter.GetBytes(b.yPos));
+                        result.Add(BitConverter.GetBytes(b.mousePos.X));
+                        result.Add(BitConverter.GetBytes(b.mousePos.Y));
                     }
                     break;
                 case Type.Explosion:
