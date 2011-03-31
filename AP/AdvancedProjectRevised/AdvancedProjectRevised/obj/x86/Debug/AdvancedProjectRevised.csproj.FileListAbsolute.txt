@@ -77,10 +77,6 @@ C:\APmerging\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\Resolve
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
-C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.read.1.tlog
-C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.read.1.tlog
-C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog
-C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResGen.write.1.tlog
 C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
 C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
 C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe
@@ -95,4 +91,4 @@ C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised
 C:\Users\Gage\Desktop\APUSETHISONE\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.SplashScreen.resources
 C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.Properties.Resources.resources
-C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\GenerateResource-ResGen.read.4.tlog
+C:\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
