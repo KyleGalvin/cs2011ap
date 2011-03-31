@@ -196,6 +196,7 @@ namespace AP
                 }
                 tiles = new Tiles(walls);
                 mPathFinder = new PathFinder(tiles.byteList());
+                collisionAI.wallTiles = tiles;
                 foreach (var x in gameState.Players)
                 {
                     x.tiles = tiles;
@@ -707,6 +708,10 @@ namespace AP
                      List<Bullet> tmpBullet = new List<Bullet>();
                      foreach (Bullet bullet in gameState.Bullets)
                      {
+                         if(tiles.isWall(bullet.xPos,bullet.yPos))
+                         {
+                             tmpBullet.Add(bullet);
+                         }
                          bullet.move();
                          if (bullet.killProjectile())
                              tmpBullet.Add(bullet);

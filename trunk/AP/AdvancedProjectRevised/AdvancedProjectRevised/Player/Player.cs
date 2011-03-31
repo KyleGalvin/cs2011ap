@@ -188,8 +188,8 @@ namespace AP
                 float len = (float) Math.Sqrt(x*x + y*y);
                 float moveX;
                 float moveY;
-                if (xPos + x * this.speed < tiles.maxX && xPos + x * this.speed > tiles.minX && yPos + y * this.speed < tiles.maxY &&
-                    yPos + y*this.speed > tiles.minY) //wallCheck
+                if (xPos + x * this.speed < tiles.maxX-1 && xPos + x * this.speed > tiles.minX+1 && yPos + y * this.speed < tiles.maxY-2 &&
+                    yPos + y*this.speed > tiles.minY+1) //wallCheck
                 {
                     if (ClientProgram.multiplayer)
                     {
