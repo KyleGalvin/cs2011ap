@@ -18,7 +18,7 @@ namespace AP
         //private float TileSize = 1;
         List<Position>[,] tileListEnemies;
         List<Player> playerList = new List<Player>();
-        private int Tiles = 50;
+        private int Tiles = 400;
         
 
 		#endregion Fields 
@@ -262,10 +262,13 @@ namespace AP
                 if (wallTiles.isWall(source.xPos, source.yPos))
                 {
                     var temp=wallTiles.returnTilePos(source);
-                    var temp2 = wallTiles.returnCoords(temp[0], temp[1]);
-                    moveAwayFromX = temp2[0];
-                    moveAwayFromY = temp2[1];
-                    return true;
+                    if (temp != null)
+                    {
+                        var temp2 = wallTiles.returnCoords(temp[0], temp[1]);
+                        moveAwayFromX = temp2[0];
+                        moveAwayFromY = temp2[1];
+                        return true;
+                    }
                 }
             }
             return checkForCollision(source, out moveAwayFromX, out moveAwayFromY, out enemyHit);
@@ -362,7 +365,7 @@ namespace AP
                     //Console.WriteLine("Enemy x: " + member.xPos + " added to x tile: " + x);
                 }
                 //else
-                  //  Console.WriteLine("Failed to add an enemy to the tile list");
+                    //Console.WriteLine("Failed to add an enemy to the tile list");
             }
         }
 
