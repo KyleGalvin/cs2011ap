@@ -101,7 +101,7 @@ namespace AP
             //create client and/or server
             NetManager manager;
 
-            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.211"));
+            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.252"));
             manager = new ClientManager(9999, ref s, serv);
             manager.setRole("client");
             while (manager.myConnections.Count == 0) { }
@@ -179,6 +179,7 @@ namespace AP
                 while (!net.Connected) { }
                 Console.WriteLine("Connected!");
                 //add players to collisionAI here
+                setUpLevel();
             }
             else
             {
@@ -367,15 +368,17 @@ namespace AP
         {
             lock (gameState)
             {
-                foreach (Bullet bullet in gameState.Bullets)
+                for (int index = 0; index < gameState.Bullets.Count; index++)
                 {
+                    Bullet bullet = gameState.Bullets[index];
                     GL.PushMatrix();
                     bullet.draw();
                     GL.PopMatrix();
                 }
 
-                foreach (Crate crate in gameState.Crates)
+                for (int index = 0; index < gameState.Crates.Count; index++)
                 {
+                    Crate crate = gameState.Crates[index];
                     GL.PushMatrix();
                     crate.draw();
                     GL.PopMatrix();
@@ -399,11 +402,12 @@ namespace AP
                 lock (gameState)
                 {
                     player.draw();
+                    
                     GL.Translate(-player.xPos, -player.yPos, 0);
 
                     foreach (Player p in gameState.Players)
                     {
-
+                        
                         if (p.playerId != player.playerId)
                         {
                             Console.WriteLine("x:" + p.xPos + " y:" + p.yPos);
@@ -479,7 +483,7 @@ namespace AP
             }
             else
             {
-                net.SendObjs<int>(Action.Request,new List<int>(){x,y},Type.Move );
+                net.SendObjs<int>(Action.Request, new List<int>() {x, y}, Type.Move);
             }
         }
 
@@ -519,8 +523,21 @@ namespace AP
                 HandleSounds();
             }
             else
-                player.walking = false;
+            {
+                foreach(Bullet b in gameState.Bullets)
+                {
+                    b.multiplayermove();
+                }
+                // player.walking = false;
+                if (gameState.Players.Count > 0)
+                {
+                    player = gameState.Players.Where(y => y.playerId == gameState.myUID).First();
+                    player.weapons.updateBulletCooldown();
+                }
 
+            }
+               
+        
             effectsHandler.updateEffects();
             
             // Move your player
@@ -581,17 +598,18 @@ namespace AP
             //ADAM
             //move to serverrrrr
             //logic for picking up ammo crates
-                 
-                 
+
+            
                  if (Mouse[OpenTK.Input.MouseButton.Left] == true)
                  {
                      if(multiplayer)
                      {
-                         //if (player.weapons.canShoot())
-                         //{
-                         //    soundHandler.play(SoundHandler.EXPLOSION);
-                         //    player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(800, 800), new Vector2(Mouse.X, Mouse.Y));
-                         //}
+                         
+                         if (player.weapons.canShoot())
+                         {
+                             soundHandler.play(SoundHandler.EXPLOSION);
+                             net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X, Mouse.Y)) }, Type.Bullet);
+                         }
                      }
                      else
                      {

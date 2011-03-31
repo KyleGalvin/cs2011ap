@@ -54,7 +54,11 @@ namespace AP
             prevXPos = xPos - prevXPos;
             prevYPos = yPos - prevYPos;
             angle = (int)(Math.Atan2(prevYPos, prevXPos) * RAD_TO_DEG);
+            Console.WriteLine("angle:" + angle + " x:"+xPos+"y:"+yPos);
         }
+
+
+
         /// <summary>
         /// Updates the specified _x pos.
         /// </summary>

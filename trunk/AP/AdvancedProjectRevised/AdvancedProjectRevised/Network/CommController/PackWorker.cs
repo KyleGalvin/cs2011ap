@@ -46,9 +46,11 @@ using OpenTK;
         /// <param name="data">The data.</param>
         /// <returns></returns>
         public AP.Bullet CreateBullet(List<byte[]> data)
-        {   
+        {
+            Console.WriteLine("bvullet xvel: " + BitConverter.ToSingle(data[3],0)+" yvel: "+BitConverter.ToSingle(data[4],0));
             Bullet b = new AP.Bullet( new OpenTK.Vector3(BitConverter.ToSingle(data[1], 0), BitConverter.ToSingle(data[2], 0),0), new OpenTK.Vector2(BitConverter.ToSingle(data[3], 0), BitConverter.ToSingle(data[4], 0)));
             b.setID(BitConverter.ToInt32( data[0],0));
+            b.setAngle();
             return b;
         }
 
@@ -107,8 +109,10 @@ using OpenTK;
                 else if ((Type)t == Type.Bullet)
                 {
                     List<AP.Bullet> result = new List<AP.Bullet>();
+                    
                     result.Add(CreateBullet(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
                     State.Bullets.AddRange(result);
+                    
                     Console.WriteLine("Created {0} Bullet objects from remote network command!", result.Count);
                 }
             }
@@ -197,9 +201,12 @@ using OpenTK;
                 }
                 else if ((Type)t == Type.Player)
                 {
-                    State.Players.Where(y => y.playerId == UID).First().Update(
+                    Player p = State.Players.Where(m => m.playerId == State.myUID).First();
+                    p.Update(
                         pack.body[(i * (int)myTypeSize) + 2], pack.body[(i * (int)myTypeSize) + 3]
-                        , pack.body[(i * (int)myTypeSize) + 4], pack.body[(i * (int)myTypeSize) + 5]);
+                        , pack.body[(i * (int)myTypeSize) + 4], pack.body[(i * (int)myTypeSize) + 5]); 
+                        p.setAngle();
+                    p.AnimatePlayer();
                     //Console.WriteLine("HANDLE UPDATE: " + (float)BitConverter.ToSingle(pack.body[0], 0) + " " + (float)BitConverter.ToSingle(pack.body[1], 0) + " " + (float)BitConverter.ToSingle(pack.body[2], 0) + " " + (float)BitConverter.ToSingle(pack.body[3], 0) + " " + BitConverter.ToSingle(pack.body[4], 0));
                 }
             }

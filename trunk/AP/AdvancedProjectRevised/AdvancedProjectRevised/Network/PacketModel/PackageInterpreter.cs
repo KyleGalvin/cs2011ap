@@ -213,8 +213,8 @@ using System.Collections;
                         result.Add(BitConverter.GetBytes(b.UID));
                         result.Add(BitConverter.GetBytes(b.xPos));
                         result.Add(BitConverter.GetBytes(b.yPos));
-                        result.Add(BitConverter.GetBytes(b.mousePos.X));
-                        result.Add(BitConverter.GetBytes(b.mousePos.Y));
+                        result.Add(BitConverter.GetBytes(b.velocity.X));
+                        result.Add(BitConverter.GetBytes(b.velocity.Y));
                     }
                     break;
                 case Type.Explosion:
