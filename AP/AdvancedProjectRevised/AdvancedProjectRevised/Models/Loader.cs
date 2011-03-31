@@ -11,7 +11,7 @@ namespace AP
     /// <summary>
     /// 
     /// </summary>
-    class Loader
+    public class Loader
     {
 		#region Methods (6) 
 
