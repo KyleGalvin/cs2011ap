@@ -60,7 +60,7 @@ namespace AP
             Enemy enemy = new Zombie(ID);
             
             enemy.setPosition(xPos, yPos);
-            enemy.draw();
+            //enemy.draw();
 
             return enemy;
         }

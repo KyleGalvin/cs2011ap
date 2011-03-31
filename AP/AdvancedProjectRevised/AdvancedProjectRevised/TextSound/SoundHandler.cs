@@ -36,7 +36,7 @@ public class SoundHandler
         audioList = new AudioReader[maxSounds];
 
         // create ONE AudioContext to handle all sounds
-       // ac = new AudioContext();
+        ac = new AudioContext();
     }
     public void setSoundState(Boolean state)
     {
