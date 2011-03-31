@@ -298,11 +298,54 @@ namespace AP
                          crate.draw();
                          GL.PopMatrix();
                      }
+                     collisionAI.updateState(ref gameState.Enemies);
                      foreach (Zombie zombie in gameState.Enemies)
                      {
+                         
                          GL.PushMatrix();
                          zombie.draw();
                          GL.PopMatrix();
+
+                         //Find closest player
+                         var playerPos = tiles.returnTilePos(player);
+                         var enemyPos = tiles.returnTilePos(zombie);
+                         //Check to see how close the zombie is to the player
+                         float x1 = player.xPos - zombie.xPos;
+                         float y1 = player.yPos - zombie.yPos;
+                         float len1 = (float) Math.Sqrt(x1*x1 + y1*y1);
+                         if (len1 < 1)
+                         {
+                             zombie.moveTowards(player);
+                         }
+                         //Find a path
+                         else if (enemyPos != null)
+                         {
+                             if (playerPos != null)
+                             {
+                                 List<PathFinderNode> path = mPathFinder.FindPath(enemyPos[0], enemyPos[1], playerPos[0],
+                                                                                  playerPos[1]);
+                                 //Give next X Y Coords
+                                 if (path != null && path.Count > 1)
+                                 {
+                                     var nextMove = tiles.returnCoords(path[1].X, path[1].Y);
+                                     //Move towards them
+                                     //Calculates the len between the moves
+                                     float x = nextMove[0] - zombie.xPos;
+                                     float y = nextMove[1] - zombie.yPos;
+                                     float len = (float) Math.Sqrt(x*x + y*y);
+                                     if (len < 1 && path.Count > 2)
+                                     {
+                                         nextMove = tiles.returnCoords(path[2].X, path[2].Y);
+                                         zombie.moveTowards(nextMove[0], nextMove[1]);
+                                     }
+                                     else
+                                     {
+                                         zombie.moveTowards(nextMove[0], nextMove[1]);
+                                     }
+                                 }
+                             }
+                         }
+
                      }
                  }
                  
@@ -573,18 +616,6 @@ namespace AP
                      viewDirection.Y += 0.1f;
                  if (Keyboard[Key.Right])
                      viewDirection.Y -= 0.1f;
-
-
-                 if (!multiplayer)
-                 {
-                     collisionAI.updateState(ref gameState.Enemies);
-                 
-
-                     foreach (var member in gameState.Enemies)
-                     {
-                         member.moveTowards(player);
-                     }
-                 }
 
             //ADAM
             //move to serverrrrr
