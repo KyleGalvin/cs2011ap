@@ -182,7 +182,6 @@ using System.Collections;
             List<byte[]> result = new List<byte[]>();
             //each type of object has a different composure.
             //here we define the structure of all possible types
-            //Console.WriteLine("Incoming type: " + (Type)t);
             switch (t)
             {
                 
@@ -199,7 +198,6 @@ using System.Collections;
                     Console.WriteLine("Building");
                     break;
                 case Type.Bullet:
-                    //Console.WriteLine("Bullet");
                     if (NetManager.myRole == "server")
                     {
                         AP.Bullet b = (AP.Bullet)(object)obj;
@@ -218,7 +216,6 @@ using System.Collections;
                     Console.WriteLine("Explosion");
                     break;
                 case Type.Player:
-                    //Console.WriteLine("Player");
                     AP.Player p = (AP.Player)(object)obj;
                     result.Add(BitConverter.GetBytes(p.playerId));
                     result.Add(BitConverter.GetBytes(p.xPos));
@@ -232,7 +229,6 @@ using System.Collections;
                 case Type.Move:
                     Console.WriteLine("Move");
                     result.Add(BitConverter.GetBytes((int)(object)obj));
-                    //result.Add(BitConverter.GetBytes(o[1]));
                     break;
                 default:
                     break;

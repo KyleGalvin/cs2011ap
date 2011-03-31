@@ -245,50 +245,14 @@ using System.Text;
             }*/
             if (playerAddList.Count > 0)
                 this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
-            //this.SendObjs<Enemy>(Action.Update, enemyUpdateList, Type.AI);
             if (playerUpdateList.Count > 0)
                 this.SendObjs<Player>(Action.Update, playerUpdateList, Type.Player);
-
-            //this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
-            //this.SendObjs<Enemy>(Action.Create, enemyAddList, Type.AI);
             if (bulletDeleteList.Count > 0)
                 this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
             if (bulletAddList.Count > 0)
                 this.SendObjs<Bullet>(Action.Create, bulletAddList, Type.Bullet);
             if (bulletUpdateList.Count > 0)
                 this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
-            //this.SendObjs<Enemy>(Action.Delete, enemyDeleteList, Type.AI);
-            //this.SendObjs<Player>(Action.Delete, playerDeleteList, Type.Player);
-            //this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
-            /*if (!done)
-            {
-                playerAddList.Add(player);
-                this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
-                done = true;
-            }
-            else
-            {
-                if( change )
-                {
-                    player.move(0, 1);
-                    player.move(0, 1);
-                    player.move(0, 1);
-                    player.move(0, 1);
-                    player.move(0, 1);
-                    change = false;
-                }
-                else
-                {
-                    player.move(1,0);
-                    player.move(1, 0);
-                    player.move(1, 0);
-                    player.move(1, 0);
-                    player.move(1, 0);
-                    change = true;
-                }
-                playerUpdateList.Add(player);
-                this.SendObjs<Player>(Action.Update, playerUpdateList, Type.Player);
-            }*/
 
             lastFrameTime = DateTime.Now;
         }
@@ -304,13 +268,6 @@ using System.Text;
 
 		// Public Methods (3) 
 
-        //protected NetManager(int newPort)
-        //{
-        //    //throw new NotImplementedException();
-        //    myConnections = new List<Connection>();
-        //    myProtocol = new PackageInterpreter();
-        //    port = newPort;
-        //}
 	    //Listen for any requests directed at our IP and Port
 		//respond by accepting connection and requesting one of our own for outgoing data
         /// <summary>
@@ -347,12 +304,8 @@ using System.Text;
 
                 Console.WriteLine("Starting the {0}th connection", myConnections.Count);
                 //create a thread to handle communication
-                //if (!createdIncomingCommThread)
-                //{
                     Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
                     clientThread.Start(myConnections[(myConnections.Count - 1)]);
-                    //createdIncomingCommThread = true;
-                //}
 
                 if (Connected && String.Compare(myRole, "server") == 0)
                 {
