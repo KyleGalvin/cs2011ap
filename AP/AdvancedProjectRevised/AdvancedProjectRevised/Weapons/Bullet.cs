@@ -81,7 +81,7 @@ namespace AP
 
             GL.PushMatrix();
             GL.Translate(xPos, yPos, 0.5f);
-            GL.Rotate(angle - 90, 0, 0, 1);
+           GL.Rotate(angle - 90, 0, 0, 1);
             ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectBullet); //body 
             GL.PopMatrix();
 
@@ -115,6 +115,13 @@ namespace AP
             yPos += yVel * speed;
 
             lifeTime--;
+        }
+
+        public void multiplayermove()
+        {
+            
+            xPos += this.velocity.X*speed;
+            yPos += this.velocity.Y*speed;
         }
 
         /// <summary>

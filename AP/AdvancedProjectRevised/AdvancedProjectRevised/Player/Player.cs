@@ -158,7 +158,11 @@ namespace AP
             yPos += y * this.speed;
             setAngle();
             position = new Vector3(xPos, yPos,0);
+            AnimatePlayer();
+        }
 
+        public void AnimatePlayer()
+        {
             walking = true;
             if (incWalk)
             {
@@ -171,7 +175,7 @@ namespace AP
                 legAngle -= 8;
                 if (legAngle < -35)
                     incWalk = true;
-            } 
+            }            
         }
 
         /// <summary>
@@ -210,6 +214,7 @@ namespace AP
                     }
                 }
             }
+
 
             timestamp = DateTime.Now.Ticks;
         }

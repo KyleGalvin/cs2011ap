@@ -106,3 +106,17 @@ C:\Documents and Settings\student\Desktop\AP\AdvancedProjectRevised\AdvancedProj
 C:\Documents and Settings\student\Desktop\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.SplashScreen.resources
 C:\Documents and Settings\student\Desktop\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.Properties.Resources.resources
 C:\Documents and Settings\student\Desktop\AP\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.pdb
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.SplashScreen.resources
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.Properties.Resources.resources
+C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
