@@ -85,11 +85,11 @@ namespace AP
             GL.EnableClientState(ArrayCap.TextureCoordArray);
             GL.EnableClientState(ArrayCap.IndexArray);
 
-            loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//texture256.png",1.0f);
-            loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//texture256.png",1.0f);
-            loadedObjects.LoadObject("Objects//PlayerRightLeg.obj", "Objects//texture256.png",1.0f);
-            loadedObjects.LoadObject("Objects//PlayerLeftArm.obj", "Objects//texture256.png",1.0f);
-            loadedObjects.LoadObject("Objects//PlayerRightArm.obj", "Objects//texture256.png",1.0f);
+            loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//Player.png", 1.0f);
+            loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//Player.png", 1.0f);
+            loadedObjects.LoadObject("Objects//PlayerRightLeg.obj", "Objects//Player.png", 1.0f);
+            loadedObjects.LoadObject("Objects//PlayerLeftArm.obj", "Objects//Player.png", 1.0f);
+            loadedObjects.LoadObject("Objects//PlayerRightArm.obj", "Objects//Player.png", 1.0f);
 
             loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//zombie.png", 1.0f);
             loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//zombie.png", 1.0f);
@@ -97,7 +97,7 @@ namespace AP
             loadedObjects.LoadObject("Objects//PlayerLeftArm.obj", "Objects//zombie.png", 1.0f);
             loadedObjects.LoadObject("Objects//PlayerRightArm.obj", "Objects//zombie.png", 1.0f);
 
-            loadedObjects.LoadObject("Objects//2DSquare.obj", "Objects//Background.png", 1.0f);
+            //loadedObjects.LoadObject("Objects//2DSquare.obj", "Objects//Background.png", 1.0f);
         }
 
         private void glControl1_Resize(object sender, EventArgs e)
@@ -204,7 +204,7 @@ namespace AP
             GL.Rotate(72, 1, 0, 0);
             GL.Rotate(180, 0, 0, 1);
             GL.Rotate(180, 0, 1, 0);
-            loadedObjects.DrawObject(10); //background
+            //loadedObjects.DrawObject(10); //background
 
 
 

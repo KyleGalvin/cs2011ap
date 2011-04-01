@@ -120,3 +120,6 @@ C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedPro
 C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.SplashScreen.resources
 C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.Properties.Resources.resources
 C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
+C:\Documents and Settings\student\Desktop\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.dll
+C:\Documents and Settings\student\Desktop\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.dll
+C:\Documents and Settings\student\Desktop\AP\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.dll

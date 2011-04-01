@@ -102,7 +102,7 @@ namespace AP
             }
             else
             {
-                net.SendObjs<int>(Action.Request, new List<int>() {x, y}, Type.Move);
+                net.SendObjs<int>(Action.Request, new List<int>() {x, y}, Type.Move, net.myConnections[0]);
             }
         }
 
@@ -517,7 +517,7 @@ namespace AP
                         
                         if (p.playerId != player.playerId)
                         {
-                            Console.WriteLine("x:" + p.xPos + " y:" + p.yPos);
+                            //Console.WriteLine("x:" + p.xPos + " y:" + p.yPos);
                             GL.PushMatrix();
                             GL.Translate(p.xPos, p.yPos, 0);
                             p.draw();
