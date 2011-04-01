@@ -201,12 +201,11 @@ using OpenTK;
                 }
                 else if ((Type)t == Type.Player)
                 {
-                    Player p = State.Players.Where(m => m.playerId == BitConverter.ToInt32(pack.body[1],0)).First();
-                    p.Update(
+                    State.Players.Where(m => m.playerId == UID).First().Update(
                         pack.body[(i * (int)myTypeSize) + 2], pack.body[(i * (int)myTypeSize) + 3]
-                        , pack.body[(i * (int)myTypeSize) + 4], pack.body[(i * (int)myTypeSize) + 5]); 
-                        p.setAngle();
-                    p.AnimatePlayer();
+                        , pack.body[(i * (int)myTypeSize) + 4], pack.body[(i * (int)myTypeSize) + 5]);
+                    State.Players.Where(m => m.playerId == UID).First().setAngle();
+                    State.Players.Where(m => m.playerId == UID).First().AnimatePlayer();
                     //Console.WriteLine("HANDLE UPDATE: " + (float)BitConverter.ToSingle(pack.body[0], 0) + " " + (float)BitConverter.ToSingle(pack.body[1], 0) + " " + (float)BitConverter.ToSingle(pack.body[2], 0) + " " + (float)BitConverter.ToSingle(pack.body[3], 0) + " " + BitConverter.ToSingle(pack.body[4], 0));
                 }
             }
