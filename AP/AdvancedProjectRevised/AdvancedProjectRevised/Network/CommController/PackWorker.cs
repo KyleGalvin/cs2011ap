@@ -201,7 +201,7 @@ using OpenTK;
                 }
                 else if ((Type)t == Type.Player)
                 {
-                    Player p = State.Players.Where(m => m.playerId == State.myUID).First();
+                    Player p = State.Players.Where(m => m.playerId == BitConverter.ToInt32(pack.body[1],0)).First();
                     p.Update(
                         pack.body[(i * (int)myTypeSize) + 2], pack.body[(i * (int)myTypeSize) + 3]
                         , pack.body[(i * (int)myTypeSize) + 4], pack.body[(i * (int)myTypeSize) + 5]); 
