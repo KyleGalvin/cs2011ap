@@ -198,6 +198,7 @@ namespace AP
                 }
                 tiles = new Tiles(walls);
                 mPathFinder = new PathFinder(tiles.byteList());
+                collisionAI.wallTiles = tiles;
                 foreach (var x in gameState.Players)
                 {
                     x.tiles = tiles;
