@@ -11,16 +11,16 @@ namespace AP
     /// </summary>
     public class Zombie : Enemy
     {
-		#region Fields (4) 
+        #region Fields (4)
 
         public static int drawNumber;
         bool incWalk = true;
         float legAngle = 0.0f;
-        public bool walking = false; 
+        public bool walking = false;
 
-		#endregion Fields 
+        #endregion Fields
 
-		#region Constructors (1) 
+        #region Constructors (1)
 
         /// <summary>
         /// Initialize the creation of a zombie enemy.
@@ -29,30 +29,31 @@ namespace AP
         /// <param name="x">Specified spawning x position.</param>
         /// <param name="y">Specified spawning y position.</param>
         /// <output>None.</output>
-        public Zombie( int ID )
+        public Zombie(int ID)
         {
             health = (int)Life.Zombie;
             enemyID = ID;
+            UID = ID;
             speed = (float)0.05;
             radius = 0.25f;
             health = 1;
             updateTimeStamp();
         }
 
-		#endregion Constructors 
+        #endregion Constructors
 
-		#region Methods (4) 
+        #region Methods (4)
 
-		// Public Methods (4) 
+        // Public Methods (4) 
 
         /// <summary>
         /// Reduces passed player's life.
         /// </summary>
         /// <param name="player">Passed played that was hit from a zombie attack.</param>
         /// <output>None.</output>
-        public override void attack( Player player )
+        public override void attack(Player player)
         {
-            player.loseHealth( (float)Damage.Low );
+            player.loseHealth((float)Damage.Low);
         }
 
         public override void draw()
@@ -61,7 +62,7 @@ namespace AP
             GL.Translate(xPos, yPos, 0);
             GL.Translate(0, 0, 0.4f);
             GL.Rotate(angle - 90, 0, 0, 1);
-            GL.Rotate(180, 0, 1.0f, 0); 
+            GL.Rotate(180, 0, 1.0f, 0);
 
             ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie); //body 
 
@@ -97,7 +98,7 @@ namespace AP
             GL.PopMatrix();
         }
 
-        
+
 
         /// <summary>
         /// Moves the zombie enemy using the passed x and y positions as
@@ -106,10 +107,10 @@ namespace AP
         /// <param name="x">Passed x position determined from AI calulation.</param>
         /// <param name="y">Passed y position determined from AI calulation.</param>
         /// <output>None.</output>
-        public override void move( float x, float y )
-        {            
+        public override void move(float x, float y)
+        {
             xPos += x * this.speed;
-            yPos += y * this.speed;            
+            yPos += y * this.speed;
         }
 
         /// <summary>
@@ -135,7 +136,7 @@ namespace AP
                 legAngle -= 8;
                 if (legAngle < -35)
                     incWalk = true;
-            } 
+            }
 
             float len = (float)Math.Sqrt(x * x + y * y);
             float moveX;
@@ -165,7 +166,7 @@ namespace AP
 
                     len = (float)Math.Sqrt(x * x + y * y);
                     move(-x / len, -y / len);
-                }     
+                }
                 else if (ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
                 { //standing in something, move away from it
                     x = moveX - xPos;
@@ -173,14 +174,14 @@ namespace AP
 
                     len = (float)Math.Sqrt(x * x + y * y);
                     move(-x / len, -y / len);
-                }                    
+                }
                 else
                 {
                     move(x / len, y / len); //free to move where you want
                 }
             }
-            
-            
+
+
             updateTimeStamp();
         }
         /// <summary>
@@ -254,6 +255,6 @@ namespace AP
 
             updateTimeStamp();
         }
-		#endregion Methods 
+        #endregion Methods
     }
 }

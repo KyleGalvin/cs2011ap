@@ -11,7 +11,7 @@ namespace AP
 {
     public class ClientProgram : GameWindow
     {
-		#region Fields (54) 
+        #region Fields (54)
 
         public static CollisionAI collisionAI;
         public EffectsHandler effectsHandler = new EffectsHandler();
@@ -69,24 +69,24 @@ namespace AP
         private int zombieIterator = 0;
         private int zombieKillCount = 0;
 
-		#endregion Fields 
+        #endregion Fields
 
-		#region Constructors (1) 
+        #region Constructors (1)
 
         /// <summary>Creates a window with the specified title.</summary>
         public ClientProgram(bool multi)
             : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
             multiplayer = multi;
-            
+
             VSync = VSyncMode.On;
         }
 
-		#endregion Constructors 
+        #endregion Constructors
 
-		#region Methods (20) 
+        #region Methods (20)
 
-		// Public Methods (3) 
+        // Public Methods (3) 
 
         // moves the player
         /// <summary>
@@ -102,7 +102,7 @@ namespace AP
             }
             else
             {
-                net.SendObjs<int>(Action.Request, new List<int>() {x, y}, Type.Move, net.myConnections[0]);
+                net.SendObjs<int>(Action.Request, new List<int>() { x, y }, Type.Move, net.myConnections[0]);
             }
         }
 
@@ -140,7 +140,7 @@ namespace AP
                 soundHandler.continueSong();
             }
         }
-		// Protected Methods (4) 
+        // Protected Methods (4) 
 
         /// <summary>
         /// Load resources here.
@@ -204,7 +204,7 @@ namespace AP
             loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood3.png", 0.4f);
             loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood4.png", 0.4f);
 
-            
+
 
             if (multiplayer)
             {
@@ -300,7 +300,7 @@ namespace AP
         {
             if (!multiplayer)
             {
-                
+
                 HandleCrates();
                 HandleSpawning();
                 HandleBullets();
@@ -310,6 +310,8 @@ namespace AP
                  * 
                  */
                 HandleSounds();
+                collisionAI.updateState(ref gameState.Enemies);
+                HandlePathing();
             }
             else
             {
@@ -325,27 +327,27 @@ namespace AP
                 }
 
             }
-               
-        
+
+
             effectsHandler.updateEffects();
-            
+
             // Move your player
             if (Keyboard[Key.W] && Keyboard[Key.D])
                 movePlayer(1, 1);
             else if (Keyboard[Key.W] && Keyboard[Key.A])
                 movePlayer(-1, 1);
             else if (Keyboard[Key.S] && Keyboard[Key.D])
-                movePlayer(1,-1);
+                movePlayer(1, -1);
             else if (Keyboard[Key.S] && Keyboard[Key.A])
-                movePlayer( -1, -1 );
+                movePlayer(-1, -1);
             else if (Keyboard[Key.W])
-                movePlayer( 0, 1 );
+                movePlayer(0, 1);
             else if (Keyboard[Key.S])
-                movePlayer( 0, -1 );
+                movePlayer(0, -1);
             else if (Keyboard[Key.A])
                 movePlayer(-1, 0);
             else if (Keyboard[Key.D])
-                movePlayer( 1, 0 );
+                movePlayer(1, 0);
             else if (Keyboard[Key.Escape])
                 Exit();
 
@@ -388,52 +390,52 @@ namespace AP
             //move to serverrrrr
             //logic for picking up ammo crates
 
-            
-                 if (Mouse[OpenTK.Input.MouseButton.Left] == true)
-                 {
-                     if(multiplayer)
-                     {
-                         
-                         if (player.weapons.canShoot())
-                         {
-                             soundHandler.play(SoundHandler.EXPLOSION);
-                             net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY)) }, Type.Bullet);
-                         }
-                     }
-                     else
-                     {
-                         if (player.weapons.canShoot())
-                         {                             
-                             player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(screenX, screenY), new Vector2(Mouse.X, Mouse.Y), ref player);
-                         }
-                     }
-                     
-                 }
-                 if (!multiplayer)
-                 {
-                     player.weapons.updateBulletCooldown();
-                     if (player.weapons.rifleBurstCooldown != 0)
-                     {
-                         if (player.weapons.canShoot())
-                         {
-                             player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(screenX, screenY), new Vector2(Mouse.X, Mouse.Y), ref player);
-                         }
-                     }
-                 }
-                if (!multiplayer)
-                {
-                    if (zombieKillCount >= 2)
-                     {
-                         levelComplete = true;
-                         Console.WriteLine("HELLO");
-                     }
 
-                    
+            if (Mouse[OpenTK.Input.MouseButton.Left] == true)
+            {
+                if (multiplayer)
+                {
+
+                    if (player.weapons.canShoot())
+                    {
+                        soundHandler.play(SoundHandler.EXPLOSION);
+                        net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY)) }, Type.Bullet);
+                    }
                 }
+                else
+                {
+                    if (player.weapons.canShoot())
+                    {
+                        player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(screenX, screenY), new Vector2(Mouse.X, Mouse.Y), ref player);
+                    }
+                }
+
+            }
+            if (!multiplayer)
+            {
+                player.weapons.updateBulletCooldown();
+                if (player.weapons.rifleBurstCooldown != 0)
+                {
+                    if (player.weapons.canShoot())
+                    {
+                        player.weapons.shoot(ref gameState.Bullets, new Vector3(player.xPos, player.yPos, 0), new Vector2(screenX, screenY), new Vector2(Mouse.X, Mouse.Y), ref player);
+                    }
+                }
+            }
+            if (!multiplayer)
+            {
+                if (zombieKillCount >= 2)
+                {
+                    levelComplete = true;
+                    Console.WriteLine("HELLO");
+                }
+
+
+            }
 
             GC.Collect();
         }
-		// Private Methods (13) 
+        // Private Methods (13) 
 
         /// <summary>
         /// Draws the background.
@@ -482,7 +484,7 @@ namespace AP
                         imageHandler.drawImage(imagePistolAvailable, 0.7f, 89.0f, 1.0f, 1.0f);
                     if (p.weapons.rifleEquipped)
                         imageHandler.drawImage(imageRifleSelected, 8.0f, 89.0f, 1.0f, 1.0f);
-                    else if(p.weapons.rifleAmmo <= 0)
+                    else if (p.weapons.rifleAmmo <= 0)
                         imageHandler.drawImage(imageRifleUnavailable, 8.0f, 89.0f, 1.0f, 1.0f);
                     else
                         imageHandler.drawImage(imageRifleAvailable, 8.0f, 89.0f, 1.0f, 1.0f);
@@ -509,12 +511,12 @@ namespace AP
                 lock (gameState)
                 {
                     player.draw();
-                    
+
                     GL.Translate(-player.xPos, -player.yPos, 0);
 
                     foreach (Player p in gameState.Players)
                     {
-                        
+
                         if (p.playerId != player.playerId)
                         {
                             //Console.WriteLine("x:" + p.xPos + " y:" + p.yPos);
@@ -555,9 +557,8 @@ namespace AP
                     crate.draw();
                     GL.PopMatrix();
                 }
-                collisionAI.updateState(ref gameState.Enemies);
+
                 GL.Color3(1.0f, 1.0f, 1.0f);
-                HandlePathing();
                 for (int index = 0; index < gameState.Enemies.Count; index++)
                 {
                     var enemy = gameState.Enemies[index];
@@ -642,7 +643,7 @@ namespace AP
             List<Bullet> tmpBullet = new List<Bullet>();
             foreach (Bullet bullet in gameState.Bullets)
             {
-                if(tiles.isWall(bullet.xPos,bullet.yPos))
+                if (tiles.isWall(bullet.xPos, bullet.yPos))
                 {
                     tmpBullet.Add(bullet);
                 }
@@ -671,10 +672,10 @@ namespace AP
                         gameState.Crates.Add(new Crate(new Vector2(enemyHit.xPos, enemyHit.yPos)));
                 }
             }
-                 
+
 
             foreach (Bullet bullet in tmpBullet)
-            {                         
+            {
                 gameState.Bullets.Remove(bullet);
             }
         }
@@ -713,18 +714,18 @@ namespace AP
             for (int index = 0; index < gameState.Enemies.Count; index++)
             {
                 var zombie = gameState.Enemies[index];
-//Find closest player
+                //Find closest player
                 var playerPos = tiles.returnTilePos(player);
                 var enemyPos = tiles.returnTilePos(zombie);
                 //Check to see how close the zombie is to the player
                 float x1 = player.xPos - zombie.xPos;
                 float y1 = player.yPos - zombie.yPos;
-                float len1 = (float) Math.Sqrt(x1*x1 + y1*y1);
+                float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
                 if (len1 <= 1.1)
                 {
                     zombie.moveTowards(player);
                 }
-                    //Find a path
+                //Find a path
                 else if (enemyPos != null)
                 {
                     if (playerPos != null)
@@ -739,7 +740,7 @@ namespace AP
                             //Calculates the len between the moves
                             float x = nextMove[0] - zombie.xPos;
                             float y = nextMove[1] - zombie.yPos;
-                            float len = (float) Math.Sqrt(x*x + y*y);
+                            float len = (float)Math.Sqrt(x * x + y * y);
                             if (len < 1 && path.Count > 2)
                             {
                                 nextMove = tiles.returnCoords(path[2].X, path[2].Y);
@@ -825,6 +826,6 @@ namespace AP
             setSpawns();
         }
 
-		#endregion Methods 
+        #endregion Methods
     }
 }
