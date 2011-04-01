@@ -58,13 +58,17 @@ namespace AP
         #region Methods
         protected void SwitchElements(int i, int j)
         {
-            T h = InnerList[i];
-            InnerList[i] = InnerList[j];
-            InnerList[j] = h;
+            lock (InnerList)
+            {
+                T h = InnerList[i];
+                InnerList[i] = InnerList[j];
+                InnerList[j] = h;
+            }
         }
 
         protected virtual int OnCompare(int i, int j)
         {
+            lock(InnerList)
             return mComparer.Compare(InnerList[i], InnerList[j]);
         }
 

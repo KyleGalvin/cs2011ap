@@ -186,8 +186,8 @@ using System.Collections;
             {
                 
                 case Type.AI:
-                    Console.WriteLine("AI");
                     AP.Enemy e = (AP.Enemy)(object)obj;
+                    Console.WriteLine("AI: {0} {1} {2}", e.UID,e.xPos,e.yPos);
                     result.Add(BitConverter.GetBytes(e.UID));
                     result.Add(BitConverter.GetBytes(e.xPos));
                     result.Add(BitConverter.GetBytes(e.yPos));

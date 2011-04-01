@@ -17,7 +17,7 @@ namespace AP
         bool[,] blockedByWall;
         //private float TileSize = 1;
         List<Position>[,] tileListEnemies;
-        List<Player> playerList = new List<Player>();
+        public List<Player> playerList = new List<Player>();
         private int Tiles = 400;
         
 

@@ -229,12 +229,15 @@ namespace AP
                         continue;
 
                     int foundInCloseIndex = -1;
-                    for (int j = 0; j < mClose.Count; j++)
+                    for (int j1 = 0; j1 < mClose.Count; j1++)
                     {
-                        if (mClose[j].X == newNode.X && mClose[j].Y == newNode.Y)
+                        if (j1 < mClose.Count)
                         {
-                            foundInCloseIndex = j;
-                            break;
+                            if (mClose[j1].X == newNode.X && mClose[j1].Y == newNode.Y)
+                            {
+                                foundInCloseIndex = j1;
+                                break;
+                            }
                         }
                     }
                     if (foundInCloseIndex != -1 && mClose[foundInCloseIndex].G <= newG)
