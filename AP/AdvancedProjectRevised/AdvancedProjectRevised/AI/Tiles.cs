@@ -12,7 +12,7 @@ namespace AP
         public float minX;
         public float maxY;
         public float minY;
-        private List<Wall> walls;
+
         public Tiles(float _minX, float _maxX, float _minY, float _maxY)
         {
             minX = _minX;
@@ -27,7 +27,6 @@ namespace AP
             maxX = walls.Max(y => y.xPos) + 2;
             minY = walls.Min(y => y.yPos) - 2;
             maxY = walls.Max(y => y.yPos) + 2;
-            this.walls = walls;
             calculateTiles(walls);
         }
         private void calculateTiles(List<Wall> walls)

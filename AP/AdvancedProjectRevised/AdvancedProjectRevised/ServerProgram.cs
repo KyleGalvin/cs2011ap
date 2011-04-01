@@ -9,31 +9,36 @@ namespace AP
 {
     class ServerProgram
     {
-        private System.Timers.Timer gameTime = new System.Timers.Timer(50);
-        public static CollisionAI collisionAI;
+		#region Fields (23) 
+
         public static int bulletID = 0;
-        CreateLevel level;
+        public static CollisionAI collisionAI;
         private int currentLevel = 1;
-        private List<Wall> walls = new List<Wall>();
-        public Tiles tiles;
         private bool enemySpawned = false;
-        private PathFinder mPathFinder;
+        private  GameState gameState;
+        private System.Timers.Timer gameTime = new System.Timers.Timer(50);
         List<int> heightSquares = new List<int>();
+        CreateLevel level;
+        private PathFinder mPathFinder;
+        NetManager net;
+        public static List<int> playerSpawnID = new List<int>();
+        List<EnemySpawn> spawns = new List<EnemySpawn>();
+        public Tiles tiles;
+        private List<Wall> walls = new List<Wall>();
         List<int> widthSquares = new List<int>();
+        public static List<int> xPosPlayerSpawn = new List<int>();
         List<int> xPosSpawn = new List<int>();
         List<int> xPosSquares = new List<int>();
+        public static List<int> yPosPlayerSpawn = new List<int>();
         List<int> yPosSpawn = new List<int>();
         List<int> yPosSquares = new List<int>();
-        public static List<int> xPosPlayerSpawn = new List<int>();
-        public static List<int> yPosPlayerSpawn = new List<int>();
-        public static List<int> playerSpawnID = new List<int>();
-
-
-        List<EnemySpawn> spawns = new List<EnemySpawn>();
         private int zombieCount = 0;
         private int zombieIterator = 0;
-        NetManager net;
-        private  GameState gameState;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
         public ServerProgram()
         {
             // Set up the spawn locations for enemies
@@ -55,6 +60,17 @@ namespace AP
             gameTime.Enabled = true;
         }
 
+		#endregion Constructors 
+
+		#region Methods (3) 
+
+		// Private Methods (3) 
+
+        /// <summary>
+        /// The main game loop
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
         private void gameLoop(object sender, ElapsedEventArgs e)
         {
             List<Bullet> bulletDelete = new List<Bullet>();
@@ -83,6 +99,21 @@ namespace AP
             net.SyncStateOutgoing();
         }
 
+        /// <summary>
+        /// Sets the spawns.
+        /// </summary>
+        private void setSpawns()
+        {
+            spawns.Clear();
+            for (int index = 0; index < xPosSpawn.Count; index++)
+            {
+                spawns.Add(new EnemySpawn(xPosSpawn[index], yPosSpawn[index]));
+            }
+        }
+
+        /// <summary>
+        /// Sets up level.
+        /// </summary>
         private void setUpLevel()
         {
             level = new CreateLevel(currentLevel);
@@ -100,33 +131,6 @@ namespace AP
             setSpawns();
         }
 
-        private void setSpawns()
-        {
-            spawns.Clear();
-            if (xPosSpawn.Count > 0)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
-            }
-            if (xPosSpawn.Count > 1)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1]));
-            }
-            if (xPosSpawn.Count > 2)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2]));
-            }
-            if (xPosSpawn.Count > 3)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
-            }
-            if (xPosSpawn.Count > 4)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[4], yPosSpawn[4]));
-            }
-            if (xPosSpawn.Count > 5)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[5], yPosSpawn[5]));
-            }
-        }
+		#endregion Methods 
     }
 }

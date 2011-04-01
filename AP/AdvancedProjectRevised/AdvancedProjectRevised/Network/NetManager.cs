@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
 using AP;
-using Timer = System.Threading.Timer;
 using OpenTK;
 using System.Linq;
 using System.Timers;

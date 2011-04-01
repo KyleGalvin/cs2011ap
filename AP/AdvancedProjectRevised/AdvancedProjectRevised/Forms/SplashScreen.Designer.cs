@@ -33,6 +33,7 @@
             this.btn_Client = new System.Windows.Forms.Button();
             this.btn_Server = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.glControl1 = new OpenTK.GLControl();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -93,11 +94,24 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
+            // glControl1
+            // 
+            this.glControl1.BackColor = System.Drawing.Color.Black;
+            this.glControl1.Location = new System.Drawing.Point(38, 313);
+            this.glControl1.Name = "glControl1";
+            this.glControl1.Size = new System.Drawing.Size(337, 332);
+            this.glControl1.TabIndex = 5;
+            this.glControl1.VSync = false;
+            this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
+            this.glControl1.Paint += new System.Windows.Forms.PaintEventHandler(this.glControl1_Paint);
+            this.glControl1.Resize += new System.EventHandler(this.glControl1_Resize);
+            // 
             // SplashScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1016, 746);
+            this.Controls.Add(this.glControl1);
             this.Controls.Add(this.btn_Server);
             this.Controls.Add(this.btn_Client);
             this.Controls.Add(this.btn_Singleplayer);
@@ -120,5 +134,6 @@
         private System.Windows.Forms.Button btn_Client;
         private System.Windows.Forms.Button btn_Server;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private OpenTK.GLControl glControl1;
     }
 }
