@@ -110,18 +110,23 @@ namespace AP
         /// No output, but the location of the bullet is changed. The lifetime of the bullet is also decremented.
         ///   </output>
         public void move()
-        {            
+        {
+            prevXPos = xPos;
+            prevYPos = yPos;
             xPos += xVel * speed;
             yPos += yVel * speed;
 
             lifeTime--;
+            setAngle();
         }
 
         public void multiplayermove()
         {
-            
+            prevXPos = xPos;
+            prevYPos = yPos;
             xPos += this.velocity.X*speed;
             yPos += this.velocity.Y*speed;
+            setAngle();
         }
 
         /// <summary>

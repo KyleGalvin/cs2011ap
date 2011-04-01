@@ -116,7 +116,7 @@ namespace AP
             //create client and/or server
             NetManager manager;
 
-            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.252"));
+            Server serv = new Server("Serv", IPAddress.Parse("192.168.105.176"));
             manager = new ClientManager(9999, ref s, serv);
             manager.setRole("client");
             while (manager.myConnections.Count == 0) { }
@@ -313,9 +313,9 @@ namespace AP
             }
             else
             {
-                foreach(Bullet b in gameState.Bullets)
+                for (int i = 0; i < gameState.Bullets.Count; i++)
                 {
-                    b.multiplayermove();
+                    gameState.Bullets[i].multiplayermove();
                 }
                 // player.walking = false;
                 if (gameState.Players.Count > 0)
@@ -397,7 +397,7 @@ namespace AP
                          if (player.weapons.canShoot())
                          {
                              soundHandler.play(SoundHandler.EXPLOSION);
-                             net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X, Mouse.Y)) }, Type.Bullet);
+                             net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY)) }, Type.Bullet);
                          }
                      }
                      else
