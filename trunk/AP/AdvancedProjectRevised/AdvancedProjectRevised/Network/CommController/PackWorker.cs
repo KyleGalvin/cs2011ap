@@ -210,7 +210,7 @@ public class PackWorker
             {
                 State.Players.Where(m => m.playerId == UID).First().Update(
                     pack.body[(i * (int)myTypeSize) + 2], pack.body[(i * (int)myTypeSize) + 3]
-                    , pack.body[(i * (int)myTypeSize) + 4], pack.body[(i * (int)myTypeSize) + 5]);
+                    , pack.body[(i * (int)myTypeSize) + 4], pack.body[(i * (int)myTypeSize) + 5], pack.body[(i * (int)myTypeSize) + 6]);
                 State.Players.Where(m => m.playerId == UID).First().setAngle();
                 State.Players.Where(m => m.playerId == UID).First().AnimatePlayer();
                 //Console.WriteLine("HANDLE UPDATE: " + (float)BitConverter.ToSingle(pack.body[0], 0) + " " + (float)BitConverter.ToSingle(pack.body[1], 0) + " " + (float)BitConverter.ToSingle(pack.body[2], 0) + " " + (float)BitConverter.ToSingle(pack.body[3], 0) + " " + BitConverter.ToSingle(pack.body[4], 0));
