@@ -508,12 +508,12 @@ namespace AP
             if (multiplayer)
             {
                 Player player = gameState.Players.Where(y => y.playerId == gameState.myUID).First();
-                lock (gameState)
-                {
+                
                     player.draw();
 
                     GL.Translate(-player.xPos, -player.yPos, 0);
-
+                    lock (gameState)
+                {
                     foreach (Player p in gameState.Players)
                     {
 

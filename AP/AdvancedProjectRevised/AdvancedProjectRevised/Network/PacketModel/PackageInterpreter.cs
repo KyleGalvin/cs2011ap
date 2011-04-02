@@ -151,7 +151,7 @@ public class PackageInterpreter
         switch (type)//these values need to be sorted out when the protocol is more sound
         {
             case Type.Player:
-                return 0x5;
+                return 0x6;
             case Type.AI:
                 return 0x5;
             case Type.Building:
