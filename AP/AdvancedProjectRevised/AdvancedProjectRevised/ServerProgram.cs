@@ -163,15 +163,15 @@ namespace AP
             {
                 ammoCounter++;
             }
-            //for (int index  = 0; index < gameState.Players.Count; index++)
+            //for (int index = 0; index < gameState.Players.Count; index++)
             //{
             //    var radius = gameState.Players[index].radius;
-            //    foreach (var bullet in gameState.Bullets.Where(y=>y.playerID!=gameState.Players[index].playerId && y.timestamp>=0))
+            //    foreach (var bullet in gameState.Bullets.Where(y => y.playerID != gameState.Players[index].playerId && y.timestamp >= 0))
             //    {
             //        float x1 = gameState.Players[index].xPos - bullet.xPos;
             //        float y1 = gameState.Players[index].yPos - bullet.yPos;
             //        float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
-            //        if(len1<=radius)
+            //        if (len1 <= radius)
             //        {
             //            bullet.timestamp = -1;
             //            gameState.Players[index].health -= 2;
