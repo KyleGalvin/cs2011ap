@@ -47,11 +47,17 @@ public class PackWorker
     /// <returns></returns>
     public AP.Bullet CreateBullet(List<byte[]> data)
     {
-        Console.WriteLine("bvullet xvel: " + BitConverter.ToSingle(data[3], 0) + " yvel: " + BitConverter.ToSingle(data[4], 0));
+        Console.WriteLine("bullet xvel: " + BitConverter.ToSingle(data[3], 0) + " yvel: " + BitConverter.ToSingle(data[4], 0));
         Bullet b = new AP.Bullet(new OpenTK.Vector3(BitConverter.ToSingle(data[1], 0), BitConverter.ToSingle(data[2], 0), 0), new OpenTK.Vector2(BitConverter.ToSingle(data[3], 0), BitConverter.ToSingle(data[4], 0)), (int)(BitConverter.ToInt32(data[0], 0) & 0xC0000000));
         b.setID(BitConverter.ToInt32(data[0], 0) & 0x41111111);//bottom 30 bits are the uid, top 2 bits are the player id
         b.setAngle();
         return b;
+    }
+
+    public AP.Crate CreateCrate(List<byte[]> data)
+    {
+        Crate c = new AP.Crate(new Vector2(BitConverter.ToSingle(data[2], 0), BitConverter.ToSingle(data[3], 0)), BitConverter.ToInt32(data[0], 0));
+        return c;
     }
 
     /// <summary>
@@ -73,13 +79,18 @@ public class PackWorker
             UInt32 t = pack.typeofobj;
             if ((Type)t == Type.Bullet)
             {
-                Int32 ID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0);
+                Int32 ID = (Int32)(BitConverter.ToUInt32(pack.body[(i * myTypeSize) + 1], 0) & 0xC1111111);
                 State.Bullets.Remove(State.Bullets.Where(y => y.UID == ID).First());
             }
             if ((Type)t == Type.AI)
             {
                 Int32 ID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0);
                 State.Enemies.Remove(State.Enemies.Where(y => y.UID == ID).First());
+            }
+            if ((Type)t == Type.Powerup)
+            {
+                Int32 ID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0);
+                State.Crates.Remove(State.Crates.Where(y => y.UID == ID).First());
             }
         }
     }
@@ -120,6 +131,15 @@ public class PackWorker
 
                 Console.WriteLine("Created {0} Bullet objects from remote network command!", result.Count);
             }
+            else if ((Type)t == Type.Powerup)
+            {
+                List<AP.Crate> result = new List<AP.Crate>();
+
+                result.Add(CreateCrate(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
+                State.Crates.AddRange(result);
+
+                Console.WriteLine("Created {0} Crates objects from remote network command!", result.Count);
+            }
         }
 
     }
@@ -153,7 +173,7 @@ public class PackWorker
         {
             for (int i = 0; i < pack.count; i++)
             {
-                State.Players.Where(y => y.playerId == conn.playerUID).First().weapons.shoot(ref State.Bullets, new Vector3(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 2], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 3], 0), 0), new Vector2(800, 800), new Vector2(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 4], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 5], 0)),conn.playerUID);
+                State.Players.Where(y => y.playerId == conn.playerUID).First().weapons.shoot(ref State.Bullets, new Vector3(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 2], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 3], 0), 0), new Vector2(800, 800), new Vector2(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 4], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 5], 0)), conn.playerUID);
                 //Console.WriteLine("Player before handling move request: xPos: " + State.Bullets.Last().xPos + " yPos: " + State.Bullets.Last().yPos);
             }
         }

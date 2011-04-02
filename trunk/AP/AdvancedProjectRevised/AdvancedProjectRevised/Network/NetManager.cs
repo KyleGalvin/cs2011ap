@@ -173,7 +173,22 @@ public abstract class NetManager
         List<Player> playerUpdateList = new List<Player>();
         List<Player> playerAddList = new List<Player>();
         List<Player> playerDeleteList = new List<Player>();
+        List<Crate> crateAddList=new List<Crate>();
+        List<Crate> crateDeleteList = new List<Crate>();
 
+        foreach (var crate in s.Crates.OrderBy(y=>y.timestamp))
+        {
+            if (crate.timestamp == -1)
+            {
+                crateDeleteList.Add(crate);
+                State.Crates.Remove(crate);
+            }
+            else if (crate.timestamp == 0)
+            {
+                crateAddList.Add(crate);
+                crate.updateTimeStamp();
+            }
+        }
         foreach (Bullet b in s.Bullets.OrderBy(y => y.timestamp))
         {
             if (b.timestamp == -1)
@@ -206,7 +221,7 @@ public abstract class NetManager
             if (p.timestamp >= lastFrameTime.Ticks)
             {
                 //Console.WriteLine("PLAYERMANAGER UPDATE for player" +p.playerId +" timestamp is : " +p.timestamp + " Last ticks:" + lastFrameTime.Ticks);
-                if (p.prevXPos != p.xPos || p.prevYPos != p.yPos)
+                if (p.prevXPos != p.xPos || p.prevYPos != p.yPos || p.prevHealth!=p.health)
                 {
                     playerUpdateList.Add(p);
                     p.prevYPos = p.yPos;
@@ -239,6 +254,11 @@ public abstract class NetManager
         if (bulletUpdateList.Count > 0)
             this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
 
+        if (crateAddList.Count > 0)
+            this.SendObjs(Action.Create, crateAddList, Type.Powerup);
+        if (crateDeleteList.Count > 0)
+            this.SendObjs(Action.Delete, crateDeleteList, Type.Powerup);
+        
         lastFrameTime = DateTime.Now;
     }
     public void setRole(String role)

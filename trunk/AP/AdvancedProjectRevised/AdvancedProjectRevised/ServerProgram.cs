@@ -18,6 +18,8 @@ namespace AP
         private bool enemySpawned = false;
         private  GameState gameState;
         private int ammoCounter=0;
+        private int crateCounter = 0;
+        private System.Timers.Timer bulletTime = new System.Timers.Timer(35f);
         private System.Timers.Timer gameTime = new System.Timers.Timer(50f);
         List<int> heightSquares = new List<int>();
         CreateLevel level;
@@ -72,7 +74,7 @@ namespace AP
             gameTime.Enabled = true;
         }
 
-		#endregion Constructors 
+        #endregion Constructors 
 
 		#region Methods (3) 
 
@@ -139,45 +141,62 @@ namespace AP
         private void gameLoop(object sender, ElapsedEventArgs e)
         {
             HandleSpawning();
-            for (int i = 0; i < gameState.Bullets.Count; i++)
+            for (var i =0;i< gameState.Bullets.Count ; i++)
             {
+
+                for (int j = 0; j < gameState.Players.Count; j++)
+                {
+                    if(gameState.Bullets[i].playerID==gameState.Players[j].playerId) continue;
+                    float x1 = gameState.Players[j].xPos - gameState.Bullets[i].xPos;
+                    float y1 = gameState.Players[j].yPos - gameState.Bullets[i].yPos;
+                    float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
+                    if (len1 <= gameState.Players[j].radius + 0.5f)
+                    {
+                        //gameState.Bullets[i].timestamp = -1;
+                        gameState.Players[j].prevHealth = gameState.Players[j].health;
+                        gameState.Players[j].health -= 2;
+                        Console.WriteLine(gameState.Players[j].playerId + " Health: " + gameState.Players[j].health);
+                    }
+                }
                 Bullet bullet = gameState.Bullets[i];
                 if (bullet.killProjectile())
                     bullet.timestamp = -1;
-                if (tiles.isWall(bullet.xPos, bullet.yPos))
+                if (tiles.isWall(bullet.xPos, bullet.yPos) && bullet.timestamp > 0)
                 {
                     bullet.timestamp = -1;
                 }
                 if (bullet.timestamp > 0)
                     bullet.move();
+
             }
             if(ammoCounter>=60)
             {
-                var x=tiles.SpawnCrate();
+                var x = tiles.SpawnCrate();
                 //spawn ammo
-                Crate c=new Crate(new Vector2(x[0],x[1]));
+                Crate c = new Crate(new Vector2(x[0], x[1]),crateCounter++);
                 c.timestamp = 0;
+                gameState.Crates.Add(c);
                 ammoCounter = 0;
             }
             else
             {
                 ammoCounter++;
             }
-            //for (int index = 0; index < gameState.Players.Count; index++)
-            //{
-            //    var radius = gameState.Players[index].radius;
-            //    foreach (var bullet in gameState.Bullets.Where(y => y.playerID != gameState.Players[index].playerId && y.timestamp >= 0))
-            //    {
-            //        float x1 = gameState.Players[index].xPos - bullet.xPos;
-            //        float y1 = gameState.Players[index].yPos - bullet.yPos;
-            //        float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
-            //        if (len1 <= radius)
-            //        {
-            //            bullet.timestamp = -1;
-            //            gameState.Players[index].health -= 2;
-            //        }
-            //    }
-            //}
+            for (var i = 0; i <gameState.Crates.Count; i++)
+            {
+                for (int j = 0; j < gameState.Players.Count; j++)
+                {
+                    float x1 = gameState.Players[j].xPos - gameState.Crates[i].xPos;
+                    float y1 = gameState.Players[j].yPos - gameState.Crates[i].yPos;
+                    float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
+                    if (len1 <= gameState.Players[j].radius + 0.5)
+                    {
+                        gameState.Crates[i].enemyID = gameState.Players[j].playerId;
+                        gameState.Crates[i].timestamp = -1;
+                    }
+                }
+
+            }
             net.SyncStateOutgoing();
         }
 

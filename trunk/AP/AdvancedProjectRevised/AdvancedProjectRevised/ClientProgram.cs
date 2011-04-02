@@ -657,7 +657,7 @@ namespace AP
                     bullet.timestamp = -1;
                     soundHandler.play(SoundHandler.ZOMBIE);
                     if (rand.Next(0, 10) < 1) //new ammo crate
-                        gameState.Crates.Add(new Crate(new Vector2(enemyHit.xPos, enemyHit.yPos)));
+                        gameState.Crates.Add(new Crate(new Vector2(enemyHit.xPos, enemyHit.yPos), gameState.myUID));
                 }
             }
 
