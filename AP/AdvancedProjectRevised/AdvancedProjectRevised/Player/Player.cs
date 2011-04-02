@@ -14,6 +14,7 @@ namespace AP
     {
 		#region Fields (4) 
 
+        public int prevHealth=100;
         public int modelNumber = 3;
         //todo make this private again
         public int playerId = -1;

@@ -130,13 +130,13 @@ namespace AP
         {
             while (true)
             {
-                var x = RandomNumber(2, tileList.GetUpperBound(0) - 2);
-                var y = RandomNumber(2, tileList.GetUpperBound(1) - 2);
+                var x = RandomNumber(3, tileList.GetUpperBound(0) - 3);
+                var y = RandomNumber(3, tileList.GetUpperBound(1) - 3);
                 if(!tileList[x,y].isWall)
                 {
                     var returnList = new List<float>();
-                    returnList.Add(tileList[x, y].Y);
-                    returnList.Add(tileList[x,y].X);
+                    returnList.Add(tileList[x, y].Y+0.5f);
+                    returnList.Add(tileList[x,y].X-0.5f);
                     return returnList;
                 }
             }

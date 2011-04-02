@@ -11,7 +11,7 @@ namespace AP
     {
         public int crateType;
 
-        public Crate(Vector2 spawnPos)
+        public Crate(Vector2 spawnPos, int UID)
         {
             xPos = spawnPos.X;
             yPos = spawnPos.Y;
@@ -19,6 +19,7 @@ namespace AP
             radius = 0.35f;
             Random rand = new Random();
             crateType = rand.Next(0, 2);
+            this.UID = UID;
         }
 
         public void draw()
