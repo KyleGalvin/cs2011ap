@@ -18,7 +18,12 @@ namespace AP
         //private float TileSize = 1;
         List<Position>[,] tileListEnemies;
         List<Player> playerList = new List<Player>();
-        private int Tiles = 50;
+        private int Tiles = 75;
+
+        public int posXBound = 7;
+        public int posYBound = 6;
+        public int negXBound = -8;
+        public int negYBound = -7;
         
 
 		#endregion Fields 
@@ -346,8 +351,19 @@ namespace AP
                     }
                 }
                 if (x != -1 && y != -1)
-                {
+                {                    
                     tileListEnemies[x, y].Add(member);
+                    if (member.type == Zombie.BOSS)
+                    { //if it is a boos then it doesnt fit in a normal tile. add it to adjacent ones as well
+                        tileListEnemies[x+1, y].Add(member);
+                        tileListEnemies[x+1, y+1].Add(member);
+                        tileListEnemies[x, y+1].Add(member);
+                        tileListEnemies[x-1, y].Add(member);
+                        tileListEnemies[x-1, y-1].Add(member);
+                        tileListEnemies[x, y-1].Add(member);
+                        tileListEnemies[x+1, y-1].Add(member);
+                        tileListEnemies[x-1, y+1].Add(member);
+                    }
                     //Console.WriteLine("Enemy x: " + member.xPos + " added to x tile: " + x);
                 }
                 else

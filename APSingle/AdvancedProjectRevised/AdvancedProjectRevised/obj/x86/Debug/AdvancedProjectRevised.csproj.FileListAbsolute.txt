@@ -112,3 +112,18 @@ C:\Documents and Settings\student\Desktop\Adam doesnt want to lose his work\Adva
 C:\Documents and Settings\student\Desktop\Adam doesnt want to lose his work\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
 C:\Documents and Settings\student\Desktop\Adam doesnt want to lose his work\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
 C:\Documents and Settings\student\Desktop\Adam doesnt want to lose his work\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.pdb
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.dll
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.dll
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.dll
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml

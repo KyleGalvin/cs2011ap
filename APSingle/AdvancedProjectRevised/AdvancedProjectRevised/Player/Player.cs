@@ -195,7 +195,7 @@ namespace AP
             float len = (float)Math.Sqrt(x * x + y * y);
             float moveX;
             float moveY;
-            if (xPos + x * this.speed < 7 && xPos + x * this.speed > -8 && yPos + y * this.speed < 6 && yPos + y * this.speed > -7) //wallCheck
+            if (xPos + x * this.speed < ClientProgram.collisionAI.posXBound && xPos + x * this.speed > ClientProgram.collisionAI.negXBound && yPos + y * this.speed < ClientProgram.collisionAI.posYBound && yPos + y * this.speed > ClientProgram.collisionAI.negYBound) //wallCheck
             {
                 if (ClientProgram.multiplayer)
                 {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <level1>
   Level 1 - ROFLPewPew
   <!-- Vieiwing Distance -->
@@ -7,41 +7,52 @@
   <objects>
 	<!-- Enemy Spawns -->
 	<spawnObject>
-		<spawn x="-8" y="-5">Spawn1</spawn>
+		<spawn x="-8" y="-13">Spawn1</spawn>
 		<enemyType num="100" type="zombie"/>
 		<enemyType num="20" type="fastZombie"/>
 	</spawnObject>
 	<spawnObject>
-		<spawn x="8" y="5">Spawn2</spawn>
+		<spawn x="8" y="-13">Spawn2</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+	<spawnObject>
+		<spawn x="8" y="1">Spawn3</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+	<spawnObject>
+		<spawn x="-8" y="1">Spawn4</spawn>
 		<enemyType num="100" type="zombie"/>
 		<enemyType num="20" type="fastZombie"/>
 	</spawnObject>
     
-	<!-- Boss -->
-	<boss type="StationaryBoss" x="20" y="20" life="1000"/>  
 	
 	<!-- Walls -->
 	<wallObject>
-		<wall id="1" x="-3" y="2" scale="1" width="4" height="1"/>
+		<wall id="1" x="-3" y="5" scale="1" width="8" height="1"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="-3" y="-8" scale="1" width="1" height="5"/>
+		<wall id="1" x="-3" y="2" scale="1" width="1" height="3"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="3" y="-6" scale="1" width="1" height="5"/>
+		<wall id="1" x="4" y="2" scale="1" width="1" height="3"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="-3" y="-10" scale="1" width="7" height="1"/>
-	</wallObject>
-	<!--allObject>
-		<wall id="1" x="-8" y="-3" scale="1" width="1" height="5"/>
+		<wall id="1" x="4" y="2" scale="1" width="7" height="1"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="8" y="-7" scale="1" width="1" height="6"/>
+		<wall id="1" x="-9" y="2" scale="1" width="7" height="1"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="-8" y="-7" scale="1" width="9" height="1"/>
-	</wallObject>-->
+		<wall id="1" x="-9" y="-14" scale="1" width="1" height="17"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="10" y="-14" scale="1" width="1" height="17"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="-9" y="-14" scale="1" width="20" height="1"/>
+	</wallObject>
   </objects>
   
 </level1>

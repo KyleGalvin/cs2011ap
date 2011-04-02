@@ -18,6 +18,8 @@ namespace AP
         public static float tankScale = 0.12f;
         public const int FAST = 2;
         public static float fastScale = 0.06f;
+        public const int BOSS = 3;
+        public static float bossScale = 1.0f;
 
         public static int drawNumber;
         bool incWalk = true;
@@ -84,6 +86,14 @@ namespace AP
                 health = (int)Life.Fast;
                 speed = (float)0.12;
                 radius = 0.25f * tankScale / normalScale;
+            }
+            else if (type == BOSS)
+            {
+                scale = bossScale;
+                health = (int)Life.Boss;
+                speed = 0;
+                radius = 0.25f * bossScale / normalScale * 2;
+                angle = -90;
             }
         }
 
@@ -212,7 +222,10 @@ namespace AP
                 legAngle -= 8;
                 if (legAngle < -35)
                     incWalk = true;
-            } 
+            }
+
+            if (type == BOSS) //boss doesn't move
+                return; //returning here still animates him though
 
             float len = (float)Math.Sqrt(x * x + y * y);
             float moveX;
@@ -222,7 +235,7 @@ namespace AP
                 if (!ServerProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
                     move(x / len, y / len); //free to move where you want
                 else
-                { //standing in something, move away from it
+                { //standing in something, move away from it                    
                     x = moveX - xPos;
                     y = moveY - yPos;
 
