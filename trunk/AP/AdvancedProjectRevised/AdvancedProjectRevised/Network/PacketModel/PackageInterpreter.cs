@@ -228,6 +228,7 @@ public class PackageInterpreter
                 result.Add(BitConverter.GetBytes(p.yPos));
                 result.Add(BitConverter.GetBytes(p.xVel));
                 result.Add(BitConverter.GetBytes(p.yVel));
+                result.Add(BitConverter.GetBytes(p.health));
                 break;
             case Type.Powerup:
                 Console.WriteLine("Powerup");

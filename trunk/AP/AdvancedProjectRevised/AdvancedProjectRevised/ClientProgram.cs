@@ -572,18 +572,20 @@ namespace AP
         /// </summary>
         private void DrawOtherGUI()
         {
-            var horizontalInc = 0;
-            for (int i = 0; i < gameState.Players.Count; i++)
+            var i = 0;
+            int horizontalInc = 0;
+            foreach (var x in gameState.Players.Where(x=>x.playerId!=gameState.myUID))
             {
-                horizontalInc = i*37; ;
+                horizontalInc = i*37;
                 GL.Color3(0.0f, 0.0f, 1.0f);
-                imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
+                imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 0.01f * x.health);
                 GL.Color3(1.0f, 1.0f, 1.0f);
                 imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
                 GL.Color3(0.0f, 0.0f, 1.0f);
-                textHandler.writeText("Player " + 2, 2, 12.0f + horizontalInc, 6.0f, 0);
-                textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
+                textHandler.writeText("Player " + x.playerId , 2, 12.0f + horizontalInc, 6.0f, 0);
+                i++;
             }
+            
         }
 
         /// <summary>
