@@ -29,7 +29,7 @@ namespace AP
         private UInt16 shotgunBulletCount = 0;
         public bool shotgunEquipped = false;
 
-        public int rifleAmmo = 50;
+        public int rifleAmmo = 60;
         public int rifleBurstCooldown = 0;
         public int shotgunAmmo = 10;
 
@@ -68,7 +68,6 @@ namespace AP
                 if (pistolEquipped)
                 {
                     bulletCooldown = 10;
-                    ClientProgram.soundHandler.play(SoundHandler.EXPLOSION);
                     return true;
                 }
                 else if (rifleEquipped)
@@ -89,7 +88,6 @@ namespace AP
                     }
                     else
                     {
-                        ClientProgram.soundHandler.play(SoundHandler.EXPLOSION);
                         return true;
                     }
                 }
@@ -100,7 +98,6 @@ namespace AP
                         equipPistol();
                     else
                     {
-                        ClientProgram.soundHandler.play(SoundHandler.EXPLOSION);
                         return true;
                     }
                 }                
@@ -203,17 +200,21 @@ namespace AP
         {
             if (pistolEquipped)
             {
+                ClientProgram.soundHandler.play(SoundHandler.SILENCER);
                 bulletList.Add(new Bullet(player.position, defaultVelocity, 40));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
             }
             else if (rifleEquipped)
             {
+                ClientProgram.soundHandler.play(SoundHandler.GUNSHOT);
                 bulletList.Add(new Bullet(player.position, defaultVelocity, 30));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
                 rifleAmmo--;
             }
             else if (shotgunEquipped)
             {
+                ClientProgram.soundHandler.play(SoundHandler.EXPLOSION);
+
                 float mx = (float)(mousePosition.X - screenSize.X / 2) / (screenSize.X * 0.3f);
                 float my = (float)(mousePosition.Y - screenSize.Y / 2) / (screenSize.Y * 0.3f);
 

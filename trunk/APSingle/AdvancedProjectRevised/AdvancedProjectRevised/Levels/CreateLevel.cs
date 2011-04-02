@@ -36,6 +36,9 @@ namespace AP
                     doc.Load("level1.xml");
                     //doc.Load("level2.xml");
                     break;
+                case 2:
+                    doc.Load("level2.xml");
+                    break;
                 default:
                     break;
             }

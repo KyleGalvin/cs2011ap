@@ -40,14 +40,26 @@ namespace AP
         {
             return width[imageNum] * percentwid;
         }
+
+        private float calculateCurrentHeight(int imageNum, float percentHeight)
+        {
+            return height[imageNum] * percentHeight;
+        }
+
         public void drawImage(int imageNum, float x, float y, float size, float percentwid)
         {
             // Write something centered in the viewport, set color to white to draw in proper color
             textImage.drawImageAt(size, x, y, 0, calculateCurrentWidth(imageNum,percentwid), height[imageNum], imageNum);
+        }
+
+        public void drawImage(int imageNum, float x, float y, float size, float percentwid, float percentHeight)
+        {
+            // Write something centered in the viewport, set color to white to draw in proper color
+            textImage.drawImageAt(size, x, y, 0, calculateCurrentWidth(imageNum, percentwid), calculateCurrentHeight(imageNum, percentHeight), imageNum);
 
         }
 
-        public void drawImage(int imageNum, float x, float y, float size, float percentwid, float rotate)
+        public void drawImageRotate(int imageNum, float x, float y, float size, float percentwid, float rotate)
         {
             // Write something centered in the viewport, set color to white to draw in proper color
             textImage.drawImageAt(size, x, y, rotate, calculateCurrentWidth(imageNum, percentwid), height[imageNum], imageNum);

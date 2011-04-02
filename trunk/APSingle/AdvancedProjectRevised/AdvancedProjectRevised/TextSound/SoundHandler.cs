@@ -22,11 +22,24 @@ public class SoundHandler
     public const String TANK_ZOMBIE2 = "../../Sounds/tankzombie2.wav";
     public const String TANK_ZOMBIE3 = "../../Sounds/tankzombie3.wav";
     public const String TANK_ZOMBIE4 = "../../Sounds/tankzombie4.wav";
-    public const String BACKGROUND = "../../Sounds/bg2.wav";
+    public const String BOSS1 = "../../Sounds/roar1.wav";
+    public const String BOSS2 = "../../Sounds/roar2.wav";
+    public const String BOSS3 = "../../Sounds/roar3.wav";
+    public const String BOSS4 = "../../Sounds/roar4.wav";
+    public const String BOSS5 = "../../Sounds/roar5.wav";
+    public const String SMASH = "../../Sounds/rumble.wav";
+    public const String DEAD = "../../Sounds/playerdead.wav";
+    public const String BACKGROUND = "../../Sounds/bg1.wav";
+    public const String BACKGROUND2 = "../../Sounds/bg2.wav";
+    public const String BOSSBACKGROUND = "../../Sounds/bossmusic.wav";
     public const String OMGHERETHECOME = "../../Sounds/HereTheyCome.wav";
+    public const String VICTORY = "../../Sounds/victory.wav";
     private const int maxSounds = 10;
-    private Boolean soundsOn = true;
+    public Boolean soundsOn = true;
     public bool pressingF1 = false;
+    public bool playedDeadSound = false;
+
+    public bool playingVictory = false;
 
     public int injuredSoundCooldown = 0;
     public int zombieScreamCooldown = 0; 
@@ -52,6 +65,25 @@ public class SoundHandler
         ac = new AudioContext();
     }
 
+    public String randomBossSound()
+    {
+        Random rand = new Random();
+        switch (rand.Next(0, 5))
+        {
+            case 0:
+                return BOSS1;
+            case 1:
+                return BOSS2;
+            case 2:
+                return BOSS3;
+            case 3:
+                return BOSS4;
+            case 4:
+                return BOSS5;
+
+        }
+        return BOSS2; //just in case
+    }
     public String randomZombieSound()
     {
         Random rand = new Random();
@@ -119,8 +151,7 @@ public class SoundHandler
     // plays a full-length song and loops it continuously
     public void playSong(String soundPath)
     {
-        if (soundsOn)
-        {
+        
             // stop playback of the current song
             AL.SourceStop(songSource);
             AL.DeleteSource(songSource);
@@ -138,17 +169,17 @@ public class SoundHandler
             AL.Source(songSource, ALSourcei.Buffer, songBuffer); // attach the buffer to a source
             AL.Source(songSource, ALSourceb.Looping, true);
 
-            // start playback
-            AL.SourcePlay(songSource);
-        }
+            if (soundsOn)
+            {
+                // start playback
+                AL.SourcePlay(songSource);
+            }
     }
 
     // plays a sound effect once (no looping)
     public void play(String soundPath)
     {
 
-        if (soundsOn)
-        {
             if (audioList[arraySpot] != null)
             {
                 // dispose the current AudioReader if it exists
@@ -172,7 +203,10 @@ public class SoundHandler
             AL.Source(sourceList[arraySpot], ALSourcei.Buffer, bufferList[arraySpot]); // attach the buffer to a source
 
             // start playback
-            AL.SourcePlay(sourceList[arraySpot]);
+            if (soundsOn)
+            {
+                AL.SourcePlay(sourceList[arraySpot]);
+            }
 
             // increment the array location
             arraySpot++;
@@ -182,6 +216,5 @@ public class SoundHandler
             {
                 arraySpot = 0;
             }
-        }
     }
 }

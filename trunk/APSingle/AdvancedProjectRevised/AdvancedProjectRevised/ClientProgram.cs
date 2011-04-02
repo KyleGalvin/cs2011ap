@@ -23,6 +23,9 @@ namespace AP
         public static int loadedBloodTexture;
         public static int loadedObjectBullet;
         public static int loadedObjectCrate;
+        public static int loadedCrackedGroundTexture;
+        public static int loadedBossMouth;
+        public static int loadedBossEye;
         public EffectsHandler effectsHandler = new EffectsHandler();
 
         public static SoundHandler soundHandler;
@@ -31,7 +34,12 @@ namespace AP
         private int imageLifeBarBG;
         private int imageLifeBar;
         private int imageGameOver;
+        private int imageYouWin;
         private int imageBenson;
+        private int imageSoundOn;
+        private int imageSoundOff;
+        private int imageLevelOne;
+        private int imageLevelTwo;
 
         private int imagePistolSelected;
         private int imagePistolAvailable;
@@ -72,12 +80,12 @@ namespace AP
         public static bool multiplayer = false;
         private Player player;
 
-        private bool shakeScreen = true;
-        private bool incXShake = true;
-        private float xShake = 0;
-        private bool incYShake = true;
-        private float yShake = 0;
+        public int bossSpawnCooldown = 2;
+        public int bossSpawnWaveCooldown = 50;
+        public int bossWaveCount = 1;
+        public static bool bossKilled = false;
 
+        public int timeToShowLevel = 48;
 
         /// <summary>Creates a window with the specified title.</summary>
         public ClientProgram()
@@ -116,9 +124,8 @@ namespace AP
         /// <param name="e">Not used.</param>
         protected override void OnLoad(EventArgs e)
         {
-            // Create 
             gameState = new GameState();
-            level = new CreateLevel(1);
+            level = new CreateLevel(currentLevel);
             level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
 
             soundHandler = new SoundHandler();
@@ -141,8 +148,13 @@ namespace AP
             imageShotgunAvailable = imageHandler.loadImage("Objects//Guns//Shotgun_available.png");
             imageShotgunUnavailable = imageHandler.loadImage("Objects//Guns//Shotgun_unavailable.png");
 
+            imageLevelOne= imageHandler.loadImage("Objects//level1.png"); 
+            imageLevelTwo = imageHandler.loadImage("Objects//level2.png");
             imageGameOver = imageHandler.loadImage("Objects//GameOver.png");
+            imageYouWin = imageHandler.loadImage("Objects//YouWin.png");
             imageBenson = imageHandler.loadImage("Objects//BensonHead.png");
+            imageSoundOn = imageHandler.loadImage("Objects//soundON.png");
+            imageSoundOff = imageHandler.loadImage("Objects//soundOFF.png");
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
@@ -153,8 +165,8 @@ namespace AP
             GL.EnableClientState(ArrayCap.IndexArray);
 
             //Load Mesh Data into a buffer to be referenced in the future.
-            loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
-            loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass.png", 5);
+            loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//stoneWall.png", 1.0f);
+            loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//dry_grass.png", 5);
             loadedObjectBullet = loadedObjects.LoadObject("Objects//bullet.obj", "Objects//bullet.png", 0.04f);
             loadedObjectCrate = loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//rifleCrate.png", 0.5f);
                 loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//shotgunCrate.png", 0.5f);
@@ -187,11 +199,28 @@ namespace AP
             loadedObjects.LoadObject("Objects//PlayerLeftArm.obj", "Objects//FastZombie.png", Zombie.fastScale);
             loadedObjects.LoadObject("Objects//PlayerRightArm.obj", "Objects//FastZombie.png", Zombie.fastScale);
 
+            //boss
+            loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//BOSS.png", Zombie.bossScale);
+            loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//BOSS.png", Zombie.bossScale);
+            loadedObjects.LoadObject("Objects//PlayerRightLeg.obj", "Objects//BOSS.png", Zombie.bossScale);
+            loadedObjects.LoadObject("Objects//BossLeftArm.obj", "Objects//BOSS.png", Zombie.bossScale);
+            loadedObjects.LoadObject("Objects//BossRightArm.obj", "Objects//BOSS.png", Zombie.bossScale);
+
 
             loadedBloodTexture = loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood1.png", 0.4f);
             loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood2.png", 0.4f);
             loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood3.png", 0.4f);
             loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood4.png", 0.4f);
+
+            loadedCrackedGroundTexture = loadedObjects.LoadObject("Objects//square.obj", "Objects//CrackedGround.png", 3.0f);
+
+            loadedBossMouth = loadedObjects.LoadObject("Objects//square.obj", "Objects//mouth1.png", 1.0f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//mouth2.png", 1.0f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//mouth3.png", 1.0f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//mouth4.png", 1.0f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//mouth5.png", 1.0f);
+
+            loadedBossEye = loadedObjects.LoadObject("Objects//square.obj", "Objects//eye.png", 0.3f);
 
             if (multiplayer)
             {
@@ -207,6 +236,35 @@ namespace AP
                 gameState.Players.Add(player);
                 setUpLevel();
                 collisionAI.addToPlayerList(ref player);
+            }
+        }
+
+        private void loadNewLevel()
+        {
+            gameState = new GameState();
+            level = new CreateLevel(currentLevel);
+            effectsHandler = new EffectsHandler();
+            xPosSquares.Clear();
+            yPosSquares.Clear();
+            heightSquares.Clear();
+            widthSquares.Clear();
+            xPosSpawn.Clear();
+            yPosSpawn.Clear();
+            level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
+            gameState.Players.Add(player);
+            player.xPos = 0;
+            player.yPos = 0;
+            setUpLevel();
+            zombieCount = 0;
+
+            if (currentLevel == 2)
+            {
+                collisionAI.posXBound = 9;
+                collisionAI.posYBound = 1;
+                collisionAI.negXBound = -9;
+                collisionAI.negYBound = -14;
+                loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass.png", 5);
+                loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
             }
         }
 
@@ -243,6 +301,11 @@ namespace AP
         /// <param name="e">Contains timing information.</param>
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+
+            /*System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap("Objects//Guns//Rifle_available.png");
+            System.Windows.Forms.Cursor myCursor = new System.Windows.Forms.Cursor(bitmap.GetHicon());
+            System.Windows.Forms.Cursor.Current = myCursor; */ 
+
             GL.Color3(1.0f, 1.0f, 1.0f); //reset colors
            if (gameState.Players.Count > 0)
            {
@@ -255,35 +318,7 @@ namespace AP
                  Matrix4d camera = Matrix4d.LookAt(OpenTK.Vector3d.Multiply(viewDirection, viewDist), OpenTK.Vector3d.Zero, up);
                  GL.LoadMatrix(ref camera);
 
-                 if (shakeScreen)
-                 {
-                     if (incXShake)
-                     {
-                         xShake += 0.2f;
-                         if (xShake >= 0.4f)
-                             incXShake = false;
-                     }
-                     else
-                     {
-                         xShake -= 0.2f;
-                         if (xShake <= -0.4f)
-                             incXShake = true;
-                     }
-
-                     if (incYShake)
-                     {
-                         yShake += 0.15f;
-                         if (yShake >= 0.4f)
-                             incYShake = false;
-                     }
-                     else
-                     {
-                         yShake -= 0.15f;
-                         if (yShake <= -0.4f)
-                             incYShake = true;
-                     }
-                     GL.Translate(xShake, yShake, 0);
-                 }
+                 effectsHandler.shakeTheScreen();                 
 
                  if (multiplayer)
                  {
@@ -359,10 +394,14 @@ namespace AP
                  {
                      foreach (var member in gameState.Enemies)
                      {
+                         GL.PushMatrix();
+                         if (member.type == Zombie.BOSS)
+                             effectsHandler.translateForBoss();
                          if (player.health > 0)
                              member.draw();
                          else
                              member.drawVictory();
+                         GL.PopMatrix();
                      }
                  }
 
@@ -370,11 +409,11 @@ namespace AP
 
                  GL.Color3(1.0f, 1.0f, 1.0f);//resets the colors so the textures don't end up red
                  //change this to be the same way as you do the walls
-                 for (int x = 0; x < 5; x++)
-                     for (int y = 0; y < 5; y++)
+                 for (int x = 0; x < 10; x++)
+                     for (int y = 0; y < 10; y++)
                      {
                          GL.PushMatrix();
-                         GL.Translate(-10 + x * 5.75, -10 + y * 5.75, 0);
+                         GL.Translate(-20 + x * 5.75, -20 + y * 5.75, 0);
                          loadedObjects.DrawObject(loadedObjectGrass); //grassssssssssssss
                          GL.PopMatrix();
                      }
@@ -431,9 +470,16 @@ namespace AP
                         GL.Color3(1.0f, 0.0f, 0.0f);
                         textHandler.writeText("Player " + (p.playerId + 1), 2, 55.0f, 98.1f, 0);
                         textHandler.writeText("Score: " + p.score, 2, 87.0f, 98.1f, 0);
-
-                        //gun images
+                        
                         GL.Color3(1.0f, 1.0f, 1.0f);
+                        //sound off/on images
+                        if( !soundHandler.soundsOn )
+                            imageHandler.drawImage(imageSoundOff, 92.0f, 92.0f, 0.6f, 1.0f);
+                        else
+                            imageHandler.drawImage(imageSoundOn, 92.0f, 92.0f, 0.6f, 1.0f);
+                        
+                        //gun images
+                        
                         if (p.weapons.pistolEquipped)
                             imageHandler.drawImage(imagePistolSelected, 0.7f, 89.0f, 1.0f, 1.0f);
                         else
@@ -455,15 +501,27 @@ namespace AP
                     }
                 }
 
-                if (player.health <= 0)
+                if (bossKilled)
+                {
+                    imageHandler.drawImage(imageYouWin, 12.0f, 60.0f, 3.0f, 1.0f);
+                }
+                else if (player.health <= 0)
                 {
                     imageHandler.drawImage(imageGameOver, 12.0f, 60.0f, 3.0f, 1.0f);
-                    imageHandler.drawImage(imageBenson, 50.0f, 30.0f, 2.0f, 1.0f, imageHandler.bensonRotate);
+                    imageHandler.drawImageRotate(imageBenson, 50.0f, 30.0f, 2.0f, 1.0f, imageHandler.bensonRotate);
                     imageHandler.bensonRotate += 5;
+                }
+                else if (timeToShowLevel > 0)
+                {
+                    if (currentLevel == 1)
+                        imageHandler.drawImage(imageLevelOne, 38.0f, 60.0f, 2.0f, 1.0f);
+                    else if (currentLevel == 2)
+                        imageHandler.drawImage(imageLevelTwo, 38.0f, 60.0f, 2.0f, 1.0f);
                 }
 
                //ADAM
                //move this into the for loop as an else     
+               /*
                 int horizontalInc = 0;
                 GL.Color3(0.0f, 0.0f, 1.0f);
                 imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
@@ -489,7 +547,20 @@ namespace AP
                 imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
                 GL.Color3(0.9f, 0.9f, 0.2f);
                 textHandler.writeText("Player " + 4, 2, 12.0f + horizontalInc, 6.0f, 0);
-                textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
+                textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);*/
+
+                if (effectsHandler.bossSpawned)
+                {
+                    Zombie boss = (Zombie)gameState.Enemies.Where(y => y.type == Zombie.BOSS).FirstOrDefault();
+                    if (boss != null)
+                    {
+                        GL.Color3(0.7f, 0.0f, 0.7f);
+                        textHandler.writeText("Big Scary Purple Zomble", 3, 50, 7, 0);
+                        imageHandler.drawImage(imageLifeBar, 2.7f, 1.65f, 1.95f, 1.89f * (boss.health / (float)Enemy.Life.Boss) * 0.01f * 100, 0.5f);
+                        GL.Color3(1.0f, 1.0f, 1.0f);
+                        imageHandler.drawImage(imageLifeBarBG, 0.1f, 0, 1.95f, 1.0f, 0.5f);
+                    }
+                }
 
                 SwapBuffers();
             }
@@ -516,7 +587,8 @@ namespace AP
         /// </summary>
         /// <param name="e">Contains timing information for framerate independent logic.</param>
         protected override void OnUpdateFrame(FrameEventArgs e)
-        {
+        {         
+            
             if (Keyboard[Key.P])
             {
             }
@@ -529,6 +601,8 @@ namespace AP
                     player.walking = false;
 
                 effectsHandler.updateEffects();
+                effectsHandler.updateBossEyes(player.xPos);
+                timeToShowLevel--;
 
                 if (player.health > 0)
                 {
@@ -696,7 +770,7 @@ namespace AP
                         if ((float)Math.Sqrt(diffX * diffX + diffY * diffY) <= player.radius + crate.radius)
                         {
                             if (crate.crateType == 0)
-                                player.weapons.rifleAmmo += 25;
+                                player.weapons.rifleAmmo += 30;
                             else if (crate.crateType == 1)
                                 player.weapons.shotgunAmmo += 5;
                             cratesToRemove.Add(crate);
@@ -748,8 +822,7 @@ namespace AP
                     {
                         foreach (var spawn in spawns)
                         {
-                            spawn.draw();
-                            if (zombieIterator == 40)
+                            if (zombieIterator >= 40)
                             {
                                 lock (gameState)
                                 {
@@ -772,6 +845,85 @@ namespace AP
                             enemySpawned = false;
                         }
                     }
+                    else
+                    {
+                        if (gameState.Enemies.Count == 0 && effectsHandler.bossSpawned == false && currentLevel == 2)
+                        { //SPAWN THE BOSS!!!
+                            soundHandler.stopSong();
+                            soundHandler.playSong(SoundHandler.BOSSBACKGROUND);
+                            soundHandler.play(SoundHandler.SMASH);
+                            effectsHandler.bossSpawned = true;
+                            Enemy enemy = new Zombie(100000); //get this to have it's own ID?
+                            enemy.setPosition(0, 3);
+
+                            gameState.Enemies.Add(enemy);
+                            gameState.Enemies.Last().changeSubtype(Zombie.BOSS);
+
+                            viewDist = 13;
+                            viewDirection.Y = -1.5;
+                        }
+                        else if (effectsHandler.bossSpawned == true && currentLevel == 2)
+                        {
+                            if ((Zombie)gameState.Enemies.Where(y => y.type == Zombie.BOSS).FirstOrDefault() == null)
+                            {
+                                if (!soundHandler.playingVictory)
+                                {
+                                    soundHandler.playingVictory = true;
+                                    soundHandler.stopSong();
+                                    soundHandler.playSong(SoundHandler.VICTORY);
+                                }
+                                bossKilled = true;
+                                gameState.Enemies.Clear();
+                            }
+                            else
+                            {
+                                if (bossSpawnWaveCooldown <= 0)
+                                {
+                                    bossSpawnWaveCooldown++;
+                                    bossSpawnCooldown--;
+                                    if (bossSpawnWaveCooldown == -1)
+                                    {
+                                        bossSpawnWaveCooldown = 200;
+                                        bossWaveCount = (bossWaveCount + 1) % 3 + 1;
+                                    }
+                                }
+                                else
+                                {
+                                    bossSpawnWaveCooldown--;
+                                    if (bossSpawnWaveCooldown == 1)
+                                        bossSpawnWaveCooldown = -200;
+                                }
+
+                                if (bossSpawnCooldown <= 0)
+                                {
+                                    Enemy enemy = new Zombie(100001); //get this to have it's own ID?
+                                    enemy.setPosition(0, 3);
+
+                                    gameState.Enemies.Add(enemy);
+                                    if (bossWaveCount == 2)
+                                    {
+                                        gameState.Enemies.Last().changeSubtype(Zombie.FAST);
+                                        bossSpawnCooldown = 16;
+                                    }
+                                    else if (bossWaveCount == 3)
+                                    {
+                                        gameState.Enemies.Last().changeSubtype(Zombie.TANK);
+                                        bossSpawnCooldown = 24;
+                                    }
+                                    else
+                                        bossSpawnCooldown = 8;
+                                }
+                            }
+                        }
+                        else if (gameState.Enemies.Count == 0 && currentLevel == 1)
+                        {
+                            timeToShowLevel = 48;
+                            currentLevel = 2;
+                            soundHandler.stopSong();
+                            soundHandler.playSong(SoundHandler.BACKGROUND2);
+                            loadNewLevel();
+                        }
+                    }
                 }
 
 
@@ -792,19 +944,23 @@ namespace AP
                             enemyHit.health--;
                             tmpBullet.Add(bullet);
                             bullet.timestamp = -1;
-                            if (enemyHit.type == Zombie.NORMAL || enemyHit.type == Zombie.FAST)
+                            soundHandler.zombieScreamCooldown--;
+                            if (soundHandler.zombieScreamCooldown <= 0)
                             {
-                                soundHandler.zombieScreamCooldown--;
+                                soundHandler.zombieScreamCooldown = rand.Next(0, 8);
 
-                                if (soundHandler.zombieScreamCooldown <= 0)
+                                if (enemyHit.type == Zombie.NORMAL || enemyHit.type == Zombie.FAST)
                                 {
                                     soundHandler.play(soundHandler.randomZombieSound());
-                                    soundHandler.zombieScreamCooldown = rand.Next(0, 8); 
                                 }
-                            }
-                            else if (enemyHit.type == Zombie.TANK)
-                            {
-                                soundHandler.play(soundHandler.randomTankSound());
+                                else if (enemyHit.type == Zombie.TANK)
+                                {
+                                    soundHandler.play(soundHandler.randomTankSound());
+                                }
+                                else if (enemyHit.type == Zombie.BOSS)
+                                {
+                                    soundHandler.play(soundHandler.randomBossSound());
+                                }
                             }
                             if (enemyHit.health <= 0)
                             {
@@ -840,6 +996,14 @@ namespace AP
                             {
                                 ClientProgram.soundHandler.play(SoundHandler.INJURED);
                                 ClientProgram.soundHandler.injuredSoundCooldown = 14;
+                            }
+                        }
+                        else
+                        {
+                            if (!ClientProgram.soundHandler.playedDeadSound)
+                            {
+                                ClientProgram.soundHandler.playedDeadSound = true;
+                                ClientProgram.soundHandler.play(SoundHandler.DEAD);
                             }
                         }
                         effectsHandler.addBlood(player.xPos, player.yPos);

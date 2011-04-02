@@ -22,7 +22,7 @@ namespace AP
 		#region Enums (2) 
 
         protected enum Damage { None = 0, Low = 1, Medium = 3, High = 5 }
-        protected enum Life { Zombie = 1, Tank = 10, Fast = 2, Hardest = 3, Boss = 100 }
+        public enum Life { Zombie = 1, Tank = 10, Fast = 2, Hardest = 3, Boss = 100 }
 
 		#endregion Enums 
 
