@@ -110,14 +110,14 @@ public class PackWorker
             if ((Type)t == Type.AI)
             {
                 List<AP.Enemy> result = new List<AP.Enemy>();
-                result.Add(CreateAI(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
+                result.Add(CreateAI(pack.body.GetRange((int)(i * myTypeSize) + 1, (int) myTypeSize)));
                 State.Enemies.AddRange(result);
                 Console.WriteLine("Created {0} AI objects from remote network command!", result.Count);
             }
             else if ((Type)t == Type.Player)
             {
                 List<AP.Player> result = new List<AP.Player>();
-                result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
+                result.Add(CreatePlayer(pack.body.GetRange((int)(i * myTypeSize) + 1, (int) myTypeSize)));
                 result.Last().modelNumber = ClientProgram.loadedObjectPlayer;
                 State.Players.AddRange(result);
                 Console.WriteLine("Created {0} Player objects from remote network command!", result.Count);
@@ -126,7 +126,7 @@ public class PackWorker
             {
                 List<AP.Bullet> result = new List<AP.Bullet>();
 
-                result.Add(CreateBullet(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
+                result.Add(CreateBullet(pack.body.GetRange((int)(i * myTypeSize) + 1, (int) myTypeSize)));
                 State.Bullets.AddRange(result);
 
                 Console.WriteLine("Created {0} Bullet objects from remote network command!", result.Count);
@@ -135,7 +135,7 @@ public class PackWorker
             {
                 List<AP.Crate> result = new List<AP.Crate>();
 
-                result.Add(CreateCrate(pack.body.GetRange((int)(i * myTypeSize) + 1, 5)));
+                result.Add(CreateCrate(pack.body.GetRange((int)(i * myTypeSize) + 1, (int) myTypeSize)));
                 State.Crates.AddRange(result);
 
                 Console.WriteLine("Created {0} Crates objects from remote network command!", result.Count);
