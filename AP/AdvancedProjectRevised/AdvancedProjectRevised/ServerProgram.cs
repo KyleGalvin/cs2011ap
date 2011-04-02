@@ -17,6 +17,7 @@ namespace AP
         private int currentLevel = 1;
         private bool enemySpawned = false;
         private  GameState gameState;
+        private int ammoCounter=0;
         private System.Timers.Timer gameTime = new System.Timers.Timer(50f);
         List<int> heightSquares = new List<int>();
         CreateLevel level;
@@ -106,69 +107,29 @@ namespace AP
             }
         }
         /// <summary>
-        /// Handles the pathing.
+        /// Handles the crates.
         /// </summary>
-        private void HandlePathing()
+        private void HandleCrates()
         {
-            for (int index = gameState.Enemies.Count-1; index >=0 ; index--)
+            foreach (var p in gameState.Players)
+            {
+                foreach (Crate crate in gameState.Crates)
                 {
-                    var zombie = gameState.Enemies[index];
-                    var len4 = 999.0f;
-                    var player = new Player();
-                    //Find closest player
-                    for (var i = 0; i < gameState.Players.Count; i++)
+                    float diffX = p.xPos - crate.xPos;
+                    float diffY = p.yPos - crate.yPos;
+                    if ((float) Math.Sqrt(diffX*diffX + diffY*diffY) <= p.radius + crate.radius)
                     {
-                        float x12 = gameState.Players[i].xPos - zombie.xPos;
-                        float y12 = gameState.Players[i].yPos - zombie.yPos;
-                        var len12 = (float)Math.Sqrt(x12 * x12 + y12 * y12);
-                        if (len12 < len4)
-                        {
-                            len4 = len12;
-                            player = gameState.Players[i];
-                        }
+                        if (crate.crateType == 0)
+                            p.weapons.rifleAmmo += 25;
+                        else if (crate.crateType == 1)
+                            p.weapons.shotgunAmmo += 5;
+                        crate.timestamp = -1;
                     }
-                    var playerPos = tiles.returnTilePos(player);
-                    var enemyPos = tiles.returnTilePos(zombie);
-                    //Check to see how close the zombie is to the player
-                    float x1 = player.xPos - zombie.xPos;
-                    float y1 = player.yPos - zombie.yPos;
-                    float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
-                    if (len1 <= 1.1)
-                    {
-                        zombie.moveTowards(player);
-                    }
-                    //Find a path
-                    else if (enemyPos != null)
-                    {
-                        if (playerPos != null)
-                        {
-
-                            List<PathFinderNode> path = mPathFinder.FindPath(enemyPos[0], enemyPos[1], playerPos[0],
-                                                                             playerPos[1]);
-                            //Give next X Y Coords
-                            if (path != null && path.Count > 1)
-                            {
-                                var nextMove = tiles.returnCoords(path[1].X, path[1].Y);
-                                //Move towards them
-                                //Calculates the len between the moves
-                                float x = nextMove[0] - zombie.xPos;
-                                float y = nextMove[1] - zombie.yPos;
-                                float len = (float)Math.Sqrt(x * x + y * y);
-                                if (len < 1 && path.Count > 2)
-                                {
-                                    nextMove = tiles.returnCoords(path[2].X, path[2].Y);
-                                    zombie.moveTowards(nextMove[0], nextMove[1]);
-                                }
-                                else
-                                {
-                                    zombie.moveTowards(nextMove[0], nextMove[1]);
-                                }
-                            }
-                        }
-                    }
-                
+                }
             }
+
         }
+   
 
         /// <summary>
         /// The main game loop
@@ -177,33 +138,46 @@ namespace AP
         /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
         private void gameLoop(object sender, ElapsedEventArgs e)
         {
-            List<Bullet> bulletDelete = new List<Bullet>();
             HandleSpawning();
-            //HandlePathing();
-            foreach (Bullet bullet in gameState.Bullets)
+            for (int i = 0; i < gameState.Bullets.Count; i++)
             {
+                Bullet bullet = gameState.Bullets[i];
                 if (bullet.killProjectile())
                     bullet.timestamp = -1;
                 if (tiles.isWall(bullet.xPos, bullet.yPos))
                 {
                     bullet.timestamp = -1;
                 }
-                if( bullet.timestamp > 0)
+                if (bullet.timestamp > 0)
                     bullet.move();
-                
-                /*float moveX;
-                float moveY;
-                Enemy enemyHit;
-                bool hit = collisionAI.checkForCollision(bullet, out moveX, out moveY, out enemyHit);
-                if (hit)
-                {
-                    if (enemyHit.decreaseHealth())
-                        gameState.Enemies.Remove(enemyHit);
-                    GC.Collect();
-                    bullet.timestamp = -1;
-                }*/
             }
-
+            if(ammoCounter>=60)
+            {
+                var x=tiles.SpawnCrate();
+                //spawn ammo
+                Crate c=new Crate(new Vector2(x[0],x[1]));
+                c.timestamp = 0;
+                ammoCounter = 0;
+            }
+            else
+            {
+                ammoCounter++;
+            }
+            //for (int index  = 0; index < gameState.Players.Count; index++)
+            //{
+            //    var radius = gameState.Players[index].radius;
+            //    foreach (var bullet in gameState.Bullets.Where(y=>y.playerID!=gameState.Players[index].playerId && y.timestamp>=0))
+            //    {
+            //        float x1 = gameState.Players[index].xPos - bullet.xPos;
+            //        float y1 = gameState.Players[index].yPos - bullet.yPos;
+            //        float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
+            //        if(len1<=radius)
+            //        {
+            //            bullet.timestamp = -1;
+            //            gameState.Players[index].health -= 2;
+            //        }
+            //    }
+            //}
             net.SyncStateOutgoing();
         }
 

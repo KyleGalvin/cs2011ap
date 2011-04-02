@@ -48,8 +48,8 @@ public class PackWorker
     public AP.Bullet CreateBullet(List<byte[]> data)
     {
         Console.WriteLine("bvullet xvel: " + BitConverter.ToSingle(data[3], 0) + " yvel: " + BitConverter.ToSingle(data[4], 0));
-        Bullet b = new AP.Bullet(new OpenTK.Vector3(BitConverter.ToSingle(data[1], 0), BitConverter.ToSingle(data[2], 0), 0), new OpenTK.Vector2(BitConverter.ToSingle(data[3], 0), BitConverter.ToSingle(data[4], 0)));
-        b.setID(BitConverter.ToInt32(data[0], 0));
+        Bullet b = new AP.Bullet(new OpenTK.Vector3(BitConverter.ToSingle(data[1], 0), BitConverter.ToSingle(data[2], 0), 0), new OpenTK.Vector2(BitConverter.ToSingle(data[3], 0), BitConverter.ToSingle(data[4], 0)), (int)(BitConverter.ToInt32(data[0], 0) & 0xC0000000));
+        b.setID(BitConverter.ToInt32(data[0], 0) & 0x41111111);//bottom 30 bits are the uid, top 2 bits are the player id
         b.setAngle();
         return b;
     }
@@ -153,7 +153,7 @@ public class PackWorker
         {
             for (int i = 0; i < pack.count; i++)
             {
-                State.Players.Where(y => y.playerId == conn.playerUID).First().weapons.shoot(ref State.Bullets, new Vector3(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 2], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 3], 0), 0), new Vector2(800, 800), new Vector2(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 4], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 5], 0)));
+                State.Players.Where(y => y.playerId == conn.playerUID).First().weapons.shoot(ref State.Bullets, new Vector3(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 2], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 3], 0), 0), new Vector2(800, 800), new Vector2(BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 4], 0), BitConverter.ToSingle(pack.body[(int)(i * myTypeSize) + 5], 0)),conn.playerUID);
                 //Console.WriteLine("Player before handling move request: xPos: " + State.Bullets.Last().xPos + " yPos: " + State.Bullets.Last().yPos);
             }
         }

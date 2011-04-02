@@ -203,12 +203,12 @@ namespace AP
         {
             if (pistolEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 40));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 40,player.playerId));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
             }
             else if (rifleEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 30));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 30, player.playerId));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
                 rifleAmmo--;
             }
@@ -230,21 +230,21 @@ namespace AP
                 int spread = 100; //higher spread value makes the spread cover less area
                 Vector2 spreadTarget = new Vector2(player.xPos + xVelo * spread, player.yPos + yVelo * spread);
 
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15, player.playerId));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15, player.playerId));
                 bulletList.Last().setDirectionToPosition(spreadTarget.X + 1, spreadTarget.Y + 1);
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15, player.playerId));
                 bulletList.Last().setDirectionToPosition(spreadTarget.X - 1, spreadTarget.Y + 1);
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15, player.playerId));
                 bulletList.Last().setDirectionToPosition(spreadTarget.X - 1, spreadTarget.Y - 1);
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 15));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 15, player.playerId));
                 bulletList.Last().setDirectionToPosition(spreadTarget.X + 1, spreadTarget.Y - 1);
                 shotgunAmmo--;
             }
             else if (rocketEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 45));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 45,player.playerId));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
             }
         }
@@ -259,10 +259,10 @@ namespace AP
         /// <param name="mouseX">The mouse X.</param>
         /// <param name="mouseY">The mouse Y.</param>
         //public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
-        public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition)
+        public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition,int playerID)
         {
                 //multiplayer server side handle shoot only!
-                Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30);
+            Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30, playerID);
                 b.setDirectionByMouse(mousePosition, screenSize);
                 b.setID(ServerProgram.bulletID++);
                 bulletList.Add(b);

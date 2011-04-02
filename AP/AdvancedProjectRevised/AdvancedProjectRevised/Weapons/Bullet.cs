@@ -21,7 +21,7 @@ namespace AP
         float yVel = 0;
         public Vector3 mousePos;
         public Vector2 velocity;
-
+         public int playerID;
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -32,7 +32,7 @@ namespace AP
         /// <param name="velocity">The velocity of the bullet</param>
         /// <output>
         ///   </output>
-        public Bullet(Vector3 position, Vector3 mousePos, int life)
+        public Bullet(Vector3 position, Vector3 mousePos, int life,int _playerID)
         {
             radius = 0.1f;
             this.position = position;
@@ -42,11 +42,13 @@ namespace AP
             this.mousePos = mousePos;
             timestamp = 0;
             lifeTime = life;
+            this.playerID = _playerID;
         }
 
-        public Bullet(Vector3 position, Vector2 velocity)
+        public Bullet(Vector3 position, Vector2 velocity,int _playerID)
         {
             radius = 0.1f;
+            this.playerID = _playerID;
             this.position = position;
             xPos = position.X;
             yPos = position.Y;
