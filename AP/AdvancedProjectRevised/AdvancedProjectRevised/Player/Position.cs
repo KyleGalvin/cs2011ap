@@ -16,20 +16,20 @@ namespace AP
         public float prevXPos;
         public float prevYPos;
         public int angle = 0;
-        public Vector3 position {get; set;}
+        public Vector3 position { get; set; }
         public Vector3 velocity { get; set; }
         public int UID { get; set; }
         protected float speed { get; set; }
         public float xVel { get; set; }
         public float yVel { get; set; }
         public int enemyID;
-        public float radius{ get; set; }
+        public float radius { get; set; }
         public long timestamp = 0;
         public int health;
 
         public Position()
         {
-            timestamp =0;
+            timestamp = 0;
         }
 
         //radian constants for angle based calculations
@@ -54,7 +54,7 @@ namespace AP
             prevXPos = xPos - prevXPos;
             prevYPos = yPos - prevYPos;
             angle = (int)(Math.Atan2(prevYPos, prevXPos) * RAD_TO_DEG);
-            Console.WriteLine("angle:" + angle + " x:"+xPos+"y:"+yPos);
+            Console.WriteLine("angle:" + angle + " x:" + xPos + "y:" + yPos);
         }
 
 
@@ -66,6 +66,19 @@ namespace AP
         /// <param name="_yPos">The _y pos.</param>
         /// <param name="_xVel">The _x vel.</param>
         /// <param name="_yVel">The _y vel.</param>
+        public void Update(byte[] _xPos, byte[] _yPos, byte[] _xVel, byte[] _yVel, byte[] _health)
+        {
+            prevXPos = xPos;
+            prevYPos = yPos;
+            xPos = (float)BitConverter.ToSingle(_xPos, 0);
+            yPos = (float)BitConverter.ToSingle(_yPos, 0);
+            xVel = (float)BitConverter.ToSingle(_xVel, 0);
+            yVel = (float)BitConverter.ToSingle(_yVel, 0);
+            health = (int)BitConverter.ToInt32(_health, 0);
+
+            Console.WriteLine("Positions" + xPos + " " + yPos);
+        }
+
         public void Update(byte[] _xPos, byte[] _yPos, byte[] _xVel, byte[] _yVel)
         {
             prevXPos = xPos;
@@ -74,8 +87,8 @@ namespace AP
             yPos = (float)BitConverter.ToSingle(_yPos, 0);
             xVel = (float)BitConverter.ToSingle(_xVel, 0);
             yVel = (float)BitConverter.ToSingle(_yVel, 0);
-            
-            Console.WriteLine("Positions"+xPos + " " + yPos);
+
+            Console.WriteLine("Positions" + xPos + " " + yPos);
         }
         /*public void Dispose()
         {

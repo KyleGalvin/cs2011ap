@@ -572,32 +572,18 @@ namespace AP
         /// </summary>
         private void DrawOtherGUI()
         {
-            int horizontalInc = 0;
-            GL.Color3(0.0f, 0.0f, 1.0f);
-            imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
-            GL.Color3(1.0f, 1.0f, 1.0f);
-            imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
-            GL.Color3(0.0f, 0.0f, 1.0f);
-            textHandler.writeText("Player " + 2, 2, 12.0f + horizontalInc, 6.0f, 0);
-            textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
-
-            horizontalInc += 37;
-            GL.Color3(0.0f, 1.0f, 0.0f);
-            imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
-            GL.Color3(1.0f, 1.0f, 1.0f);
-            imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
-            GL.Color3(0.0f, 1.0f, 0.0f);
-            textHandler.writeText("Player " + 3, 2, 12.0f + horizontalInc, 6.0f, 0);
-            textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
-
-            horizontalInc += 37;
-            GL.Color3(0.9f, 0.9f, 0.2f);
-            imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
-            GL.Color3(1.0f, 1.0f, 1.0f);
-            imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
-            GL.Color3(0.9f, 0.9f, 0.2f);
-            textHandler.writeText("Player " + 4, 2, 12.0f + horizontalInc, 6.0f, 0);
-            textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
+            var horizontalInc = 0;
+            for (int i = 0; i < gameState.Players.Count; i++)
+            {
+                horizontalInc = i*37; ;
+                GL.Color3(0.0f, 0.0f, 1.0f);
+                imageHandler.drawImage(imageLifeBar, 0.7f + horizontalInc, 0.84f, 0.5f, 1.89f * 100 * 0.01f);
+                GL.Color3(1.0f, 1.0f, 1.0f);
+                imageHandler.drawImage(imageLifeBarBG, 0 + horizontalInc, 0, 0.5f, 1.0f);
+                GL.Color3(0.0f, 0.0f, 1.0f);
+                textHandler.writeText("Player " + 2, 2, 12.0f + horizontalInc, 6.0f, 0);
+                textHandler.writeText("Score: " + 100, 2, 12.0f + horizontalInc, 4.0f, 0);
+            }
         }
 
         /// <summary>
