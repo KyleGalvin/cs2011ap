@@ -121,5 +121,25 @@ namespace AP
                 }
             return false;
         }
+        private int RandomNumber(int min, int max)
+        {
+            Random random = new Random();
+            return random.Next(min, max);
+        }
+        public List<float> SpawnCrate()
+        {
+            while (true)
+            {
+                var x = RandomNumber(2, tileList.GetUpperBound(0) - 2);
+                var y = RandomNumber(2, tileList.GetUpperBound(1) - 2);
+                if(!tileList[x,y].isWall)
+                {
+                    var returnList = new List<float>();
+                    returnList.Add(tileList[x, y].Y);
+                    returnList.Add(tileList[x,y].X);
+                    return returnList;
+                }
+            }
+        }
     }
 }

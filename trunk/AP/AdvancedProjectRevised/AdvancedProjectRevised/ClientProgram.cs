@@ -399,7 +399,7 @@ namespace AP
                     if (player.weapons.canShoot())
                     {
                         soundHandler.play(SoundHandler.EXPLOSION);
-                        net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY)) }, Type.Bullet);
+                        net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY),gameState.myUID) }, Type.Bullet);
                     }
                 }
                 else

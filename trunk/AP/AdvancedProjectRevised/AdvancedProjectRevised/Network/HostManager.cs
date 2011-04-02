@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using System.Net.Sockets;
+using System.Windows.Forms;
 using OpenTK;
 using System.Collections.Generic;
 using AP;
@@ -54,6 +55,8 @@ using AP;
                 {
                     //a socket error has occured
                     Console.WriteLine(e.ToString());
+                    MessageBox.Show("Error: " + e.Message);
+                    Environment.Exit(0);
                     break;
                 }
             }

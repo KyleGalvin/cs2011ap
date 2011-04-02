@@ -226,22 +226,8 @@ public abstract class NetManager
                 playerDeleteList.Add(p);
             }
         }
-        /*foreach (Enemy e in s.Enemies)
-        {
-            if (e.timestamp > lastFrameTime.Ticks)
-            {
-                enemyUpdateList.Add(e);
-            }
-            else if (e.timestamp == 0)
-            {
-                enemyAddList.Add(e);
-            }
-            else if (e.timestamp == -1)
-            {
-                enemyDeleteList.Add(e);
-            }
-            e.timestamp = DateTime.Now.Ticks;
-        }*/
+
+
         if (playerAddList.Count > 0)
             this.SendObjs<Player>(Action.Create, playerAddList, Type.Player);
         if (playerUpdateList.Count > 0)
