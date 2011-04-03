@@ -48,6 +48,10 @@
   <ItemGroup>
     <Compile Include="AI\CollisionAI.cs" />
     <Compile Include="AI\EnemyAI.cs" />
+    <Compile Include="AI\PathFinder.cs" />
+    <Compile Include="AI\PriorityQueueB.cs" />
+    <Compile Include="AI\Tile.cs" />
+    <Compile Include="AI\Tiles.cs" />
     <Compile Include="ClientProgram.cs" />
     <Compile Include="Controls\Controls.cs" />
     <Compile Include="EffectsHandler.cs" />
@@ -75,6 +79,7 @@
     </Compile>
     <Compile Include="GameState.cs" />
     <Compile Include="Levels\CreateLevel.cs" />
+    <Compile Include="Levels\Wall.cs" />
     <Compile Include="Models\LoadedObjects.cs" />
     <Compile Include="Models\Loader.cs" />
     <Compile Include="Models\MeshData.cs" />

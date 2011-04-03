@@ -76,6 +76,11 @@ namespace AP
             //no need to move a stationary boss :)
         }
 
+        public override void moveTowards(float _x, float _y)
+        {
+            //no need to move a stationary boss :)
+        }
+
 		#endregion Methods 
     }
 }

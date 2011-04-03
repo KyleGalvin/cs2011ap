@@ -35,7 +35,7 @@ namespace AP
             //set to the boss'sesess's's's's position
             boss.changeSubtype(Zombie.BOSS);
             boss.xPos = 0;
-            boss.yPos = 3;
+            boss.yPos = 10;
         }
 
         public void updateBossEyes(float playerX)
@@ -118,7 +118,7 @@ namespace AP
             bloodXPos.Add(xPos);
             bloodYPos.Add(yPos);
             bloodTimeLeft.Add(100);
-            bloodTextureNumber.Add(ClientProgram.loadedBloodTexture + rand.Next(0, 4));
+            bloodTextureNumber.Add(ClientProgram.loadedBloodTexture + rand.Next(0, 8));
         }
 
         public void updateEffects()
@@ -177,7 +177,7 @@ namespace AP
             {
                 GL.Color3(1.0f, 1.0f, 1.0f);
                 GL.PushMatrix();
-                GL.Translate(0, 3, 0.01f);
+                GL.Translate(0, 10, 0.01f);
                 ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedCrackedGroundTexture);                
                 GL.Translate(0, 0, 6);
                 GL.Translate(0, -1.1f, 0);

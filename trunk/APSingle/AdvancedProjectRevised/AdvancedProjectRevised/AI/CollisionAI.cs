@@ -14,17 +14,12 @@ namespace AP
     {
 		#region Fields (3) 
 
+        public Tiles wallTiles;
         bool[,] blockedByWall;
         //private float TileSize = 1;
         List<Position>[,] tileListEnemies;
         List<Player> playerList = new List<Player>();
-        private int Tiles = 75;
-
-        public int posXBound = 7;
-        public int posYBound = 6;
-        public int negXBound = -8;
-        public int negYBound = -7;
-        
+        private int Tiles = 80;        
 
 		#endregion Fields 
 
@@ -259,10 +254,25 @@ namespace AP
         public bool checkForMovementCollision(Position source, out float moveAwayFromX, out float moveAwayFromY)
         {
             Enemy enemyHit;
-            //disabling the buggy wall check for now
-            //if (checkForWallCollision(source, out moveAwayFromX, out moveAwayFromY))
-                //return true;
-            return checkForCollision(source, out moveAwayFromX, out moveAwayFromY, out enemyHit);
+            if (wallTiles != null)
+            {
+                if (wallTiles.isWall(source.xPos, source.yPos))
+                {
+                    var temp = wallTiles.returnTilePos(source);
+                    if (temp != null)
+                    {
+                        var temp2 = wallTiles.returnCoords(temp[0], temp[1]);
+                        moveAwayFromX = temp2[0];
+                        moveAwayFromY = temp2[1];
+                        return true;
+                    }
+                }
+            }
+            bool returnFlag = checkForCollision(source, out moveAwayFromX, out moveAwayFromY, out enemyHit);
+            if(enemyHit != null)
+                if (enemyHit.type == Zombie.BOSS) //movement pathing with boss is ignored
+                    return false;
+            return returnFlag;
         }
 
         /// <summary>
@@ -351,23 +361,26 @@ namespace AP
                     }
                 }
                 if (x != -1 && y != -1)
-                {                    
+                {
                     tileListEnemies[x, y].Add(member);
                     if (member.type == Zombie.BOSS)
                     { //if it is a boos then it doesnt fit in a normal tile. add it to adjacent ones as well
-                        tileListEnemies[x+1, y].Add(member);
-                        tileListEnemies[x+1, y+1].Add(member);
-                        tileListEnemies[x, y+1].Add(member);
-                        tileListEnemies[x-1, y].Add(member);
-                        tileListEnemies[x-1, y-1].Add(member);
-                        tileListEnemies[x, y-1].Add(member);
-                        tileListEnemies[x+1, y-1].Add(member);
-                        tileListEnemies[x-1, y+1].Add(member);
+                        tileListEnemies[x + 1, y].Add(member);
+                        tileListEnemies[x + 1, y + 1].Add(member);
+                        tileListEnemies[x, y + 1].Add(member);
+                        tileListEnemies[x - 1, y].Add(member);
+                        tileListEnemies[x - 1, y - 1].Add(member);
+                        tileListEnemies[x, y - 1].Add(member);
+                        tileListEnemies[x + 1, y - 1].Add(member);
+                        tileListEnemies[x - 1, y + 1].Add(member);
                     }
                     //Console.WriteLine("Enemy x: " + member.xPos + " added to x tile: " + x);
                 }
                 else
+                {
                     Console.WriteLine("Failed to add an enemy to the tile list");
+                    member.health = 0; //something bad has happened. mark the enemy for death
+                }
             }
         }
 
