@@ -12,7 +12,7 @@ namespace AP
     /// </summary>
     public class Weapon : Position
     {
-		#region Fields (14) 
+        #region Fields (14)
 
         private int bulletCooldown;
         Vector3 defaultVelocity = new Vector3(0, 0, 0);
@@ -33,9 +33,9 @@ namespace AP
         public int rifleBurstCooldown = 0;
         public int shotgunAmmo = 10;
 
-		#endregion Fields 
+        #endregion Fields
 
-		#region Constructors (1) 
+        #region Constructors (1)
 
         public Weapon()
         {
@@ -43,11 +43,11 @@ namespace AP
             bulletCooldown = 1;
         }
 
-		#endregion Constructors 
+        #endregion Constructors
 
-		#region Methods (11) 
+        #region Methods (11)
 
-		// Public Methods (11) 
+        // Public Methods (11) 
 
         public void updateTimeStamp()
         {
@@ -62,7 +62,7 @@ namespace AP
         /// </returns>
         public bool canShoot()
         {
-            
+
             if (bulletCooldown <= 0)
             {
                 if (pistolEquipped)
@@ -103,7 +103,7 @@ namespace AP
                         ClientProgram.soundHandler.play(SoundHandler.EXPLOSION);
                         return true;
                     }
-                }                
+                }
             }
             return false;
         }
@@ -203,7 +203,7 @@ namespace AP
         {
             if (pistolEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 40,player.playerId));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 40, player.playerId));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
             }
             else if (rifleEquipped)
@@ -244,7 +244,7 @@ namespace AP
             }
             else if (rocketEquipped)
             {
-                bulletList.Add(new Bullet(player.position, defaultVelocity, 45,player.playerId));
+                bulletList.Add(new Bullet(player.position, defaultVelocity, 45, player.playerId));
                 bulletList.Last().setDirectionByMouse(mousePosition, screenSize);
             }
         }
@@ -259,13 +259,40 @@ namespace AP
         /// <param name="mouseX">The mouse X.</param>
         /// <param name="mouseY">The mouse Y.</param>
         //public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
-        public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition,int playerID)
+        public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition, int playerID)
         {
-                //multiplayer server side handle shoot only!
-            Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30, playerID);
-                b.setDirectionByMouse(mousePosition, screenSize);
-                b.setID(ServerProgram.bulletID++);
-                bulletList.Add(b);
+            //multiplayer server side handle shoot only!
+            /* Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30, playerID);
+             b.setDirectionByMouse(mousePosition, screenSize);
+             b.setID(ServerProgram.bulletID++);
+             bulletList.Add(b);*/
+
+            if (rifleEquipped)
+            {
+                rifleAmmo--;
+            }
+            else if (shotgunEquipped)
+            {
+                shotgunAmmo--;
+            }
+
+        }
+        public void shoot()
+        {
+            //multiplayer server side handle shoot only!
+            /* Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30, playerID);
+             b.setDirectionByMouse(mousePosition, screenSize);
+             b.setID(ServerProgram.bulletID++);
+             bulletList.Add(b);*/
+
+            if (rifleEquipped)
+            {
+                rifleAmmo--;
+            }
+            else if (shotgunEquipped)
+            {
+                shotgunAmmo--;
+            }
 
         }
 
@@ -290,6 +317,6 @@ namespace AP
             bulletCooldown--;
         }
 
-		#endregion Methods 
+        #endregion Methods
     }
 }
