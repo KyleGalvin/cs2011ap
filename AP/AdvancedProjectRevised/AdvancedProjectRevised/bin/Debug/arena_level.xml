@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ArenaLevel>
+  Arena Level - ROFLPewPew
+  <!-- Vieiwing Distance -->
+  <viewDist dist="23"/>
+  
+  <objects>
+	<!-- Player Spawns -->
+	
+	<playerSpawnObject>
+		<playerSpawn id="0" x="-10" y="-7">Player1</playerSpawn>
+	</playerSpawnObject>
+	<playerSpawnObject>
+		<playerSpawn id="1" x="10" y="-7">Player2</playerSpawn>
+	</playerSpawnObject>
+	<playerSpawnObject>
+		<playerSpawn id="2" x="-10" y="6">Player3</playerSpawn>
+	</playerSpawnObject>
+	<playerSpawnObject>
+		<playerSpawn id="3" x="10" y="6">Player4</playerSpawn>
+	</playerSpawnObject>
+	
+	<!-- End of Player Spawns -->
+	
+	<!-- Enemy Spawns -->
+	<!-- Left Spawns -->
+	<spawnObject>
+		<spawn x="-12" y="-1">Spawn1</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+	<spawnObject>
+		<spawn x="-7" y="8">Spawn2</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+	<spawnObject>
+		<spawn x="-7" y="-8">Spawn3</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+	
+	<!-- Right Spawns -->
+	<spawnObject>
+		<spawn x="12" y="0">Spawn4</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+	<spawnObject>
+		<spawn x="8" y="8">Spawn5</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+	<spawnObject>
+		<spawn x="8" y="-8">Spawn6</spawn>
+		<enemyType num="100" type="zombie"/>
+		<enemyType num="20" type="fastZombie"/>
+	</spawnObject>
+    <!-- End Enemy Spawns -->
+	
+	<!-- Boss -->
+	<boss type="StationaryBoss" x="20" y="20" life="1000"/> 
+
+		<!-- Walls -->
+		<!-- Middle -->
+		<wallObject>
+			<wall id="1" x="0" y="-7" scale="1" width="1" height="4"/>
+		</wallObject>
+		<wallObject>
+			<wall id="1" x="0" y="-1" scale="1" width="1" height="3"/>
+		</wallObject>
+		<wallObject>
+			<wall id="1" x="0" y="4" scale="1" width="1" height="4"/>
+		</wallObject>
+		
+		<wallObject>
+			<wall id="1" x="5" y="-5" scale="1" width="3" height="1"/>
+		</wallObject>
+		<wallObject>
+			<wall id="1" x="5" y="5" scale="1" width="3" height="1"/>
+		</wallObject>
+		<wallObject>
+			<wall id="1" x="8" y="-1" scale="1" width="1" height="3"/>
+		</wallObject>
+		
+		<wallObject>
+			<wall id="1" x="-5" y="-5" scale="1" width="3" height="1"/>
+		</wallObject>
+		<wallObject>
+			<wall id="1" x="-5" y="5" scale="1" width="3" height="1"/>
+		</wallObject>
+		<wallObject>
+			<wall id="1" x="-8" y="-1" scale="1" width="1" height="3"/>
+		</wallObject>
+		
+		
+		<!-- Left -->
+		<wallObject>
+			<wall id="1" x="-12" y="-8" scale="1" width="1" height="17"/>
+		</wallObject>
+		
+		<!-- Right -->
+		<wallObject>
+			<wall id="1" x="12" y="-8" scale="1" width="1" height="16"/>
+		</wallObject>
+
+		
+		<!-- Top -->
+		<wallObject>
+			<wall id="1" x="-11" y="8" scale="1" width="24" height="1"/>
+		</wallObject>
+
+		
+		<!-- Bottom -->
+		<wallObject>
+			<wall id="1" x="-11" y="-8" scale="1" width="23" height="1"/>
+		</wallObject>
+
+	</objects>
+	
+	<!-- Walls -->
+	
+  
+</ArenaLevel>

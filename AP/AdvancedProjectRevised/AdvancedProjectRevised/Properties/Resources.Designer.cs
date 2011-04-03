@@ -60,6 +60,13 @@ namespace AdvancedProjectRevised.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap BG {
+            get {
+                object obj = ResourceManager.GetObject("BG", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap Clientbutton {
             get {
                 object obj = ResourceManager.GetObject("Clientbutton", resourceCulture);
@@ -91,6 +98,13 @@ namespace AdvancedProjectRevised.Properties {
         internal static System.Drawing.Bitmap Splash_title {
             get {
                 object obj = ResourceManager.GetObject("Splash_title", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap test {
+            get {
+                object obj = ResourceManager.GetObject("test", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

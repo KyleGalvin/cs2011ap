@@ -208,7 +208,6 @@ namespace AP
 
 
 
-            glControl1.SwapBuffers();
         }
     }
 }
