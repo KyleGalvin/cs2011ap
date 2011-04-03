@@ -46,7 +46,6 @@ using System.Collections.Generic;
             //segment number
             int i = 0;
             int bytesRead = 0;
-            Console.WriteLine("Waiting for incoming data from...");
 
             while (myPackage.IsComplete() == false)
             {//recieve body

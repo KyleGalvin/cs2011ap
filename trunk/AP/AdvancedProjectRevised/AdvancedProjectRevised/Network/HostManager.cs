@@ -36,8 +36,7 @@ using AP;
 
             client = myConnection.GetClient();
 
-            Console.WriteLine("client {0} has connected.", client.Client.RemoteEndPoint);
-
+  
 
             while (true)
             {
@@ -46,10 +45,8 @@ using AP;
                 try
                 {
                     //read package data
-                    Console.WriteLine("attempt to read pack:");
                     pack = myConnection.ReadPackage();
                     packetSwitcher(pack, myConnection);
-                    Console.WriteLine("Package recieved!");
                 }
                 catch (Exception e)
                 {

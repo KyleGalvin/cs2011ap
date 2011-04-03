@@ -262,10 +262,10 @@ namespace AP
         public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition, int playerID)
         {
             //multiplayer server side handle shoot only!
-            /* Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30, playerID);
+            Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30, playerID);
              b.setDirectionByMouse(mousePosition, screenSize);
              b.setID(ServerProgram.bulletID++);
-             bulletList.Add(b);*/
+             bulletList.Add(b);
 
             if (rifleEquipped)
             {
@@ -279,12 +279,6 @@ namespace AP
         }
         public void shoot()
         {
-            //multiplayer server side handle shoot only!
-            /* Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30, playerID);
-             b.setDirectionByMouse(mousePosition, screenSize);
-             b.setID(ServerProgram.bulletID++);
-             bulletList.Add(b);*/
-
             if (rifleEquipped)
             {
                 rifleAmmo--;

@@ -61,7 +61,6 @@ namespace AP
                     if (!blocked)
                         blockedByWall[i, j] = false;
                 }
-            Console.WriteLine("wall count{0}", wallCount);
         }
 
 		#endregion Constructors 

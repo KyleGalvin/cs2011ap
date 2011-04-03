@@ -200,12 +200,6 @@ public abstract class NetManager
             {
                 bulletAddList.Add(b);
             }
-            /*else if (b.timestamp >= lastFrameTime.Ticks)
-            {
-                bulletUpdateList.Add(b);
-                b.timestamp = -2; 
-            }*/
-
             if (b.timestamp >= 0)
                 b.timestamp = DateTime.Now.Ticks;
         }
@@ -251,9 +245,6 @@ public abstract class NetManager
             this.SendObjs<Bullet>(Action.Delete, bulletDeleteList, Type.Bullet);
         if (bulletAddList.Count > 0)
             this.SendObjs<Bullet>(Action.Create, bulletAddList, Type.Bullet);
-        if (bulletUpdateList.Count > 0)
-            this.SendObjs<Bullet>(Action.Update, bulletUpdateList, Type.Bullet);
-
         if (crateAddList.Count > 0)
             this.SendObjs(Action.Create, crateAddList, Type.Powerup);
         if (crateDeleteList.Count > 0)
@@ -295,7 +286,6 @@ public abstract class NetManager
             //wait for new incoming connection
             client = myListener.AcceptTcpClient();
             Connected = true;
-            Console.WriteLine("COUNT: " + myConnections.Count);
             //We cannot be sending out on our connections while we add a new one
             //since the list length cannot change while we iterate through the list
             lock (this)
@@ -307,7 +297,7 @@ public abstract class NetManager
             Connection lastCon = myConnections[myConnections.Count - 1];
             lastCon.myStream.myPackage.isLobby = IsLobby;
 
-            Console.WriteLine("Starting the {0}th connection", myConnections.Count);
+            Console.WriteLine("Starting the {0}th connection to IP {1}", myConnections.Count, myConnections.Last().GetClient().Client.RemoteEndPoint);
             //create a thread to handle communication
             Thread clientThread = new Thread(new ParameterizedThreadStart(HandleIncomingComm));
             clientThread.Start(myConnections[(myConnections.Count - 1)]);

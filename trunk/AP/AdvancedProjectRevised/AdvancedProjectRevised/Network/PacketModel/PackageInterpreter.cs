@@ -181,27 +181,26 @@ public class PackageInterpreter
     private List<byte[]> serialize<T>(Type t, T obj)
     {
         List<byte[]> result = new List<byte[]>();
+        Console.WriteLine("Serializing object to send over network...");
+
         //each type of object has a different composure.
         //here we define the structure of all possible types
         switch (t)
         {
-
             case Type.AI:
                 AP.Enemy e = (AP.Enemy)(object)obj;
-                Console.WriteLine("AI: {0} {1} {2}", e.UID, e.xPos, e.yPos);
+                Console.WriteLine("AI-- UID:{0} xPos:{1} yPos:{2} xVel:{3} yVel:{4}", e.UID, e.xPos, e.yPos, e.xVel, e.yVel);
                 result.Add(BitConverter.GetBytes(e.UID));
                 result.Add(BitConverter.GetBytes(e.xPos));
                 result.Add(BitConverter.GetBytes(e.yPos));
                 result.Add(BitConverter.GetBytes(e.xVel));
                 result.Add(BitConverter.GetBytes(e.yVel));
                 break;
-            case Type.Building:
-                Console.WriteLine("Building");
-                break;
             case Type.Bullet:
                 if (NetManager.myRole == "server")
                 {
                     AP.Bullet b = (AP.Bullet)(object)obj;
+                    Console.WriteLine("Bullet-- UID:{0} xPos:{1} yPos:{2} xVel:{3} yVel:{4}", b.UID, b.xPos, b.yPos,b.velocity.X,b.velocity.Y);
                     result.Add(BitConverter.GetBytes((UInt32)b.UID | (UInt32)b.playerID << 30));
                     result.Add(BitConverter.GetBytes(b.xPos));
                     result.Add(BitConverter.GetBytes(b.yPos));
@@ -211,6 +210,7 @@ public class PackageInterpreter
                 else
                 {
                     AP.Bullet b = (AP.Bullet)(object)obj;
+                    Console.WriteLine("Bullet-- UID:{0} xPos:{1} yPos:{2} MouseX:{3} MouseY:{4}", b.UID, b.xPos, b.yPos, b.velocity.X, b.velocity.Y);
                     result.Add(BitConverter.GetBytes((UInt32)b.UID | (UInt32)b.playerID << 30));
                     result.Add(BitConverter.GetBytes(b.xPos));
                     result.Add(BitConverter.GetBytes(b.yPos));
@@ -218,11 +218,9 @@ public class PackageInterpreter
                     result.Add(BitConverter.GetBytes(b.velocity.Y));
                 }
                 break;
-            case Type.Explosion:
-                Console.WriteLine("Explosion");
-                break;
             case Type.Player:
                 AP.Player p = (AP.Player)(object)obj;
+                Console.WriteLine("Player-- UID:{0} xPos:{1} yPos:{2} xVel:{3} yVel:{4} health:{5}", p.playerId, p.xPos, p.yPos, p.xVel, p.yVel, p.health);
                 result.Add(BitConverter.GetBytes(p.playerId));
                 result.Add(BitConverter.GetBytes(p.xPos));
                 result.Add(BitConverter.GetBytes(p.yPos));
@@ -233,12 +231,12 @@ public class PackageInterpreter
             case Type.Powerup:
                 
                 AP.Crate c = (AP.Crate)(object)obj;
+                Console.WriteLine("Powerup-- UID:{0} PlayerID:{1} xPos:{2} yPos:{3} Type:{4}", c.UID, c.enemyID, c.xPos, c.yPos, c.crateType);
                 result.Add(BitConverter.GetBytes(c.UID));
                 result.Add(BitConverter.GetBytes(c.enemyID));
                 result.Add(BitConverter.GetBytes(c.xPos));
                 result.Add(BitConverter.GetBytes(c.yPos));
                 result.Add(BitConverter.GetBytes(c.crateType));
-                Console.WriteLine("Powerup {0} {1} {2} {3}", c.UID,c.enemyID,c.xPos,c.yPos);
                 break;
             case Type.Move:
                 Console.WriteLine("Move");
@@ -247,7 +245,7 @@ public class PackageInterpreter
             default:
                 break;
         }
-
+        Console.WriteLine();
         return result;
     }
 
