@@ -159,7 +159,7 @@ public class PackageInterpreter
             case Type.Bullet:
                 return 0x5;
             case Type.Powerup:
-                return 0x4;
+                return 0x5;
             case Type.Connection:
                 return 0x1;
             case Type.Move:
@@ -237,6 +237,7 @@ public class PackageInterpreter
                 result.Add(BitConverter.GetBytes(c.enemyID));
                 result.Add(BitConverter.GetBytes(c.xPos));
                 result.Add(BitConverter.GetBytes(c.yPos));
+                result.Add(BitConverter.GetBytes(c.crateType));
                 Console.WriteLine("Powerup {0} {1} {2} {3}", c.UID,c.enemyID,c.xPos,c.yPos);
                 break;
             case Type.Move:

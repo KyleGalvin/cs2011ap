@@ -57,6 +57,7 @@ public class PackWorker
     public AP.Crate CreateCrate(List<byte[]> data)
     {
         Crate c = new AP.Crate(new Vector2(BitConverter.ToSingle(data[2], 0), BitConverter.ToSingle(data[3], 0)), BitConverter.ToInt32(data[0], 0));
+        c.crateType = BitConverter.ToInt32(data[4], 0);
         return c;
     }
 
