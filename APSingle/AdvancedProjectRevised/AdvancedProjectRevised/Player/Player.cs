@@ -19,6 +19,8 @@ namespace AP
         public int playerId = -1;
         public string playerName;
         public Weapon weapons = new Weapon();
+        public Tiles tiles;
+
 
         bool incWalk = true;
         float legAngle = 0.0f;
@@ -192,7 +194,7 @@ namespace AP
         /// <param name="y">The y direction that the player is trying to move.</param>
         public void move(int x, int y)
         {
-            float len = (float)Math.Sqrt(x * x + y * y);
+            /*float len = (float)Math.Sqrt(x * x + y * y);
             float moveX;
             float moveY;
             if (xPos + x * this.speed < ClientProgram.collisionAI.posXBound && xPos + x * this.speed > ClientProgram.collisionAI.negXBound && yPos + y * this.speed < ClientProgram.collisionAI.posYBound && yPos + y * this.speed > ClientProgram.collisionAI.negYBound) //wallCheck
@@ -216,6 +218,37 @@ namespace AP
                 }
             }
             
+            timestamp = DateTime.Now.Ticks;*/
+
+            if (!tiles.isWall(xPos + x * this.speed, yPos + y * this.speed))
+            {
+                float len = (float)Math.Sqrt(x * x + y * y);
+                float moveX;
+                float moveY;
+                if (xPos + x * this.speed < tiles.maxX - 1 && xPos + x * this.speed > tiles.minX + 1 && yPos + y * this.speed < tiles.maxY - 2 &&
+                    yPos + y * this.speed > tiles.minY + 1) //wallCheck
+                {
+                    if (ClientProgram.multiplayer)
+                    {
+                        //if (!ServerProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                        makeMove(x, y);
+                        //else
+                        //{
+                        //move player to middle if touching a zombie
+                        //dont get hit by a zombie in the middle or you get stuck
+                        //change this later to damage I guess
+                        //xPos = 0;
+                        //yPos = 0;
+                        //}
+                    }
+                    else
+                    {
+                        makeMove(x, y);
+                    }
+                }
+            }
+
+
             timestamp = DateTime.Now.Ticks;
         }
 

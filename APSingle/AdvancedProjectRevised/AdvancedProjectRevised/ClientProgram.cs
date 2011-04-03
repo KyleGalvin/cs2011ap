@@ -40,6 +40,7 @@ namespace AP
         private int imageSoundOff;
         private int imageLevelOne;
         private int imageLevelTwo;
+        private int imageControls;
 
         private int imagePistolSelected;
         private int imagePistolAvailable;
@@ -86,6 +87,11 @@ namespace AP
         public static bool bossKilled = false;
 
         public int timeToShowLevel = 48;
+        private bool showControls = false;
+
+        private List<Wall> walls = new List<Wall>();
+        private Tiles tiles;
+        private PathFinder mPathFinder;
 
         /// <summary>Creates a window with the specified title.</summary>
         public ClientProgram()
@@ -96,6 +102,7 @@ namespace AP
             if (val == "m")
                 multiplayer = true;
 
+            WindowBorder = WindowBorder.Hidden;
 
             VSync = VSyncMode.On;
         }
@@ -155,6 +162,7 @@ namespace AP
             imageBenson = imageHandler.loadImage("Objects//BensonHead.png");
             imageSoundOn = imageHandler.loadImage("Objects//soundON.png");
             imageSoundOff = imageHandler.loadImage("Objects//soundOFF.png");
+            imageControls = imageHandler.loadImage("Objects//controls.png");
 
             GL.ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             GL.Enable(EnableCap.DepthTest);
@@ -211,6 +219,10 @@ namespace AP
             loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood2.png", 0.4f);
             loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood3.png", 0.4f);
             loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood4.png", 0.4f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood5.png", 0.4f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood6.png", 0.4f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood7.png", 0.4f);
+            loadedObjects.LoadObject("Objects//square.obj", "Objects//BloodSplatters//Blood8.png", 0.4f);
 
             loadedCrackedGroundTexture = loadedObjects.LoadObject("Objects//square.obj", "Objects//CrackedGround.png", 3.0f);
 
@@ -236,6 +248,19 @@ namespace AP
                 gameState.Players.Add(player);
                 setUpLevel();
                 collisionAI.addToPlayerList(ref player);
+
+                for (int i = 0; i < xPosSquares.Count; i++)
+                {
+                    walls.Add(new Wall(xPosSquares[i], yPosSquares[i], heightSquares[i], widthSquares[i]));
+                }
+                tiles = new Tiles(walls);
+                mPathFinder = new PathFinder(tiles.byteList());
+                collisionAI.wallTiles = tiles;
+                foreach (var x in gameState.Players)
+                {
+                    x.tiles = tiles;
+                }
+
             }
         }
 
@@ -257,12 +282,21 @@ namespace AP
             setUpLevel();
             zombieCount = 0;
 
+            walls.Clear();
+            for (int i = 0; i < xPosSquares.Count; i++)
+            {
+                walls.Add(new Wall(xPosSquares[i], yPosSquares[i], heightSquares[i], widthSquares[i]));
+            }
+            tiles = new Tiles(walls);
+            mPathFinder = new PathFinder(tiles.byteList());
+            collisionAI.wallTiles = tiles;
+            foreach (var x in gameState.Players)
+            {
+                x.tiles = tiles;
+            }
+
             if (currentLevel == 2)
             {
-                collisionAI.posXBound = 9;
-                collisionAI.posYBound = 1;
-                collisionAI.negXBound = -9;
-                collisionAI.negYBound = -14;
                 loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass.png", 5);
                 loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
             }
@@ -301,11 +335,6 @@ namespace AP
         /// <param name="e">Contains timing information.</param>
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-
-            /*System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap("Objects//Guns//Rifle_available.png");
-            System.Windows.Forms.Cursor myCursor = new System.Windows.Forms.Cursor(bitmap.GetHicon());
-            System.Windows.Forms.Cursor.Current = myCursor; */ 
-
             GL.Color3(1.0f, 1.0f, 1.0f); //reset colors
            if (gameState.Players.Count > 0)
            {
@@ -427,7 +456,7 @@ namespace AP
                          for (int idx = 0; idx < widthSquares[i]; idx++)
                          {
                              GL.PushMatrix();
-                             GL.Translate(x + idx - 0.5f, yPosSquares[i] - 0.5f, 0.5f);
+                             GL.Translate(x + idx + 0.5f, yPosSquares[i] - 0.5f, 0.5f);
                              loadedObjects.DrawObject(loadedObjectWall);
                              GL.PopMatrix();
                          }
@@ -438,7 +467,7 @@ namespace AP
                          for (int idx = 0; idx < heightSquares[i]; idx++)
                          {
                              GL.PushMatrix();
-                             GL.Translate(x - 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
+                             GL.Translate(x + 0.5f, yPosSquares[i] + idx - 0.5f, 0.5f);
                              loadedObjects.DrawObject(loadedObjectWall);
                              GL.PopMatrix();
                          }
@@ -562,6 +591,9 @@ namespace AP
                     }
                 }
 
+               if (showControls)
+                   imageHandler.drawImage(imageControls, 25, 30, 1.0f, 1.0f);
+
                 SwapBuffers();
             }
         }
@@ -574,7 +606,7 @@ namespace AP
         /// <param name="e">Not used.</param>
         protected override void OnResize(EventArgs e)
         {
-            //base.OnResize(e);
+            //base.OnResize(e);           
             GL.Viewport(0, 0, screenX, screenY);
 
             Matrix4 projection = Matrix4.CreatePerspectiveFieldOfView((float)Math.PI / 4, Width / (float)Height, 1.0f, 64.0f);
@@ -587,10 +619,17 @@ namespace AP
         /// </summary>
         /// <param name="e">Contains timing information for framerate independent logic.</param>
         protected override void OnUpdateFrame(FrameEventArgs e)
-        {         
-            
+        {
+            if (Keyboard[Key.Space])
+            {
+                showControls =true;
+            }
+            else
+                showControls = false;
+
             if (Keyboard[Key.P])
             {
+                //do nothing
             }
             else
             {
@@ -676,10 +715,6 @@ namespace AP
                     {
                         player.weapons.equipShotgun();
                     }
-                    if (Keyboard[Key.Number4])
-                    {
-                        player.weapons.equipRocket();
-                    }
 
                     if (Mouse[OpenTK.Input.MouseButton.Left] == true)
                     {
@@ -751,10 +786,11 @@ namespace AP
                     collisionAI.updateState(ref gameState.Enemies);
 
 
-                    foreach (var member in gameState.Enemies)
+                    /*foreach (var member in gameState.Enemies)
                     {
                         member.moveTowards(player);
-                    }
+                    }*/
+                    handlePathing();
                 }
 
                 //ADAM
@@ -818,7 +854,7 @@ namespace AP
                 if (!multiplayer)
                 {
                     zombieIterator++;
-                    if (zombieCount < 100)
+                    if (zombieCount < 1)
                     {
                         foreach (var spawn in spawns)
                         {
@@ -854,7 +890,7 @@ namespace AP
                             soundHandler.play(SoundHandler.SMASH);
                             effectsHandler.bossSpawned = true;
                             Enemy enemy = new Zombie(100000); //get this to have it's own ID?
-                            enemy.setPosition(0, 3);
+                            enemy.setPosition(0, 10);
 
                             gameState.Enemies.Add(enemy);
                             gameState.Enemies.Last().changeSubtype(Zombie.BOSS);
@@ -897,7 +933,7 @@ namespace AP
                                 if (bossSpawnCooldown <= 0)
                                 {
                                     Enemy enemy = new Zombie(100001); //get this to have it's own ID?
-                                    enemy.setPosition(0, 3);
+                                    enemy.setPosition(0, 9);
 
                                     gameState.Enemies.Add(enemy);
                                     if (bossWaveCount == 2)
@@ -932,6 +968,10 @@ namespace AP
                     List<Bullet> tmpBullet = new List<Bullet>();
                     foreach (Bullet bullet in gameState.Bullets)
                     {
+                        if (tiles.isWall(bullet.xPos, bullet.yPos))
+                        {
+                            tmpBullet.Add(bullet);
+                        }
                         bullet.move();
                         if (bullet.killProjectile())
                             tmpBullet.Add(bullet);
@@ -961,24 +1001,33 @@ namespace AP
                                 {
                                     soundHandler.play(soundHandler.randomBossSound());
                                 }
-                            }
-                            if (enemyHit.health <= 0)
-                            {
-                                //ADAM
-                                effectsHandler.addBlood(moveX, moveY); //needs to be on the server too
-                                gameState.Enemies.Remove(enemyHit);
-                                GC.Collect();
-                                if (rand.Next(0, 10) < 1) //new ammo crate
-                                    gameState.Crates.Add(new Crate(new Vector2(enemyHit.xPos, enemyHit.yPos)));
-                                player.score += 100; //ADAM need to complicate this on the server
-                            }
+                            }                            
                         }
                     }
-
 
                     foreach (Bullet bullet in tmpBullet)
                     {
                         gameState.Bullets.Remove(bullet);
+                    }
+
+                    List<Enemy> tmpEnemies = new List<Enemy>();
+                    foreach (Enemy enemyToKill in gameState.Enemies)
+                    {
+                        if (enemyToKill.health <= 0)
+                        {
+                            //ADAM
+                            effectsHandler.addBlood(enemyToKill.xPos, enemyToKill.yPos); //needs to be on the server too
+                            tmpEnemies.Add(enemyToKill);
+                            GC.Collect();
+                            if (rand.Next(0, 10) < 1) //new ammo crate
+                                gameState.Crates.Add(new Crate(new Vector2(enemyToKill.xPos, enemyToKill.yPos)));
+                            player.score += 100; //ADAM need to complicate this on the server
+                        }
+                    }
+
+                    foreach (Enemy enemyToKill in tmpEnemies)
+                    {
+                        gameState.Enemies.Remove(enemyToKill);
                     }
 
                     //ADAM
@@ -987,7 +1036,8 @@ namespace AP
                      * 
                      */
                     float moveX2, moveY2;
-                    if (collisionAI.checkForMovementCollision(player, out moveX2, out moveY2))
+                    Enemy enemyWalkedInTo;
+                    if (collisionAI.checkForCollision(player, out moveX2, out moveY2, out enemyWalkedInTo))
                     {
                         if (player.health > 0)
                         {
@@ -1012,6 +1062,53 @@ namespace AP
                 }
             }
             GC.Collect();
+        }
+
+        private void handlePathing()
+        {
+            for (int index = 0; index < gameState.Enemies.Count; index++)
+            {
+                var zombie = gameState.Enemies[index];
+                //Find closest player
+                var playerPos = tiles.returnTilePos(player);
+                var enemyPos = tiles.returnTilePos(zombie);
+                //Check to see how close the zombie is to the player
+                float x1 = player.xPos - zombie.xPos;
+                float y1 = player.yPos - zombie.yPos;
+                float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
+                if (len1 <= 1.26)
+                {
+                    zombie.moveTowards(player);
+                }
+                //Find a path
+                else if (enemyPos != null)
+                {
+                    if (playerPos != null)
+                    {
+                        List<PathFinderNode> path = mPathFinder.FindPath(enemyPos[0], enemyPos[1], playerPos[0],
+                                                                         playerPos[1]);
+                        //Give next X Y Coords
+                        if (path != null && path.Count > 1)
+                        {
+                            var nextMove = tiles.returnCoords(path[1].X, path[1].Y);
+                            //Move towards them
+                            //Calculates the len between the moves
+                            float x = nextMove[0] - zombie.xPos;
+                            float y = nextMove[1] - zombie.yPos;
+                            float len = (float)Math.Sqrt(x * x + y * y);
+                            if (len < 1 && path.Count > 2)
+                            {
+                                nextMove = tiles.returnCoords(path[2].X, path[2].Y);
+                                zombie.moveTowards(nextMove[0], nextMove[1]);
+                            }
+                            else
+                            {
+                                zombie.moveTowards(nextMove[0], nextMove[1]);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
     }

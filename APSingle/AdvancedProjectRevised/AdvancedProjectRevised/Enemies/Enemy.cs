@@ -74,6 +74,12 @@ public abstract void move(float x, float y);
         public abstract void moveTowards(Player target);
 
         /// <summary>
+        /// Moves towards the player.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        public abstract void moveTowards(float _x, float _y);
+
+        /// <summary>
         /// Sets the position.
         /// </summary>
         /// <param name="x">The x.</param>

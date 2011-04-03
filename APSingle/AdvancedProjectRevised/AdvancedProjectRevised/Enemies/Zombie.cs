@@ -224,8 +224,8 @@ namespace AP
                     incWalk = true;
             }
 
-            if (type == BOSS) //boss doesn't move
-                return; //returning here still animates him though
+            if (type == BOSS)
+                return; //boss doesnt move
 
             float len = (float)Math.Sqrt(x * x + y * y);
             float moveX;
@@ -235,7 +235,7 @@ namespace AP
                 if (!ServerProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
                     move(x / len, y / len); //free to move where you want
                 else
-                { //standing in something, move away from it                    
+                { //standing in something, move away from it
                     x = moveX - xPos;
                     y = moveY - yPos;
 
@@ -255,7 +255,7 @@ namespace AP
 
                     len = (float)Math.Sqrt(x * x + y * y);
                     move(-x / len, -y / len);
-                }     
+                }
                 else if (ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
                 { //standing in something, move away from it
                     x = moveX - xPos;
@@ -263,15 +263,86 @@ namespace AP
 
                     len = (float)Math.Sqrt(x * x + y * y);
                     move(-x / len, -y / len);
-                }                    
+                }
                 else
                 {
                     move(x / len, y / len); //free to move where you want
                 }
             }
-            
-            
+
+
             updateTimeStamp();
+        }
+        /// <summary>
+        /// Moves towards the player.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        public override void moveTowards(float _x, float _y)
+        {
+            float x = _x - xPos;
+            float y = _y - yPos;
+            prevXPos = xPos;
+            prevYPos = yPos;
+
+            walking = true;
+            if (incWalk)
+            {
+                legAngle += 8;
+                if (legAngle > 35)
+                    incWalk = false;
+            }
+            else
+            {
+                legAngle -= 8;
+                if (legAngle < -35)
+                    incWalk = true;
+            }
+
+            if (type == BOSS)
+                return; //boss doesnt move
+
+            float len = (float)Math.Sqrt(x * x + y * y);
+            float moveX;
+            float moveY;
+            if (ClientProgram.multiplayer)
+            {
+                if (!ServerProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                    move(x / len, y / len); //free to move where you want
+                else
+                { //standing in something, move away from it
+                    x = moveX - xPos;
+                    y = moveY - yPos;
+
+                    len = (float)Math.Sqrt(x * x + y * y);
+                    move(-x / len, -y / len);
+                }
+            }
+            else
+            {
+                move(x / len, y / len);
+                setAngle();
+                move(-x / len, -y / len);
+                if (ClientProgram.collisionAI.checkForCollisionWithPlayers(this, out moveX, out moveY))
+                { //standing in something, move away from it
+                    x = moveX - xPos;
+                    y = moveY - yPos;
+
+                    len = (float)Math.Sqrt(x * x + y * y);
+                    move(-x / len, -y / len);
+                }
+                else if (ClientProgram.collisionAI.checkForMovementCollision(this, out moveX, out moveY))
+                { //standing in something, move away from it
+                    x = moveX - xPos;
+                    y = moveY - yPos;
+
+                    len = (float)Math.Sqrt(x * x + y * y);
+                    move(-x / len, -y / len);
+                }
+                else
+                {
+                    move(x / len, y / len); //free to move where you want
+                }
+            }
         }
 
 		#endregion Methods 

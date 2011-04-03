@@ -114,6 +114,8 @@ namespace AP
             pistolEquipped = true;
             rocketEquipped = false;
             shotgunEquipped = false;
+            bulletCooldown = 1;
+            rifleBurstCooldown = 0;
         }
 
         /// <summary>
@@ -125,6 +127,8 @@ namespace AP
             pistolEquipped = false;
             rocketEquipped = false;
             shotgunEquipped = false;
+            bulletCooldown = 1;
+            rifleBurstCooldown = 0;
         }
 
         /// <summary>
@@ -147,6 +151,8 @@ namespace AP
             pistolEquipped = false;
             rocketEquipped = false;
             shotgunEquipped = true;
+            bulletCooldown = 1;
+            rifleBurstCooldown = 0;
         }
 
         /// <summary>
