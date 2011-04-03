@@ -59,7 +59,6 @@ using System.Linq;
 		{
 			//we only intend to recieve 4 bytes at a time
             body.Add(incoming.ToList().ToArray());
-            Console.WriteLine(incoming[0]+incoming[1]+incoming[2]+incoming[3]);
 			if(body.Count == 1)
 			{
 				//no header has been created. We naievely assume the data read is a header
@@ -77,14 +76,13 @@ using System.Linq;
                 }
                 count = myInterpreter.GetCount(header);
                 Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}", sizeofobj, ((Type)(typeofobj)).ToString(), count, ((Action)action).ToString());
-                Console.WriteLine(header);
 			}
 			else
 			{
    
 				if(body.Count == ((myInterpreter.GetCount(header)*sizeofobj))+1)
 				{
-                    Console.WriteLine("Packet complete: " + body.Count);
+                    Console.WriteLine("Packet complete, number of 32 bit values: " + body.Count+ "\n");
 					complete = true;
 				}
 			}

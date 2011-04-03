@@ -166,10 +166,8 @@ public class PackWorker
         UInt32 t = pack.typeofobj;
         if ((Type)t == Type.Move)
         {
-            Console.WriteLine("Handle request");
-            Console.WriteLine("Player before handling move request: xPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().xPos + " yPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().yPos);
+
             State.Players.Where(y => y.playerId == conn.playerUID).First().move(BitConverter.ToInt32(pack.body[1], 0), BitConverter.ToInt32(pack.body[2], 0));
-            Console.WriteLine("Player after handling move request: xPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().xPos + " yPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().yPos);
         }
         if ((Type)t == Type.Bullet)
         {
