@@ -33,10 +33,7 @@ using AP;
         protected override void HandleIncomingComm(object connection)
         {
             Connection myConnection = (Connection)connection;
-
             client = myConnection.GetClient();
-
-  
 
             while (true)
             {
