@@ -7,12 +7,12 @@
   <objects>
 	<!-- Enemy Spawns -->
 	<spawnObject>
-		<spawn x="-9" y="-11">Spawn1</spawn>
+		<spawn x="-8" y="-10">Spawn1</spawn>
 		<enemyType num="100" type="zombie"/>
 		<enemyType num="20" type="fastZombie"/>
 	</spawnObject>
 	<spawnObject>
-		<spawn x="8" y="-11">Spawn2</spawn>
+		<spawn x="8" y="-10">Spawn2</spawn>
 		<enemyType num="100" type="zombie"/>
 		<enemyType num="20" type="fastZombie"/>
 	</spawnObject>
@@ -22,7 +22,7 @@
 		<enemyType num="20" type="fastZombie"/>
 	</spawnObject>
 	<spawnObject>
-		<spawn x="-8" y="7">Spawn4</spawn>
+		<spawn x="-8" y="8">Spawn4</spawn>
 		<enemyType num="100" type="zombie"/>
 		<enemyType num="20" type="fastZombie"/>
 	</spawnObject>
@@ -30,54 +30,54 @@
 	
 	<!-- Walls -->
 	<wallObject>
-		<wall id="1" x="-4" y="12" scale="1" width="8" height="1"/>
+		<wall id="1" x="-4" y="13" scale="1" width="8" height="1"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="-4" y="9" scale="1" width="1" height="3"/>
+		<wall id="1" x="-4" y="10" scale="1" width="1" height="3"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="3" y="9" scale="1" width="1" height="3"/>
+		<wall id="1" x="3" y="10" scale="1" width="1" height="3"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="3" y="9" scale="1" width="7" height="1"/>
+		<wall id="1" x="3" y="10" scale="1" width="7" height="1"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="-10" y="9" scale="1" width="7" height="1"/>
+		<wall id="1" x="-10" y="10" scale="1" width="7" height="1"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="-10" y="-12" scale="1" width="1" height="22"/>
+		<wall id="1" x="-10" y="-11" scale="1" width="1" height="22"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="9" y="-12" scale="1" width="1" height="22"/>
+		<wall id="1" x="9" y="-11" scale="1" width="1" height="22"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="-10" y="-12" scale="1" width="20" height="1"/>
-	</wallObject>
-
-	<wallObject>
-		<wall id="1" x="-6" y="-8" scale="1" width="2" height="1"/>
-	</wallObject>
-	<wallObject>
-		<wall id="1" x="-6" y="-2" scale="1" width="2" height="1"/>
-	</wallObject>
-	<wallObject>
-		<wall id="1" x="4" y="-8" scale="1" width="2" height="1"/>
-	</wallObject>
-	<wallObject>
-		<wall id="1" x="4" y="-2" scale="1" width="2" height="1"/>
-	</wallObject>
-	<wallObject>
-		<wall id="1" x="-6" y="4" scale="1" width="2" height="1"/>
-	</wallObject>
-	<wallObject>
-		<wall id="1" x="4" y="4" scale="1" width="2" height="1"/>
+		<wall id="1" x="-10" y="-11" scale="1" width="20" height="1"/>
 	</wallObject>
 
 	<wallObject>
-		<wall id="1" x="-1" y="1" scale="1" width="2" height="1"/>
+		<wall id="1" x="-6" y="-7" scale="1" width="2" height="1"/>
 	</wallObject>
 	<wallObject>
-		<wall id="1" x="-1" y="-5" scale="1" width="2" height="1"/>
+		<wall id="1" x="-6" y="-1" scale="1" width="2" height="1"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="4" y="-7" scale="1" width="2" height="1"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="4" y="-1" scale="1" width="2" height="1"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="-6" y="5" scale="1" width="2" height="1"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="4" y="5" scale="1" width="2" height="1"/>
+	</wallObject>
+
+	<wallObject>
+		<wall id="1" x="-1" y="2" scale="1" width="2" height="1"/>
+	</wallObject>
+	<wallObject>
+		<wall id="1" x="-1" y="-4" scale="1" width="2" height="1"/>
 	</wallObject>
   </objects>
   

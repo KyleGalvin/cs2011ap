@@ -793,7 +793,8 @@ namespace AP
                     {
                         member.moveTowards(player);
                     }*/
-                    handlePathing();
+                    if(timeToShowLevel <= 0)
+                        handlePathing();
                 }
 
                 //ADAM
@@ -857,7 +858,7 @@ namespace AP
                 if (!multiplayer)
                 {
                     zombieIterator++;
-                    if (zombieCount < 100)
+                    if (zombieCount < 1)
                     {
                         foreach (var spawn in spawns)
                         {
