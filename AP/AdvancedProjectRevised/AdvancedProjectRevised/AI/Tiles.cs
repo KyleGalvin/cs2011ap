@@ -7,6 +7,7 @@ namespace AP
 {
     public class Tiles
     {
+        Random random = new Random();
         public Tile[,] tileList;
         public float maxX;
         public float minX;
@@ -122,21 +123,21 @@ namespace AP
             return false;
         }
         private int RandomNumber(int min, int max)
-        {
-            Random random = new Random();
+        {            
             return random.Next(min, max);
         }
         public List<float> SpawnCrate()
         {
             while (true)
             {
-                var x = RandomNumber(3, tileList.GetUpperBound(0) - 3);
-                var y = RandomNumber(3, tileList.GetUpperBound(1) - 3);
-                if(!tileList[x,y].isWall)
+                var x = RandomNumber(0, (int)maxX + (int)Math.Abs(minX));
+                var y = RandomNumber(0, (int)maxY + (int)Math.Abs(minY));
+                if (!tileList[x, y].isWall && tileList[x, y].X < maxX-2 && tileList[x, y].Y < maxY-2 && tileList[x, y].X > minX+2 && tileList[x, y].Y > minY+1)
                 {
                     var returnList = new List<float>();
-                    returnList.Add(tileList[x, y].Y+0.5f);
+                    
                     returnList.Add(tileList[x,y].X-0.5f);
+                    returnList.Add(tileList[x, y].Y + 0.5f);
                     return returnList;
                 }
             }
