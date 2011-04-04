@@ -39,7 +39,7 @@
             // btn_Server
             // 
             this.btn_Server.Image = global::AdvancedProjectRevised.Properties.Resources.ServerButton;
-            this.btn_Server.Location = new System.Drawing.Point(344, 364);
+            this.btn_Server.Location = new System.Drawing.Point(344, 157);
             this.btn_Server.Name = "btn_Server";
             this.btn_Server.Size = new System.Drawing.Size(128, 32);
             this.btn_Server.TabIndex = 3;
@@ -49,7 +49,7 @@
             // btn_Client
             // 
             this.btn_Client.Image = global::AdvancedProjectRevised.Properties.Resources.Clientbutton;
-            this.btn_Client.Location = new System.Drawing.Point(344, 441);
+            this.btn_Client.Location = new System.Drawing.Point(344, 234);
             this.btn_Client.Name = "btn_Client";
             this.btn_Client.Size = new System.Drawing.Size(128, 32);
             this.btn_Client.TabIndex = 2;
@@ -59,7 +59,7 @@
             // btn_Singleplayer
             // 
             this.btn_Singleplayer.Image = global::AdvancedProjectRevised.Properties.Resources.SingleButton;
-            this.btn_Singleplayer.Location = new System.Drawing.Point(256, 402);
+            this.btn_Singleplayer.Location = new System.Drawing.Point(219, 195);
             this.btn_Singleplayer.Name = "btn_Singleplayer";
             this.btn_Singleplayer.Size = new System.Drawing.Size(128, 32);
             this.btn_Singleplayer.TabIndex = 1;
@@ -71,7 +71,7 @@
             // 
             this.btn_Multiplayer.BackColor = System.Drawing.Color.Transparent;
             this.btn_Multiplayer.Image = global::AdvancedProjectRevised.Properties.Resources.MultiButton;
-            this.btn_Multiplayer.Location = new System.Drawing.Point(428, 402);
+            this.btn_Multiplayer.Location = new System.Drawing.Point(468, 195);
             this.btn_Multiplayer.Name = "btn_Multiplayer";
             this.btn_Multiplayer.Size = new System.Drawing.Size(128, 32);
             this.btn_Multiplayer.TabIndex = 0;
@@ -84,11 +84,11 @@
             this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Image = global::AdvancedProjectRevised.Properties.Resources.BG;
+            this.pictureBox1.Image = global::AdvancedProjectRevised.Properties.Resources.BG1;
             this.pictureBox1.InitialImage = global::AdvancedProjectRevised.Properties.Resources.Splash_title;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(800, 600);
+            this.pictureBox1.Size = new System.Drawing.Size(798, 599);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
