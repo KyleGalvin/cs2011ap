@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Forms;
 using AP;
 
     /// <summary>
@@ -143,6 +144,8 @@ using AP;
                 {
                     //a socket error has occured
                     Console.WriteLine(e.ToString());
+                    MessageBox.Show("Error: " + e.Message);
+                    Environment.Exit(0);
                     break;
                 }
             }
