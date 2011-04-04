@@ -7,7 +7,7 @@ using OpenTK;
 using System.Net;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-
+using System.Windows.Forms;
 
 namespace AP
 {
@@ -93,14 +93,14 @@ namespace AP
         private Tiles tiles;
         private PathFinder mPathFinder;
 
+        private Cursor myCursor;
+
         /// <summary>Creates a window with the specified title.</summary>
-        public ClientProgram()
+        public ClientProgram(bool multi)
             : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
-            Console.WriteLine("[s]ingle player or [m]ultiplayer");
-            string val = Console.ReadLine();
-            if (val == "m")
-                multiplayer = true;
+            
+                multiplayer = multi;
 
             WindowBorder = WindowBorder.Hidden;
 
@@ -139,6 +139,8 @@ namespace AP
             textHandler = new TextHandler("../../Images/mybitmapfont.png");
             imageHandler = new ImageHandler();
             effectsHandler = new EffectsHandler();
+
+            myCursor = new Cursor("Objects//cursor.cur");
 
             soundHandler.playSong(SoundHandler.BACKGROUND);
             soundHandler.play(SoundHandler.OMGHERETHECOME);
@@ -281,7 +283,8 @@ namespace AP
             player.yPos = 0;
             setUpLevel();
             zombieCount = 0;
-
+            
+            
             walls.Clear();
             for (int i = 0; i < xPosSquares.Count; i++)
             {
@@ -335,6 +338,7 @@ namespace AP
         /// <param name="e">Contains timing information.</param>
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            System.Windows.Forms.Cursor.Current = myCursor;
             GL.Color3(1.0f, 1.0f, 1.0f); //reset colors
            if (gameState.Players.Count > 0)
            {
@@ -620,6 +624,7 @@ namespace AP
         /// <param name="e">Contains timing information for framerate independent logic.</param>
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            Cursor.Current = myCursor;
             if (Keyboard[Key.Space])
             {
                 showControls =true;
@@ -761,12 +766,10 @@ namespace AP
                 if (Keyboard[OpenTK.Input.Key.Up])
                 {
                     viewDist *= 1.1f;
-                    Console.WriteLine("View distance: {0}", viewDist);
                 }
                 else if (Keyboard[OpenTK.Input.Key.Down])
                 {
                     viewDist *= 0.9f;
-                    Console.WriteLine("View distance: {0}", viewDist);
                 }
 
                 
@@ -854,7 +857,7 @@ namespace AP
                 if (!multiplayer)
                 {
                     zombieIterator++;
-                    if (zombieCount < 1)
+                    if (zombieCount < 100)
                     {
                         foreach (var spawn in spawns)
                         {
