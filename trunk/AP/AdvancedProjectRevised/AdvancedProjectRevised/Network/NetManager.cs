@@ -328,7 +328,6 @@ public abstract class NetManager
     /// <param name="pack">The pack.</param>
     public void packetSwitcher(NetPackage pack, Connection callerConnection)
     {
-        Console.WriteLine("PACKET SWITCHED");
         if (pack.IsComplete())//we've accumulated the amount of data our header predicts
         {
             if (pack.action == (UInt32)Action.Delete)
