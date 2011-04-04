@@ -136,10 +136,7 @@ using AP;
                 try
                 {
                     //read package data
-                    //Console.WriteLine("attempt to read pack:");
                     pack = myConnection.ReadPackage();
-                    //Console.WriteLine("Package recieved!");
-                    //Console.WriteLine("incoming id " + BitConverter.ToInt32( pack.body[0],0 )+"incoming x:" + BitConverter.ToInt32( pack.body[1],0 )+ " incoming y:" + BitConverter.ToInt32( pack.body[2],0));
                     packetSwitcher(pack, myConnection);
                 }
                 catch(Exception e)
@@ -148,13 +145,6 @@ using AP;
                     Console.WriteLine(e.ToString());
                     break;
                 }
-
-                //if (bytesRead == 0)//nothing was read from socket
-                //{
-                //	Console.WriteLine("Client {0} has disconnected.",client.Client.RemoteEndPoint);
-                //	break;
-                //}
-                
             }
 
             lock (this)
