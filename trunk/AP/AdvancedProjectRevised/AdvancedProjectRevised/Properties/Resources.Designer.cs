@@ -60,6 +60,13 @@ namespace AdvancedProjectRevised.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap BensonHead {
+            get {
+                object obj = ResourceManager.GetObject("BensonHead", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap BG {
             get {
                 object obj = ResourceManager.GetObject("BG", resourceCulture);
@@ -70,6 +77,13 @@ namespace AdvancedProjectRevised.Properties {
         internal static System.Drawing.Bitmap Clientbutton {
             get {
                 object obj = ResourceManager.GetObject("Clientbutton", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap GameOver {
+            get {
+                object obj = ResourceManager.GetObject("GameOver", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
