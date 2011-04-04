@@ -39,7 +39,7 @@
             // btn_Server
             // 
             this.btn_Server.Image = global::AdvancedProjectRevised.Properties.Resources.ServerButton;
-            this.btn_Server.Location = new System.Drawing.Point(469, 481);
+            this.btn_Server.Location = new System.Drawing.Point(344, 364);
             this.btn_Server.Name = "btn_Server";
             this.btn_Server.Size = new System.Drawing.Size(128, 32);
             this.btn_Server.TabIndex = 3;
@@ -49,7 +49,7 @@
             // btn_Client
             // 
             this.btn_Client.Image = global::AdvancedProjectRevised.Properties.Resources.Clientbutton;
-            this.btn_Client.Location = new System.Drawing.Point(469, 558);
+            this.btn_Client.Location = new System.Drawing.Point(344, 441);
             this.btn_Client.Name = "btn_Client";
             this.btn_Client.Size = new System.Drawing.Size(128, 32);
             this.btn_Client.TabIndex = 2;
@@ -59,7 +59,7 @@
             // btn_Singleplayer
             // 
             this.btn_Singleplayer.Image = global::AdvancedProjectRevised.Properties.Resources.SingleButton;
-            this.btn_Singleplayer.Location = new System.Drawing.Point(381, 519);
+            this.btn_Singleplayer.Location = new System.Drawing.Point(256, 402);
             this.btn_Singleplayer.Name = "btn_Singleplayer";
             this.btn_Singleplayer.Size = new System.Drawing.Size(128, 32);
             this.btn_Singleplayer.TabIndex = 1;
@@ -71,7 +71,7 @@
             // 
             this.btn_Multiplayer.BackColor = System.Drawing.Color.Transparent;
             this.btn_Multiplayer.Image = global::AdvancedProjectRevised.Properties.Resources.MultiButton;
-            this.btn_Multiplayer.Location = new System.Drawing.Point(553, 519);
+            this.btn_Multiplayer.Location = new System.Drawing.Point(428, 402);
             this.btn_Multiplayer.Name = "btn_Multiplayer";
             this.btn_Multiplayer.Size = new System.Drawing.Size(128, 32);
             this.btn_Multiplayer.TabIndex = 0;
@@ -97,15 +97,16 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1016, 746);
+            this.ClientSize = new System.Drawing.Size(792, 566);
             this.Controls.Add(this.btn_Server);
             this.Controls.Add(this.btn_Client);
             this.Controls.Add(this.btn_Singleplayer);
             this.Controls.Add(this.btn_Multiplayer);
             this.Controls.Add(this.pictureBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "SplashScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "SplashScreen";
+            this.Text = "ROFL PEW PEW";
             this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
