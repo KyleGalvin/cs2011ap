@@ -239,7 +239,6 @@ public class PackageInterpreter
                 result.Add(BitConverter.GetBytes(c.crateType));
                 break;
             case Type.Move:
-                Console.WriteLine("Move");
                 result.Add(BitConverter.GetBytes((int)(object)obj));
                 break;
             default:
