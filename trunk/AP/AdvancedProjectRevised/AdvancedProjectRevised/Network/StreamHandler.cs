@@ -54,7 +54,7 @@ using System.Collections.Generic;
             }
 
             return myPackage;
-        }
+       } 
 
         /// <summary>
         /// Blindly writes the specified data. It is up to the NetManager (or appropriate child) to ensure this is a properly formed packet.
