@@ -23,20 +23,23 @@ namespace AP
             // if server
             // - get client info
             //Form1 form = new Form1();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new SplashScreen());
 
-            Console.WriteLine("[s]erver or [c]lient");
-            string val = Console.ReadLine();
-            if (val == "s")
-            {
-                ServerProgram server = new ServerProgram();
-            }
-            else if (val == "c")
-            {
-                using (ClientProgram client = new ClientProgram())
-                {
-                    client.Run(28.0);
-                }
-            }
+            //Console.WriteLine("[s]erver or [c]lient");
+            //string val = Console.ReadLine();
+            //if (val == "s")
+            //{
+            //    ServerProgram server = new ServerProgram();
+            //}
+            //else if (val == "c")
+            //{
+            //    using (ClientProgram client = new ClientProgram())
+            //    {
+            //        client.Run(28.0);
+            //    }
+            //}
         }
     }
 }

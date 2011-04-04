@@ -57,6 +57,7 @@
             // 
             // btn_Host
             // 
+            this.btn_Host.Image = global::AdvancedProjectRevised.Properties.Resources.ServerButton;
             this.btn_Host.Location = new System.Drawing.Point(12, 12);
             this.btn_Host.Name = "btn_Host";
             this.btn_Host.Size = new System.Drawing.Size(75, 23);

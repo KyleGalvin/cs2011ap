@@ -127,3 +127,9 @@ C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\Advanc
 C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.GLControl.xml
 C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.xml
 C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\OpenTK.Compatibility.xml
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.SplashScreen.resources
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.Properties.Resources.resources
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.exe.manifest
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.application
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe.manifest
+C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.application
