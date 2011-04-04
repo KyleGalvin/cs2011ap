@@ -75,14 +75,14 @@ using System.Linq;
                     sizeofobj = myInterpreter.GetTypeSize((Type)(typeofobj));
                 }
                 count = myInterpreter.GetCount(header);
-                Console.WriteLine("RECIEVED HEADER-- size of typeobj: {0} type {1} count: {2} action: {3}", sizeofobj, ((Type)(typeofobj)).ToString(), count, ((Action)action).ToString());
+                Console.WriteLine("RECIEVED PACKET HEADER -- Size of object: {0} Type: {1} Count: {2} Action: {3}", sizeofobj, ((Type)(typeofobj)).ToString(), count, ((Action)action).ToString());
 			}
 			else
 			{
    
 				if(body.Count == ((myInterpreter.GetCount(header)*sizeofobj))+1)
 				{
-                    Console.WriteLine("Packet complete, number of 32 bit values: " + body.Count+ "\n");
+                    Console.WriteLine("Packet complete: " + body.Count + "\n");
 					complete = true;
 				}
 			}

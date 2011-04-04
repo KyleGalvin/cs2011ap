@@ -13,6 +13,7 @@ public class PackWorker
     protected GameState State;
     //private List<AP.Position> GameState;
     protected PackageInterpreter myInterpreter = new PackageInterpreter();
+    
 
     #endregion Fields
 
@@ -91,8 +92,27 @@ public class PackWorker
             if ((Type)t == Type.Powerup)
             {
                 Int32 ID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0);
+                Int32 crateType = State.Crates.Where(y => y.UID == ID).First().crateType;
+                Int32 playerID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0)>>30;
                 State.Crates.Remove(State.Crates.Where(y => y.UID == ID).First());
-                State.Players.Where(y => y.playerId == State.myUID).First().weapons.rifleAmmo += 30;
+
+                if (playerID == State.myUID)
+                {
+                    switch (crateType)
+                    {
+                        case 0:
+                            State.Players.Where(y => y.playerId == State.myUID).First().weapons.rifleAmmo += 30;
+                            break;
+                        case 1:
+                            State.Players.Where(y => y.playerId == State.myUID).First().weapons.shotgunAmmo += 5;
+                            break;
+                        default:
+                            break;
+                    }
+                    ClientProgram.soundHandler.play(SoundHandler.RELOAD);
+                }
+                
+                    
             }
         }
     }
@@ -162,12 +182,16 @@ public class PackWorker
     public void HandleRequest(NetPackage pack, Connection conn)
     {
         UInt32 myTypeSize = myInterpreter.GetTypeSize((Type)(pack.typeofobj));
-
         UInt32 t = pack.typeofobj;
+
+        Console.WriteLine("Handling request...");
+
         if ((Type)t == Type.Move)
         {
-
+            
+            Console.WriteLine("Player before handling move request: xPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().xPos + " yPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().yPos);
             State.Players.Where(y => y.playerId == conn.playerUID).First().move(BitConverter.ToInt32(pack.body[1], 0), BitConverter.ToInt32(pack.body[2], 0));
+            Console.WriteLine("Player after handling move request: xPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().xPos + " yPos: " + State.Players.Where(y => y.playerId == conn.playerUID).First().yPos);
         }
         if ((Type)t == Type.Bullet)
         {
