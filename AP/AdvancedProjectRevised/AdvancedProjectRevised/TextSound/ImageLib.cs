@@ -14,6 +14,8 @@ namespace AP
         List<int> width;
         List<int> height;
 
+        public float bensonRotate = 0;
+
         public ImageHandler()
         {
             textImage = new TextureImage();
@@ -42,6 +44,13 @@ namespace AP
         {
             // Write something centered in the viewport, set color to white to draw in proper color
             textImage.drawImageAt(size, x, y, 0, calculateCurrentWidth(imageNum,percentwid), height[imageNum], imageNum);
+
+        }
+
+        public void drawImageRotate(int imageNum, float x, float y, float size, float percentwid, float rotate)
+        {
+            // Write something centered in the viewport, set color to white to draw in proper color
+            textImage.drawImageAt(size, x, y, rotate, calculateCurrentWidth(imageNum, percentwid), height[imageNum], imageNum);
 
         }
     }

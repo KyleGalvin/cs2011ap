@@ -94,8 +94,17 @@ namespace AP
             GL.PopMatrix();*/
 
             GL.PushMatrix();
-            GL.Translate(0, 0, 0.4f);
-            GL.Rotate(angle - 90, 0, 0, 1);
+            if (health <= 0)
+            {
+                GL.Rotate(90, 0, 1.0f, 0);
+                GL.Rotate(90, 0, 0, 1.0f);
+            }
+            else
+            {
+                GL.Translate(0, 0, 0.4f);
+                GL.Rotate(angle - 90, 0, 0, 1);
+            }
+
             GL.Rotate(180, 0, 1.0f, 0); 
 
             ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectPlayer); //body 
