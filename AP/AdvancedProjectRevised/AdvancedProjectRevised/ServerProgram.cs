@@ -169,19 +169,7 @@ namespace AP
                     bullet.move();
 
             }
-            if(ammoCounter>=60)
-            {
-                var x = tiles.SpawnCrate();
-                //spawn ammo
-                Crate c = new Crate(new Vector2(x[0], x[1]),crateCounter++);
-                c.timestamp = 0;
-                gameState.Crates.Add(c);
-                ammoCounter = 0;
-            }
-            else
-            {
-                ammoCounter++;
-            }
+            
             for (var i = 0; i <gameState.Crates.Count; i++)
             {
                 for (int j = 0; j < gameState.Players.Count; j++)
@@ -189,13 +177,30 @@ namespace AP
                     float x1 = gameState.Players[j].xPos - gameState.Crates[i].xPos;
                     float y1 = gameState.Players[j].yPos - gameState.Crates[i].yPos;
                     float len1 = (float)Math.Sqrt(x1 * x1 + y1 * y1);
-                    if (len1 <= gameState.Players[j].radius + 0.5)
+                    if (len1 <= gameState.Players[j].radius + 0.5 && gameState.Crates[i].timestamp>=0)
                     {
                         gameState.Crates[i].enemyID = gameState.Players[j].playerId;
                         gameState.Crates[i].timestamp = -1;
                     }
                 }
 
+            }
+            if (ammoCounter >= 100)
+            {
+                var x = tiles.SpawnCrate();
+                //spawn ammo
+                if (gameState.Crates.Where(y => y.xPos == x[0] && y.yPos == x[1]).Count() <= 0)
+                {
+                    Crate c = new Crate(new Vector2(x[0], x[1]), crateCounter++);
+                    c.timestamp = 0;
+                    gameState.Crates.Add(c);
+                    ammoCounter = 0;
+                }
+
+            }
+            else
+            {
+                ammoCounter++;
             }
             net.SyncStateOutgoing();
         }
