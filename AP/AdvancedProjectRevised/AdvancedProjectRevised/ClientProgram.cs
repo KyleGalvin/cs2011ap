@@ -21,6 +21,7 @@ namespace AP
         ImageHandler imageHandler;
         private int imageLifeBar;
         private int imageLifeBarBG;
+        private int imageYouWin;
         private int imagePistolAvailable;
         private int imagePistolSelected;
         private int imageRifleAvailable;
@@ -31,11 +32,13 @@ namespace AP
         private int imageShotgunUnavailable;
         CreateLevel level;
         private bool levelComplete = false;
+        public static int imageBenson;
         public static int loadedBloodTexture;
         public static int loadedObjectBullet;
         public static int loadedObjectCrate;
         public static int loadedObjectGrass;
         public static int loadedObjectPlayer;
+        public static int imageGameOver;
         public static LoadedObjects loadedObjects = new LoadedObjects();
         public static int loadedObjectWall;
         public static int loadedObjectZombie;
@@ -68,6 +71,8 @@ namespace AP
         private int ZombieCountTotal = 20;
         private int zombieIterator = 0;
         private int zombieKillCount = 0;
+        public bool lose;
+        public bool win;
 
         #endregion Fields
 
@@ -78,6 +83,9 @@ namespace AP
             : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
             multiplayer = multi;
+
+            lose = false;
+            win = false;
 
             VSync = VSyncMode.On;
         }
@@ -186,6 +194,9 @@ namespace AP
             loadedObjectBullet = loadedObjects.LoadObject("Objects//bullet.obj", "Objects//bullet.png", 0.04f);
             loadedObjectCrate = loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//rifleCrate.png", 0.5f);
             loadedObjects.LoadObject("Objects//guns//crate.obj", "Objects//guns//shotgunCrate.png", 0.5f);
+            imageGameOver = imageHandler.loadImage("Objects//GameOver.png");
+            imageYouWin = imageHandler.loadImage("Objects//YouWin.png");
+            imageBenson = imageHandler.loadImage("Objects//BensonHead.png");
 
             loadedObjectPlayer = loadedObjects.LoadObject("Objects//PlayerBody.obj", "Objects//Player.png", 0.08f);
             loadedObjects.LoadObject("Objects//PlayerLeftLeg.obj", "Objects//Player.png", 0.08f);
@@ -298,6 +309,26 @@ namespace AP
         /// <param name="e">Contains timing information for framerate independent logic.</param>
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            win = true;
+            if (multiplayer && gameState.Players.Count > 0)
+            {
+                if (gameState.Players.Where(y => y.playerId == gameState.myUID).First().health <= 0)
+                {
+                    lose = true;
+                }
+                else
+                {
+
+                    for (int i = 0; i < gameState.Players.Count(); i++)
+                    {
+                        if (gameState.Players[i].playerId != gameState.myUID && gameState.Players[i].health > 0 && gameState.Players.Count > 1)
+                        {
+                            win = false;
+                        }
+                    }
+                }
+            }
+
             if (!multiplayer)
             {
 
@@ -331,25 +362,29 @@ namespace AP
 
             effectsHandler.updateEffects();
 
-            // Move your player
-            if (Keyboard[Key.W] && Keyboard[Key.D])
-                movePlayer(1, 1);
-            else if (Keyboard[Key.W] && Keyboard[Key.A])
-                movePlayer(-1, 1);
-            else if (Keyboard[Key.S] && Keyboard[Key.D])
-                movePlayer(1, -1);
-            else if (Keyboard[Key.S] && Keyboard[Key.A])
-                movePlayer(-1, -1);
-            else if (Keyboard[Key.W])
-                movePlayer(0, 1);
-            else if (Keyboard[Key.S])
-                movePlayer(0, -1);
-            else if (Keyboard[Key.A])
-                movePlayer(-1, 0);
-            else if (Keyboard[Key.D])
-                movePlayer(1, 0);
-            else if (Keyboard[Key.Escape])
-                Exit();
+            if (!lose)
+            {
+                // Move your player
+                if (Keyboard[Key.W] && Keyboard[Key.D])
+                    movePlayer(1, 1);
+                else if (Keyboard[Key.W] && Keyboard[Key.A])
+                    movePlayer(-1, 1);
+                else if (Keyboard[Key.S] && Keyboard[Key.D])
+                    movePlayer(1, -1);
+                else if (Keyboard[Key.S] && Keyboard[Key.A])
+                    movePlayer(-1, -1);
+                else if (Keyboard[Key.W])
+                    movePlayer(0, 1);
+                else if (Keyboard[Key.S])
+                    movePlayer(0, -1);
+                else if (Keyboard[Key.A])
+                    movePlayer(-1, 0);
+                else if (Keyboard[Key.D])
+                    movePlayer(1, 0);
+            }
+            if (Keyboard[Key.Escape])
+               Exit();
+
 
             // Toggle the sound on/off
             if (Keyboard[Key.F1] && !soundHandler.pressingF1)
@@ -393,7 +428,7 @@ namespace AP
 
             if (Mouse[OpenTK.Input.MouseButton.Left] == true)
             {
-                if (multiplayer)
+                if (multiplayer && gameState.Players.Count > 0)
                 {
 
                     if (player.weapons.canShoot())
@@ -435,6 +470,10 @@ namespace AP
             }
 
             GC.Collect();
+
+
+            
+
         }
         // Private Methods (13) 
 
@@ -471,6 +510,17 @@ namespace AP
                     GL.Color3(1.0f, 1.0f, 1.0f);
                     imageHandler.drawImage(imageLifeBarBG, 0, 96, 0.68f, 1.0f);
 
+                    if (lose)
+                    {
+                        imageHandler.drawImage(imageGameOver, 12.0f, 40.0f, 3.0f, 1.0f);
+                        imageHandler.drawImageRotate(imageBenson, 50.0f, 30.0f, 2.0f, 1.0f, imageHandler.bensonRotate);
+                        imageHandler.bensonRotate += 5;
+                    }
+
+                    if (win)
+                    {
+                        imageHandler.drawImage(imageYouWin, 12.0f, 40.0f, 3.0f, 1.0f);
+                    }
                     //text stuff
                     GL.Color3(1.0f, 0.0f, 0.0f);
                     textHandler.writeText("Player " + (p.playerId + 1), 2, 55.0f, 98.1f, 0);
