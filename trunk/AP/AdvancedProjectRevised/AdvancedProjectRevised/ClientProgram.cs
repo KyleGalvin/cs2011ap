@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using OpenTK;
 using System.Net;
 using OpenTK.Graphics.OpenGL;
@@ -110,7 +111,16 @@ namespace AP
             }
             else
             {
-                net.SendObjs<int>(Action.Request, new List<int>() { x, y }, Type.Move, net.myConnections[0]);
+                try
+                {
+                    net.SendObjs<int>(Action.Request, new List<int>() { x, y }, Type.Move, net.myConnections[0]);
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Error: Disconnected from server");
+                    Environment.Exit(0);
+                }
             }
         }
 
@@ -433,9 +443,58 @@ namespace AP
 
                     if (player.weapons.canShoot())
                     {
-                        soundHandler.play(SoundHandler.EXPLOSION);
-                        net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY), gameState.myUID) }, Type.Bullet);
-                        gameState.Players.Where(y => y.playerId == gameState.myUID).First().weapons.shoot();
+                        if (player.weapons.shotgunEquipped)
+                        {
+                            soundHandler.play(SoundHandler.EXPLOSION);
+                            Vector3 defaultVelocity = new Vector3(0, 0, 0);
+
+                            float mx = (float)(Mouse.X - screenX / 2) / (screenX * 0.3f);
+                            float my = (float)(Mouse.Y - screenY / 2) / (screenY * 0.3f);
+
+                            float xVelo = -mx;
+                            float yVelo = -my;
+
+                            float len = (float)Math.Sqrt(xVelo * xVelo + yVelo * yVelo);
+                            xVelo /= len;
+                            yVelo /= len;
+
+                            xVelo /= 10;
+                            yVelo /= -10;
+
+                            int spread = 100; //higher spread value makes the spread cover less area
+                            Vector2 spreadTarget = new Vector2(player.xPos + xVelo * spread, player.yPos + yVelo * spread);
+
+                            Bullet b1 = new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X*800/screenX, Mouse.Y*800/screenY), gameState.myUID);
+                            b1.setDirectionByMouse(new Vector2(Mouse.X, Mouse.Y),new Vector2(screenX, screenY));
+                            Bullet b2 = new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY), gameState.myUID);
+                            b2.setDirectionToPosition(spreadTarget.X + 1, spreadTarget.Y + 1);
+                            Bullet b3 = new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY), gameState.myUID);
+                            b3.setDirectionToPosition(spreadTarget.X - 1, spreadTarget.Y + 1);
+                            Bullet b4 = new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY), gameState.myUID);
+                            b4.setDirectionToPosition(spreadTarget.X - 1, spreadTarget.Y - 1);
+                            Bullet b5 = new Bullet(new Vector3(player.xPos, player.yPos, 0), new Vector2(Mouse.X * 800 / screenX, Mouse.Y * 800 / screenY), gameState.myUID);
+                            b5.setDirectionToPosition(spreadTarget.X + 1, spreadTarget.Y - 1);
+
+                            net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { b1 }, Type.Bullet);
+                            net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { b2 }, Type.Bullet); 
+                            net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { b3 }, Type.Bullet);
+                            net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { b4 }, Type.Bullet);
+                            net.SendObjs<Bullet>(Action.Request, new List<Bullet>() { b5 }, Type.Bullet);
+
+                            gameState.Players.Where(y => y.playerId == gameState.myUID).First().weapons.shoot();
+                        }
+                        else
+                        {
+                            soundHandler.play(SoundHandler.EXPLOSION);
+                            net.SendObjs<Bullet>(Action.Request,
+                                                 new List<Bullet>()
+                                                     {
+                                                         new Bullet(new Vector3(player.xPos, player.yPos, 0),
+                                                                    new Vector2(Mouse.X*800/screenX, Mouse.Y*800/screenY),
+                                                                    gameState.myUID)
+                                                     }, Type.Bullet);
+                            gameState.Players.Where(y => y.playerId == gameState.myUID).First().weapons.shoot();
+                        }
                     }
                 }
                 else
