@@ -9,6 +9,8 @@ using AP;
 
     /// <summary>
     /// Network manager specific to the game host.
+    /// Contributors: Kyle Galvin
+    /// Revision: 292
     /// </summary>
     public class HostManager : NetManager
     {

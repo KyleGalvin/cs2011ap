@@ -9,27 +9,29 @@ namespace AP
 {
     /// <summary>
     /// The class that will keep track of a players state and handle the movement and actions of the player.
+    /// Contributors: Scott Herman, Gage Patterson, Kyle Galvin, Adam Humeniuk
+    /// Revision: 295
     /// </summary>
     public class Player : Position
     {
-		#region Fields (4) 
+		#region Fields (10) 
 
-        public int prevHealth=100;
+        bool incWalk = true;
+        float legAngle = 0.0f;
         public int modelNumber = 3;
         //todo make this private again
         public int playerId = -1;
         public string playerName;
-        public Weapon weapons = new Weapon();
+        public int prevHealth=100;
+         public int score = 0;
         public Tiles tiles;
-        bool incWalk = true;
-        float legAngle = 0.0f;
-        public bool walking = false; 
-
-        public int score = 0;
+        public bool walking = false;
+        public Weapon weapons = new Weapon();
 
 		#endregion Fields 
 
 		#region Constructors (2) 
+
         /// <summary>
         /// The constructor for a player. It will set all the player parameters to default values.
         /// </summary>
@@ -67,9 +69,29 @@ namespace AP
 
 		#endregion Constructors 
 
-		#region Methods (5) 
+		#region Methods (6) 
 
-		// Public Methods (5) 
+		// Public Methods (6) 
+
+        /// <summary>
+        /// Animates the player.
+        /// </summary>
+        public void AnimatePlayer()
+        {
+            walking = true;
+            if (incWalk)
+            {
+                legAngle += 8;
+                if (legAngle > 35)
+                    incWalk = false;
+            }
+            else
+            {
+                legAngle -= 8;
+                if (legAngle < -35)
+                    incWalk = true;
+            }            
+        }
 
         /// <summary>
         /// Assigns the player ID.
@@ -169,23 +191,6 @@ namespace AP
             setAngle();
             position = new Vector3(xPos, yPos,0);
             AnimatePlayer();
-        }
-
-        public void AnimatePlayer()
-        {
-            walking = true;
-            if (incWalk)
-            {
-                legAngle += 8;
-                if (legAngle > 35)
-                    incWalk = false;
-            }
-            else
-            {
-                legAngle -= 8;
-                if (legAngle < -35)
-                    incWalk = true;
-            }            
         }
 
         /// <summary>

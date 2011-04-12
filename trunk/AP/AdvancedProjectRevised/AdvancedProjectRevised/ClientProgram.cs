@@ -1,28 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using OpenTK;
 using System.Net;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Input;
-
+using System;
 
 namespace AP
 {
+    /// <summary>
+    /// Client side program. Used for both multiplayer and singleplayer.
+    /// Contributors: Scott Herman, Gage Patterson, Kyle Galvin, Adam Humeniuk, Todd Burton.
+    /// Revision: 298
+    /// </summary>
     public class ClientProgram : GameWindow
     {
-        #region Fields (54)
+		#region Fields (58) 
 
         public static CollisionAI collisionAI;
         public EffectsHandler effectsHandler = new EffectsHandler();
         private bool enemySpawned = false;
         private GameState gameState;
         List<int> heightSquares = new List<int>();
+        public static int imageBenson;
+        public static int imageGameOver;
         ImageHandler imageHandler;
         private int imageLifeBar;
         private int imageLifeBarBG;
-        private int imageYouWin;
         private int imagePistolAvailable;
         private int imagePistolSelected;
         private int imageRifleAvailable;
@@ -31,18 +36,18 @@ namespace AP
         private int imageShotgunAvailable;
         private int imageShotgunSelected;
         private int imageShotgunUnavailable;
+        private int imageYouWin;
         CreateLevel level;
         private bool levelComplete = false;
-        public static int imageBenson;
         public static int loadedBloodTexture;
         public static int loadedObjectBullet;
         public static int loadedObjectCrate;
         public static int loadedObjectGrass;
         public static int loadedObjectPlayer;
-        public static int imageGameOver;
         public static LoadedObjects loadedObjects = new LoadedObjects();
         public static int loadedObjectWall;
         public static int loadedObjectZombie;
+        public bool lose;
         private PathFinder mPathFinder;
         public static bool multiplayer = false;
         public static NetManager net;
@@ -62,6 +67,7 @@ namespace AP
         private double viewDist = 23.0;
         private List<Wall> walls = new List<Wall>();
         List<int> widthSquares = new List<int>();
+        public bool win;
         List<int> xPosPlayerSpawn = new List<int>();
         List<int> xPosSpawn = new List<int>();
         List<int> xPosSquares = new List<int>();
@@ -72,14 +78,15 @@ namespace AP
         private int ZombieCountTotal = 20;
         private int zombieIterator = 0;
         private int zombieKillCount = 0;
-        public bool lose;
-        public bool win;
 
-        #endregion Fields
+		#endregion Fields 
 
-        #region Constructors (1)
+		#region Constructors (1) 
 
-        /// <summary>Creates a window with the specified title.</summary>
+        /// <summary>
+        /// Creates a window with the specified title.
+        /// </summary>
+        /// <param name="multi">if set to <c>true</c> [multi].</param>
         public ClientProgram(bool multi)
             : base(screenX, screenY, OpenTK.Graphics.GraphicsMode.Default, "ROFLPEWPEW")
         {
@@ -91,13 +98,12 @@ namespace AP
             VSync = VSyncMode.On;
         }
 
-        #endregion Constructors
+		#endregion Constructors 
 
-        #region Methods (20)
+		#region Methods (20) 
 
-        // Public Methods (3) 
+		// Public Methods (3) 
 
-        // moves the player
         /// <summary>
         /// Moves the player.
         /// </summary>
@@ -141,6 +147,7 @@ namespace AP
             manager.Connected = true;
             return manager;
         }
+
         /// <summary>
         /// Toggles the sound.
         /// </summary>
@@ -158,7 +165,7 @@ namespace AP
                 soundHandler.continueSong();
             }
         }
-        // Protected Methods (4) 
+		// Protected Methods (4) 
 
         /// <summary>
         /// Load resources here.
@@ -534,7 +541,7 @@ namespace AP
             
 
         }
-        // Private Methods (13) 
+		// Private Methods (13) 
 
         /// <summary>
         /// Draws the background.
@@ -924,6 +931,6 @@ namespace AP
             setSpawns();
         }
 
-        #endregion Methods
+		#endregion Methods 
     }
 }

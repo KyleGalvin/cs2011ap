@@ -11,6 +11,8 @@ namespace AP
 {
     /// <summary>
     /// The class in charge of loading and drawing our 3d mesh objects.
+    /// Contributors: Adam Humeniuk
+    /// Revision: 255
     /// </summary>
     public class LoadedObjects : Loader
     {

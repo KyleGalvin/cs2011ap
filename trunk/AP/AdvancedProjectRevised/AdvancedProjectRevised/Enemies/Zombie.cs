@@ -8,19 +8,21 @@ namespace AP
 {
     /// <summary>
     /// Basic Zombie class.
+    /// Contributors: Scott Herman, Gage Patterson, Adam Humeniuk
+    /// Revision: 264
     /// </summary>
     public class Zombie : Enemy
     {
-        #region Fields (4)
+		#region Fields (4) 
 
         public static int drawNumber;
         bool incWalk = true;
         float legAngle = 0.0f;
         public bool walking = false;
 
-        #endregion Fields
+		#endregion Fields 
 
-        #region Constructors (1)
+		#region Constructors (1) 
 
         /// <summary>
         /// Initialize the creation of a zombie enemy.
@@ -40,11 +42,11 @@ namespace AP
             updateTimeStamp();
         }
 
-        #endregion Constructors
+		#endregion Constructors 
 
-        #region Methods (4)
+		#region Methods (5) 
 
-        // Public Methods (4) 
+		// Public Methods (5) 
 
         /// <summary>
         /// Reduces passed player's life.
@@ -97,8 +99,6 @@ namespace AP
             GL.PopMatrix();
             GL.PopMatrix();
         }
-
-
 
         /// <summary>
         /// Moves the zombie enemy using the passed x and y positions as
@@ -184,6 +184,7 @@ namespace AP
 
             updateTimeStamp();
         }
+
         /// <summary>
         /// Moves towards the player.
         /// </summary>
@@ -255,6 +256,7 @@ namespace AP
 
             updateTimeStamp();
         }
-        #endregion Methods
+
+		#endregion Methods 
     }
 }

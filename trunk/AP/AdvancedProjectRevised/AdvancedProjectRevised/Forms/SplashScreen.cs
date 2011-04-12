@@ -11,30 +11,58 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AP
 {
+    /// <summary>
+    /// The main screen a user sees when they start the program
+    /// Contributors: Gage Patterson
+    /// Revision: 283
+    /// </summary>
     public partial class SplashScreen : Form
     {
+		#region Fields (12) 
+
+        float angle1 = 0.0f;
+        float angle2 = 0.0f;
+        bool incWalk = true;
+        bool incWalk2 = true;
+        float legAngle = 0.0f;
+        float legAngle2 = 0.0f;
         bool loaded = false;
+        LoadedObjects loadedObjects = new LoadedObjects();
         //camera related things
         OpenTK.Vector3d up = new OpenTK.Vector3d(0.0, 0.0, -1.0);
         OpenTK.Vector3d viewDirection = new OpenTK.Vector3d(0.0, 1.0, -0.3);
         double viewDist = 30.0;
-        float angle1 = 0.0f;
-        float angle2 = 0.0f;
-
         float zombieWalk = 0.0f;
 
-        bool incWalk = true;
-        float legAngle = 0.0f;
+		#endregion Fields 
 
-        bool incWalk2 = true;
-        float legAngle2 = 0.0f;
+		#region Constructors (1) 
 
-        LoadedObjects loadedObjects = new LoadedObjects();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SplashScreen"/> class.
+        /// </summary>
         public SplashScreen()
         {
             InitializeComponent();
         }
 
+		#endregion Constructors 
+
+		#region Methods (8) 
+
+		// Protected Methods (1) 
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+        }
+		// Private Methods (7) 
+
+        /// <summary>
+        /// Handles the Click event of the btn_Client control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void btn_Client_Click(object sender, EventArgs e)
         {
             btn_Multiplayer.Visible = true;
@@ -43,23 +71,11 @@ namespace AP
             btn_Server.Visible = false;
         }
 
-        private void btn_Server_Click(object sender, EventArgs e)
-        {
-            this.Visible = false;
-            ServerProgram server = new ServerProgram();
-            
-        }
-
-        private void btn_Singleplayer_Click(object sender, EventArgs e)
-        {
-            this.Visible = false;
-            using (ClientProgram client = new ClientProgram(false))
-            {
-                client.Run(28.0);
-            }
-            Application.Exit();
-        }
-
+        /// <summary>
+        /// Handles the Click event of the btn_Multiplayer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void btn_Multiplayer_Click(object sender, EventArgs e)
         {
             this.Visible = false;
@@ -69,9 +85,32 @@ namespace AP
             }
             Application.Exit();
         }
-        protected override void OnPaint(PaintEventArgs e)
+
+        /// <summary>
+        /// Handles the Click event of the btn_Server control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void btn_Server_Click(object sender, EventArgs e)
         {
-            base.OnPaint(e);
+            this.Visible = false;
+            ServerProgram server = new ServerProgram();
+            
+        }
+
+        /// <summary>
+        /// Handles the Click event of the btn_Singleplayer control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        private void btn_Singleplayer_Click(object sender, EventArgs e)
+        {
+            this.Visible = false;
+            using (ClientProgram client = new ClientProgram(false))
+            {
+                client.Run(28.0);
+            }
+            Application.Exit();
         }
 
         private void glControl1_Load(object sender, EventArgs e)
@@ -98,19 +137,6 @@ namespace AP
             loadedObjects.LoadObject("Objects//PlayerRightArm.obj", "Objects//zombie.png", 1.0f);
 
             //loadedObjects.LoadObject("Objects//2DSquare.obj", "Objects//Background.png", 1.0f);
-        }
-
-        private void glControl1_Resize(object sender, EventArgs e)
-        {
-            if (!loaded)
-                return;
-            GL.Viewport(0, 0, Width, Height);
-
-            double aspect_ratio = Width / (double)Height;
-
-            OpenTK.Matrix4 perspective = OpenTK.Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)aspect_ratio, 0.1f, 64000f);
-            GL.MatrixMode(MatrixMode.Projection);
-            GL.LoadMatrix(ref perspective);
         }
 
         private void glControl1_Paint(object sender, PaintEventArgs e)
@@ -209,5 +235,20 @@ namespace AP
 
 
         }
+
+        private void glControl1_Resize(object sender, EventArgs e)
+        {
+            if (!loaded)
+                return;
+            GL.Viewport(0, 0, Width, Height);
+
+            double aspect_ratio = Width / (double)Height;
+
+            OpenTK.Matrix4 perspective = OpenTK.Matrix4.CreatePerspectiveFieldOfView(MathHelper.PiOver4, (float)aspect_ratio, 0.1f, 64000f);
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadMatrix(ref perspective);
+        }
+
+		#endregion Methods 
     }
 }

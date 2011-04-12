@@ -2,32 +2,43 @@
 using OpenTK;
 using OpenTK.Audio;
 
+/// <summary>
+/// Handles the sound
+/// Contributors: Todd Burton
+/// Revision: 248
+/// </summary>
 public class SoundHandler
 {
+		#region Fields (20) 
+
+    AudioContext ac;
+    private int arraySpot = 0;
+    AudioReader[] audioList;
+    public const String BACKGROUND = "../../Sounds/bg1.wav";
+    int[] bufferList;
     public const String EXPLOSION = "../../Sounds/explosion.wav";
     public const String GUNSHOT = "../../Sounds/gunshot.wav";
+    public const String INJURED = "../../Sounds/injured1.wav";
+    public int injuredSoundCooldown = 0;
+    private const int maxSounds = 10;
+    public bool pressingF1 = false;
+    public const String RELOAD = "../../Sounds/reload.wav";
     public const String SCREAM = "../../Sounds/wilhelm.wav";
     public const String SILENCER = "../../Sounds/gunshotsilencer.wav";
-    public const String RELOAD = "../../Sounds/reload.wav";
-    public const String INJURED = "../../Sounds/injured1.wav";
-    public const String ZOMBIE = "../../Sounds/zombie3.wav";
-    public const String BACKGROUND = "../../Sounds/bg1.wav";
-    private const int maxSounds = 10;
-    private Boolean soundsOn = false;
-    public bool pressingF1 = false;
-
-    public int injuredSoundCooldown = 0;
-
-    private int arraySpot = 0;
-    int[] bufferList;
-    int[] sourceList;
     private int songBuffer;
-    private int songSource;
     private AudioReader songReader;
+    private int songSource;
+    private Boolean soundsOn = false;
+    int[] sourceList;
+    public const String ZOMBIE = "../../Sounds/zombie3.wav";
 
-    AudioReader[] audioList;
-    AudioContext ac;
+		#endregion Fields 
 
+		#region Constructors (1) 
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SoundHandler"/> class.
+    /// </summary>
     public SoundHandler()
     {
         // initialize buffer, source, AudioReader arrays
@@ -38,55 +49,34 @@ public class SoundHandler
         // create ONE AudioContext to handle all sounds
         ac = new AudioContext();
     }
-    public void setSoundState(Boolean state)
-    {
-        soundsOn = state;
-    }
-    public Boolean getSoundState()
-    {
-        return soundsOn;
-    }
 
-    // stops the current song (does not affect sound effects)
-    public void stopSong()
-    {
-        // stop playback of the current song and delete its buffer        
-        AL.SourceStop(songSource);
-    }
+		#endregion Constructors 
 
+		#region Methods (6) 
+
+		// Public Methods (6) 
+
+    /// <summary>
+    /// Continues the song.
+    /// </summary>
     public void continueSong()
     {
         AL.SourcePlay(songSource);
     }
 
-    // plays a full-length song and loops it continuously
-    public void playSong(String soundPath)
+    /// <summary>
+    /// Gets the state of the sound.
+    /// </summary>
+    /// <returns></returns>
+    public Boolean getSoundState()
     {
-        if (soundsOn)
-        {
-            // stop playback of the current song
-            AL.SourceStop(songSource);
-            AL.DeleteSource(songSource);
-            AL.DeleteBuffer(songBuffer);
-
-            // generate a new buffer, source, audioReader
-            songBuffer = AL.GenBuffer();
-            songSource = AL.GenSource();
-            songReader = new AudioReader(soundPath);
-
-            // read the song into the buffer
-            AL.BufferData(songBuffer, songReader.ReadToEnd());
-
-            // create a source using this buffer, loop the song
-            AL.Source(songSource, ALSourcei.Buffer, songBuffer); // attach the buffer to a source
-            AL.Source(songSource, ALSourceb.Looping, true);
-
-            // start playback
-            AL.SourcePlay(songSource);
-        }
+        return soundsOn;
     }
 
-    // plays a sound effect once (no looping)
+    /// <summary>
+    /// Plays the specified sound path. No Loop
+    /// </summary>
+    /// <param name="soundPath">The sound path.</param>
     public void play(String soundPath)
     {
 
@@ -127,4 +117,54 @@ public class SoundHandler
             }
         }
     }
+
+    /// <summary>
+    /// Plays the song. Loop
+    /// </summary>
+    /// <param name="soundPath">The sound path.</param>
+    public void playSong(String soundPath)
+    {
+        if (soundsOn)
+        {
+            // stop playback of the current song
+            AL.SourceStop(songSource);
+            AL.DeleteSource(songSource);
+            AL.DeleteBuffer(songBuffer);
+
+            // generate a new buffer, source, audioReader
+            songBuffer = AL.GenBuffer();
+            songSource = AL.GenSource();
+            songReader = new AudioReader(soundPath);
+
+            // read the song into the buffer
+            AL.BufferData(songBuffer, songReader.ReadToEnd());
+
+            // create a source using this buffer, loop the song
+            AL.Source(songSource, ALSourcei.Buffer, songBuffer); // attach the buffer to a source
+            AL.Source(songSource, ALSourceb.Looping, true);
+
+            // start playback
+            AL.SourcePlay(songSource);
+        }
+    }
+
+    /// <summary>
+    /// Sets the state of the sound.
+    /// </summary>
+    /// <param name="state">if set to <c>true</c> [state].</param>
+    public void setSoundState(Boolean state)
+    {
+        soundsOn = state;
+    }
+
+    /// <summary>
+    /// Stops the song.
+    /// </summary>
+    public void stopSong()
+    {
+        // stop playback of the current song and delete its buffer        
+        AL.SourceStop(songSource);
+    }
+
+		#endregion Methods 
 }

@@ -9,17 +9,19 @@ namespace AP
     /// The class that is used for collision detectiong and enemy AI.
     /// It keeps a seperate version of the game state which it is able to understand
     /// and use to efficiently run it's checks.
+    /// Contributors: Adam Humeniuk
+    /// Revision: 285
     /// </summary>
     public class CollisionAI
     {
-		#region Fields (3) 
-        public Tiles wallTiles;
+		#region Fields (5) 
+
         bool[,] blockedByWall;
+        public List<Player> playerList = new List<Player>();
         //private float TileSize = 1;
         List<Position>[,] tileListEnemies;
-        public List<Player> playerList = new List<Player>();
         private int Tiles = 400;
-        
+        public Tiles wallTiles;
 
 		#endregion Fields 
 
@@ -65,9 +67,9 @@ namespace AP
 
 		#endregion Constructors 
 
-		#region Methods (4) 
+		#region Methods (6) 
 
-		// Public Methods (4) 
+		// Public Methods (6) 
 
         public void addToPlayerList(ref Player p)
         {

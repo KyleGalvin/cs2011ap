@@ -10,6 +10,8 @@ using AP;
 
     /// <summary>
     /// The network library for the client
+    /// Contributors: Kyle Galvin, Gage Patterson, Scott Herman
+    /// Revision: 299
     /// </summary>
 	public class ClientManager : NetManager
 	{

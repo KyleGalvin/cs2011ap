@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
     /// <summary>
     /// Holds the client connection and everyone connected to it. If your a client you will have one if your a server you will have up to 4
+    /// Contributors: Kyle Galvin, Scott Herman, Gage Patterson
+    /// Revision: 194
     /// </summary>
 	public class Connection
 	{
@@ -19,6 +21,10 @@ using System.Collections.Generic;
 
 		#region Constructors (1) 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Connection"/> class.
+        /// </summary>
+        /// <param name="client">The client.</param>
 		public Connection(object client)
 		{
             playerUID = -1;

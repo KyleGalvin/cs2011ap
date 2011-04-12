@@ -120,3 +120,5 @@ C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedPro
 C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.SplashScreen.resources
 C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.Properties.Resources.resources
 C:\Documents and Settings\student\Desktop\AP2\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
+C:\Users\Gage\Desktop\AP_Comment_For_Final\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\Users\Gage\Desktop\AP_Comment_For_Final\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
