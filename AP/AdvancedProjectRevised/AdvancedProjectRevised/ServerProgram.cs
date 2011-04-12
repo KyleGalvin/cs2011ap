@@ -7,27 +7,32 @@ using OpenTK;
 
 namespace AP
 {
+    /// <summary>
+    /// This is the server that the clients connect to.
+    /// Contributors: Scott Herman, Gage Patterson, Kyle Galvin, Todd Burton
+    /// Revision: 294
+    /// </summary>
     class ServerProgram
     {
-		#region Fields (23) 
-        
+		#region Fields (28) 
+
+        private int ammoCounter=0;
         public static int bulletID = 0;
-        public static int enemyID = 0;
+        private System.Timers.Timer bulletTime = new System.Timers.Timer(35f);
         public static CollisionAI collisionAI;
+        private int crateCounter = 0;
         private int currentLevel = 1;
+        public static int enemyID = 0;
         private bool enemySpawned = false;
         private  GameState gameState;
-        private int ammoCounter=0;
-        private int crateCounter = 0;
-        private System.Timers.Timer bulletTime = new System.Timers.Timer(35f);
         private System.Timers.Timer gameTime = new System.Timers.Timer(50f);
         List<int> heightSquares = new List<int>();
         CreateLevel level;
         private PathFinder mPathFinder;
         NetManager net;
-        public static bool status;
         public static List<int> playerSpawnID = new List<int>();
         List<EnemySpawn> spawns = new List<EnemySpawn>();
+        public static bool status;
         public Tiles tiles;
         private List<Wall> walls = new List<Wall>();
         List<int> widthSquares = new List<int>();
@@ -44,6 +49,9 @@ namespace AP
 
 		#region Constructors (1) 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServerProgram"/> class.
+        /// </summary>
         public ServerProgram()
         {
             // Set up the spawn locations for enemies
@@ -74,64 +82,11 @@ namespace AP
             gameTime.Enabled = true;
         }
 
-        #endregion Constructors 
+		#endregion Constructors 
 
-		#region Methods (3) 
+		#region Methods (5) 
 
-		// Private Methods (3) 
-        /// <summary>
-        /// Handles the spawning.
-        /// </summary>
-        private void HandleSpawning()
-        {
-            zombieIterator++;
-            if (zombieCount < 100)
-            {
-                foreach (var spawn in spawns)
-                {
-                    if (zombieIterator == 40)
-                    {
-                        lock (gameState)
-                        {
-                            //need to ping server for a UID
-                            gameState.Enemies.Add(spawn.spawnEnemy(enemyID++));
-                            enemySpawned = true;
-                            zombieCount++;
-                        }
-
-                    }
-                }
-                if (enemySpawned)
-                {
-                    zombieIterator = 0;
-                    enemySpawned = false;
-                }
-            }
-        }
-        /// <summary>
-        /// Handles the crates.
-        /// </summary>
-        private void HandleCrates()
-        {
-            foreach (var p in gameState.Players)
-            {
-                foreach (Crate crate in gameState.Crates)
-                {
-                    float diffX = p.xPos - crate.xPos;
-                    float diffY = p.yPos - crate.yPos;
-                    if ((float) Math.Sqrt(diffX*diffX + diffY*diffY) <= p.radius + crate.radius)
-                    {
-                        if (crate.crateType == 0)
-                            p.weapons.rifleAmmo += 25;
-                        else if (crate.crateType == 1)
-                            p.weapons.shotgunAmmo += 5;
-                        crate.timestamp = -1;
-                    }
-                }
-            }
-
-        }
-   
+		// Private Methods (5) 
 
         /// <summary>
         /// The main game loop
@@ -203,6 +158,60 @@ namespace AP
                 ammoCounter++;
             }
             net.SyncStateOutgoing();
+        }
+
+        /// <summary>
+        /// Handles the crates.
+        /// </summary>
+        private void HandleCrates()
+        {
+            foreach (var p in gameState.Players)
+            {
+                foreach (Crate crate in gameState.Crates)
+                {
+                    float diffX = p.xPos - crate.xPos;
+                    float diffY = p.yPos - crate.yPos;
+                    if ((float) Math.Sqrt(diffX*diffX + diffY*diffY) <= p.radius + crate.radius)
+                    {
+                        if (crate.crateType == 0)
+                            p.weapons.rifleAmmo += 25;
+                        else if (crate.crateType == 1)
+                            p.weapons.shotgunAmmo += 5;
+                        crate.timestamp = -1;
+                    }
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Handles the spawning.
+        /// </summary>
+        private void HandleSpawning()
+        {
+            zombieIterator++;
+            if (zombieCount < 100)
+            {
+                foreach (var spawn in spawns)
+                {
+                    if (zombieIterator == 40)
+                    {
+                        lock (gameState)
+                        {
+                            //need to ping server for a UID
+                            gameState.Enemies.Add(spawn.spawnEnemy(enemyID++));
+                            enemySpawned = true;
+                            zombieCount++;
+                        }
+
+                    }
+                }
+                if (enemySpawned)
+                {
+                    zombieIterator = 0;
+                    enemySpawned = false;
+                }
+            }
         }
 
         /// <summary>

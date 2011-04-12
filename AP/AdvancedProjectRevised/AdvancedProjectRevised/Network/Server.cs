@@ -5,6 +5,8 @@ using System.Text;
 
     /// <summary>
     /// Used to hold the information about the server.
+    /// Contributors: Gage Patterson
+    /// Revision: 164
     /// </summary>
     public class Server
     {
@@ -17,6 +19,11 @@ using System.Text;
 
 		#region Constructors (1) 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Server"/> class.
+        /// </summary>
+        /// <param name="_Name">Name of the _.</param>
+        /// <param name="_ServerIP">The _ server IP.</param>
         public Server(string _Name, IPAddress _ServerIP)
         {
             Name = _Name;

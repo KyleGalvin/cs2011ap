@@ -4,10 +4,12 @@ using System.Linq;
 
     /// <summary>
     /// Representation of a packet
+    /// Contributors: Kyle Galvin, Gage Patterson, Scott Herman
+    /// Revision: 292
     /// </summary>
 	public class NetPackage
 	{
-		#region Fields (10) 
+		#region Fields (11) 
 
 		public UInt32 action;
 		public List<byte[]> body;
@@ -16,15 +18,18 @@ using System.Linq;
 		public UInt32 header;
         public bool isLobby;
         public PackageInterpreter myInterpreter;
+        public List<byte[]> newbody;
 		public UInt32 sizeofobj;
 		public UInt32 totalSize;
 		public UInt32 typeofobj;
-        public List<byte[]> newbody;
 
 		#endregion Fields 
 
 		#region Constructors (1) 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetPackage"/> class.
+        /// </summary>
 		public NetPackage ()
 		{
             myInterpreter = new PackageInterpreter();

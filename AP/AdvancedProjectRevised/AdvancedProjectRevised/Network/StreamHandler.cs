@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
     /// <summary>
     /// Handles the incoming/out-going data
+    /// Contributors: Kyle Galvin, Scott Herman, Gage Patterson
+    /// Revision: 293
     /// </summary>
     public class StreamHandler
     {
@@ -54,9 +56,9 @@ using System.Collections.Generic;
             }
 
             return myPackage;
-       } 
+       }
 
-        /// <summary>
+         /// <summary>
         /// Blindly writes the specified data. It is up to the NetManager (or appropriate child) to ensure this is a properly formed packet.
         /// </summary>
         /// <param name="data">The data.</param>

@@ -29,6 +29,8 @@ public enum Type
 
 /// <summary>
 /// Can interpret the command and data associated with a packet.
+/// Contributors: Kyle Galvin, Scott Herman, Gage Patterson
+/// Revision: 291
 /// </summary>
 public class PackageInterpreter
 {

@@ -9,22 +9,26 @@ namespace AP
 {
      /// <summary>
      /// The basic bullet class. It will keep track of bullet lifetime as well as movement.
-     /// </summary>
+    /// Contributors: Scott Herman, Gage Patterson, Adam Humeniuk, Kyle Galvin
+    /// Revision: 265
+    /// </summary
     public class Bullet: Position
     {
-		#region Fields (4) 
+		#region Fields (7) 
 
         //private Bullet prevBullet = null;
         private float direction = 1.0f;
         public int lifeTime = 30;
+        public Vector3 mousePos;
+         public int playerID;
+        public Vector2 velocity;
         float xVel = 0;
         float yVel = 0;
-        public Vector3 mousePos;
-        public Vector2 velocity;
-         public int playerID;
+
 		#endregion Fields 
 
-		#region Constructors (1) 
+		#region Constructors (2) 
+
         /// <summary>
         /// This is the bullet constructor. It sets up the attributes of a basic bullet
         /// </summary>
@@ -45,6 +49,12 @@ namespace AP
             this.playerID = _playerID;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Bullet"/> class.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <param name="velocity">The velocity.</param>
+        /// <param name="_playerID">The _player ID.</param>
         public Bullet(Vector3 position, Vector2 velocity,int _playerID)
         {
             radius = 0.1f;
@@ -59,9 +69,9 @@ namespace AP
 
 		#endregion Constructors 
 
-		#region Methods (4) 
+		#region Methods (6) 
 
-		// Public Methods (4) 
+		// Public Methods (6) 
 
         /// <summary>
         /// Draws this instance.
@@ -122,6 +132,9 @@ namespace AP
             setAngle();
         }
 
+        /// <summary>
+        /// Multiplayermoves this instance.
+        /// </summary>
         public void multiplayermove()
         {
             prevXPos = xPos;

@@ -6,30 +6,35 @@ using OpenTK;
 
 /// <summary>
 /// Executes the packet commands
+/// Contributors: Kyle Galvin, Scott Herman, Gage Patterson
+/// Revision: 292
 /// </summary>
 public class PackWorker
 {
-    #region Fields (1)
-    protected GameState State;
+		#region Fields (2) 
+
     //private List<AP.Position> GameState;
     protected PackageInterpreter myInterpreter = new PackageInterpreter();
-    
+    protected GameState State;
 
-    #endregion Fields
+		#endregion Fields 
 
-    #region Constructors (1)
+		#region Constructors (1) 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PackWorker"/> class.
+    /// </summary>
+    /// <param name="s">The s.</param>
     public PackWorker(ref GameState s)
     {
         State = s;
     }
 
-    #endregion Constructors
+		#endregion Constructors 
 
+		#region Methods (11) 
 
-    #region Methods (8)
-
-    // Public Methods (8) 
+		// Public Methods (11) 
 
     /// <summary>
     /// Creates the AI.
@@ -55,6 +60,11 @@ public class PackWorker
         return b;
     }
 
+    /// <summary>
+    /// Creates the crate.
+    /// </summary>
+    /// <param name="data">The data.</param>
+    /// <returns></returns>
     public AP.Crate CreateCrate(List<byte[]> data)
     {
         Crate c = new AP.Crate(new Vector2(BitConverter.ToSingle(data[2], 0), BitConverter.ToSingle(data[3], 0)), BitConverter.ToInt32(data[0], 0));
@@ -70,51 +80,6 @@ public class PackWorker
     public AP.Player CreatePlayer(List<byte[]> data)
     {
         return new AP.Player(new OpenTK.Vector3(BitConverter.ToSingle(data[1], 0), BitConverter.ToSingle(data[2], 0), 0), BitConverter.ToInt32(data[0], 0));
-    }
-
-    public void HandleDelete(NetPackage pack)
-    {
-        Int32 myTypeSize = (Int32)myInterpreter.GetTypeSize((Type)(pack.typeofobj));
-
-        for (int i = 0; i < pack.count; i++)
-        {
-            UInt32 t = pack.typeofobj;
-            if ((Type)t == Type.Bullet)
-            {
-                Int32 ID = (Int32)(BitConverter.ToUInt32(pack.body[(i * myTypeSize) + 1], 0) & 0xC1111111);
-                State.Bullets.Remove(State.Bullets.Where(y => y.UID == ID).First());
-            }
-            if ((Type)t == Type.AI)
-            {
-                Int32 ID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0);
-                State.Enemies.Remove(State.Enemies.Where(y => y.UID == ID).First());
-            }
-            if ((Type)t == Type.Powerup)
-            {
-                Int32 ID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0);
-                Int32 crateType = State.Crates.Where(y => y.UID == ID).First().crateType;
-                Int32 playerID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0)>>30;
-                State.Crates.Remove(State.Crates.Where(y => y.UID == ID).First());
-
-                if (playerID == State.myUID)
-                {
-                    switch (crateType)
-                    {
-                        case 0:
-                            State.Players.Where(y => y.playerId == State.myUID).First().weapons.rifleAmmo += 30;
-                            break;
-                        case 1:
-                            State.Players.Where(y => y.playerId == State.myUID).First().weapons.shotgunAmmo += 5;
-                            break;
-                        default:
-                            break;
-                    }
-                    ClientProgram.soundHandler.play(SoundHandler.RELOAD);
-                }
-                
-                    
-            }
-        }
     }
 
     /// <summary>
@@ -167,12 +132,74 @@ public class PackWorker
     }
 
     /// <summary>
+    /// Handles the delete.
+    /// </summary>
+    /// <param name="pack">The pack.</param>
+    public void HandleDelete(NetPackage pack)
+    {
+        Int32 myTypeSize = (Int32)myInterpreter.GetTypeSize((Type)(pack.typeofobj));
+
+        for (int i = 0; i < pack.count; i++)
+        {
+            UInt32 t = pack.typeofobj;
+            if ((Type)t == Type.Bullet)
+            {
+                Int32 ID = (Int32)(BitConverter.ToUInt32(pack.body[(i * myTypeSize) + 1], 0) & 0xC1111111);
+                State.Bullets.Remove(State.Bullets.Where(y => y.UID == ID).First());
+            }
+            if ((Type)t == Type.AI)
+            {
+                Int32 ID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0);
+                State.Enemies.Remove(State.Enemies.Where(y => y.UID == ID).First());
+            }
+            if ((Type)t == Type.Powerup)
+            {
+                Int32 ID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0);
+                Int32 crateType = State.Crates.Where(y => y.UID == ID).First().crateType;
+                Int32 playerID = BitConverter.ToInt32(pack.body[(i * myTypeSize) + 1], 0)>>30;
+                State.Crates.Remove(State.Crates.Where(y => y.UID == ID).First());
+
+                if (playerID == State.myUID)
+                {
+                    switch (crateType)
+                    {
+                        case 0:
+                            State.Players.Where(y => y.playerId == State.myUID).First().weapons.rifleAmmo += 30;
+                            break;
+                        case 1:
+                            State.Players.Where(y => y.playerId == State.myUID).First().weapons.shotgunAmmo += 5;
+                            break;
+                        default:
+                            break;
+                    }
+                    ClientProgram.soundHandler.play(SoundHandler.RELOAD);
+                }
+                
+                    
+            }
+        }
+    }
+
+    /// <summary>
     /// Handles the describe.
     /// </summary>
     /// <param name="pack">The pack.</param>
     public void HandleDescribe(NetPackage pack)
     {
         BitConverter.ToInt32(pack.body[0], 0);
+    }
+
+    /// <summary>
+    /// Handles the identify.
+    /// </summary>
+    /// <param name="pack">The pack.</param>
+    /// <returns></returns>
+    public int HandleIdentify(NetPackage pack)
+    {
+        State.myUID = BitConverter.ToInt32(pack.body[1], 0);
+        Console.WriteLine("MY UID is set to " + State.myUID);
+        Console.WriteLine("PACKAGE " + BitConverter.ToInt32(pack.body[1], 0));
+        return State.myUID;
     }
 
     /// <summary>
@@ -203,15 +230,6 @@ public class PackWorker
         }
 
     }
-
-    public int HandleIdentify(NetPackage pack)
-    {
-        State.myUID = BitConverter.ToInt32(pack.body[1], 0);
-        Console.WriteLine("MY UID is set to " + State.myUID);
-        Console.WriteLine("PACKAGE " + BitConverter.ToInt32(pack.body[1], 0));
-        return State.myUID;
-    }
-
 
     /// <summary>
     /// Handles the text.
@@ -265,7 +283,6 @@ public class PackWorker
 
     }
 
-
-    #endregion Methods
+		#endregion Methods 
 }
 

@@ -6,6 +6,8 @@ namespace AP
 {
     /// <summary>
     /// Handles the level creation
+    /// Contributors: Scott Herman
+    /// Revision: 255
     /// </summary>
     public class CreateLevel
     {

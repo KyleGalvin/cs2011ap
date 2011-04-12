@@ -5,12 +5,27 @@ using Img = System.Drawing.Imaging;
 
 namespace AP
 {
- 
+
+    /// <summary>
+    /// Handles the text
+    /// Contributors: Todd Burton, Adam Humeniuk, Mike Rioux
+    /// Revision: 209
+    /// </summary>
     public class TextHandler
     {
+		#region Fields (2) 
+
         int tex;
         TextureFont texFont;
 
+		#endregion Fields 
+
+		#region Constructors (1) 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TextHandler"/> class.
+        /// </summary>
+        /// <param name="textPath">The text path.</param>
         public TextHandler(string textPath)
         {
             // Load a bitmap from disc, and put it in a GL texture.
@@ -19,15 +34,107 @@ namespace AP
             texFont = new TextureFont(tex);
         }
 
+		#endregion Constructors 
+
+		#region Methods (1) 
+
+		// Public Methods (1) 
+
+        /// <summary>
+        /// Writes the text.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="size">The size.</param>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <param name="angle">The angle.</param>
         public void writeText(string text, float size, float x, float y, int angle)
         {
             // Write something centered in the viewport.
             texFont.WriteStringAt(text, size, x, y, angle); // text, heightPercent, xPercent, yPercent, degreesCounterClockwise
 
         }
+
+		#endregion Methods 
     }
+    /// <summary>
+    /// A text utility
+    /// </summary>
   public static class TextUtil
   {
+		#region Methods (4) 
+
+		// Private Methods (4) 
+
+      /// <summary>
+      /// Creates the texture.
+      /// </summary>
+      /// <param name="width">The width.</param>
+      /// <param name="height">The height.</param>
+      /// <param name="alpha">if set to <c>true</c> [alpha].</param>
+      /// <param name="bytes">The bytes.</param>
+      /// <returns></returns>
+    private static int CreateTexture(int width, int height, bool alpha, byte[] bytes)
+    {
+      int expectedBytes = width * height * (alpha ? 4 : 3);
+      Debug.Assert(expectedBytes == bytes.Length);
+      int tex = GiveMeATexture();
+      Upload(width, height, alpha, bytes);
+      SetParameters();
+      return tex;
+    }
+
+    /// <summary>
+    /// Gives me A texture.
+    /// </summary>
+    /// <returns></returns>
+    private static int GiveMeATexture()
+    {
+      int tex = GL.GenTexture();
+      GL.BindTexture(TextureTarget.Texture2D, tex);
+      return tex;
+    }
+
+    /// <summary>
+    /// Sets the parameters.
+    /// </summary>
+    private static void SetParameters()
+    {
+      GL.TexParameter(
+        TextureTarget.Texture2D,
+        TextureParameterName.TextureMinFilter,
+        (int)TextureMinFilter.Linear);
+      GL.TexParameter(TextureTarget.Texture2D,
+        TextureParameterName.TextureMagFilter,
+        (int)TextureMagFilter.Linear);
+    }
+
+    /// <summary>
+    /// Uploads the specified width.
+    /// </summary>
+    /// <param name="width">The width.</param>
+    /// <param name="height">The height.</param>
+    /// <param name="alpha">if set to <c>true</c> [alpha].</param>
+    /// <param name="bytes">The bytes.</param>
+    private static void Upload(int width, int height, bool alpha, byte[] bytes)
+    {
+      var internalFormat = alpha ? PixelInternalFormat.Rgba : PixelInternalFormat.Rgb;
+      var format = alpha ? PixelFormat.Rgba : PixelFormat.Rgb;
+      GL.TexImage2D<byte>(
+        TextureTarget.Texture2D,
+        0,
+        internalFormat,
+        width, height,
+        0,
+        format,
+        PixelType.UnsignedByte,
+        bytes);
+    }
+
+		#endregion Methods 
+
+
+
     #region Public
 
     /// <summary>
@@ -103,53 +210,39 @@ namespace AP
     }
 
     #endregion
-
-    private static int CreateTexture(int width, int height, bool alpha, byte[] bytes)
-    {
-      int expectedBytes = width * height * (alpha ? 4 : 3);
-      Debug.Assert(expectedBytes == bytes.Length);
-      int tex = GiveMeATexture();
-      Upload(width, height, alpha, bytes);
-      SetParameters();
-      return tex;
-    }
-
-    private static int GiveMeATexture()
-    {
-      int tex = GL.GenTexture();
-      GL.BindTexture(TextureTarget.Texture2D, tex);
-      return tex;
-    }
-
-    private static void SetParameters()
-    {
-      GL.TexParameter(
-        TextureTarget.Texture2D,
-        TextureParameterName.TextureMinFilter,
-        (int)TextureMinFilter.Linear);
-      GL.TexParameter(TextureTarget.Texture2D,
-        TextureParameterName.TextureMagFilter,
-        (int)TextureMagFilter.Linear);
-    }
-
-    private static void Upload(int width, int height, bool alpha, byte[] bytes)
-    {
-      var internalFormat = alpha ? PixelInternalFormat.Rgba : PixelInternalFormat.Rgb;
-      var format = alpha ? PixelFormat.Rgba : PixelFormat.Rgb;
-      GL.TexImage2D<byte>(
-        TextureTarget.Texture2D,
-        0,
-        internalFormat,
-        width, height,
-        0,
-        format,
-        PixelType.UnsignedByte,
-        bytes);
-    }
   }
 
+  /// <summary>
+  /// Store the font texture
+  /// </summary>
   public class TextureFont
   {
+		#region Fields (5) 
+
+    /// <summary>
+    /// Determines the distance from character center to adjacent character center, horizontally, in
+    /// one written text string. Model space coordinates.
+    /// </summary>
+    public double AdvanceWidth = 0.9;
+    /// <summary>
+    /// Determines the height of the cut-out to do for each character when rendering. This is necessary
+    /// to avoid artefacts stemming from filtering (zooming/rotating). Make sure your font contains some
+    /// "white space" around each character so they won't be clipped due to this!
+    /// </summary>
+    public double CharacterBoundingBoxHeight = .9;
+    /// <summary>
+    /// Determines the width of the cut-out to do for each character when rendering. This is necessary
+    /// to avoid artefacts stemming from filtering (zooming/rotating). Make sure your font contains some
+    /// "white space" around each character so they won't be clipped due to this!
+    /// </summary>
+    public double CharacterBoundingBoxWidth = 0.8;
+    private const double Sixteenth = 1.0 / 16.0;
+    private int textureId;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
     /// <summary>
     /// Create a TextureFont object. The sent-in textureId should refer to a
     /// texture bitmap containing a 16x16 grid of fixed-width characters,
@@ -161,6 +254,22 @@ namespace AP
     public TextureFont(int textureId)
     {
       this.textureId = textureId;
+    }
+
+		#endregion Constructors 
+
+		#region Methods (5) 
+
+		// Public Methods (3) 
+
+//{ get { return 1.0 - borderY * 2; } set { borderY = (1.0 - value) / 2.0; } }
+    /// <summary>
+    /// Computes the expected width of text string given. The height is always 1.0.
+    /// Model space coordinates.
+    /// </summary>
+    public double ComputeWidth(string text)
+    {
+      return text.Length * AdvanceWidth;
     }
 
     /// <summary>
@@ -185,35 +294,6 @@ namespace AP
       }
       GL.End();
       GL.PopMatrix();
-    }
-
-    /// <summary>
-    /// Determines the distance from character center to adjacent character center, horizontally, in
-    /// one written text string. Model space coordinates.
-    /// </summary>
-    public double AdvanceWidth = 0.9;
-
-    /// <summary>
-    /// Determines the width of the cut-out to do for each character when rendering. This is necessary
-    /// to avoid artefacts stemming from filtering (zooming/rotating). Make sure your font contains some
-    /// "white space" around each character so they won't be clipped due to this!
-    /// </summary>
-    public double CharacterBoundingBoxWidth = 0.8;
-
-    /// <summary>
-    /// Determines the height of the cut-out to do for each character when rendering. This is necessary
-    /// to avoid artefacts stemming from filtering (zooming/rotating). Make sure your font contains some
-    /// "white space" around each character so they won't be clipped due to this!
-    /// </summary>
-    public double CharacterBoundingBoxHeight = .9;//{ get { return 1.0 - borderY * 2; } set { borderY = (1.0 - value) / 2.0; } }
-
-    /// <summary>
-    /// Computes the expected width of text string given. The height is always 1.0.
-    /// Model space coordinates.
-    /// </summary>
-    public double ComputeWidth(string text)
-    {
-      return text.Length * AdvanceWidth;
     }
 
     /// <summary>
@@ -247,7 +327,12 @@ namespace AP
       GL.MatrixMode(MatrixMode.Modelview);
 
     }
+		// Private Methods (2) 
 
+    /// <summary>
+    /// Computes the aspect ratio.
+    /// </summary>
+    /// <returns></returns>
     private static double ComputeAspectRatio()
     {
       int[] viewport = new int[4];
@@ -258,6 +343,11 @@ namespace AP
       return aspectRatio;
     }
 
+    /// <summary>
+    /// Writes the character.
+    /// </summary>
+    /// <param name="ch">The ch.</param>
+    /// <param name="xpos">The xpos.</param>
     private void WriteCharacter(char ch, double xpos)
     {
       byte ascii;
@@ -281,8 +371,7 @@ namespace AP
       GL.TexCoord2(left, bottom); GL.Vertex2(xpos, 0);
     }
 
-    private int textureId;
-    private const double Sixteenth = 1.0 / 16.0;
+		#endregion Methods 
   }
 
 }
