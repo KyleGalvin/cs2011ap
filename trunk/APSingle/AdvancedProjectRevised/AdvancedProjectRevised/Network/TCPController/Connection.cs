@@ -3,9 +3,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 
-    /// <summary>
-    /// Holds the client connection and everyone connected to it. If your a client you will have one if your a server you will have up to 4
-    /// </summary>
+/// <summary>
+/// Holds the client connection and everyone connected to it. If your a client you will have one if your a server you will have up to 4
+/// Contributors: Kyle Galvin, Scott Herman, Gage Patterson
+/// Revision: 194
+/// </summary>
 	public class Connection
 	{
 		#region Fields (4) 

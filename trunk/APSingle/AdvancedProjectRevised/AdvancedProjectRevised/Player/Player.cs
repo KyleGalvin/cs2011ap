@@ -9,28 +9,28 @@ namespace AP
 {
     /// <summary>
     /// The class that will keep track of a players state and handle the movement and actions of the player.
+    /// Contributors: Scott Herman, Gage Patterson, Kyle Galvin, Adam Humeniuk
+    /// Revision: 295
     /// </summary>
     public class Player : Position
     {
-		#region Fields (4) 
+		#region Fields (9) 
 
+        bool incWalk = true;
+        float legAngle = 0.0f;
         public int modelNumber = 3;
         //todo make this private again
         public int playerId = -1;
         public string playerName;
-        public Weapon weapons = new Weapon();
+         public int score = 0;
         public Tiles tiles;
-
-
-        bool incWalk = true;
-        float legAngle = 0.0f;
-        public bool walking = false; 
-
-        public int score = 0;
+        public bool walking = false;
+        public Weapon weapons = new Weapon();
 
 		#endregion Fields 
 
 		#region Constructors (2) 
+
         /// <summary>
         /// The constructor for a player. It will set all the player parameters to default values.
         /// </summary>

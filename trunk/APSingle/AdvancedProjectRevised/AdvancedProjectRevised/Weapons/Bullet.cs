@@ -9,27 +9,31 @@ namespace AP
 {
      /// <summary>
      /// The basic bullet class. It will keep track of bullet lifetime as well as movement.
-     /// </summary>
+    /// Contributors: Scott Herman, Gage Patterson, Adam Humeniuk, Kyle Galvin
+    /// Revision: 265
+    /// </summary>
     public class Bullet: Position
     {
-		#region Fields (4) 
+		#region Fields (6) 
 
         //private Bullet prevBullet = null;
         private float direction = 1.0f;
         private int lifeTime = 30;
-        float xVel = 0;
-        float yVel = 0;
         public Vector3 mousePos;
         public Vector2 velocity;
+        float xVel = 0;
+        float yVel = 0;
 
 		#endregion Fields 
 
-		#region Constructors (1) 
+		#region Constructors (2) 
+
         /// <summary>
         /// This is the bullet constructor. It sets up the attributes of a basic bullet
         /// </summary>
         /// <param name="position">This is the point that the bullet starts at</param>
-        /// <param name="velocity">The velocity of the bullet</param>
+        /// <param name="mousePos">The mouse pos.</param>
+        /// <param name="life">The life.</param>
         /// <output>
         ///   </output>
         public Bullet(Vector3 position, Vector3 mousePos, int life)
@@ -44,6 +48,11 @@ namespace AP
             lifeTime = life;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Bullet"/> class.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <param name="velocity">The velocity.</param>
         public Bullet(Vector3 position, Vector2 velocity)
         {
             radius = 0.1f;
@@ -57,9 +66,9 @@ namespace AP
 
 		#endregion Constructors 
 
-		#region Methods (4) 
+		#region Methods (5) 
 
-		// Public Methods (4) 
+		// Public Methods (5) 
 
         /// <summary>
         /// Draws this instance.
@@ -153,6 +162,11 @@ namespace AP
             setAngle();
         }
 
+        /// <summary>
+        /// Sets the direction to position.
+        /// </summary>
+        /// <param name="xTarget">The x target.</param>
+        /// <param name="yTarget">The y target.</param>
         public void setDirectionToPosition(float xTarget, float yTarget)
         {
             xVel = xPos - xTarget;

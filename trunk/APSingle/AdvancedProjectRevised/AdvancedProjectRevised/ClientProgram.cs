@@ -11,89 +11,87 @@ using System.Windows.Forms;
 
 namespace AP
 {
+    /// <summary>
+    /// Main program that is used for the singleplayer game
+    /// Contributors: Scott Herman, Gage Patterson, Kyle Galvin, Adam Humeniuk, Todd Burton.
+    /// Revision: 298
+    /// </summary>
     class ClientProgram : GameWindow
     {
-        private Random rand = new Random();
+		#region Fields (66) 
 
-        public static LoadedObjects loadedObjects = new LoadedObjects();
-        public static int loadedObjectWall;
-        public static int loadedObjectGrass;
-        public static int loadedObjectPlayer;
-        public static int loadedObjectZombie;
-        public static int loadedBloodTexture;
-        public static int loadedObjectBullet;
-        public static int loadedObjectCrate;
-        public static int loadedCrackedGroundTexture;
-        public static int loadedBossMouth;
-        public static int loadedBossEye;
+        public static bool bossKilled = false;
+        public int bossSpawnCooldown = 2;
+        public int bossSpawnWaveCooldown = 50;
+        public int bossWaveCount = 1;
+        public static CollisionAI collisionAI;
+        private int currentLevel = 1;
         public EffectsHandler effectsHandler = new EffectsHandler();
-
-        public static SoundHandler soundHandler;
-        ImageHandler imageHandler;
-        TextHandler textHandler;
-        private int imageLifeBarBG;
-        private int imageLifeBar;
-        private int imageGameOver;
-        private int imageYouWin;
+        private bool enemySpawned = false;
+        private GameState gameState;
+        List<int> heightSquares = new List<int>();
         private int imageBenson;
-        private int imageSoundOn;
-        private int imageSoundOff;
+        private int imageControls;
+        private int imageGameOver;
+        ImageHandler imageHandler;
         private int imageLevelOne;
         private int imageLevelTwo;
-        private int imageControls;
-
-        private int imagePistolSelected;
+        private int imageLifeBar;
+        private int imageLifeBarBG;
         private int imagePistolAvailable;
-        private int imageRifleSelected;
+        private int imagePistolSelected;
         private int imageRifleAvailable;
+        private int imageRifleSelected;
         private int imageRifleUnavailable;
-        private int imageShotgunSelected;
         private int imageShotgunAvailable;
+        private int imageShotgunSelected;
         private int imageShotgunUnavailable;
-
+        private int imageSoundOff;
+        private int imageSoundOn;
+        private int imageYouWin;
         CreateLevel level;
-
+        public static int loadedBloodTexture;
+        public static int loadedBossEye;
+        public static int loadedBossMouth;
+        public static int loadedCrackedGroundTexture;
+        public static int loadedObjectBullet;
+        public static int loadedObjectCrate;
+        public static int loadedObjectGrass;
+        public static int loadedObjectPlayer;
+        public static LoadedObjects loadedObjects = new LoadedObjects();
+        public static int loadedObjectWall;
+        public static int loadedObjectZombie;
+        private PathFinder mPathFinder;
+        public static bool multiplayer = false;
+        private Cursor myCursor;
+        private NetManager net;
+        private Player player;
+        private Random rand = new Random();
         // Screen dimensions
         private const int screenX = 700;
         private const int screenY = 700;
-
+        private bool showControls = false;
+        public static SoundHandler soundHandler;
+        List<EnemySpawn> spawns = new List<EnemySpawn>();
+        TextHandler textHandler;
+        private Tiles tiles;
+        public int timeToShowLevel = 48;
         //camera related things
         Vector3d up = new Vector3d(0.0, 1.0, 0.0);
         Vector3d viewDirection = new Vector3d(0.0, 0.0, 1.0);
         private double viewDist = 23.0;
+        private List<Wall> walls = new List<Wall>();
         List<int> widthSquares = new List<int>();
-        List<int> heightSquares = new List<int>();
         List<int> xPosSpawn = new List<int>();
         List<int> xPosSquares = new List<int>();
         List<int> yPosSpawn = new List<int>();
         List<int> yPosSquares = new List<int>();
-
-        private int currentLevel = 1;
-        public static CollisionAI collisionAI;
-        private bool enemySpawned = false;
-
-        List<EnemySpawn> spawns = new List<EnemySpawn>();
         private int zombieCount = 0;
         private int zombieIterator = 0;
 
-        private NetManager net;
-        private GameState gameState;
-        public static bool multiplayer = false;
-        private Player player;
+		#endregion Fields 
 
-        public int bossSpawnCooldown = 2;
-        public int bossSpawnWaveCooldown = 50;
-        public int bossWaveCount = 1;
-        public static bool bossKilled = false;
-
-        public int timeToShowLevel = 48;
-        private bool showControls = false;
-
-        private List<Wall> walls = new List<Wall>();
-        private Tiles tiles;
-        private PathFinder mPathFinder;
-
-        private Cursor myCursor;
+		#region Constructors (1) 
 
         /// <summary>Creates a window with the specified title.</summary>
         public ClientProgram(bool multi)
@@ -106,6 +104,12 @@ namespace AP
 
             VSync = VSyncMode.On;
         }
+
+		#endregion Constructors 
+
+		#region Methods (9) 
+
+		// Public Methods (1) 
 
         /// <summary>
         /// Dirties the net hack.
@@ -124,6 +128,7 @@ namespace AP
             manager.Connected = true;
             return manager;
         }
+		// Protected Methods (4) 
 
         /// <summary>
         /// Load resources here.
@@ -263,72 +268,6 @@ namespace AP
                     x.tiles = tiles;
                 }
 
-            }
-        }
-
-        private void loadNewLevel()
-        {
-            gameState = new GameState();
-            level = new CreateLevel(currentLevel);
-            effectsHandler = new EffectsHandler();
-            xPosSquares.Clear();
-            yPosSquares.Clear();
-            heightSquares.Clear();
-            widthSquares.Clear();
-            xPosSpawn.Clear();
-            yPosSpawn.Clear();
-            level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
-            gameState.Players.Add(player);
-            player.xPos = 0;
-            player.yPos = 0;
-            setUpLevel();
-            zombieCount = 0;
-            
-            
-            walls.Clear();
-            for (int i = 0; i < xPosSquares.Count; i++)
-            {
-                walls.Add(new Wall(xPosSquares[i], yPosSquares[i], heightSquares[i], widthSquares[i]));
-            }
-            tiles = new Tiles(walls);
-            mPathFinder = new PathFinder(tiles.byteList());
-            collisionAI.wallTiles = tiles;
-            foreach (var x in gameState.Players)
-            {
-                x.tiles = tiles;
-            }
-
-            if (currentLevel == 2)
-            {
-                loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass.png", 5);
-                loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
-            }
-        }
-
-        private void setUpLevel()
-        {
-            collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
-            setSpawns();
-        }
-
-        private void setSpawns()
-        {
-            spawns.Clear();
-            if (xPosSpawn.Count > 0)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
-            }
-            if (xPosSpawn.Count > 1)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1]));
-            }
-            if (xPosSpawn.Count > 2)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2]));
-            }
-            if (xPosSpawn.Count > 3)
-            {
-                spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
             }
         }
 
@@ -1067,7 +1006,11 @@ namespace AP
             }
             GC.Collect();
         }
+		// Private Methods (4) 
 
+        /// <summary>
+        /// Handles the pathing.
+        /// </summary>
         private void handlePathing()
         {
             for (int index = 0; index < gameState.Enemies.Count; index++)
@@ -1115,5 +1058,72 @@ namespace AP
             }
         }
 
+        private void loadNewLevel()
+        {
+            gameState = new GameState();
+            level = new CreateLevel(currentLevel);
+            effectsHandler = new EffectsHandler();
+            xPosSquares.Clear();
+            yPosSquares.Clear();
+            heightSquares.Clear();
+            widthSquares.Clear();
+            xPosSpawn.Clear();
+            yPosSpawn.Clear();
+            level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
+            gameState.Players.Add(player);
+            player.xPos = 0;
+            player.yPos = 0;
+            setUpLevel();
+            zombieCount = 0;
+            
+            
+            walls.Clear();
+            for (int i = 0; i < xPosSquares.Count; i++)
+            {
+                walls.Add(new Wall(xPosSquares[i], yPosSquares[i], heightSquares[i], widthSquares[i]));
+            }
+            tiles = new Tiles(walls);
+            mPathFinder = new PathFinder(tiles.byteList());
+            collisionAI.wallTiles = tiles;
+            foreach (var x in gameState.Players)
+            {
+                x.tiles = tiles;
+            }
+
+            if (currentLevel == 2)
+            {
+                loadedObjectGrass = loadedObjects.LoadObject("Objects//groundTile.obj", "Objects//grass.png", 5);
+                loadedObjectWall = loadedObjects.LoadObject("Objects//UnitCube.obj", "Objects//cube.png", 1.0f);
+            }
+        }
+
+        private void setSpawns()
+        {
+            spawns.Clear();
+            if (xPosSpawn.Count > 0)
+            {
+                spawns.Add(new EnemySpawn(xPosSpawn[0], yPosSpawn[0]));
+            }
+            if (xPosSpawn.Count > 1)
+            {
+                spawns.Add(new EnemySpawn(xPosSpawn[1], yPosSpawn[1]));
+            }
+            if (xPosSpawn.Count > 2)
+            {
+                spawns.Add(new EnemySpawn(xPosSpawn[2], yPosSpawn[2]));
+            }
+            if (xPosSpawn.Count > 3)
+            {
+                spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
+            }
+        }
+
+        private void setUpLevel()
+        {
+            collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
+            setSpawns();
+        }
+
+		#endregion Methods 
     }
 }

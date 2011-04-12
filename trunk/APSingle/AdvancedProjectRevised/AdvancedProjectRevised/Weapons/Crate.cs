@@ -7,10 +7,19 @@ using OpenTK.Graphics.OpenGL;
 
 namespace AP
 {
+    /// <summary>
+    /// Used to store the crate type and position for ammo pickups
+    /// Contributors: Adam Humeniuk
+    /// Revision: 278
+    /// </summary>
     public class Crate : Position
     {
         public int crateType;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Crate"/> class.
+        /// </summary>
+        /// <param name="spawnPos">The spawn pos.</param>
         public Crate(Vector2 spawnPos)
         {
             xPos = spawnPos.X;
@@ -21,6 +30,9 @@ namespace AP
             crateType = rand.Next(0, 2);
         }
 
+        /// <summary>
+        /// Draws this instance.
+        /// </summary>
         public void draw()
         {
             GL.PushMatrix();

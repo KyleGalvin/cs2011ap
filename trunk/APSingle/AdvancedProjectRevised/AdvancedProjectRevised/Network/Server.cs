@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-    /// <summary>
-    /// Used to hold the information about the server.
-    /// </summary>
+/// <summary>
+/// Used to hold the information about the server.
+/// Contributors: Gage Patterson
+/// Revision: 164
+/// </summary>
     public class Server
     {
 		#region Fields (2) 

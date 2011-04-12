@@ -7,6 +7,8 @@ namespace AP
 {
     /// <summary>
     /// Collection of objects that represent the game.
+    /// Contributors: Scott Herman, Kyle Galvin
+    /// Revision: 236
     /// </summary>
     public class GameState
     {
@@ -22,6 +24,9 @@ namespace AP
 
 		#region Constructors (1) 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameState"/> class.
+        /// </summary>
         public GameState()
         {
             Players = new List<AP.Player>();
@@ -54,6 +59,10 @@ namespace AP
             return (enemyIDs++);
         }
 
+        /// <summary>
+        /// Timestamps the specified obj.
+        /// </summary>
+        /// <param name="Obj">The obj.</param>
         public void Timestamp(Position Obj)
         {
             DateTime t = DateTime.Now;
