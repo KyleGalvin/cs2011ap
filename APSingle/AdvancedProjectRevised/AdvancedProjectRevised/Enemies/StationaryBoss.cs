@@ -7,6 +7,8 @@ namespace AP
 {
     /// <summary>
     /// This class is used for the stationary boss
+    /// Contributors: Scott Herman
+    /// Revision: 215
     /// </summary>
     public class StationaryBoss: Enemy
     {

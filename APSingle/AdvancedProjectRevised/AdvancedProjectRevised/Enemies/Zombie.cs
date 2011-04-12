@@ -8,26 +8,28 @@ namespace AP
 {
     /// <summary>
     /// Basic Zombie class.
+    /// Contributors: Scott Herman, Gage Patterson, Adam Humeniuk
+    /// Revision: 264
     /// </summary>
     public class Zombie : Enemy
     {
-		#region Fields (4) 
-        public const int NORMAL = 0;
-        public static float normalScale = 0.08f;
-        public const int TANK = 1;
-        public static float tankScale = 0.12f;
-        public const int FAST = 2;
-        public static float fastScale = 0.06f;
+		#region Fields (15) 
+
+        private bool ascending = true;
         public const int BOSS = 3;
         public static float bossScale = 1.0f;
-
         public static int drawNumber;
+        public const int FAST = 2;
+        public static float fastScale = 0.06f;
         bool incWalk = true;
         float legAngle = 0.0f;
-        public bool walking = false;
+        public const int NORMAL = 0;
+        public static float normalScale = 0.08f;
         private float scale = 0;
+        public const int TANK = 1;
+        public static float tankScale = 0.12f;
         private float victoryJumpHeight = 0.0f;
-        private bool ascending = true;
+        public bool walking = false;
 
 		#endregion Fields 
 
@@ -49,9 +51,9 @@ namespace AP
 
 		#endregion Constructors 
 
-		#region Methods (4) 
+		#region Methods (7) 
 
-		// Public Methods (4) 
+		// Public Methods (7) 
 
         /// <summary>
         /// Reduces passed player's life.
@@ -63,6 +65,10 @@ namespace AP
             player.loseHealth( (float)Damage.Low );
         }
 
+        /// <summary>
+        /// Changes the sub type
+        /// </summary>
+        /// <param name="newType"></param>
         public override void changeSubtype(int newType)
         {
             type = newType;
@@ -97,39 +103,9 @@ namespace AP
             }
         }
 
-        public override void drawVictory()
-        {
-            GL.PushMatrix();
-            GL.Translate(xPos, yPos, 0);
-            GL.Translate(0, 0, 0.4f / 0.08f * scale + victoryJumpHeight);
-            GL.Rotate(angle - 90, 0, 0, 1);
-            GL.Rotate(180, 0, 1.0f, 0);
-
-            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + type * 5); //body 
-
-            GL.PushMatrix();
-            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 2 + type * 5); //right leg 
-            GL.PopMatrix();
-
-            GL.PushMatrix();
-            GL.Translate(scale, 0, 0);
-            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 1 + type * 5); //left leg 
-            GL.PopMatrix();
-
-            GL.PushMatrix();
-            if (walking)
-                GL.Rotate(180, 1.0, 0, 0);
-            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 3 + type * 5); //left arm 
-            GL.PopMatrix();
-
-            GL.PushMatrix();
-            if (walking)
-                GL.Rotate(180, 1.0, 0, 0);
-            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 4 + type * 5); //right arm 
-            GL.PopMatrix();
-            GL.PopMatrix();
-        }
-
+        /// <summary>
+        /// Draws this instance.
+        /// </summary>
         public override void draw()
         {            
             GL.PushMatrix();
@@ -172,7 +148,41 @@ namespace AP
             GL.PopMatrix();
         }
 
-        
+        /// <summary>
+        /// Draws this instance in victory dance.
+        /// </summary>
+        public override void drawVictory()
+        {
+            GL.PushMatrix();
+            GL.Translate(xPos, yPos, 0);
+            GL.Translate(0, 0, 0.4f / 0.08f * scale + victoryJumpHeight);
+            GL.Rotate(angle - 90, 0, 0, 1);
+            GL.Rotate(180, 0, 1.0f, 0);
+
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + type * 5); //body 
+
+            GL.PushMatrix();
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 2 + type * 5); //right leg 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            GL.Translate(scale, 0, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 1 + type * 5); //left leg 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            if (walking)
+                GL.Rotate(180, 1.0, 0, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 3 + type * 5); //left arm 
+            GL.PopMatrix();
+
+            GL.PushMatrix();
+            if (walking)
+                GL.Rotate(180, 1.0, 0, 0);
+            ClientProgram.loadedObjects.DrawObject(ClientProgram.loadedObjectZombie + 4 + type * 5); //right arm 
+            GL.PopMatrix();
+            GL.PopMatrix();
+        }
 
         /// <summary>
         /// Moves the zombie enemy using the passed x and y positions as
@@ -273,6 +283,7 @@ namespace AP
 
             updateTimeStamp();
         }
+
         /// <summary>
         /// Moves towards the player.
         /// </summary>

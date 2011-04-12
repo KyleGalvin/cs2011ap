@@ -8,11 +8,18 @@ namespace AP
 {
     /// <summary>
     /// Controls the spawning of enemies
+    /// Contributors: Scott Herman, Gage Patterson
+    /// Revision: 248
     /// </summary>
     class EnemySpawn : Position
     {
 		#region Constructors (1) 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EnemySpawn"/> class.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
         public EnemySpawn(float x, float y)
         {
             xPos = x;

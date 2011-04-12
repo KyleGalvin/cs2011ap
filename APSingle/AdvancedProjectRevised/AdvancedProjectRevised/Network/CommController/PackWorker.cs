@@ -4,20 +4,27 @@ using AP;
 using System.Linq;
 using OpenTK;
 
-    /// <summary>
-    /// Executes the packet commands
-    /// </summary>
+/// <summary>
+/// Executes the packet commands
+/// Contributors: Kyle Galvin, Scott Herman, Gage Patterson
+/// Revision: 292
+/// </summary>
     public class PackWorker
     {
-		#region Fields (1) 
-        protected GameState State;
+		#region Fields (2) 
+
         //private List<AP.Position> GameState;
         protected PackageInterpreter myInterpreter = new PackageInterpreter();
+        protected GameState State;
 
 		#endregion Fields 
 
 		#region Constructors (1) 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PackWorker"/> class.
+        /// </summary>
+        /// <param name="s">The s.</param>
         public PackWorker(ref GameState s)
         {
             State = s;
@@ -25,10 +32,9 @@ using OpenTK;
 
 		#endregion Constructors 
 
+		#region Methods (10) 
 
-        #region Methods (8)
-
-        // Public Methods (8) 
+		// Public Methods (10) 
 
         /// <summary>
         /// Creates the AI.
@@ -60,21 +66,6 @@ using OpenTK;
         public AP.Player CreatePlayer(List<byte[]> data)
         {
             return new AP.Player(new OpenTK.Vector3(BitConverter.ToSingle( data[1],0),BitConverter.ToSingle( data[2],0), 0), BitConverter.ToInt32(data[0], 0));
-        }
-
-        public void HandleDelete(NetPackage pack)
-        {
-            Int32 myTypeSize = (Int32)myInterpreter.GetTypeSize((Type)(pack.typeofobj));
-
-            for (int i = 0; i < pack.count; i++)
-            {
-                UInt32 t = pack.typeofobj;
-                if ((Type)t == Type.Bullet)
-                {
-                    Int32 ID = BitConverter.ToInt32(pack.body[(i*myTypeSize)+1], 0);
-                    State.Bullets.Remove(State.Bullets.Where(y => y.UID == ID).First()) ;
-                }
-            }
         }
 
         /// <summary>
@@ -116,12 +107,44 @@ using OpenTK;
         }
 
         /// <summary>
+        /// Handles the delete.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
+        public void HandleDelete(NetPackage pack)
+        {
+            Int32 myTypeSize = (Int32)myInterpreter.GetTypeSize((Type)(pack.typeofobj));
+
+            for (int i = 0; i < pack.count; i++)
+            {
+                UInt32 t = pack.typeofobj;
+                if ((Type)t == Type.Bullet)
+                {
+                    Int32 ID = BitConverter.ToInt32(pack.body[(i*myTypeSize)+1], 0);
+                    State.Bullets.Remove(State.Bullets.Where(y => y.UID == ID).First()) ;
+                }
+            }
+        }
+
+        /// <summary>
         /// Handles the describe.
         /// </summary>
         /// <param name="pack">The pack.</param>
         public void HandleDescribe(NetPackage pack)
         {
             BitConverter.ToInt32(pack.body[0], 0);
+        }
+
+        /// <summary>
+        /// Handles the identify.
+        /// </summary>
+        /// <param name="pack">The pack.</param>
+        /// <returns></returns>
+        public int HandleIdentify(NetPackage pack)
+        {
+            State.myUID = BitConverter.ToInt32(pack.body[1], 0);
+            Console.WriteLine("MY UID is set to " + State.myUID);
+            Console.WriteLine("PACKAGE " + BitConverter.ToInt32(pack.body[1], 0));
+            return State.myUID;
         }
 
         /// <summary>
@@ -150,15 +173,6 @@ using OpenTK;
                 }
             
         }
-
-        public int HandleIdentify(NetPackage pack)
-        {
-            State.myUID = BitConverter.ToInt32(pack.body[1], 0);
-            Console.WriteLine("MY UID is set to " + State.myUID);
-            Console.WriteLine("PACKAGE " + BitConverter.ToInt32(pack.body[1], 0));
-            return State.myUID;
-        }
-
 
         /// <summary>
         /// Handles the text.
@@ -207,7 +221,6 @@ using OpenTK;
             //return result;
 
         }
-
 
 		#endregion Methods 
     }

@@ -9,23 +9,25 @@ namespace AP
     /// The class that is used for collision detectiong and enemy AI.
     /// It keeps a seperate version of the game state which it is able to understand
     /// and use to efficiently run it's checks.
+    /// Contributors: Adam Humeniuk
+    /// Revision: 285
     /// </summary>
     class CollisionAI
     {
-		#region Fields (3) 
+		#region Fields (5) 
 
-        public Tiles wallTiles;
         bool[,] blockedByWall;
+        List<Player> playerList = new List<Player>();
         //private float TileSize = 1;
         List<Position>[,] tileListEnemies;
-        List<Player> playerList = new List<Player>();
-        private int Tiles = 80;        
+        private int Tiles = 80;
+        public Tiles wallTiles;
 
 		#endregion Fields 
 
 		#region Constructors (1) 
 
-        /// <summary>
+                /// <summary>
         /// Constructor to set up the basic game state as the AI will need to look at it.
         /// </summary>
         /// <param name="xWalls">The levels x wall positions.</param>
@@ -66,10 +68,14 @@ namespace AP
 
 		#endregion Constructors 
 
-		#region Methods (4) 
+		#region Methods (6) 
 
-		// Public Methods (4) 
+		// Public Methods (6) 
 
+        /// <summary>
+        /// Adds to player list.
+        /// </summary>
+        /// <param name="p">The p.</param>
         public void addToPlayerList(ref Player p)
         {
             playerList.Add(p);
@@ -225,6 +231,13 @@ namespace AP
             return false;                    
         }
 
+        /// <summary>
+        /// Checks for collision with players.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="moveAwayFromX">The move away from X.</param>
+        /// <param name="moveAwayFromY">The move away from Y.</param>
+        /// <returns></returns>
         public bool checkForCollisionWithPlayers(Position source, out float moveAwayFromX, out float moveAwayFromY)
         {
             //check collisions with players first

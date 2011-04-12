@@ -7,9 +7,11 @@ using System.Collections.Generic;
 using System.Text;
 using AP;
 
-    /// <summary>
-    /// The network library for the client
-    /// </summary>
+/// <summary>
+/// The network library for the client
+/// Contributors: Kyle Galvin, Gage Patterson, Scott Herman
+/// Revision: 299
+/// </summary>
 	public class ClientManager : NetManager
 	{
 		#region Fields (1) 

@@ -8,6 +8,8 @@ namespace AP
 {
     /// <summary>
     /// The superclass for all things that will move around our map (players, enemies and bullets).
+    /// Contributors: Scott Herman, Gage Patterson, Kyle Galvin, Adam Humeniuk
+    /// Revision: 278
     /// </summary>
     public class Position// : IDisposable
     {
@@ -27,6 +29,9 @@ namespace AP
         public long timestamp = 0;
         public int health;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Position"/> class.
+        /// </summary>
         public Position()
         {
             timestamp =0;
@@ -36,11 +41,18 @@ namespace AP
         const float PI = 3.1415926f;
         protected const float RAD_TO_DEG = 180.0f / PI;
 
+        /// <summary>
+        /// Updates the time stamp.
+        /// </summary>
         public void updateTimeStamp()
         {
             timestamp = DateTime.Now.Ticks;
         }
 
+        /// <summary>
+        /// Sets the ID.
+        /// </summary>
+        /// <param name="id">The id.</param>
         public void setID(int id)
         {
             UID = id;

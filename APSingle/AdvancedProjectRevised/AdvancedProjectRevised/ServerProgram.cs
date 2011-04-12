@@ -7,27 +7,40 @@ using OpenTK;
 
 namespace AP
 {
+    /// <summary>
+    /// This is the server that the clients connect to.
+    /// Contributors: Scott Herman, Gage Patterson, Kyle Galvin, Todd Burton
+    /// Revision: 294
+    /// </summary>
     class ServerProgram
     {
-        private System.Timers.Timer gameTime = new System.Timers.Timer(50);
-        public static CollisionAI collisionAI;
+		#region Fields (17) 
+
         public static int bulletID = 0;
-        CreateLevel level;
+        public static CollisionAI collisionAI;
         private int currentLevel = 1;
-
         private bool enemySpawned = false;
-
+        private  GameState gameState;
+        private System.Timers.Timer gameTime = new System.Timers.Timer(50);
         List<int> heightSquares = new List<int>();
+        CreateLevel level;
+        NetManager net;
+        List<EnemySpawn> spawns = new List<EnemySpawn>();
         List<int> widthSquares = new List<int>();
         List<int> xPosSpawn = new List<int>();
         List<int> xPosSquares = new List<int>();
         List<int> yPosSpawn = new List<int>();
         List<int> yPosSquares = new List<int>();
-        List<EnemySpawn> spawns = new List<EnemySpawn>();
         private int zombieCount = 0;
         private int zombieIterator = 0;
-        NetManager net;
-        private  GameState gameState;
+
+		#endregion Fields 
+
+		#region Constructors (1) 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ServerProgram"/> class.
+        /// </summary>
         public ServerProgram()
         {
             setUpLevel();
@@ -44,6 +57,17 @@ namespace AP
             gameTime.Enabled = true;
         }
 
+		#endregion Constructors 
+
+		#region Methods (3) 
+
+		// Private Methods (3) 
+
+        /// <summary>
+        /// Main game loop used to control the game state
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="System.Timers.ElapsedEventArgs"/> instance containing the event data.</param>
         private void gameLoop(object sender, ElapsedEventArgs e)
         {
             List<Bullet> bulletDelete = new List<Bullet>();
@@ -71,16 +95,9 @@ namespace AP
             net.SyncStateOutgoing();
         }
 
-        private void setUpLevel()
-        {
-            level = new CreateLevel(currentLevel);
-            level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
-            
-            collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
-
-            setSpawns();
-        }
-
+        /// <summary>
+        /// Sets the spawns.
+        /// </summary>
         private void setSpawns()
         {
             spawns.Clear();
@@ -101,5 +118,20 @@ namespace AP
                 spawns.Add(new EnemySpawn(xPosSpawn[3], yPosSpawn[3]));
             }
         }
+
+        /// <summary>
+        /// Sets up level.
+        /// </summary>
+        private void setUpLevel()
+        {
+            level = new CreateLevel(currentLevel);
+            level.parseFile(ref xPosSquares, ref yPosSquares, ref heightSquares, ref widthSquares, ref xPosSpawn, ref yPosSpawn);
+            
+            collisionAI = new CollisionAI(ref xPosSquares, ref yPosSquares, ref widthSquares, ref heightSquares);
+
+            setSpawns();
+        }
+
+		#endregion Methods 
     }
 }

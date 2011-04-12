@@ -9,34 +9,38 @@ namespace AP
     /// <summary>
     /// The class that will keep track of weapons and ammunition for a player.
     /// Each player will have it's own instance of this class.
+    /// Contributors: Gage Patterson, Scott Herman, Kyle Galvin, Adam Humeniuk
+    /// Revision: 285
     /// </summary>
     public class Weapon : Position
     {
-		#region Fields (14) 
+		#region Fields (17) 
 
         private int bulletCooldown;
         Vector3 defaultVelocity = new Vector3(0, 0, 0);
         private bool grenadeAvailable = false;
         private UInt16 grenadeCount = 3;
         public bool pistolEquipped = false;
+        public int rifleAmmo = 60;
         private bool rifleAvailable = false;
         private UInt16 rifleBulletCount = 0;
+        public int rifleBurstCooldown = 0;
         public bool rifleEquipped = false;
         private bool rocketAvailable = false;
         private UInt16 rocketBulletCount = 0;
         public bool rocketEquipped = false;
+        public int shotgunAmmo = 10;
         private bool shotgunAvailable = false;
         private UInt16 shotgunBulletCount = 0;
         public bool shotgunEquipped = false;
-
-        public int rifleAmmo = 60;
-        public int rifleBurstCooldown = 0;
-        public int shotgunAmmo = 10;
 
 		#endregion Fields 
 
 		#region Constructors (1) 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Weapon"/> class.
+        /// </summary>
         public Weapon()
         {
             pistolEquipped = true;
@@ -45,14 +49,9 @@ namespace AP
 
 		#endregion Constructors 
 
-		#region Methods (11) 
+		#region Methods (13) 
 
-		// Public Methods (11) 
-
-        public void updateTimeStamp()
-        {
-            timestamp = DateTime.Now.Ticks;
-        }
+		// Public Methods (13) 
 
         /// <summary>
         /// Determines whether this instance can shoot.
@@ -202,6 +201,33 @@ namespace AP
         /// <param name="mouseX">The mouse X.</param>
         /// <param name="mouseY">The mouse Y.</param>
         //public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
+        public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition)
+        {
+            if (ClientProgram.multiplayer)
+            {
+                Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30);
+                b.setDirectionByMouse(mousePosition, screenSize);
+                b.mousePos.X = b.xVel;
+                b.mousePos.Y = b.yVel;
+                b.setID(ServerProgram.bulletID++);
+                bulletList.Add(b);
+            }
+            else
+            {
+                
+            }
+        }
+
+        /// <summary>
+        /// Shoots the specified bullet.
+        /// </summary>
+        /// <param name="bulletList">The bullet list.</param>
+        /// <param name="player">The player.</param>
+        /// <param name="screenX">The screen X.</param>
+        /// <param name="screenY">The screen Y.</param>
+        /// <param name="mouseX">The mouse X.</param>
+        /// <param name="mouseY">The mouse Y.</param>
+        //public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
         public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition, ref Player player)
         {
             if (pistolEquipped)
@@ -257,34 +283,6 @@ namespace AP
         }
 
         /// <summary>
-        /// Shoots the specified bullet.
-        /// </summary>
-        /// <param name="bulletList">The bullet list.</param>
-        /// <param name="player">The player.</param>
-        /// <param name="screenX">The screen X.</param>
-        /// <param name="screenY">The screen Y.</param>
-        /// <param name="mouseX">The mouse X.</param>
-        /// <param name="mouseY">The mouse Y.</param>
-        //public void shoot(ref List<Bullet> bulletList, ref Player player, int screenX, int screenY, float mouseX, float mouseY)
-        public void shoot(ref List<Bullet> bulletList, Vector3 playerPosition, Vector2 screenSize, Vector2 mousePosition)
-        {
-            if (ClientProgram.multiplayer)
-            {
-                Bullet b = new Bullet(playerPosition, new Vector3(mousePosition.X, mousePosition.Y, 0), 30);
-                b.setDirectionByMouse(mousePosition, screenSize);
-                b.mousePos.X = b.xVel;
-                b.mousePos.Y = b.yVel;
-                b.setID(ServerProgram.bulletID++);
-                bulletList.Add(b);
-            }
-            else
-            {
-                
-            }
-        }
-
-
-        /// <summary>
         /// Called when shotgun is attained
         /// </summary>
         public void shotgunAttained()
@@ -302,6 +300,14 @@ namespace AP
         public void updateBulletCooldown()
         {
             bulletCooldown--;
+        }
+
+        /// <summary>
+        /// Updates the time stamp.
+        /// </summary>
+        public void updateTimeStamp()
+        {
+            timestamp = DateTime.Now.Ticks;
         }
 
 		#endregion Methods 

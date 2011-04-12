@@ -9,7 +9,9 @@ using OpenTK.Graphics.OpenGL;
 namespace AP
 {
     /// <summary>
-    /// 
+    /// This class is used to load objects
+    /// Contributors: Adam Humeniuk
+    /// Revision: 250
     /// </summary>
     class Loader
     {

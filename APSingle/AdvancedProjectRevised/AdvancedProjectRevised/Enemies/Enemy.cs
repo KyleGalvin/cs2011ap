@@ -9,10 +9,12 @@ namespace AP
     /// The superclass of game enemies. It contains the definitions of the attributes and functions used by
     /// all enemy types in the game. This includes things like damage and life with abstract functions like
     /// move and draw.
+    /// Contributors: Kyle Galvin, Scott Herman, Adam Humeniuk, Gage Patterson
+    /// Revision: 215
     /// </summary>
     public abstract class Enemy : Position
     {
-		#region Fields (1) 
+		#region Fields (2) 
 
                protected bool alive = true;
                public int type = 0;
@@ -22,15 +24,15 @@ namespace AP
 		#region Enums (2) 
 
         protected enum Damage { None = 0, Low = 1, Medium = 3, High = 5 }
-        public enum Life { Zombie = 1, Tank = 10, Fast = 2, Hardest = 3, Boss = 100 }
+public enum Life { Zombie = 1, Tank = 10, Fast = 2, Hardest = 3, Boss = 100 }
 
 		#endregion Enums 
 
-		#region Methods (6) 
+		#region Methods (12) 
 
-		// Public Methods (6) 
+		// Public Methods (12) 
 
-        /// <summary>
+/// <summary>
         /// Attacks the specified player.
         /// </summary>
         /// <param name="player">The player.</param>
@@ -41,6 +43,26 @@ namespace AP
         /// </summary>
         /// <param name="player">The player.</param>
         public abstract void changeSubtype(int newType);
+
+        /// <summary>
+        /// Decreases the health.
+        /// </summary>
+        /// <returns></returns>
+        public bool decreaseHealth()
+        {
+            health--;
+            if (health <= 0)
+            {
+                timestamp = -1;
+                return true;
+            }
+            return false;
+        }
+
+        public void destroyTimeStamp()
+        {
+            timestamp = -1;
+        }
 
         /// <summary>
         /// Draws this instance.
@@ -90,24 +112,13 @@ public abstract void move(float x, float y);
             yPos = y;
         }
 
+        /// <summary>
+        /// Updates the time stamp.
+        /// </summary>
         public void updateTimeStamp()
         {
             if( timestamp != -1 )
                 timestamp = DateTime.Now.Ticks;
-        }
-        public bool decreaseHealth()
-        {
-            health--;
-            if (health <= 0)
-            {
-                timestamp = -1;
-                return true;
-            }
-            return false;
-        }
-        public void destroyTimeStamp()
-        {
-            timestamp = -1;
         }
 
 		#endregion Methods 

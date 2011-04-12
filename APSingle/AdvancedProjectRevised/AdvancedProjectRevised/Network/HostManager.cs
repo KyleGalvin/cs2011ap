@@ -6,15 +6,18 @@ using OpenTK;
 using System.Collections.Generic;
 using AP;
 
-    /// <summary>
-    /// Network manager specific to the game host.
-    /// </summary>
+/// <summary>
+/// Network manager specific to the game host.
+/// Contributors: Kyle Galvin
+/// Revision: 292
+/// </summary>
     public class HostManager : NetManager
     {
 		#region Fields (1) 
 
         //HACK todo
         int i = 0;
+
 		#endregion Fields 
 
 		#region Constructors (1) 
@@ -27,8 +30,10 @@ using AP;
 
 		#endregion Constructors 
 
-		#region Methods (2) 
-		
+		#region Methods (1) 
+
+		// Protected Methods (1) 
+
         /// <summary>
         /// Handles the incoming comm.
         /// </summary>

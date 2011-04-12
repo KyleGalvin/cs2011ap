@@ -3,9 +3,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 
-    /// <summary>
-    /// Handles the incoming/out-going data
-    /// </summary>
+/// <summary>
+/// Handles the incoming/out-going data
+/// Contributors: Kyle Galvin, Scott Herman, Gage Patterson
+/// Revision: 293
+/// </summary>
     public class StreamHandler
     {
 		#region Fields (3) 

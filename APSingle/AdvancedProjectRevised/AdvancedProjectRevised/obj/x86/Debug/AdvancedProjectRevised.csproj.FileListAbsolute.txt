@@ -133,3 +133,12 @@ C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\Advanc
 C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\bin\Debug\AdvancedProjectRevised.application
 C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe.manifest
 C:\Documents and Settings\student\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.application
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.exe
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.pdb
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby.resources
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Lobby_Dialog.resources
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.Forms.Main.resources
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AP.SplashScreen.resources
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.Properties.Resources.resources
+C:\Users\Gage\Desktop\APSingle\AdvancedProjectRevised\AdvancedProjectRevised\obj\x86\Debug\AdvancedProjectRevised.csproj.GenerateResource.Cache
